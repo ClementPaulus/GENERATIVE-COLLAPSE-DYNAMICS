@@ -69,6 +69,10 @@ class TestDashboardInit:
             "render_geometry_page",
             "render_canon_explorer_page",
             "render_domain_overview_page",
+            "render_evolution_kernel_page",
+            "render_brain_kernel_page",
+            "render_awareness_manifold_page",
+            "render_cognitive_traversal_page",
         ]
         for name in render_names:
             assert hasattr(dash, name), f"{name} missing from dashboard exports"
@@ -370,7 +374,23 @@ class TestUtilsDataLoaders:
         from umcp.dashboard._utils import load_closures
 
         closures = load_closures()
-        valid_domains = {"GCD", "KIN", "RCFT", "WEYL", "SECURITY", "ASTRO", "NUC", "QM", "FIN", "unknown"}
+        valid_domains = {
+            "GCD",
+            "KIN",
+            "RCFT",
+            "WEYL",
+            "SECURITY",
+            "ASTRO",
+            "NUC",
+            "QM",
+            "FIN",
+            "EVO",
+            "EVERYDAY",
+            "MAT",
+            "SM",
+            "ATOM",
+            "unknown",
+        }
         for c in closures:
             assert c["domain"] in valid_domains, f"Unexpected domain: {c['domain']}"
 

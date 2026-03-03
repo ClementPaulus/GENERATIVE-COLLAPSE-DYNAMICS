@@ -11,13 +11,14 @@ Usage:
   streamlit run src/umcp/dashboard/__init__.py
 
 Features:
-  - Real-time system health monitoring (40 pages)
+  - Real-time system health monitoring (44 pages)
   - Interactive ledger exploration with anomaly detection
   - Casepack browser with validation status
   - Regime phase space visualization with trajectories
   - Kernel metrics analysis with trends and correlations
   - Contract and closure exploration with code preview
   - Physics, Kinematics, Cosmology, Astronomy domain interfaces
+  - Evolution, Brain Kernel, Awareness Manifold, Cognitive Traversal
   - Geometry, Canon Explorer, Precision analysis
   - Live validation runner, batch validation, test templates
 
@@ -40,6 +41,7 @@ Package structure:
   - pages_advanced.py: Precision, Geometry, Canon Explorer, Domain Overview
   - pages_diagnostic.py: τ_R* Diagnostic, Epistemic Classification, Insights Engine
   - pages_exploration.py: Rosetta Translation, Orientation Protocol, Everyday Physics
+  - pages_evolution.py: Evolution Kernel, Brain Kernel, Awareness Manifold, Cognitive Traversal
 """
 # pyright: reportUnknownMemberType=false
 # pyright: reportUnknownVariableType=false
@@ -113,6 +115,12 @@ from umcp.dashboard.pages_diagnostic import (
     render_insights_page,
     render_tau_r_star_page,
 )
+from umcp.dashboard.pages_evolution import (
+    render_awareness_manifold_page,
+    render_brain_kernel_page,
+    render_cognitive_traversal_page,
+    render_evolution_kernel_page,
+)
 from umcp.dashboard.pages_exploration import (
     render_everyday_physics_page,
     render_orientation_page,
@@ -184,17 +192,21 @@ __all__ = [
     "render_api_integration_page",
     "render_astronomy_page",
     "render_atomic_physics_page",
+    "render_awareness_manifold_page",
     "render_batch_validation_page",
     "render_bookmarks_page",
+    "render_brain_kernel_page",
     "render_canon_explorer_page",
     "render_casepacks_page",
     "render_closures_page",
+    "render_cognitive_traversal_page",
     "render_comparison_page",
     "render_contracts_page",
     "render_cosmology_page",
     "render_domain_overview_page",
     "render_epistemic_page",
     "render_everyday_physics_page",
+    "render_evolution_kernel_page",
     "render_exports_page",
     "render_finance_page",
     "render_formula_builder_page",
@@ -334,6 +346,11 @@ def main() -> None:
         "Physics": ("⚗️", render_physics_interface_page),
         "Kinematics": ("🎯", render_kinematics_interface_page),
         "Cosmology": ("🌌", render_cosmology_page),
+        # Evolution Pages
+        "Evolution Kernel": ("🧬", render_evolution_kernel_page),
+        "Brain Kernel": ("🧠", render_brain_kernel_page),
+        "Awareness Manifold": ("🌀", render_awareness_manifold_page),
+        "Cognitive Traversal": ("🚀", render_cognitive_traversal_page),
         # Exploration Pages
         "Rosetta Translation": ("🌐", render_rosetta_page),
         "Orientation Protocol": ("🧭", render_orientation_page),

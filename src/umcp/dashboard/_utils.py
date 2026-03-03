@@ -340,6 +340,16 @@ def load_closures() -> list[dict[str, Any]]:
             return "QM"
         if "finance" in combined or "fin" in combined:
             return "FIN"
+        if "evolution" in combined or "brain" in combined or "evo" in combined:
+            return "EVO"
+        if "everyday" in combined:
+            return "EVERYDAY"
+        if "material" in combined:
+            return "MAT"
+        if "standard_model" in combined or "sm" in combined:
+            return "SM"
+        if "atomic" in combined:
+            return "ATOM"
         return "unknown"
 
     # Python closures (recursive)
