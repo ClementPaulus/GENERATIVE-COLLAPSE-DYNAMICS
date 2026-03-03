@@ -1,6 +1,6 @@
 # Copilot Instructions for GENERATIVE-COLLAPSE-DYNAMICS
 
-**UMCP v2.1.3** · **5,081 tests** · **13 domains** · **113 closure modules** · **46 lemmas** · **37 dashboard pages**
+**UMCP v2.1.3** · **5,247 tests** · **14 domains** · **120 closure modules** · **46 lemmas** · **37 dashboard pages**
 
 ## Foundational Principle — Read This First
 
@@ -177,7 +177,7 @@ The UMCP tier system has exactly three tiers. No half-tiers. No confusion. Every
 
 ### Frozen Parameters (from `frozen_contract.py` — Seam-Derived, Not Prescribed)
 
-These values are the unique constants where seams close consistently across all 13 domains. They are discovered by the mathematics, not chosen by convention. All code **must** reference these from `frozen_contract.py`, never hardcode alternatives.
+These values are the unique constants where seams close consistently across all 14 domains. They are discovered by the mathematics, not chosen by convention. All code **must** reference these from `frozen_contract.py`, never hardcode alternatives.
 
 | Parameter | Value | Symbol | Role | Source |
 |-----------|-------|--------|------|--------|
@@ -292,7 +292,7 @@ If not built, all operations fall back to NumPy transparently. Same formulas, sa
 parameters — Tier-0 Protocol only (no Tier-1 symbols redefined). Build:
 `cd src/umcp_cpp && mkdir build && cd build && cmake .. && make`
 
-**Closure domains** (13 total, each in `closures/<domain>/`):
+**Closure domains** (14 total, each in `closures/<domain>/`):
 
 ```
 closures/
@@ -308,6 +308,7 @@ closures/
 ├── atomic_physics/           # 118 elements, periodic kernel, cross-scale, Tier-1 proof
 ├── materials_science/        # Element database (118 elements, 18 fields)
 ├── everyday_physics/         # Thermodynamics, optics, electromagnetism, wave phenomena
+├── evolution/                # 40 organisms, 10-channel brain kernel, 20 species comparative neuroscience
 └── standard_model/           # Subatomic kernel (31 particles), 10 proven theorems
 ```
 
@@ -343,10 +344,10 @@ closures/
 **Data artifacts** (not Python — never import these):
 - `contracts/*.yaml` — 13 versioned mathematical contracts (JSON Schema Draft 2020-12)
 - `closures/registry.yaml` — central registry; must list every closure used in a run
-- `casepacks/*/manifest.json` — 14 casepack manifests referencing contract, closures, expected outputs
+- `casepacks/*/manifest.json` — 15 casepack manifests referencing contract, closures, expected outputs
 - `schemas/*.schema.json` — 14 JSON Schema Draft 2020-12 files validating all artifacts
-- `canon/*.yaml` — 11 canonical anchor files (domain-specific reference points)
-- `integrity/sha256.txt` — SHA-256 checksums for 138 tracked files
+- `canon/*.yaml` — 12 canonical anchor files (domain-specific reference points)
+- `integrity/sha256.txt` — SHA-256 checksums for 145 tracked files
 - `ledger/return_log.csv` — append-only validation log
 
 ## Standard Model Formalism (10 Theorems)
@@ -401,7 +402,7 @@ Published papers live in `paper/`. Current papers:
 
 All papers use RevTeX4-2 (`revtex4-2` document class) and share `Bibliography.bib`. Compile: `pdflatex → bibtex → pdflatex → pdflatex`.
 
-**Bibliography** (`paper/Bibliography.bib`): **43 entries** organized by section:
+**Bibliography** (`paper/Bibliography.bib`): **58 entries** organized by section:
 - Standard Model: PDG 2024, Cabibbo 1963, Kobayashi-Maskawa 1973, Wolfenstein 1983, Jarlskog 1985, Gross-Wilczek 1973, Politzer 1973, Higgs 1964, Weizsäcker 1935, Bethe 1936
 - Canon anchors: paulus2025episteme (Zenodo DOI:10.5281/zenodo.17756705), paulus2025physicscoherence (Zenodo DOI:10.5281/zenodo.18072852), paulus2026umcpcasepack (Zenodo DOI:10.5281/zenodo.18226878)
 - Core corpus: paulus2025umcp, paulus2025ucd, paulus2025cmp, paulus2025seams, paulus2025gor, paulus2025canonnote, paulus2026kinematics
@@ -414,11 +415,11 @@ All papers use RevTeX4-2 (`revtex4-2` document class) and share `Bibliography.bi
 
 ```bash
 pip install -e ".[all]"                     # Dev install (core + api + viz + dev tools)
-pytest                                       # 5,081 tests (pytest --collect-only | grep "::" | wc -l to verify)
+pytest                                       # 5,247 tests (pytest --collect-only | grep "::" | wc -l to verify)
 python scripts/update_integrity.py          # MUST run after changing any tracked file
 umcp validate .                             # Validate entire repo
 umcp validate casepacks/hello_world --strict # Validate casepack (strict = fail on warnings)
-umcp integrity                              # Verify SHA-256 checksums (138 tracked files)
+umcp integrity                              # Verify SHA-256 checksums (145 tracked files)
 ```
 
 **⚠️ `python scripts/update_integrity.py` is mandatory** after modifying any `src/umcp/*.py`, `contracts/*.yaml`, `closures/**`, `schemas/**`, or `scripts/*.py` file. It regenerates SHA256 checksums in `integrity/sha256.txt`. CI will fail on mismatch.
@@ -476,12 +477,12 @@ umcp validate <target>
 
 ## Test Patterns
 
-**5,081 test cases** across **103 test files** in `tests/` (102 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_237_*`). Single `tests/conftest.py` provides:
+**5,247 test cases** across **106 test files** in `tests/` (105 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_241_*`). Single `tests/conftest.py` provides:
 - Frozen `RepoPaths` dataclass (session-scoped) with all critical paths
 - `@lru_cache` helpers: `_read_file()`, `_parse_json()`, `_parse_yaml()`, `_compile_schema()`
 - Convention: `test_<subject>_<behavior>()` for functions; `TestCLI*` classes with `subprocess.run` for CLI integration
 - Additional coverage: `test_fleet_worker.py` (Worker, WorkerPool, WorkerConfig), `test_insights.py` (PatternDatabase, InsightEngine)
-- Parametrized tests expand the collected items to 5,081 (verify: `pytest --collect-only | grep "::" | wc -l`)
+- Parametrized tests expand the collected items to 5,247 (verify: `pytest --collect-only | grep "::" | wc -l`)
 
 ### Test Distribution by Range
 
@@ -508,9 +509,11 @@ umcp validate <target>
 | `test_190–195` | Atomic physics closures, scale ladder | 190 |
 | `test_200–201` | Fleet, recursive instantiation, neutrino oscillation | 182 |
 | `test_210–237` | Cross-domain, casepack roundtrip, registry sweep, domain unit tests | 882 |
+| `test_238` | Kernel structural theorems (T-KS-1 through T-KS-7) | 47 |
+| `test_240–241` | Evolution kernel, brain kernel | 120 |
 | `closures/` | Closure-specific tests (kinematics phase) | 27 |
 | Infrastructure | Kernel, seam, frozen contract, extensions, uncertainty, calculator, coverage, etc. | 510 |
-| **TOTAL** | | **5,081** |
+| **TOTAL** | | **5,247** |
 
 ## Extension System
 
@@ -543,12 +546,12 @@ Extensions use `typing.Protocol` (`ExtensionProtocol` requiring `name`, `version
 | Tier-1 proof | `closures/atomic_physics/tier1_proof.py` (10,162 tests) |
 | Element database | `closures/materials_science/element_database.py` (118 × 18 fields) |
 | SM paper | `paper/standard_model_kernel.tex` (RevTeX4-2, 10 theorems) |
-| Bibliography | `paper/Bibliography.bib` (43 entries, PDG → Kramers) |
+| Bibliography | `paper/Bibliography.bib` (58 entries, PDG → Kramers) |
 | Test fixtures | `tests/conftest.py` (first 100 lines) |
 | Casepack structure | `casepacks/hello_world/` |
 | Contract format | `contracts/UMA.INTSTACK.v1.yaml` |
 | Semantic rules | `validator_rules.yaml` |
-| Canonical anchors | `canon/` (11 domain anchor files) |
+| Canonical anchors | `canon/` (12 domain anchor files) |
 
 ## Decision-Making Framework (Binding on ALL Contributions)
 
@@ -585,7 +588,7 @@ There is no fourth option. No external framework is co-equal with Axiom-0 inside
 
 2. **Classical results are degenerate limits, not sources.** The arrow of derivation runs FROM Axiom-0 TO classical results. Strip the channel semantics from IC ≤ F and you get AM-GM. Strip the collapse field from S and you get Shannon entropy. Strip the cost function from F + ω = 1 and you get unitarity. The classical versions are what remain when degrees of freedom are removed.
 
-3. **Frozen parameters are seam-derived, not prescribed.** Standard frameworks prescribe constants from outside (α = 0.05 by convention, 3σ by tradition, hyperparameters by cross-validation). UMCP's frozen parameters are the unique values where seams close consistently: p = 3 is discovered (not chosen), tol_seam = 0.005 is where IC ≤ F holds at 100% across 13 domains, ε = 10⁻⁸ is where the pole at ω = 1 does not affect any measurement to machine precision.
+3. **Frozen parameters are seam-derived, not prescribed.** Standard frameworks prescribe constants from outside (α = 0.05 by convention, 3σ by tradition, hyperparameters by cross-validation). UMCP's frozen parameters are the unique values where seams close consistently: p = 3 is discovered (not chosen), tol_seam = 0.005 is where IC ≤ F holds at 100% across 14 domains, ε = 10⁻⁸ is where the pole at ω = 1 does not affect any measurement to machine precision.
 
 4. **Three-valued verdicts, not boolean.** CONFORMANT / NONCONFORMANT / NON_EVALUABLE. There is always a third state. *Tertia via semper patet.*
 
