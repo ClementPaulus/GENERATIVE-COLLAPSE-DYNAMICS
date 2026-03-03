@@ -864,7 +864,9 @@ def render_physics_interface_page() -> None:
     with conv_cols[0]:
         conv_value = st.number_input("Value", value=1.0, format="%.6f", key="conv_value")
     with conv_cols[1]:
-        conv_quantity = st.selectbox("Quantity", list(PHYSICS_QUANTITIES.keys()), key="conv_quantity")
+        conv_quantity = st.selectbox(
+            "Quantity", list(PHYSICS_QUANTITIES.keys()), key="conv_quantity", help="Physical quantity type to convert"
+        )
     with conv_cols[2]:
         qty_key = conv_quantity if conv_quantity else "position"
         from_units = list(PHYSICS_QUANTITIES[qty_key]["units"].keys())
@@ -949,7 +951,9 @@ def render_physics_interface_page() -> None:
         st.markdown("**Fundamental Physical Constants (CODATA 2022)**")
 
         # Search filter
-        const_search = st.text_input("🔍 Search constants", key="const_search")
+        const_search = st.text_input(
+            "🔍 Search constants", key="const_search", help="Filter constants by name or symbol"
+        )
 
         # Create dataframe
         const_data = []
@@ -967,7 +971,7 @@ def render_physics_interface_page() -> None:
                 )
 
         if const_data:
-            st.dataframe(pd.DataFrame(const_data), hide_index=True, width="stretch")
+            st.dataframe(pd.DataFrame(const_data), hide_index=True, use_container_width=True)
         else:
             st.info("No constants found matching your search.")
 
@@ -1063,6 +1067,7 @@ def render_physics_interface_page() -> None:
         list(PHYSICS_QUANTITIES.keys()),
         default=["position", "velocity", "acceleration", "mass", "energy"],
         key="physics_selected",
+        help="Choose physical quantities for UMCP trace vector",
     )
 
     if not selected_quantities:
@@ -1134,12 +1139,13 @@ def render_physics_interface_page() -> None:
         value=1e-6,
         format_func=lambda x: f"{x:.0e}",
         key="phys_epsilon",
+        help="Guard band for coordinate clamping",
     )
 
     st.divider()
 
     # ========== Process Button ==========
-    if st.button("🚀 Run Physics → UMCP Translation", type="primary", width="stretch"):
+    if st.button("🚀 Run Physics → UMCP Translation", type="primary", use_container_width=True):
         progress = st.progress(0, text="Starting physics translation...")
 
         audit_entry = {
@@ -1306,7 +1312,7 @@ def render_physics_interface_page() -> None:
                     for d in audit_entry["tier0"]["quantities"]
                 ]
             )
-            st.dataframe(t0_df, hide_index=True, width="stretch")
+            st.dataframe(t0_df, hide_index=True, use_container_width=True)
 
         with tier_cols[1]:
             st.markdown("### ⚙️ Tier 1: Kernel")
@@ -1369,7 +1375,7 @@ def render_kinematics_interface_page() -> None:
 
     for i, (name, scenario) in enumerate(KINEMATICS_SCENARIOS.items()):
         with scenario_cols[i]:
-            if st.button(f"📌 {name}", key=f"kin_scenario_{name}", width="stretch"):
+            if st.button(f"📌 {name}", key=f"kin_scenario_{name}", use_container_width=True):
                 selected_scenario = name
                 st.session_state.kin_scenario = scenario
 
@@ -1438,9 +1444,18 @@ def render_kinematics_interface_page() -> None:
 
         traj_cols = st.columns(3)
         with traj_cols[0]:
-            v0 = st.number_input("Initial velocity (m/s)", value=20.0, min_value=0.1, key="traj_v0")
+            v0 = st.number_input(
+                "Initial velocity (m/s)", value=20.0, min_value=0.1, key="traj_v0", help="Projectile launch speed"
+            )
         with traj_cols[1]:
-            theta_deg = st.slider("Launch angle (°)", min_value=0, max_value=90, value=45, key="traj_theta")
+            theta_deg = st.slider(
+                "Launch angle (°)",
+                min_value=0,
+                max_value=90,
+                value=45,
+                key="traj_theta",
+                help="Angle from horizontal in degrees",
+            )
             theta_rad = theta_deg * 0.0174533
         with traj_cols[2]:
             g_val = st.number_input("Gravity (m/s²)", value=9.80665, key="traj_g")
@@ -1490,7 +1505,7 @@ def render_kinematics_interface_page() -> None:
                     height=350,
                     yaxis={"scaleanchor": "x"},
                 )
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
     # Tab 3: Energy Conservation Check
     with kin_tabs[2]:
@@ -1587,7 +1602,7 @@ def render_kinematics_interface_page() -> None:
                 fig.update_yaxes(title_text="Velocity (m/s)", row=2, col=1)
 
                 fig.update_layout(height=500, showlegend=True)
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
             # Key points
             t_stop = -v0_plot / a_plot if a_plot != 0 else float("inf")
@@ -1639,7 +1654,9 @@ def render_kinematics_interface_page() -> None:
 
     with col1:
         st.subheader("Position (x)")
-        pos_val = st.number_input("Position value", value=1.0, format="%.4f", key="kin_pos")
+        pos_val = st.number_input(
+            "Position value", value=1.0, format="%.4f", key="kin_pos", help="Raw position measurement"
+        )
         pos_unit = st.selectbox(
             "Position unit", list(PHYSICS_QUANTITIES["position"]["units"].keys()), key="kin_pos_unit"
         )
@@ -1647,7 +1664,9 @@ def render_kinematics_interface_page() -> None:
 
     with col2:
         st.subheader("Velocity (v)")
-        vel_val = st.number_input("Velocity value", value=1.0, format="%.4f", key="kin_vel")
+        vel_val = st.number_input(
+            "Velocity value", value=1.0, format="%.4f", key="kin_vel", help="Raw velocity measurement"
+        )
         vel_unit = st.selectbox(
             "Velocity unit", list(PHYSICS_QUANTITIES["velocity"]["units"].keys()), key="kin_vel_unit"
         )
@@ -1716,7 +1735,7 @@ def render_kinematics_interface_page() -> None:
     )
 
     # ========== Process ==========
-    if st.button("🚀 Run Kinematics → UMCP Translation", type="primary", width="stretch"):
+    if st.button("🚀 Run Kinematics → UMCP Translation", type="primary", use_container_width=True):
         progress = st.progress(0, text="Starting kinematics translation...")
 
         audit_entry = {
@@ -1895,7 +1914,7 @@ def render_kinematics_interface_page() -> None:
                     for k, v in t0.items()
                 ]
             )
-            st.dataframe(t0_df, hide_index=True, width="stretch")
+            st.dataframe(t0_df, hide_index=True, use_container_width=True)
 
         with tier_cols[1]:
             st.markdown("### ⚙️ Tier 1: Kernel")
@@ -2006,7 +2025,7 @@ def render_kinematics_interface_page() -> None:
                 showlegend=True,
             )
 
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
         # Full audit
         with st.expander("🔍 Full Audit JSON", expanded=False):

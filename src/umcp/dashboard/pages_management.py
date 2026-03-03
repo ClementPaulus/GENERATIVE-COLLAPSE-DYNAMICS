@@ -48,7 +48,9 @@ def render_notifications_page() -> None:
 
         with st.container(border=True):
             st.session_state.notifications["enabled"] = st.toggle(
-                "Enable Notifications", value=st.session_state.notifications["enabled"]
+                "Enable Notifications",
+                value=st.session_state.notifications["enabled"],
+                help="Master switch for all alert types",
             )
 
             st.markdown("**Alert Types:**")
@@ -89,7 +91,7 @@ def render_notifications_page() -> None:
     with col2:
         st.subheader("🔍 Current State Check")
 
-        if st.button("🔄 Check for Alerts Now", width="stretch"):
+        if st.button("🔄 Check for Alerts Now", use_container_width=True):
             df = load_ledger()
             alerts = []
 
@@ -216,16 +218,20 @@ def render_bookmarks_page() -> None:
         col1, col2 = st.columns(2)
 
         with col1:
-            bookmark_name = st.text_input("Bookmark Name", placeholder="e.g., 'Stable regime baseline'")
+            bookmark_name = st.text_input(
+                "Bookmark Name", placeholder="e.g., 'Stable regime baseline'", help="Short descriptive name"
+            )
             bookmark_type = st.selectbox(
-                "Bookmark Type", ["Ledger Snapshot", "Configuration", "Audit Run", "Custom Note"]
+                "Bookmark Type",
+                ["Ledger Snapshot", "Configuration", "Audit Run", "Custom Note"],
+                help="What kind of state to capture",
             )
 
         with col2:
             bookmark_tags = st.text_input("Tags (comma-separated)", placeholder="stable, baseline, v1.5")
             bookmark_notes = st.text_area("Notes", placeholder="Add any notes about this bookmark...")
 
-        submitted = st.form_submit_button("🔖 Save Bookmark", width="stretch")
+        submitted = st.form_submit_button("🔖 Save Bookmark", use_container_width=True)
 
         if submitted and bookmark_name:
             # Capture current state
@@ -275,7 +281,7 @@ def render_bookmarks_page() -> None:
     else:
         # Filter by type
         types = list({b["type"] for b in st.session_state.bookmarks})
-        type_filter = st.selectbox("Filter by Type", ["All", *types])
+        type_filter = st.selectbox("Filter by Type", ["All", *types], help="Show only this bookmark type")
 
         filtered = st.session_state.bookmarks
         if type_filter != "All":
@@ -320,10 +326,10 @@ def render_bookmarks_page() -> None:
                 data=json.dumps(st.session_state.bookmarks, indent=2, default=str),
                 file_name=f"umcp_bookmarks_{datetime.now().strftime('%Y%m%d')}.json",
                 mime="application/json",
-                width="stretch",
+                use_container_width=True,
             )
         with col2:
-            if st.button("🗑️ Clear All Bookmarks", width="stretch"):
+            if st.button("🗑️ Clear All Bookmarks", use_container_width=True):
                 st.session_state.bookmarks = []
                 st.rerun()
 
@@ -357,12 +363,15 @@ def render_api_integration_page() -> None:
 
     with col1:
         api_url = st.text_input(
-            "API URL", value=st.session_state.api_settings["url"], placeholder="http://localhost:8000"
+            "API URL",
+            value=st.session_state.api_settings["url"],
+            placeholder="http://localhost:8000",
+            help="Base URL of the UMCP REST API",
         )
         st.session_state.api_settings["url"] = api_url
 
     with col2:
-        if st.button("🔗 Test Connection", width="stretch"):
+        if st.button("🔗 Test Connection", use_container_width=True):
             try:
                 import urllib.error
                 import urllib.request
@@ -406,7 +415,7 @@ def render_api_integration_page() -> None:
 
         with tabs[1]:
             st.markdown("### Ledger Data")
-            limit = st.slider("Limit", 5, 100, 20, key="api_ledger_limit")
+            limit = st.slider("Limit", 5, 100, 20, key="api_ledger_limit", help="Max ledger rows to fetch")
             if st.button("🔄 Fetch Ledger", key="api_ledger"):
                 try:
                     import urllib.request
@@ -415,7 +424,7 @@ def render_api_integration_page() -> None:
                         data = json.loads(response.read().decode())
                         if isinstance(data, list) and pd is not None:
                             df = pd.DataFrame(data)
-                            st.dataframe(df, width="stretch")
+                            st.dataframe(df, use_container_width=True)
                         else:
                             st.json(data)
                 except Exception as e:

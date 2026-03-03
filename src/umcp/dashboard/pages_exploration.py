@@ -242,6 +242,7 @@ def render_rosetta_page() -> None:
                 list(ROSETTA_LENSES.keys()),
                 index=0,
                 key="rosetta_lens",
+                help="Choose a cross-domain translation lens",
             )
 
         with col_info:
@@ -269,6 +270,7 @@ def render_rosetta_page() -> None:
             list(ROSETTA_LENSES.keys()),
             default=["Epistemology", "Physics", "Finance"],
             key="rosetta_multi",
+            help="Pick lenses to compare side-by-side",
         )
 
         if selected_lenses and pd is not None:
@@ -299,10 +301,11 @@ def render_rosetta_page() -> None:
             "Scenario",
             ["Custom Input", *list(ROSETTA_EXAMPLES.keys())],
             key="rosetta_scenario",
+            help="Pick a preset scenario or enter custom data",
         )
 
         if scenario_choice == "Custom Input":
-            n_ch = st.slider("Number of channels", 2, 12, 8, key="rosetta_n_ch")
+            n_ch = st.slider("Number of channels", 2, 12, 8, key="rosetta_n_ch", help="Trace vector dimensionality")
             st.markdown("**Enter channel values** (each 0–1):")
             cols = st.columns(min(n_ch, 4))
             channels: list[float] = []
@@ -792,7 +795,12 @@ def render_orientation_page() -> None:
         "§7 The Full Spine",
     ]
 
-    selected = st.selectbox("Select section (or run all)", ["Run All Sections", *sections], key="orient_section")
+    selected = st.selectbox(
+        "Select section (or run all)",
+        ["Run All Sections", *sections],
+        key="orient_section",
+        help="Run one section or all seven",
+    )
 
     run_all = selected == "Run All Sections"
 
@@ -805,7 +813,9 @@ def render_orientation_page() -> None:
         **every** channel contributes to fidelity or to drift. No third bucket.
         """)
 
-        n_traces = st.slider("Number of random traces", 100, 50000, 10000, 100, key="orient_n1")
+        n_traces = st.slider(
+            "Number of random traces", 100, 50000, 10000, 100, key="orient_n1", help="Random traces for duality check"
+        )
 
         if st.button("Verify Duality", key="orient_btn1"):
             rng = np.random.default_rng(42)
@@ -851,7 +861,15 @@ def render_orientation_page() -> None:
         st.markdown("*Trucidatio geometrica: unus canalis mortuus omnes necat.*")
         st.markdown("8 channels, 7 near-perfect (0.999), one varying:")
 
-        dead_val = st.slider("Dead channel value", 1e-8, 0.999, 0.001, format="%.1e", key="orient_dead")
+        dead_val = st.slider(
+            "Dead channel value",
+            1e-8,
+            0.999,
+            0.001,
+            format="%.1e",
+            key="orient_dead",
+            help="Value of the killed channel",
+        )
 
         w8 = np.ones(8) / 8.0
         dead_values = [0.999, 0.5, 0.1, 0.01, 0.001, 1e-4, 1e-6, 1e-8]
@@ -1048,7 +1066,7 @@ def render_orientation_page() -> None:
         st.markdown("*Contractu congelato, invariantibus dictis, ratione reconciliatā, suturā.*")
 
         st.subheader("Configure trace vector")
-        n_ch = st.slider("Channels", 2, 12, 8, key="orient_spine_n")
+        n_ch = st.slider("Channels", 2, 12, 8, key="orient_spine_n", help="State space dimensionality")
         cols = st.columns(min(n_ch, 4))
         default_vals = [0.85, 0.72, 0.91, 0.68, 0.77, 0.83, 0.90, 0.15, 0.60, 0.50, 0.40, 0.30]
         c_vals: list[float] = []

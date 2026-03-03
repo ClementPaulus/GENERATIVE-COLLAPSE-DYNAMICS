@@ -76,7 +76,7 @@ def render_precision_page() -> None:
     """)
 
     with st.expander("⚙️ State Input", expanded=True):
-        n_channels = st.slider("Number of channels (n)", 2, 8, 3)
+        n_channels = st.slider("Number of channels (n)", 2, 8, 3, help="State space dimensionality")
 
         cols = st.columns(n_channels)
         c_values = []
@@ -184,7 +184,7 @@ def render_precision_page() -> None:
     }
 
     df_inv = pd.DataFrame(invariants_data)
-    st.dataframe(df_inv, width="stretch", hide_index=True)
+    st.dataframe(df_inv, use_container_width=True, hide_index=True)
 
     # ========== Computation Metadata ==========
     if _HAS_KERNEL:
@@ -213,7 +213,7 @@ def render_precision_page() -> None:
                     f"±{error_bounds.S:.2e}",
                 ],
             }
-            st.dataframe(pd.DataFrame(error_data), width="stretch", hide_index=True)
+            st.dataframe(pd.DataFrame(error_data), use_container_width=True, hide_index=True)
 
     # ========== Formal Verification Checks ==========
     st.subheader("✅ Formal Verification")
@@ -275,7 +275,7 @@ def render_precision_page() -> None:
     )
 
     df_checks = pd.DataFrame(checks)
-    st.dataframe(df_checks, width="stretch", hide_index=True)
+    st.dataframe(df_checks, use_container_width=True, hide_index=True)
 
     # ========== Regime Classification ==========
     st.subheader("🌡️ Regime Classification")
@@ -322,13 +322,19 @@ def render_precision_page() -> None:
 
     with seam_cols[0]:
         st.markdown("**State at t₀**")
-        IC_0 = st.number_input("IC(t₀)", value=0.85, step=0.01, format="%.6f", key="IC0")
+        IC_0 = st.number_input(
+            "IC(t₀)", value=0.85, step=0.01, format="%.6f", key="IC0", help="Integrity composite before transition"
+        )
         tau_R = st.number_input("τ_R (return time)", value=5, min_value=1, max_value=100, key="tau_R_sim")
 
     with seam_cols[1]:
         st.markdown("**State at t₁**")
-        IC_1 = st.number_input("IC(t₁)", value=0.82, step=0.01, format="%.6f", key="IC1")
-        tol_seam = st.number_input("Tolerance", value=0.005, step=0.001, format="%.4f", key="tol_sim")
+        IC_1 = st.number_input(
+            "IC(t₁)", value=0.82, step=0.01, format="%.6f", key="IC1", help="Integrity composite after transition"
+        )
+        tol_seam = st.number_input(
+            "Tolerance", value=0.005, step=0.001, format="%.4f", key="tol_sim", help="Max seam residual for PASS"
+        )
 
     # Seam parameters (user-adjustable)
     seam_param_cols = st.columns(3)
@@ -384,7 +390,7 @@ def render_precision_page() -> None:
             f"{identity_check:.2e}",
         ],
     }
-    st.dataframe(pd.DataFrame(seam_table), width="stretch", hide_index=True)
+    st.dataframe(pd.DataFrame(seam_table), use_container_width=True, hide_index=True)
 
     st.markdown(
         f"""
@@ -435,7 +441,7 @@ def render_precision_page() -> None:
         },
     ]
 
-    st.dataframe(pd.DataFrame(constitution), width="stretch", hide_index=True)
+    st.dataframe(pd.DataFrame(constitution), use_container_width=True, hide_index=True)
 
 
 # ============================================================================
@@ -564,7 +570,9 @@ def render_layer1_state_space() -> None:
     # ========== 2D/3D Projection ==========
     st.markdown("#### Trajectory Projection")
 
-    view_mode = st.radio("View Mode", ["2D (c₁, c₂)", "3D (c₁, c₂, c₃)"], horizontal=True)
+    view_mode = st.radio(
+        "View Mode", ["2D (c₁, c₂)", "3D (c₁, c₂, c₃)"], horizontal=True, help="Projection for trajectory view"
+    )
 
     if view_mode == "2D (c₁, c₂)" or n_dims < 3:
         # 2D visualization
@@ -650,7 +658,7 @@ def render_layer1_state_space() -> None:
             title=f"State Space Trajectory (η={eta})",
         )
 
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
     else:
         # 3D visualization
@@ -710,7 +718,7 @@ def render_layer1_state_space() -> None:
             title=f"3D State Space (η={eta})",
         )
 
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
     # ========== Return Statistics ==========
     st.markdown("#### Return Analysis")
@@ -742,7 +750,7 @@ def render_layer1_state_space() -> None:
         fig_hist.update_layout(
             height=250, xaxis_title="Return Time τ_R (steps)", yaxis_title="Count", title="Return Time Distribution"
         )
-        st.plotly_chart(fig_hist, width="stretch")
+        st.plotly_chart(fig_hist, use_container_width=True)
 
 
 def render_layer2_projections() -> None:
@@ -769,11 +777,15 @@ def render_layer2_projections() -> None:
     with st.expander("⚙️ Simulation Parameters", expanded=True):
         col1, col2 = st.columns(2)
         with col1:
-            n_samples = st.slider("Samples", 20, 200, 80)
-            scenario = st.selectbox("Scenario", ["Stable System", "Drift Event", "Oscillating", "Collapse Approach"])
+            n_samples = st.slider("Samples", 20, 200, 80, help="Synthetic time steps to generate")
+            scenario = st.selectbox(
+                "Scenario",
+                ["Stable System", "Drift Event", "Oscillating", "Collapse Approach"],
+                help="Preset system behavior pattern",
+            )
         with col2:
             seed = st.number_input("Seed", 0, 999, 42, key="layer2_seed")
-            show_regime = st.checkbox("Show Regime Regions", True)
+            show_regime = st.checkbox("Show Regime Regions", True, help="Overlay regime threshold bands")
 
     np.random.seed(seed)
     t = np.arange(n_samples)
@@ -839,7 +851,7 @@ def render_layer2_projections() -> None:
             fig.add_hline(y=0.30, line_dash="dash", line_color="red", row=row, col=col)
 
     fig.update_layout(height=700, showlegend=False, title="Invariant Projections Over Time")
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
 
     # ========== Phase Space Views ==========
     st.markdown("#### Projection Phase Spaces")
@@ -865,7 +877,7 @@ def render_layer2_projections() -> None:
         fig_of.update_layout(
             height=350, xaxis_title="ω (Drift)", yaxis_title="F (Fidelity)", title="Drift-Fidelity Axis"
         )
-        st.plotly_chart(fig_of, width="stretch")
+        st.plotly_chart(fig_of, use_container_width=True)
 
     with phase_col2:
         # S vs C
@@ -882,7 +894,7 @@ def render_layer2_projections() -> None:
         fig_sc.update_layout(
             height=350, xaxis_title="S (Entropy)", yaxis_title="C (Curvature)", title="Entropy-Curvature Axis"
         )
-        st.plotly_chart(fig_sc, width="stretch")
+        st.plotly_chart(fig_sc, use_container_width=True)
 
     # ========== Heterogeneity Gap Visualization ==========
     st.markdown("#### Heterogeneity Gap Analysis")
@@ -910,7 +922,7 @@ def render_layer2_projections() -> None:
         title="Heterogeneity Gap: F ≥ IC (with equality iff homogeneous)",
         legend={"orientation": "h", "yanchor": "bottom", "y": 1.02},
     )
-    st.plotly_chart(fig_gap, width="stretch")
+    st.plotly_chart(fig_gap, use_container_width=True)
 
     st.caption("The gap Δ = F - IC quantifies state heterogeneity (Lemma 4, KERNEL_SPECIFICATION.md)")
 
@@ -940,13 +952,13 @@ def render_layer3_seam_graph() -> None:
     with st.expander("⚙️ Seam Simulation", expanded=True):
         col1, col2, col3 = st.columns(3)
         with col1:
-            n_seams = st.slider("Number of Seams", 5, 30, 12)
-            tol_seam = st.slider("Tolerance (tol_seam)", 0.001, 0.02, 0.005, 0.001)
+            n_seams = st.slider("Number of Seams", 5, 30, 12, help="How many seam transitions")
+            tol_seam = st.slider("Tolerance (tol_seam)", 0.001, 0.02, 0.005, 0.001, help="Max seam residual for PASS")
         with col2:
             R = st.slider("Return Rate R", 0.01, 0.1, 0.05, 0.01, help="Credit per return step")
-            noise_level = st.slider("Budget Noise", 0.0, 0.02, 0.003, 0.001)
+            noise_level = st.slider("Budget Noise", 0.0, 0.02, 0.003, 0.001, help="Random perturbation magnitude")
         with col3:
-            failure_rate = st.slider("Failure Rate", 0.0, 0.5, 0.15, 0.05)
+            failure_rate = st.slider("Failure Rate", 0.0, 0.5, 0.15, 0.05, help="Fraction of seams that fail")
             seed = st.number_input("Seed", 0, 999, 42, key="layer3_seed")
 
     np.random.seed(seed)
@@ -1090,7 +1102,7 @@ def render_layer3_seam_graph() -> None:
         title="Seam Certification Graph (Green=PASS, Red=FAIL, Gray=NO_RETURN)",
     )
 
-    st.plotly_chart(fig_graph, width="stretch")
+    st.plotly_chart(fig_graph, use_container_width=True)
 
     # ========== Residual Distribution ==========
     st.markdown("#### Residual Analysis")
@@ -1111,7 +1123,7 @@ def render_layer3_seam_graph() -> None:
             fig_res.update_layout(
                 height=300, xaxis_title="Seam", yaxis_title="Residual s", title="Seam Residuals (orange = tolerance)"
             )
-            st.plotly_chart(fig_res, width="stretch")
+            st.plotly_chart(fig_res, use_container_width=True)
 
     with col2:
         # Summary metrics
@@ -1145,7 +1157,7 @@ def render_layer3_seam_graph() -> None:
 
     st.dataframe(
         display_df[["t0", "t1", "tau_R", "delta_kappa_ledger", "delta_kappa_budget", "residual", "status"]],
-        width="stretch",
+        use_container_width=True,
         hide_index=True,
     )
 
@@ -1244,7 +1256,7 @@ def render_layer3_seam_graph() -> None:
                 yaxis_title="Cumulative |Residual|",
                 title=f"Residual Accumulation (growth exponent b = {metrics.growth_exponent:.3f})",
             )
-            st.plotly_chart(fig_growth, width="stretch")
+            st.plotly_chart(fig_growth, use_container_width=True)
 
 
 def render_unified_geometry_view() -> None:
@@ -1268,7 +1280,7 @@ def render_unified_geometry_view() -> None:
             n_steps = st.slider("Time Steps", 30, 150, 60, key="unified_steps")
             seed = st.number_input("Seed", 0, 999, 42, key="unified_seed")
         with col2:
-            drift_intensity = st.slider("Drift Intensity", 0.0, 0.3, 0.08)
+            drift_intensity = st.slider("Drift Intensity", 0.0, 0.3, 0.08, help="Magnitude of stochastic drift")
             st.slider("η Tolerance", 0.05, 0.25, 0.12)
 
     np.random.seed(seed)
@@ -1372,7 +1384,7 @@ def render_unified_geometry_view() -> None:
     fig.update_yaxes(title_text="Regime", row=3, col=1, range=[0, 1], showticklabels=False)
     fig.update_xaxes(title_text="Time t", row=3, col=1)
 
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
 
     # ========== Flow Summary ==========
     st.markdown("#### Geometric Flow Summary")

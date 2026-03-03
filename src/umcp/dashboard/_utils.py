@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from umcp.dashboard._deps import _cache_data, np, pd
+from umcp.dashboard._deps import _cache_data, np, pd, st
 
 # Import UMCP core modules
 try:
@@ -452,6 +452,284 @@ def detect_anomalies(series: Any, threshold: float = 2.5) -> Any:
         return pd.Series([False] * len(series), index=series.index)
     z_scores = (series - mean) / std
     return abs(z_scores) > threshold
+
+
+# ============================================================================
+# Shared UI Helpers — Professional Polish
+# ============================================================================
+
+# Custom CSS injected once via inject_custom_css()
+_CUSTOM_CSS = """
+<style>
+/* ── Global typography and spacing ────────────────────────────── */
+section[data-testid="stSidebar"] > div:first-child {
+    padding-top: 1rem;
+}
+.stMetric label { font-size: 0.82rem !important; }
+.stMetric [data-testid="stMetricValue"] { font-size: 1.3rem !important; }
+
+/* ── Section cards with subtle borders ────────────────────────── */
+div[data-testid="stExpander"] {
+    border: 1px solid rgba(128, 128, 128, 0.15);
+    border-radius: 8px;
+}
+
+/* ── Compact mode adjustments ─────────────────────────────────── */
+.compact .stMarkdown p { margin-bottom: 0.3rem; }
+.compact .stMetric { padding: 0.3rem 0; }
+
+/* ── Regime badge pills ───────────────────────────────────────── */
+.regime-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+}
+.regime-stable  { background: #28a745; }
+.regime-watch   { background: #ffc107; color: #333; }
+.regime-collapse { background: #dc3545; }
+.regime-critical { background: #6f42c1; }
+
+/* ── Status badges ────────────────────────────────────────────── */
+.status-conformant    { color: #28a745; font-weight: 600; }
+.status-nonconformant { color: #dc3545; font-weight: 600; }
+.status-non-evaluable { color: #6c757d; font-weight: 600; }
+
+/* ── Metric highlight cards ───────────────────────────────────── */
+.metric-card {
+    background: linear-gradient(135deg, rgba(0,123,255,0.05) 0%, rgba(0,123,255,0.02) 100%);
+    border: 1px solid rgba(0,123,255,0.12);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+}
+.metric-card h4 { margin: 0 0 4px 0; font-size: 0.9rem; color: #666; }
+.metric-card .value { font-size: 1.5rem; font-weight: 700; color: #1a1a2e; }
+
+/* ── Info panels ──────────────────────────────────────────────── */
+.info-panel {
+    background: rgba(23, 162, 184, 0.06);
+    border-left: 3px solid #17a2b8;
+    border-radius: 0 6px 6px 0;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-size: 0.9rem;
+}
+
+/* ── Navigation category headers ──────────────────────────────── */
+.nav-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #888;
+    margin: 12px 0 4px 0;
+    padding: 0;
+}
+</style>
+"""
+
+_CSS_INJECTED = False
+
+
+def inject_custom_css() -> None:
+    """Inject shared CSS styles once per Streamlit session.
+
+    Call this at the top of ``main()`` after ``st.set_page_config()``.
+    Idempotent — safe to call from any page.
+    """
+    global _CSS_INJECTED
+    if _CSS_INJECTED or st is None:
+        return
+    st.markdown(_CUSTOM_CSS, unsafe_allow_html=True)
+    _CSS_INJECTED = True
+
+
+def page_header(
+    title: str,
+    icon: str,
+    subtitle: str,
+    *,
+    contract: str | None = None,
+    tier: str = "Tier-2",
+) -> None:
+    """Render a consistent page header with icon, subtitle, and tier badge.
+
+    Parameters
+    ----------
+    title : str
+        Page title (no emoji prefix — ``icon`` supplies it).
+    icon : str
+        Single emoji for the page.
+    subtitle : str
+        One-line description shown as caption below the title.
+    contract : str, optional
+        Contract reference (e.g. ``"EVO.INTSTACK.v1"``).
+    tier : str
+        Tier label, default ``"Tier-2"``.
+    """
+    if st is None:
+        return
+    st.title(f"{icon} {title}")
+    parts = [subtitle]
+    if contract:
+        parts.append(f"Contract: {contract}")
+    parts.append(tier)
+    st.caption(" | ".join(parts))
+
+
+def section_divider(label: str | None = None) -> None:
+    """Render a labeled section divider."""
+    if st is None:
+        return
+    if label:
+        st.markdown(
+            f'<p class="nav-category">{label}</p>',
+            unsafe_allow_html=True,
+        )
+    st.divider()
+
+
+def regime_badge(regime: str) -> str:
+    """Return HTML for an inline regime badge pill.
+
+    Usage::
+
+        st.markdown(regime_badge("Stable"), unsafe_allow_html=True)
+    """
+    cls = f"regime-{regime.lower()}"
+    return f'<span class="regime-badge {cls}">{regime}</span>'
+
+
+def metric_row(metrics: list[tuple[str, str | float, str | None]]) -> None:
+    """Render a row of metrics in equal columns.
+
+    Parameters
+    ----------
+    metrics : list of (label, value, delta_or_none) tuples
+    """
+    if st is None:
+        return
+    cols = st.columns(len(metrics))
+    for col, (label, value, delta) in zip(cols, metrics, strict=False):
+        with col:
+            st.metric(label, value, delta=delta)
+
+
+# ── Shared chart layout defaults ─────────────────────────────────────────────
+
+CHART_MARGINS_COMPACT: dict[str, int] = {"t": 10, "b": 30, "l": 40, "r": 10}
+CHART_MARGINS_NORMAL: dict[str, int] = {"t": 30, "b": 40, "l": 50, "r": 20}
+CHART_HEIGHT_SM = 280
+CHART_HEIGHT_MD = 380
+CHART_HEIGHT_LG = 500
+
+
+def apply_chart_style(fig: Any, *, height: int = CHART_HEIGHT_MD, compact: bool = False) -> Any:
+    """Apply consistent layout defaults to a Plotly figure.
+
+    Parameters
+    ----------
+    fig : plotly Figure
+        The figure to style.
+    height : int
+        Chart height in pixels (default: 380).
+    compact : bool
+        If True, use tighter margins.
+
+    Returns
+    -------
+    The figure (for chaining).
+    """
+    margins = CHART_MARGINS_COMPACT if compact else CHART_MARGINS_NORMAL
+    fig.update_layout(
+        height=height,
+        margin=margins,
+        font={"family": "Inter, system-ui, sans-serif", "size": 12},
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        hoverlabel={"font_size": 12},
+    )
+    return fig
+
+
+# Navigation category definitions for grouped sidebar
+NAV_CATEGORIES: dict[str, list[str]] = {
+    "Core": [
+        "Overview",
+        "Domain Overview",
+        "Health",
+        "Ledger",
+        "Metrics",
+    ],
+    "Science Domains": [
+        "Cosmology",
+        "Astronomy",
+        "Nuclear",
+        "Quantum",
+        "Atomic Physics",
+        "Standard Model",
+        "Materials Science",
+        "Finance",
+        "RCFT",
+        "Security",
+        "Everyday Physics",
+    ],
+    "Evolution & Cognition": [
+        "Evolution Kernel",
+        "Brain Kernel",
+        "Awareness Manifold",
+        "Cognitive Traversal",
+    ],
+    "Analysis": [
+        "Regime",
+        "Time Series",
+        "Comparison",
+        "Formula Builder",
+        "Precision",
+    ],
+    "Exploration": [
+        "Canon Explorer",
+        "Geometry",
+        "Rosetta Translation",
+        "Orientation Protocol",
+        "Physics",
+        "Kinematics",
+    ],
+    "Tools": [
+        "Casepacks",
+        "Contracts",
+        "Closures",
+        "Live Runner",
+        "Batch Validation",
+        "Test Templates",
+    ],
+    "Diagnostics": [
+        "τ_R* Diagnostic",
+        "Epistemic",
+        "Insights",
+    ],
+    "Manage": [
+        "Exports",
+        "Bookmarks",
+        "Notifications",
+        "API Integration",
+    ],
+}
+
+# Category icons for sidebar
+NAV_CATEGORY_ICONS: dict[str, str] = {
+    "Core": "🏠",
+    "Science Domains": "🔬",
+    "Evolution & Cognition": "🧬",
+    "Analysis": "📊",
+    "Exploration": "🧭",
+    "Tools": "🛠️",
+    "Diagnostics": "🩺",
+    "Manage": "⚙️",
+}
 
 
 # ============================================================================

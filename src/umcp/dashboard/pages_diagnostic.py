@@ -505,7 +505,9 @@ def render_tau_r_star_page() -> None:
     zeno_col1, zeno_col2 = st.columns(2)
 
     with zeno_col1:
-        n_obs = st.slider("Number of observations N", 1, 100, 10, key="n_obs_zeno")
+        n_obs = st.slider(
+            "Number of observations N", 1, 100, 10, key="n_obs_zeno", help="Observation count for Zeno cost"
+        )
         gamma_current = gamma_omega(omega_input)
         total_cost = n_obs * gamma_current
         budget_fraction = total_cost / TOL_SEAM
@@ -626,11 +628,12 @@ def render_epistemic_page() -> None:
             ["STABLE", "WATCH", "COLLAPSE"],
             index=0,
             key="epist_regime",
+            help="Current system regime label",
         )
         regime = Regime(regime_str)
 
     with class_col2:
-        seam_pass = st.toggle("Seam Pass", value=True, key="epist_seam")
+        seam_pass = st.toggle("Seam Pass", value=True, key="epist_seam", help="Did the seam residual pass?")
         tau_R_val = st.number_input(
             "τ_R (Return Time)",
             min_value=0.0,
@@ -641,7 +644,7 @@ def render_epistemic_page() -> None:
         )
 
     with class_col3:
-        use_inf = st.toggle("τ_R = ∞ (No Return)", value=False, key="epist_inf")
+        use_inf = st.toggle("τ_R = ∞ (No Return)", value=False, key="epist_inf", help="Set τ_R = ∞_rec (no return)")
         if use_inf:
             tau_R_val = float("inf")
 
@@ -714,9 +717,11 @@ def render_epistemic_page() -> None:
 
     ill_input_cols = st.columns([1, 1])
     with ill_input_cols[0]:
-        omega_pi = st.slider("ω for illusion", 0.001, 0.99, 0.15, 0.001, key="pi_omega")
+        omega_pi = st.slider(
+            "ω for illusion", 0.001, 0.99, 0.15, 0.001, key="pi_omega", help="Drift value for illusion analysis"
+        )
     with ill_input_cols[1]:
-        n_pi = st.slider("N observations", 1, 50, 5, key="pi_n")
+        n_pi = st.slider("N observations", 1, 50, 5, key="pi_n", help="Number of observations to model")
 
     ill_col1, ill_col2 = st.columns([2, 1])
 
@@ -1067,18 +1072,21 @@ def render_insights_page() -> None:
             "Domain",
             ["All", *db.domains()],
             key="insight_domain",
+            help="Filter patterns by domain",
         )
     with filter_col2:
         severity_filter = st.selectbox(
             "Severity",
             ["All"] + [s.value for s in InsightSeverity],
             key="insight_severity",
+            help="Filter by severity level",
         )
     with filter_col3:
         source_filter = st.selectbox(
             "Source",
             ["All", "canon", "discovered", "cross-closure"],
             key="insight_source",
+            help="Filter by pattern origin",
         )
 
     # Apply filters

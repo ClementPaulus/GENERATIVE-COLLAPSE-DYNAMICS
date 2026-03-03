@@ -182,12 +182,14 @@ def render_cosmology_page() -> None:
     with control_cols[0]:
         sigma_0 = st.slider("Σ₀ (deviation amplitude)", -0.5, 0.5, 0.24, 0.01, help="DES Y3 finds Σ₀ ≈ 0.24 ± 0.14")
     with control_cols[1]:
-        g_model_name = st.selectbox("g(z) Model", ["constant", "exponential", "standard"], index=0)
+        g_model_name = st.selectbox(
+            "g(z) Model", ["constant", "exponential", "standard"], index=0, help="Redshift evolution model for Σ(z)"
+        )
         g_model = GzModel(g_model_name)
     with control_cols[2]:
-        z_max_sigma = st.slider("z_max", 0.5, 3.0, 2.0, 0.1)
+        z_max_sigma = st.slider("z_max", 0.5, 3.0, 2.0, 0.1, help="Maximum redshift for Σ(z) curve")
     with control_cols[3]:
-        n_points = st.slider("Points", 20, 200, 100, 10)
+        n_points = st.slider("Points", 20, 200, 100, 10, help="Number of redshift sample points")
 
     # Compute Σ(z)
     z_sigma = np.linspace(0, z_max_sigma, n_points)
@@ -398,7 +400,10 @@ def render_astronomy_page() -> None:
         preset_col, _ = st.columns([1, 2])
         with preset_col:
             preset = st.selectbox(
-                "Presets", ["Custom", "☀️ Sun", "⭐ Sirius A", "🔴 Proxima Centauri", "💙 Rigel"], key="astro_lum_preset"
+                "Presets",
+                ["Custom", "☀️ Sun", "⭐ Sirius A", "🔴 Proxima Centauri", "💙 Rigel"],
+                key="astro_lum_preset",
+                help="Choose a known star or enter custom values",
             )
         presets_lum = {
             "☀️ Sun": (1.0, 5778.0, 1.0),
@@ -409,11 +414,23 @@ def render_astronomy_page() -> None:
         _m, _t, _r = presets_lum.get(preset, (1.0, 5778.0, 1.0))
         c1, c2, c3 = st.columns(3)
         with c1:
-            m_star = st.number_input("M★ (M☉)", 0.08, 150.0, _m, 0.1, key="astro_mstar")
+            m_star = st.number_input(
+                "M★ (M☉)", 0.08, 150.0, _m, 0.1, key="astro_mstar", help="Stellar mass in solar masses"
+            )
         with c2:
-            t_eff = st.number_input("T_eff (K)", 2000.0, 50000.0, _t, 100.0, key="astro_teff")
+            t_eff = st.number_input(
+                "T_eff (K)",
+                2000.0,
+                50000.0,
+                _t,
+                100.0,
+                key="astro_teff",
+                help="Effective surface temperature in Kelvin",
+            )
         with c3:
-            r_star = st.number_input("R★ (R☉)", 0.01, 1500.0, _r, 0.1, key="astro_rstar")
+            r_star = st.number_input(
+                "R★ (R☉)", 0.01, 1500.0, _r, 0.1, key="astro_rstar", help="Stellar radius in solar radii"
+            )
 
         if st.button("Compute Luminosity", key="astro_lum", type="primary"):
             try:
@@ -856,6 +873,7 @@ def render_nuclear_page() -> None:
                     "💎 C-12 (Carbon)",
                 ],
                 key="nuc_bind_preset",
+                help="Select a nuclide or enter custom Z, A",
             )
         presets_bind = {
             "⚛️ Fe-56 (Iron)": (26, 56),
@@ -867,9 +885,11 @@ def render_nuclear_page() -> None:
         _z, _a = presets_bind.get(bp, (26, 56))
         c1, c2 = st.columns(2)
         with c1:
-            z_val = st.number_input("Z (protons)", 1, 120, _z, key="nuc_z")
+            z_val = st.number_input("Z (protons)", 1, 120, _z, key="nuc_z", help="Atomic number (number of protons)")
         with c2:
-            a_val = st.number_input("A (mass number)", 1, 300, _a, key="nuc_a")
+            a_val = st.number_input(
+                "A (mass number)", 1, 300, _a, key="nuc_a", help="Total nucleon count (protons + neutrons)"
+            )
 
         if st.button("Compute Binding", key="nuc_bind", type="primary"):
             try:
@@ -1519,7 +1539,10 @@ def render_quantum_page() -> None:
         preset_col, _ = st.columns([1, 2])
         with preset_col:
             qcp = st.selectbox(
-                "Presets", ["Custom", "🎯 Perfect Born", "📐 Superposition", "🌀 Decoherent"], key="qm_coll_preset"
+                "Presets",
+                ["Custom", "🎯 Perfect Born", "📐 Superposition", "🌀 Decoherent"],
+                key="qm_coll_preset",
+                help="Choose a quantum state scenario",
             )
         presets_coll = {
             "🎯 Perfect Born": ("0.6, 0.8", "0.36, 0.64"),
@@ -1529,9 +1552,13 @@ def render_quantum_page() -> None:
         _psi, _prob = presets_coll.get(qcp, ("0.6, 0.8", "0.35, 0.65"))
         c1, c2 = st.columns(2)
         with c1:
-            psi_str = st.text_input("ψ amplitudes (comma-separated)", _psi, key="qm_psi")
+            psi_str = st.text_input(
+                "ψ amplitudes (comma-separated)", _psi, key="qm_psi", help="Wavefunction amplitudes, e.g. 0.6, 0.8"
+            )
         with c2:
-            prob_str = st.text_input("P measured (comma-separated)", _prob, key="qm_prob")
+            prob_str = st.text_input(
+                "P measured (comma-separated)", _prob, key="qm_prob", help="Observed probabilities, e.g. 0.36, 0.64"
+            )
 
         if st.button("Compute Collapse", key="qm_collapse", type="primary"):
             try:
@@ -2019,6 +2046,7 @@ def render_finance_page() -> None:
                 "🔴 Distressed",
             ],
             key="fin_preset",
+            help="Pre-configured financial scenarios",
         )
 
     presets_fin: dict[str, dict[str, float | str]] = {
@@ -2091,9 +2119,15 @@ def render_finance_page() -> None:
     col1, col2 = st.columns(2)
     with col1:
         st.markdown("**📈 Financial Record**")
-        month = st.text_input("Month (YYYY-MM)", str(p["month"]), key="fin_month")
-        revenue = st.number_input("Revenue ($)", 0.0, 1e9, float(p["rev"]), 1000.0, key="fin_rev")
-        expenses = st.number_input("Expenses ($)", 0.0, 1e9, float(p["exp"]), 1000.0, key="fin_exp")
+        month = st.text_input(
+            "Month (YYYY-MM)", str(p["month"]), key="fin_month", help="Reporting period in YYYY-MM format"
+        )
+        revenue = st.number_input(
+            "Revenue ($)", 0.0, 1e9, float(p["rev"]), 1000.0, key="fin_rev", help="Total revenue for the period"
+        )
+        expenses = st.number_input(
+            "Expenses ($)", 0.0, 1e9, float(p["exp"]), 1000.0, key="fin_exp", help="Total operating expenses"
+        )
         cogs = st.number_input("COGS ($)", 0.0, 1e9, float(p["cogs"]), 1000.0, key="fin_cogs")
         cashflow = st.number_input("Cashflow ($)", -1e9, 1e9, float(p["cf"]), 1000.0, key="fin_cf")
 
@@ -2357,6 +2391,7 @@ def render_rcft_page() -> None:
                     "⭕ Clean Circle",
                 ],
                 key="rcft_frac_preset",
+                help="Trajectory preset with varying complexity",
             )
 
         presets_frac = {
@@ -2369,9 +2404,13 @@ def render_rcft_page() -> None:
 
         c1, c2 = st.columns(2)
         with c1:
-            n_pts = st.slider("Trajectory points", 50, 500, _npts, key="rcft_npts")
+            n_pts = st.slider(
+                "Trajectory points", 50, 500, _npts, key="rcft_npts", help="Number of points in the trajectory"
+            )
         with c2:
-            noise = st.slider("Noise level", 0.0, 1.0, _noise, 0.05, key="rcft_noise")
+            noise = st.slider(
+                "Noise level", 0.0, 1.0, _noise, 0.05, key="rcft_noise", help="Random perturbation amplitude (0=clean)"
+            )
 
         if st.button("Compute Fractal Dimension", key="rcft_frac", type="primary"):
             try:
@@ -3539,6 +3578,7 @@ def render_atomic_physics_page() -> None:
                     "U – Uranium (Z=92)",
                 ],
                 key="atom_ie_preset",
+                help="Pick an element or enter Z manually",
             )
         presets_ie = {
             "H – Hydrogen (Z=1)": 1,
@@ -3564,7 +3604,7 @@ def render_atomic_physics_page() -> None:
             st.session_state["atom_z_ie"] = presets_ie[ip]
         st.session_state[_lk_ie] = ip
         _z = presets_ie.get(ip, 1)
-        z_val = st.number_input("Z (atomic number)", 1, 118, _z, key="atom_z_ie")
+        z_val = st.number_input("Z (atomic number)", 1, 118, _z, key="atom_z_ie", help="Atomic number (1–118)")
 
         if st.button("Compute Ionization Energy", key="atom_ie", type="primary"):
             try:
@@ -4491,6 +4531,7 @@ def render_standard_model_page() -> None:
                     "ScalarBoson",
                 ],
                 key="sm_cat_filter",
+                help="Filter particles by SM category",
             )
 
             particles = particle_table()
@@ -5377,7 +5418,12 @@ def render_materials_science_page() -> None:
 
         c1, _c2 = st.columns([1, 2])
         with c1:
-            coh_preset = st.selectbox("Element", list(_ELEMENT_PRESETS.keys()), key="matl_coh_preset")
+            coh_preset = st.selectbox(
+                "Element",
+                list(_ELEMENT_PRESETS.keys()),
+                key="matl_coh_preset",
+                help="Select element for cohesive energy calc",
+            )
         coh_sym, coh_Z = _ELEMENT_PRESETS.get(coh_preset, ("Fe", 26))
 
         if st.button("Compute Cohesive Energy", key="matl_coh_btn", type="primary"):
@@ -6149,7 +6195,15 @@ def render_security_page() -> None:
         signals = []
         for i, name in enumerate(sig_names):
             with sig_cols[i]:
-                s = st.slider(name, 0.0, 1.0, 0.9 - i * 0.05, 0.01, key=f"sec_sig_{i}")
+                s = st.slider(
+                    name,
+                    0.0,
+                    1.0,
+                    0.9 - i * 0.05,
+                    0.01,
+                    key=f"sec_sig_{i}",
+                    help=f"{name} signal strength (0=fail, 1=pass)",
+                )
                 signals.append(s)
 
         st.markdown("#### Signal Weights")
@@ -6157,7 +6211,15 @@ def render_security_page() -> None:
         weights_raw = []
         for i, name in enumerate(sig_names):
             with w_cols[i]:
-                w = st.number_input(f"w_{name[:4]}", 0.0, 1.0, 1.0 / len(sig_names), 0.01, key=f"sec_w_{i}")
+                w = st.number_input(
+                    f"w_{name[:4]}",
+                    0.0,
+                    1.0,
+                    1.0 / len(sig_names),
+                    0.01,
+                    key=f"sec_w_{i}",
+                    help=f"Weight for {name} signal",
+                )
                 weights_raw.append(w)
 
         if st.button("Compute Trust Fidelity", key="sec_tf_btn", type="primary"):

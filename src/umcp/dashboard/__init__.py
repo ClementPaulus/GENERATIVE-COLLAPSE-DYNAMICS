@@ -60,6 +60,8 @@ from typing import Any
 from umcp.dashboard._deps import HAS_VIZ_DEPS, st
 from umcp.dashboard._utils import (
     KERNEL_SYMBOLS,
+    NAV_CATEGORIES,
+    NAV_CATEGORY_ICONS,
     REGIME_COLORS,
     STATUS_COLORS,
     THEMES,
@@ -71,10 +73,15 @@ from umcp.dashboard._utils import (
     get_regime_color,
     get_repo_root,
     get_trend_indicator,
+    inject_custom_css,
     load_casepacks,
     load_closures,
     load_contracts,
     load_ledger,
+    metric_row,
+    page_header,
+    regime_badge,
+    section_divider,
 )
 
 # ── Import UMCP version ─────────────────────────────────────────────────────
@@ -169,6 +176,8 @@ __all__ = [
     "GCD_SYMBOLS",
     "HAS_VIZ_DEPS",
     "KERNEL_SYMBOLS",
+    "NAV_CATEGORIES",
+    "NAV_CATEGORY_ICONS",
     "PHYSICS_QUANTITIES",
     "REGIME_COLORS",
     "STATUS_COLORS",
@@ -183,12 +192,16 @@ __all__ = [
     "get_regime_color",
     "get_repo_root",
     "get_trend_indicator",
+    "inject_custom_css",
     "load_casepacks",
     "load_closures",
     "load_contracts",
     "load_ledger",
     "main",
+    "metric_row",
     "normalize_to_bounded",
+    "page_header",
+    "regime_badge",
     "render_api_integration_page",
     "render_astronomy_page",
     "render_atomic_physics_page",
@@ -238,6 +251,7 @@ __all__ = [
     "render_test_templates_page",
     "render_time_series_page",
     "render_unified_geometry_view",
+    "section_divider",
     "translate_to_gcd",
 ]
 
@@ -292,6 +306,9 @@ def main() -> None:
         initial_sidebar_state="expanded",
     )
 
+    # Inject shared CSS
+    inject_custom_css()
+
     # Initialize session state for toggles
     if "auto_refresh" not in st.session_state:
         st.session_state.auto_refresh = False
@@ -306,152 +323,92 @@ def main() -> None:
     if "last_validation" not in st.session_state:
         st.session_state.last_validation = None
 
-    # Sidebar
-    st.sidebar.title("🔬 UMCP")
-    st.sidebar.caption(f"v{__version__}")
-
-    # ========== Navigation ==========
-    st.sidebar.markdown("### 📍 Navigation")
-
-    # Organized pages by category
+    # ── Page registry (icon → render function) ───────────────────────────────
     pages: dict[str, tuple[str, Any]] = {
-        # Core Pages
+        # Core
         "Overview": ("📊", render_overview_page),
         "Domain Overview": ("🗺️", render_domain_overview_page),
-        "Canon Explorer": ("📖", render_canon_explorer_page),
-        "Precision": ("🎯", render_precision_page),
-        "Geometry": ("🔷", render_geometry_page),
-        "Ledger": ("📒", render_ledger_page),
-        "Casepacks": ("📦", render_casepacks_page),
-        "Contracts": ("📜", render_contracts_page),
-        "Closures": ("🔧", render_closures_page),
-        "Regime": ("🌡️", render_regime_page),
-        "Metrics": ("📐", render_metrics_page),
         "Health": ("🏥", render_health_page),
-        # Interactive Pages
-        "Live Runner": ("▶️", render_live_runner_page),
-        "Batch Validation": ("📦", render_batch_validation_page),
-        "Test Templates": ("🧮", render_test_templates_page),
-        # Domain Pages (Tier-2 Expansion)
+        "Ledger": ("📒", render_ledger_page),
+        "Metrics": ("📐", render_metrics_page),
+        # Science Domains
+        "Cosmology": ("🌌", render_cosmology_page),
         "Astronomy": ("🔭", render_astronomy_page),
         "Nuclear": ("☢️", render_nuclear_page),
         "Quantum": ("🔮", render_quantum_page),
-        "Finance": ("💰", render_finance_page),
-        "RCFT": ("🌀", render_rcft_page),
         "Atomic Physics": ("⚛️", render_atomic_physics_page),
         "Standard Model": ("🔬", render_standard_model_page),
         "Materials Science": ("🧱", render_materials_science_page),
+        "Finance": ("💰", render_finance_page),
+        "RCFT": ("🌀", render_rcft_page),
         "Security": ("🛡️", render_security_page),
         "Everyday Physics": ("🌡️", render_everyday_physics_page),
-        "Physics": ("⚗️", render_physics_interface_page),
-        "Kinematics": ("🎯", render_kinematics_interface_page),
-        "Cosmology": ("🌌", render_cosmology_page),
-        # Evolution Pages
+        # Evolution & Cognition
         "Evolution Kernel": ("🧬", render_evolution_kernel_page),
         "Brain Kernel": ("🧠", render_brain_kernel_page),
-        "Awareness Manifold": ("🌀", render_awareness_manifold_page),
+        "Awareness Manifold": ("💠", render_awareness_manifold_page),
         "Cognitive Traversal": ("🚀", render_cognitive_traversal_page),
-        # Exploration Pages
-        "Rosetta Translation": ("🌐", render_rosetta_page),
-        "Orientation Protocol": ("🧭", render_orientation_page),
-        # Diagnostic Pages
-        "τ_R* Diagnostic": ("🌡️", render_tau_r_star_page),
-        "Epistemic": ("🧿", render_epistemic_page),
-        "Insights": ("💡", render_insights_page),
-        # Analysis Pages
-        "Formula Builder": ("🔧", render_formula_builder_page),
+        # Analysis
+        "Regime": ("🌡️", render_regime_page),
         "Time Series": ("📈", render_time_series_page),
         "Comparison": ("🔀", render_comparison_page),
-        # Management Pages
+        "Formula Builder": ("🧮", render_formula_builder_page),
+        "Precision": ("🎯", render_precision_page),
+        # Exploration
+        "Canon Explorer": ("📖", render_canon_explorer_page),
+        "Geometry": ("🔷", render_geometry_page),
+        "Rosetta Translation": ("🌐", render_rosetta_page),
+        "Orientation Protocol": ("🧭", render_orientation_page),
+        "Physics": ("⚗️", render_physics_interface_page),
+        "Kinematics": ("🎯", render_kinematics_interface_page),
+        # Tools
+        "Casepacks": ("📦", render_casepacks_page),
+        "Contracts": ("📜", render_contracts_page),
+        "Closures": ("🔧", render_closures_page),
+        "Live Runner": ("▶️", render_live_runner_page),
+        "Batch Validation": ("📋", render_batch_validation_page),
+        "Test Templates": ("🧪", render_test_templates_page),
+        # Diagnostics
+        "τ_R* Diagnostic": ("🩺", render_tau_r_star_page),
+        "Epistemic": ("🧿", render_epistemic_page),
+        "Insights": ("💡", render_insights_page),
+        # Manage
         "Exports": ("📥", render_exports_page),
         "Bookmarks": ("🔖", render_bookmarks_page),
         "Notifications": ("🔔", render_notifications_page),
         "API Integration": ("🔌", render_api_integration_page),
     }
 
-    page = st.sidebar.radio(
-        "Select Page",
-        list(pages.keys()),
-        format_func=lambda x: f"{pages[x][0]} {x}",
-        label_visibility="collapsed",
-        key="umcp_page_nav",
+    # ══════════════════════════════════════════════════════════════════════════
+    #  SIDEBAR
+    # ══════════════════════════════════════════════════════════════════════════
+
+    # ── Branding ─────────────────────────────────────────────────────────────
+    st.sidebar.markdown(
+        f"""
+        <div style="text-align:center; padding: 4px 0 8px 0;">
+            <span style="font-size:1.6rem; font-weight:800; letter-spacing:0.04em;">
+                🔬 UMCP
+            </span>
+            <br/>
+            <span style="font-size:0.75rem; color:#888;">
+                v{__version__} · 44 pages · 14 domains
+            </span>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-    st.sidebar.divider()
-
-    # ========== Display Controls ==========
-    st.sidebar.markdown("### ⚙️ Display Controls")
-
-    # Toggle switches
-    st.session_state.compact_mode = st.sidebar.toggle(
-        "Compact Mode", value=st.session_state.compact_mode, help="Reduce spacing and show more data"
-    )
-
-    st.session_state.show_advanced = st.sidebar.toggle(
-        "Show Advanced Options", value=st.session_state.show_advanced, help="Display advanced configuration options"
-    )
-
-    st.session_state.auto_refresh = st.sidebar.toggle(
-        "Auto Refresh", value=st.session_state.auto_refresh, help="Automatically refresh data periodically"
-    )
-
-    if st.session_state.auto_refresh:
-        st.session_state.refresh_interval = st.sidebar.slider(
-            "Refresh Interval (sec)", min_value=5, max_value=120, value=st.session_state.refresh_interval, step=5
-        )
-        # Auto-refresh: clear cached data and rerun after the configured interval
-        import time
-
-        time.sleep(st.session_state.refresh_interval)
-        st.cache_data.clear()
-        st.rerun()
-
-    st.sidebar.divider()
-
-    # ========== Theme Selection ==========
-    if st.session_state.show_advanced:
-        st.sidebar.markdown("### 🎨 Theme")
-        st.session_state.theme = st.sidebar.selectbox(
-            "Color Theme", list(THEMES.keys()), index=list(THEMES.keys()).index(st.session_state.theme)
-        )
-        st.sidebar.divider()
-
-    # ========== Quick Stats ==========
-    st.sidebar.markdown("### 📊 Quick Stats")
-    df = load_ledger()
-    casepacks = load_casepacks()
-    contracts = load_contracts()
-
-    col1, col2 = st.sidebar.columns(2)
-    with col1:
-        st.metric("📒 Ledger", len(df))
-        st.metric("📜 Contracts", len(contracts))
-    with col2:
-        st.metric("📦 Casepacks", len(casepacks))
-        if not df.empty and "run_status" in df.columns:
-            conformant = (df["run_status"] == "CONFORMANT").sum()
-            total = len(df)
-            rate = int(conformant / total * 100) if total > 0 else 0
-            st.metric("✅ Rate", f"{rate}%")
-        else:
-            st.metric("✅ Rate", "N/A")
-
-    st.sidebar.divider()
-
-    # ========== Quick Actions ==========
-    st.sidebar.markdown("### ⚡ Quick Actions")
-
+    # ── Quick Actions (compact) ──────────────────────────────────────────────
     qa_col1, qa_col2 = st.sidebar.columns(2)
-
     with qa_col1:
-        if st.button("🔄 Refresh", width="stretch", key="sidebar_refresh"):
+        if st.button("🔄 Refresh", use_container_width=True, key="sidebar_refresh"):
             st.rerun()
-
     with qa_col2:
-        if st.button("🧪 Validate", width="stretch", key="sidebar_validate"):
+        if st.button("🧪 Validate", use_container_width=True, key="sidebar_validate"):
             st.session_state.run_quick_validation = True
 
-    # Handle quick validation
+    # Handle quick validation inline
     if st.session_state.get("run_quick_validation", False):
         with st.sidebar:
             with st.spinner("Validating..."):
@@ -464,45 +421,130 @@ def main() -> None:
                         cwd=get_repo_root(),
                     )
                     if result.returncode == 0:
-                        st.success("✅ Valid")
+                        st.success("✅ CONFORMANT")
                     else:
-                        st.error("❌ Failed")
+                        st.error("❌ NONCONFORMANT")
                 except Exception as e:
                     st.error(f"Error: {e}")
             st.session_state.run_quick_validation = False
 
     st.sidebar.divider()
 
-    # ========== Core Axiom ==========
-    st.sidebar.markdown("### 📜 Core Axiom")
-    st.sidebar.info('**"Collapse is generative; only what returns is real."**')
-    st.sidebar.caption("— Axiom-0")
+    # ── Categorized Navigation ───────────────────────────────────────────────
+    # Build flat list of all page names for sidebar radio
+    all_page_names: list[str] = []
+    for cat_name in NAV_CATEGORIES:
+        all_page_names.extend(NAV_CATEGORIES[cat_name])
+
+    # Initialize selected page in session state
+    if "selected_page" not in st.session_state:
+        st.session_state.selected_page = "Overview"
+
+    # Render categorized navigation using expanders
+    for cat_name, cat_pages in NAV_CATEGORIES.items():
+        cat_icon = NAV_CATEGORY_ICONS.get(cat_name, "📁")
+        is_active_cat = st.session_state.selected_page in cat_pages
+        with st.sidebar.expander(
+            f"{cat_icon} {cat_name}",
+            expanded=is_active_cat,
+        ):
+            for pg_name in cat_pages:
+                if pg_name not in pages:
+                    continue
+                icon, _ = pages[pg_name]
+                is_current = st.session_state.selected_page == pg_name
+                label = f"**{icon} {pg_name}**" if is_current else f"{icon} {pg_name}"
+                if st.button(
+                    label,
+                    key=f"nav_{pg_name}",
+                    use_container_width=True,
+                    type="primary" if is_current else "secondary",
+                ):
+                    st.session_state.selected_page = pg_name
+                    st.rerun()
 
     st.sidebar.divider()
 
-    # ========== Protocol Tiers ==========
-    st.sidebar.markdown(f"### 🏛️ Protocol Tiers (v{__version__})")
-    st.sidebar.markdown("""
-    - **Tier-0**: Protocol — validation, regime gates, SHA256, seam calculus
-    - **Tier-1**: Immutable Invariants — F+ω=1, IC≤F, IC≈exp(κ)
-    - **Tier-2**: Expansion Space — domain closures with validity checks
-    """)
+    # ── Quick Stats (compact) ────────────────────────────────────────────────
+    df = load_ledger()
+    casepacks = load_casepacks()
 
-    st.sidebar.divider()
+    with st.sidebar.container():
+        c1, c2, c3 = st.sidebar.columns(3)
+        with c1:
+            st.metric("📒", len(df), help="Ledger entries")
+        with c2:
+            st.metric("📦", len(casepacks), help="Casepacks")
+        with c3:
+            if not df.empty and "run_status" in df.columns:
+                conformant = (df["run_status"] == "CONFORMANT").sum()
+                total = len(df)
+                rate = int(conformant / total * 100) if total > 0 else 0
+                st.metric("✅", f"{rate}%", help="Conformance rate")
+            else:
+                st.metric("✅", "N/A", help="Conformance rate")
 
-    # ========== Resources ==========
-    st.sidebar.markdown("### 📚 Resources")
-    st.sidebar.markdown("- [GitHub](https://github.com/calebpruett927/GENERATIVE-COLLAPSE-DYNAMICS)")
-    st.sidebar.markdown("- [Documentation](README.md)")
-    st.sidebar.markdown("- [API Docs](http://localhost:8000/docs)")
-    st.sidebar.markdown("- [Tutorial](QUICKSTART_TUTORIAL.md)")
+    # ── Display Controls ─────────────────────────────────────────────────────
+    with st.sidebar.expander("⚙️ Display", expanded=False):
+        st.session_state.compact_mode = st.toggle(
+            "Compact Mode",
+            value=st.session_state.compact_mode,
+            help="Reduce spacing and show more data",
+        )
+        st.session_state.show_advanced = st.toggle(
+            "Advanced Options",
+            value=st.session_state.show_advanced,
+            help="Display advanced configuration options",
+        )
+        st.session_state.auto_refresh = st.toggle(
+            "Auto Refresh",
+            value=st.session_state.auto_refresh,
+            help="Automatically refresh data periodically",
+        )
+        if st.session_state.auto_refresh:
+            st.session_state.refresh_interval = st.slider(
+                "Interval (sec)",
+                5,
+                120,
+                st.session_state.refresh_interval,
+                5,
+            )
+            import time
 
-    st.sidebar.divider()
-    st.sidebar.caption("© 2026 UMCP Project")
+            time.sleep(st.session_state.refresh_interval)
+            st.cache_data.clear()
+            st.rerun()
 
-    # Render selected page
-    _, render_func = pages[page]
-    render_func()
+        if st.session_state.show_advanced:
+            st.session_state.theme = st.selectbox(
+                "Theme",
+                list(THEMES.keys()),
+                index=list(THEMES.keys()).index(st.session_state.theme),
+            )
+
+    # ── Axiom & Resources (collapsed) ────────────────────────────────────────
+    with st.sidebar.expander("📜 Axiom-0", expanded=False):
+        st.info('**"Collapse is generative; only what returns is real."**')
+        st.caption("F+ω=1 · IC≤F · IC=exp(κ)\n\nTier-0: Protocol · Tier-1: Invariants · Tier-2: Closures")
+
+    with st.sidebar.expander("📚 Resources", expanded=False):
+        st.markdown(
+            "- [GitHub](https://github.com/calebpruett927/GENERATIVE-COLLAPSE-DYNAMICS)\n"
+            "- [Tutorial](QUICKSTART_TUTORIAL.md)\n"
+            "- [API Docs](http://localhost:8000/docs)"
+        )
+
+    st.sidebar.caption(f"© 2026 UMCP · v{__version__}")
+
+    # ── Render selected page ─────────────────────────────────────────────────
+    selected = st.session_state.selected_page
+    if selected in pages:
+        _, render_func = pages[selected]
+        render_func()
+    else:
+        # Fallback if selected page no longer exists
+        st.session_state.selected_page = "Overview"
+        render_overview_page()
 
 
 # ── Streamlit direct execution ───────────────────────────────────────────────

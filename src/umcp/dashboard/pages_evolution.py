@@ -193,6 +193,7 @@ def render_evolution_kernel_page() -> None:
                 "Filter by Domain",
                 ["All", *sorted(df["Domain"].unique().tolist())],
                 key="evo_domain_filter",
+                help="Filter organisms by domain of life",
             )
         with fc2:
             status_filter = st.selectbox(
@@ -205,6 +206,7 @@ def render_evolution_kernel_page() -> None:
                 "Filter by Regime",
                 ["All", *sorted(df["Regime"].unique().tolist())],
                 key="evo_regime_filter",
+                help="Filter by GCD regime classification",
             )
 
         filtered = df.copy()
@@ -329,6 +331,7 @@ def render_evolution_kernel_page() -> None:
             [r.name for r in results],
             default=[r.name for r in results[:4]],
             key="evo_compare",
+            help="Pick organisms for radar comparison",
         )
 
         if selected_orgs:
@@ -364,6 +367,7 @@ def render_evolution_kernel_page() -> None:
             "Select organism",
             [r.name for r in results],
             key="evo_deep",
+            help="Choose organism for detailed analysis",
         )
 
         if selected_org:
@@ -814,6 +818,7 @@ def render_brain_kernel_page() -> None:
             species_names,
             default=["Homo sapiens", "Pan troglodytes (chimp)"],
             key="brain_radar_select",
+            help="Pick species for radar comparison",
         )
 
         if selected_species:
@@ -1240,6 +1245,7 @@ def render_cognitive_traversal_page() -> None:
             [p.species for p in BRAIN_CATALOG],
             default=["Homo sapiens", "Pan troglodytes (chimp)", "Caenorhabditis elegans"],
             key="trav_curves_select",
+            help="Pick species for convergence curves",
         )
 
         if species_to_plot:
@@ -1394,6 +1400,7 @@ def render_cognitive_traversal_page() -> None:
             "Select species for sensitivity analysis",
             [p.species for p in BRAIN_CATALOG],
             key="trav_sens_species",
+            help="Species for dκ/dcᵢ sensitivity analysis",
         )
 
         if selected_sp:

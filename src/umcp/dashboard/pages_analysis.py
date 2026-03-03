@@ -143,7 +143,7 @@ def render_exports_page() -> None:
         return
 
     st.title("📥 Data Export Center")
-    st.caption("Download data, plots, and reports in various formats")
+    st.caption("Download data, plots, and reports in various formats | CSV, JSON, Excel, HTML")
 
     # Initialize export history
     if "export_history" not in st.session_state:
@@ -168,6 +168,7 @@ def render_exports_page() -> None:
                     "Date Range",
                     ["All Time", "Last 24 Hours", "Last 7 Days", "Last 30 Days", "Custom"],
                     key="export_date_range",
+                    help="Filter ledger entries by time window",
                 )
                 if date_range == "Last 24 Hours" and "timestamp" in df.columns:
                     df = df[df["timestamp"] >= datetime.now() - timedelta(hours=24)]
@@ -178,13 +179,17 @@ def render_exports_page() -> None:
 
             with col2:
                 columns = st.multiselect(
-                    "Select Columns", df.columns.tolist(), default=df.columns.tolist()[:10], key="export_columns"
+                    "Select Columns",
+                    df.columns.tolist(),
+                    default=df.columns.tolist()[:10],
+                    key="export_columns",
+                    help="Choose which columns to include in the export",
                 )
 
             # Preview
             if columns:
                 st.markdown("**Preview (first 10 rows):**")
-                st.dataframe(df[columns].head(10), width="stretch")
+                st.dataframe(df[columns].head(10), use_container_width=True)
 
                 # Download buttons
                 export_cols = st.columns(3)
@@ -195,7 +200,7 @@ def render_exports_page() -> None:
                         data=csv_data,
                         file_name=f"umcp_ledger_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                         mime="text/csv",
-                        width="stretch",
+                        use_container_width=True,
                     )
                 with export_cols[1]:
                     json_data = df[columns].to_json(orient="records", indent=2)
@@ -204,7 +209,7 @@ def render_exports_page() -> None:
                         data=json_data,
                         file_name=f"umcp_ledger_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                         mime="application/json",
-                        width="stretch",
+                        use_container_width=True,
                     )
                 with export_cols[2]:
                     # Excel requires openpyxl
@@ -218,10 +223,10 @@ def render_exports_page() -> None:
                             data=buffer.getvalue(),
                             file_name=f"umcp_ledger_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
                             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            width="stretch",
+                            use_container_width=True,
                         )
                     except ImportError:
-                        st.button("📊 Excel (needs openpyxl)", disabled=True, width="stretch")
+                        st.button("📊 Excel (needs openpyxl)", disabled=True, use_container_width=True)
 
     with tab2:
         st.subheader("Casepack Reports")
@@ -249,7 +254,7 @@ def render_exports_page() -> None:
                         data=json.dumps(report, indent=2),
                         file_name=f"casepack_{selected_cp}_report.json",
                         mime="application/json",
-                        width="stretch",
+                        use_container_width=True,
                     )
 
     with tab3:
@@ -292,7 +297,7 @@ def render_exports_page() -> None:
 
             if fig:
                 fig.update_layout(height=500)
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
                 # Export as HTML (interactive)
                 html_buffer = fig.to_html(include_plotlyjs="cdn")
@@ -301,7 +306,7 @@ def render_exports_page() -> None:
                     data=html_buffer,
                     file_name=f"umcp_plot_{plot_type.lower().replace(' ', '_')}.html",
                     mime="text/html",
-                    width="stretch",
+                    use_container_width=True,
                 )
         else:
             st.info("No data available for plot generation.")
@@ -309,7 +314,7 @@ def render_exports_page() -> None:
     with tab4:
         st.subheader("Full System Report")
 
-        if st.button("🔄 Generate Full Report", width="stretch"):
+        if st.button("🔄 Generate Full Report", use_container_width=True):
             with st.spinner("Generating comprehensive report..."):
                 # Compile full report
                 df = load_ledger()
@@ -357,7 +362,7 @@ def render_exports_page() -> None:
                     data=json.dumps(report, indent=2, default=str),
                     file_name=f"umcp_full_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                     mime="application/json",
-                    width="stretch",
+                    use_container_width=True,
                 )
 
 
@@ -367,7 +372,7 @@ def render_comparison_page() -> None:
         return
 
     st.title("🔀 Comparison Mode")
-    st.caption("Compare two audit runs or validation results side-by-side")
+    st.caption("Compare two audit runs or validation results side-by-side | Diff analysis")
 
     # Initialize comparison history
     if "comparison_history" not in st.session_state:
@@ -452,7 +457,7 @@ def render_comparison_page() -> None:
 
             if diff_data:
                 diff_df = pd.DataFrame(diff_data)
-                st.dataframe(diff_df, width="stretch", hide_index=True)
+                st.dataframe(diff_df, use_container_width=True, hide_index=True)
 
                 # Visual comparison
                 if go is not None:
@@ -470,7 +475,7 @@ def render_comparison_page() -> None:
                         xaxis_title="Metrics",
                         yaxis_title="Value",
                     )
-                    st.plotly_chart(fig, width="stretch")
+                    st.plotly_chart(fig, use_container_width=True)
 
     with tab2:
         st.subheader("Compare Casepacks")
@@ -512,7 +517,7 @@ def render_comparison_page() -> None:
                 ]
 
                 comp_df = pd.DataFrame(comparison_metrics, columns=["Metric", cp_a_id, cp_b_id])
-                st.dataframe(comp_df, width="stretch", hide_index=True)
+                st.dataframe(comp_df, use_container_width=True, hide_index=True)
 
     with tab3:
         st.subheader("Compare Audit Runs")
@@ -554,7 +559,7 @@ def render_time_series_page() -> None:
         return
 
     st.title("📈 Time Series Analysis")
-    st.caption("Track kernel invariants and trends over multiple validation runs")
+    st.caption("Track kernel invariants and trends over multiple validation runs | Forecasting & moving averages")
 
     df = load_ledger()
 
@@ -611,6 +616,7 @@ def render_time_series_page() -> None:
         numeric_cols,
         default=numeric_cols[:3] if len(numeric_cols) >= 3 else numeric_cols,
         format_func=lambda x: KERNEL_SYMBOLS.get(x, x) or x,
+        help="Choose one or more kernel invariants to track over time",
     )
 
     if not selected_metrics:
@@ -653,7 +659,7 @@ def render_time_series_page() -> None:
             showlegend=True,
             legend={"orientation": "h", "yanchor": "bottom", "y": 1.02},
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
     with tab2:
         st.markdown("### Moving Averages")
@@ -685,7 +691,7 @@ def render_time_series_page() -> None:
             )
 
         fig.update_layout(height=500, title=f"Moving Average (window={window_size})")
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
 
     with tab3:
         st.markdown("### Simple Forecasting")
@@ -722,7 +728,7 @@ def render_time_series_page() -> None:
                         )
                     )
                     fig.update_layout(title=f"{KERNEL_SYMBOLS.get(metric, metric) or metric} Forecast", height=300)
-                    st.plotly_chart(fig, width="stretch")
+                    st.plotly_chart(fig, use_container_width=True)
 
             with col2:
                 st.markdown(f"**{KERNEL_SYMBOLS.get(metric, metric) or metric}**")
@@ -751,7 +757,7 @@ def render_time_series_page() -> None:
             )
 
         stats_df = pd.DataFrame(stats_data)
-        st.dataframe(stats_df, width="stretch", hide_index=True)
+        st.dataframe(stats_df, use_container_width=True, hide_index=True)
 
         # Correlation matrix
         if len(selected_metrics) >= 2:
@@ -762,7 +768,7 @@ def render_time_series_page() -> None:
                 corr, text_auto=".2f", aspect="auto", color_continuous_scale="RdBu_r", title="Metric Correlations"
             )
             fig.update_layout(height=400)
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
 
 def render_formula_builder_page() -> None:
@@ -771,7 +777,7 @@ def render_formula_builder_page() -> None:
         return
 
     st.title("🔧 Custom Formula Builder")
-    st.caption("Create and test your own physics and analysis formulas")
+    st.caption("Create and test your own physics and analysis formulas | Safe expression evaluation")
 
     # Initialize custom formulas
     if "custom_formulas" not in st.session_state:
@@ -801,7 +807,7 @@ def render_formula_builder_page() -> None:
 
         formula_description = st.text_area("Description", placeholder="Describe what this formula calculates...")
 
-        submitted = st.form_submit_button("➕ Add Formula", width="stretch")
+        submitted = st.form_submit_button("➕ Add Formula", use_container_width=True)
 
         if submitted and formula_name and formula_expr and formula_params:
             params = [p.strip() for p in formula_params.split(",")]
@@ -862,7 +868,7 @@ def render_formula_builder_page() -> None:
                     )
 
             # Calculate
-            if st.button("🔢 Calculate", width="stretch"):
+            if st.button("🔢 Calculate", use_container_width=True):
                 try:
                     result = _safe_eval_expr(selected_formula["expression"], param_values)
 
@@ -902,7 +908,7 @@ def render_formula_builder_page() -> None:
             data=json.dumps(st.session_state.custom_formulas, indent=2),
             file_name="custom_formulas.json",
             mime="application/json",
-            width="stretch",
+            use_container_width=True,
         )
     else:
         st.info("No custom formulas saved yet.")

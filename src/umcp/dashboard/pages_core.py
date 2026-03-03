@@ -42,22 +42,22 @@ def render_overview_page() -> None:
         return
 
     st.title("🔬 UMCP Dashboard")
-    st.caption(f"Universal Measurement Contract Protocol | v{__version__} | Schema: UMCP.v1")
+    st.caption(f"Universal Measurement Contract Protocol | v{__version__} | 44 pages · 14 domains")
 
     # ========== Core Axiom ==========
-    with st.expander("📜 **Core Axiom**: What Returns Through Collapse Is Real", expanded=False):
+    with st.expander("📜 **Axiom-0**: Collapse is generative; only what returns is real", expanded=False):
         st.markdown("""
-        **AXIOM-0 (The Return Axiom)**: *"Collapse is generative; only what returns is real."*
+        **Operational Definitions:**
 
-        This is the fundamental axiom upon which UMCP, GCD, and RCFT are built.
+        | Concept | Symbol | Meaning |
+        |---------|--------|---------|
+        | **Fidelity** | F | What survives collapse |
+        | **Drift** | ω = 1−F | What is lost to collapse |
+        | **Integrity** | IC = exp(κ) | Multiplicative coherence |
+        | **Return** | τ_R | Re-entry delay to measurement domain |
+        | **Regime** | — | Stable / Watch / Collapse |
 
-        **Operational Definitions**:
-        - **Collapse**: Regime label produced by kernel gates on (ω, F, S, C) under frozen thresholds
-        - **Return (τ_R)**: Re-entry condition with prior u ∈ Dθ(t) where ‖Ψ(t) - Ψ(u)‖ ≤ η
-        - **Drift (ω)**: ω = 1 - F, collapse proximity measure on [0,1]
-        - **Integrity (IC)**: IC = exp(κ) where κ = Σ wᵢ ln(cᵢ,ε)
-
-        **Constitutional Principle**: *One-way dependency flow within a frozen run, with return-based canonization between runs.*
+        **Structural identities:** F + ω = 1 · IC ≤ F · IC ≈ exp(κ)
         """)
 
     # Load all data
@@ -67,53 +67,50 @@ def render_overview_page() -> None:
     closures = load_closures()
 
     # ========== Top-level metrics ==========
-    st.subheader("📊 System Overview")
-    metrics_cols = st.columns(6)
+    with st.container(border=True):
+        metrics_cols = st.columns(6)
 
-    ledger_count = len(df) if not df.empty else 0
-    with metrics_cols[0]:
-        st.metric("📒 Ledger Entries", f"{ledger_count:,}")
+        ledger_count = len(df) if not df.empty else 0
+        with metrics_cols[0]:
+            st.metric("📒 Ledger Entries", f"{ledger_count:,}", help="Total validation runs recorded")
 
-    with metrics_cols[1]:
-        st.metric("📦 Casepacks", len(casepacks))
+        with metrics_cols[1]:
+            st.metric("📦 Casepacks", len(casepacks), help="Available reference implementations")
 
-    with metrics_cols[2]:
-        st.metric("📜 Contracts", len(contracts))
+        with metrics_cols[2]:
+            st.metric("📜 Contracts", len(contracts), help="Mathematical contracts defining validation rules")
 
-    with metrics_cols[3]:
-        st.metric("🔧 Closures", len(closures))
+        with metrics_cols[3]:
+            st.metric("🔧 Closures", len(closures), help="Computational closures across 14 domains")
 
-    with metrics_cols[4]:
-        if not df.empty and "run_status" in df.columns:
-            conformant = (df["run_status"] == "CONFORMANT").sum()
-            total = len(df)
-            rate = conformant / total * 100 if total > 0 else 0
-            st.metric("✅ Conformance", f"{rate:.1f}%")
-        else:
-            st.metric("✅ Conformance", "N/A")
+        with metrics_cols[4]:
+            if not df.empty and "run_status" in df.columns:
+                conformant = (df["run_status"] == "CONFORMANT").sum()
+                total = len(df)
+                rate = conformant / total * 100 if total > 0 else 0
+                st.metric("✅ Conformance", f"{rate:.1f}%", help="Percentage of CONFORMANT validations")
+            else:
+                st.metric("✅ Conformance", "N/A")
 
-    with metrics_cols[5]:
-        # System health indicator
-        health = "🟢 Healthy"
-        if df.empty:
-            health = "🟡 No Data"
-        elif not df.empty and "run_status" in df.columns:
-            nonconformant = (df["run_status"] == "NONCONFORMANT").sum()
-            if nonconformant / len(df) > 0.2:
-                health = "🔴 Issues"
-            elif nonconformant / len(df) > 0.1:
-                health = "🟡 Warning"
-        st.metric("System Health", health)
-
-    st.divider()
+        with metrics_cols[5]:
+            health = "🟢 Healthy"
+            if df.empty:
+                health = "🟡 No Data"
+            elif not df.empty and "run_status" in df.columns:
+                nonconformant = (df["run_status"] == "NONCONFORMANT").sum()
+                if nonconformant / len(df) > 0.2:
+                    health = "🔴 Issues"
+                elif nonconformant / len(df) > 0.1:
+                    health = "🟡 Warning"
+            st.metric("System Health", health, help="Based on nonconformant ratio")
 
     # ========== Main content area ==========
     left_col, center_col, right_col = st.columns([1.5, 2, 1])
 
-    with left_col:
-        st.subheader("📈 Status Distribution")
+    with left_col, st.container(border=True):
+        st.subheader("📊 Status Distribution")
         if df.empty:
-            st.info("No ledger data yet.")
+            st.info("No ledger data yet. Run `umcp validate` to populate.")
         elif "run_status" in df.columns:
             status_counts = df["run_status"].value_counts()
             fig = px.pie(
@@ -128,11 +125,13 @@ def render_overview_page() -> None:
                 margin={"t": 10, "b": 10, "l": 10, "r": 10},
                 showlegend=True,
                 legend={"orientation": "h", "yanchor": "bottom", "y": -0.2},
+                plot_bgcolor="rgba(0,0,0,0)",
+                paper_bgcolor="rgba(0,0,0,0)",
             )
             fig.update_traces(textposition="inside", textinfo="percent+label")
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
-    with center_col:
+    with center_col, st.container(border=True):
         st.subheader("📈 Metrics Timeline")
         if df.empty or "timestamp" not in df.columns:
             st.info("No time series data available.")
@@ -142,7 +141,10 @@ def render_overview_page() -> None:
 
             if numeric_cols:
                 selected_metric = st.selectbox(
-                    "Select Metric", numeric_cols, format_func=lambda x: KERNEL_SYMBOLS.get(x, x) or x
+                    "Select Metric",
+                    numeric_cols,
+                    format_func=lambda x: KERNEL_SYMBOLS.get(x, x) or x,
+                    help="Choose a kernel invariant to plot over time",
                 )
                 fig = go.Figure()
                 fig.add_trace(
@@ -155,6 +157,7 @@ def render_overview_page() -> None:
                         line={"width": 2},
                         fill="tozeroy",
                         fillcolor="rgba(0,123,255,0.1)",
+                        hovertemplate="%{y:.4f}<br>%{x|%b %d, %H:%M}<extra></extra>",
                     )
                 )
                 fig.update_layout(
@@ -163,12 +166,14 @@ def render_overview_page() -> None:
                     xaxis_title="",
                     yaxis_title=KERNEL_SYMBOLS.get(selected_metric, selected_metric),
                     showlegend=False,
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    paper_bgcolor="rgba(0,0,0,0)",
                 )
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
             else:
                 st.info("No numeric metrics available.")
 
-    with right_col:
+    with right_col, st.container(border=True):
         st.subheader("🎯 Latest Values")
         if not df.empty:
             latest = df.iloc[-1]
@@ -178,7 +183,6 @@ def render_overview_page() -> None:
                 val = latest[col]
                 if pd.notna(val):
                     label = KERNEL_SYMBOLS.get(col, col) or col
-                    # Get trend if enough data
                     delta = None
                     if len(df) > 1:
                         prev = df.iloc[-2][col]
@@ -187,8 +191,6 @@ def render_overview_page() -> None:
                     st.metric(label, f"{val:.4f}", delta=delta)
         else:
             st.info("No data")
-
-    st.divider()
 
     # ========== Recent Activity Feed ==========
     st.subheader("📝 Recent Activity")
@@ -206,10 +208,13 @@ def render_overview_page() -> None:
                 omega_str = f"ω={omega_val:.3f}" if omega_val is not None else ""
                 st.markdown(
                     f"""
-                <div style="padding:8px; border-radius:8px; background-color: {STATUS_COLORS.get(status, "#ccc")}22; border-left: 3px solid {STATUS_COLORS.get(status, "#ccc")};">
+                <div style="padding:10px; border-radius:8px;
+                     background-color: {STATUS_COLORS.get(status, "#ccc")}15;
+                     border-left: 3px solid {STATUS_COLORS.get(status, "#ccc")};
+                     margin-bottom: 6px;">
                     <strong>{emoji} {status}</strong><br/>
-                    <small>{ts}</small><br/>
-                    <small>{omega_str}</small>
+                    <small style="color:#666;">{ts}</small><br/>
+                    <small style="color:#888;">{omega_str}</small>
                 </div>
                 """,
                     unsafe_allow_html=True,
@@ -224,7 +229,7 @@ def render_ledger_page() -> None:
         return
 
     st.title("📒 Validation Ledger")
-    st.caption("Explore and analyze validation history")
+    st.caption("Explore and analyze validation history | Append-only audit trail")
 
     df = load_ledger()
 
@@ -241,13 +246,15 @@ def render_ledger_page() -> None:
     with filter_cols[0]:
         if "run_status" in filtered_df.columns:
             status_options = ["All", *filtered_df["run_status"].unique().tolist()]
-            status_filter: str = st.selectbox("Status", status_options) or "All"
+            status_filter: str = st.selectbox("Status", status_options, help="Filter by validation verdict") or "All"
             if status_filter != "All":
                 filtered_df = filtered_df[filtered_df["run_status"] == status_filter]
 
     with filter_cols[1]:
         if "timestamp" in filtered_df.columns:
-            date_range = st.selectbox("Time Range", ["All", "Last 24h", "Last 7d", "Last 30d", "Custom"])
+            date_range = st.selectbox(
+                "Time Range", ["All", "Last 24h", "Last 7d", "Last 30d", "Custom"], help="Restrict to recent entries"
+            )
             now = datetime.now()
             if date_range == "Last 24h":
                 filtered_df = filtered_df[filtered_df["timestamp"] >= now - timedelta(days=1)]
@@ -259,17 +266,17 @@ def render_ledger_page() -> None:
     with filter_cols[2]:
         numeric_cols = filtered_df.select_dtypes(include=["number"]).columns.tolist()
         if numeric_cols and "omega" in numeric_cols:
-            omega_filter = st.slider("Omega Range", 0.0, 1.0, (0.0, 1.0), 0.01)
+            omega_filter = st.slider("Omega Range", 0.0, 1.0, (0.0, 1.0), 0.01, help="ω = 1−F: higher means more drift")
             if "omega" in filtered_df.columns:
                 filtered_df = filtered_df[
                     (filtered_df["omega"] >= omega_filter[0]) & (filtered_df["omega"] <= omega_filter[1])
                 ]
 
     with filter_cols[3]:
-        max_rows = st.slider("Max Rows", 10, 1000, 100)
+        max_rows = st.slider("Max Rows", 10, 1000, 100, help="Limit displayed rows")
 
     with filter_cols[4]:
-        sort_order = st.selectbox("Sort", ["Newest First", "Oldest First"])
+        sort_order = st.selectbox("Sort", ["Newest First", "Oldest First"], help="Chronological order")
         ascending = sort_order == "Oldest First"
 
     # Apply sorting
@@ -282,7 +289,7 @@ def render_ledger_page() -> None:
     )
 
     display_df = filtered_df.tail(max_rows) if not ascending else filtered_df.head(max_rows)
-    st.dataframe(display_df, width="stretch", height=400)
+    st.dataframe(display_df, use_container_width=True, height=400)
 
     st.divider()
 
@@ -297,7 +304,7 @@ def render_ledger_page() -> None:
             # Add additional stats
             stats.loc["range"] = stats.loc["max"] - stats.loc["min"]
             stats.loc["cv%"] = (stats.loc["std"] / stats.loc["mean"] * 100).round(2)
-            st.dataframe(stats.T.style.format("{:.4f}"), width="stretch")
+            st.dataframe(stats.T.style.format("{:.4f}"), use_container_width=True)
         else:
             st.info("No numeric columns for statistics.")
 
@@ -309,7 +316,7 @@ def render_ledger_page() -> None:
             with col1:
                 fig = px.box(filtered_df, y=selected, title=f"{KERNEL_SYMBOLS.get(selected, selected)} Box Plot")
                 fig.update_layout(height=350)
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
             with col2:
                 fig = px.histogram(
                     filtered_df,
@@ -319,7 +326,7 @@ def render_ledger_page() -> None:
                     marginal="rug",
                 )
                 fig.update_layout(height=350)
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
     with tab3:
         numeric_cols = filtered_df.select_dtypes(include=["number"]).columns.tolist()
@@ -333,7 +340,7 @@ def render_ledger_page() -> None:
 
                 if anomaly_count > 0:
                     anomaly_df = filtered_df[anomalies]
-                    st.dataframe(anomaly_df, width="stretch")
+                    st.dataframe(anomaly_df, use_container_width=True)
 
                     # Visualize
                     fig = go.Figure()
@@ -356,7 +363,7 @@ def render_ledger_page() -> None:
                         )
                     )
                     fig.update_layout(title=f"Anomalies in {KERNEL_SYMBOLS.get(selected, selected)}", height=300)
-                    st.plotly_chart(fig, width="stretch")
+                    st.plotly_chart(fig, use_container_width=True)
             else:
                 st.info("Not enough data for anomaly detection (need > 3 samples).")
 
@@ -377,7 +384,9 @@ def render_casepacks_page() -> None:
         return
 
     st.title("📦 Casepacks")
-    st.caption("Browse and explore available reference implementations")
+    st.caption(
+        "Browse and explore available reference implementations | Each casepack is a self-contained validation unit"
+    )
 
     casepacks = load_casepacks()
 
@@ -386,23 +395,26 @@ def render_casepacks_page() -> None:
         return
 
     # ========== Summary metrics ==========
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.metric("Total Casepacks", len(casepacks))
-    with col2:
-        total_closures = sum(cp["closures_count"] for cp in casepacks)
-        st.metric("Total Closures", total_closures)
-    with col3:
-        total_tests = sum(cp["test_vectors"] for cp in casepacks)
-        st.metric("Total Test Vectors", total_tests)
-    with col4:
-        total_files = sum(cp["files_count"] for cp in casepacks)
-        st.metric("Total Files", total_files)
+    with st.container(border=True):
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("Total Casepacks", len(casepacks), help="Directories under casepacks/")
+        with col2:
+            total_closures = sum(cp["closures_count"] for cp in casepacks)
+            st.metric("Total Closures", total_closures, help="Computational closures across all casepacks")
+        with col3:
+            total_tests = sum(cp["test_vectors"] for cp in casepacks)
+            st.metric("Total Test Vectors", total_tests, help="Total test vectors for validation")
+        with col4:
+            total_files = sum(cp["files_count"] for cp in casepacks)
+            st.metric("Total Files", total_files, help="Total files across all casepacks")
 
     st.divider()
 
     # ========== Filter ==========
-    search = st.text_input("🔍 Search casepacks", placeholder="Type to filter...")
+    search = st.text_input(
+        "🔍 Search casepacks", placeholder="Type to filter...", help="Filter by casepack name or description"
+    )
 
     filtered_casepacks = casepacks
     if search:
@@ -461,7 +473,7 @@ def render_contracts_page() -> None:
         return
 
     st.title("📜 Contracts")
-    st.caption("Mathematical contracts defining validation rules and invariants")
+    st.caption("Mathematical contracts defining validation rules and invariants | Frozen per run")
 
     contracts = load_contracts()
 
@@ -478,13 +490,14 @@ def render_contracts_page() -> None:
         domains[domain].append(c)
 
     # Summary metrics
-    st.subheader("📊 Overview")
-    cols = st.columns(len(domains) + 1)
-    with cols[0]:
-        st.metric("Total Contracts", len(contracts))
-    for i, (domain, domain_contracts) in enumerate(domains.items(), 1):
-        with cols[i]:
-            st.metric(f"{domain}", len(domain_contracts))
+    with st.container(border=True):
+        st.subheader("📊 Overview")
+        cols = st.columns(len(domains) + 1)
+        with cols[0]:
+            st.metric("Total Contracts", len(contracts), help="YAML contracts under contracts/")
+        for i, (domain, domain_contracts) in enumerate(domains.items(), 1):
+            with cols[i]:
+                st.metric(f"{domain}", len(domain_contracts), help=f"{domain} domain contracts")
 
     st.divider()
 
@@ -522,7 +535,7 @@ def render_closures_page() -> None:
         return
 
     st.title("🔧 Closures")
-    st.caption("Computational closures for validation and transformation")
+    st.caption("Computational closures for validation and transformation | Tier-2 expansion space")
 
     closures = load_closures()
 
@@ -531,31 +544,32 @@ def render_closures_page() -> None:
         return
 
     # ========== Summary ==========
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        python_count = sum(1 for c in closures if c["type"] == "python")
-        st.metric("🐍 Python", python_count)
-    with col2:
-        yaml_count = sum(1 for c in closures if c["type"] == "yaml")
-        st.metric("📄 YAML", yaml_count)
-    with col3:
-        total_lines = sum(c["lines"] for c in closures)
-        st.metric("📏 Total Lines", f"{total_lines:,}")
-    with col4:
-        total_size = sum(c["size_bytes"] for c in closures)
-        st.metric("💾 Total Size", format_bytes(total_size))
+    with st.container(border=True):
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            python_count = sum(1 for c in closures if c["type"] == "python")
+            st.metric("🐍 Python", python_count, help="Python closure modules")
+        with col2:
+            yaml_count = sum(1 for c in closures if c["type"] == "yaml")
+            st.metric("📄 YAML", yaml_count, help="YAML configuration closures")
+        with col3:
+            total_lines = sum(c["lines"] for c in closures)
+            st.metric("📏 Total Lines", f"{total_lines:,}", help="Combined source lines")
+        with col4:
+            total_size = sum(c["size_bytes"] for c in closures)
+            st.metric("💾 Total Size", format_bytes(total_size), help="Total file size on disk")
 
     st.divider()
 
     # ========== Filters ==========
     filter_cols = st.columns(3)
     with filter_cols[0]:
-        type_filter = st.radio("Type", ["All", "Python", "YAML"], horizontal=True)
+        type_filter = st.radio("Type", ["All", "Python", "YAML"], horizontal=True, help="Filter by closure file type")
     with filter_cols[1]:
         domain_options = ["All", *sorted({c["domain"] for c in closures})]
-        domain_filter: str = st.selectbox("Domain", domain_options) or "All"
+        domain_filter: str = st.selectbox("Domain", domain_options, help="Filter by domain") or "All"
     with filter_cols[2]:
-        search = st.text_input("Search", placeholder="Filter by name...")
+        search = st.text_input("Search", placeholder="Filter by name...", help="Search closure names")
 
     # Apply filters
     filtered = closures
@@ -607,7 +621,7 @@ def render_regime_page() -> None:
         return
 
     st.title("🌡️ Regime Classification")
-    st.caption("Interactive exploration of the kernel regime phase space")
+    st.caption("Interactive exploration of the kernel regime phase space | Four-gate criterion")
 
     # ========== Theory ==========
     with st.expander("📖 Understanding Regimes", expanded=False):
@@ -667,9 +681,15 @@ def render_regime_page() -> None:
     st.subheader("📊 Regime Phase Space")
 
     with st.expander("⚙️ Visualization Settings"):
-        resolution = st.slider("Resolution", 50, 200, 100, help="Higher resolution = more detail but slower rendering")
-        show_boundaries = st.checkbox("Show Regime Boundaries", value=True)
-        show_trajectory = st.checkbox("Simulate Trajectory", value=False)
+        resolution = st.slider(
+            "Resolution", 50, 200, 100, help="Grid points per axis — higher = more detail but slower"
+        )
+        show_boundaries = st.checkbox(
+            "Show Regime Boundaries", value=True, help="Overlay \u03c9 and seam threshold lines"
+        )
+        show_trajectory = st.checkbox(
+            "Simulate Trajectory", value=False, help="Show a sample oscillatory path through phase space"
+        )
 
     # Create phase space
     omega_range = np.linspace(0, 1, resolution)
@@ -745,9 +765,11 @@ def render_regime_page() -> None:
         yaxis={"range": [0, 1]},
         showlegend=True,
         legend={"orientation": "h", "yanchor": "bottom", "y": 1.02},
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
     )
 
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, use_container_width=True)
 
     # Legend
     legend_cols = st.columns(4)
@@ -819,8 +841,10 @@ def render_regime_page() -> None:
             yaxis_title="Overlap Fraction (ω)",
             xaxis={"range": [-0.05, 0.05]},
             yaxis={"range": [0, 1]},
+            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="rgba(0,0,0,0)",
         )
-        st.plotly_chart(fig2, width="stretch")
+        st.plotly_chart(fig2, use_container_width=True)
 
         # Regime distribution
         regime_counts = plot_df["regime"].value_counts()
@@ -838,7 +862,7 @@ def render_metrics_page() -> None:
         return
 
     st.title("📐 Kernel Metrics Analysis")
-    st.caption("Deep dive into kernel invariants, correlations, and trends")
+    st.caption("Deep dive into kernel invariants, correlations, and trends | Tier-1 reserved symbols")
 
     df = load_ledger()
 
@@ -878,9 +902,9 @@ def render_metrics_page() -> None:
         # Options
         ts_cols = st.columns(2)
         with ts_cols[0]:
-            ma_window = st.slider("Moving Average Window", 1, 50, 10)
+            ma_window = st.slider("Moving Average Window", 1, 50, 10, help="Smoothing window size for trend lines")
         with ts_cols[1]:
-            show_raw = st.checkbox("Show Raw Data", value=True)
+            show_raw = st.checkbox("Show Raw Data", value=True, help="Toggle raw data overlay behind moving average")
 
         # Create subplots
         if make_subplots is None:
@@ -942,7 +966,7 @@ def render_metrics_page() -> None:
             height=220 * len(selected_metrics),
             showlegend=False,
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("Not enough time series data available.")
 
@@ -951,7 +975,9 @@ def render_metrics_page() -> None:
     # ========== Distribution Analysis ==========
     st.subheader("📊 Distribution Analysis")
 
-    dist_type = st.radio("Chart Type", ["Violin", "Box", "Histogram"], horizontal=True)
+    dist_type = st.radio(
+        "Chart Type", ["Violin", "Box", "Histogram"], horizontal=True, help="Choose distribution visualization style"
+    )
 
     dist_cols = st.columns(min(3, len(selected_metrics)))
 
@@ -978,7 +1004,7 @@ def render_metrics_page() -> None:
                 height=300,
                 showlegend=False,
             )
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
 
@@ -1005,7 +1031,7 @@ def render_metrics_page() -> None:
                 zmax=1,
             )
             fig.update_layout(title="Correlation Matrix", height=400)
-            st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, use_container_width=True)
 
             # Insights
             st.markdown("**Correlation Insights:**")
@@ -1028,7 +1054,7 @@ def render_metrics_page() -> None:
                     height=600,
                 )
                 fig.update_traces(diagonal_visible=False, marker={"size": 4})
-                st.plotly_chart(fig, width="stretch")
+                st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
 
@@ -1062,10 +1088,10 @@ def render_metrics_page() -> None:
 
     # Try to use styled dataframe with gradient, fallback to plain if matplotlib not available
     try:
-        st.dataframe(stats.T.style.format("{:.4f}").background_gradient(cmap="Blues", axis=0), width="stretch")
+        st.dataframe(stats.T.style.format("{:.4f}").background_gradient(cmap="Blues", axis=0), use_container_width=True)
     except ImportError:
         # Matplotlib not available, use plain styled dataframe
-        st.dataframe(stats.T.style.format("{:.4f}"), width="stretch")
+        st.dataframe(stats.T.style.format("{:.4f}"), use_container_width=True)
 
 
 def render_health_page() -> None:
@@ -1074,7 +1100,7 @@ def render_health_page() -> None:
         return
 
     st.title("🏥 System Health")
-    st.caption("UMCP system diagnostics and health checks")
+    st.caption("UMCP system diagnostics and health checks | Component status at a glance")
 
     repo_root = get_repo_root()
 
@@ -1162,20 +1188,25 @@ def render_health_page() -> None:
 
     # Display checks as table
     checks_df = pd.DataFrame(checks)
-    st.dataframe(checks_df, width="stretch", hide_index=True)
+    st.dataframe(checks_df, use_container_width=True, hide_index=True)
 
     st.divider()
 
     # ========== Python Environment ==========
-    st.subheader("🐍 Python Environment")
+    with st.container(border=True):
+        st.subheader("🐍 Python Environment")
 
-    env_cols = st.columns(3)
-    with env_cols[0]:
-        st.metric("Python Version", f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}")
-    with env_cols[1]:
-        st.metric("UMCP Version", __version__)
-    with env_cols[2]:
-        st.metric("Platform", sys.platform)
+        env_cols = st.columns(3)
+        with env_cols[0]:
+            st.metric(
+                "Python Version",
+                f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+                help="Running interpreter version",
+            )
+        with env_cols[1]:
+            st.metric("UMCP Version", __version__, help="Installed UMCP package version")
+        with env_cols[2]:
+            st.metric("Platform", sys.platform, help="OS platform identifier")
 
     st.divider()
 
@@ -1200,7 +1231,7 @@ def render_health_page() -> None:
         deps.append({"Package": dep, "Type": "Visualization", "Status": status})
 
     deps_df = pd.DataFrame(deps)
-    st.dataframe(deps_df, width="stretch", hide_index=True)
+    st.dataframe(deps_df, use_container_width=True, hide_index=True)
 
     st.divider()
 
@@ -1210,7 +1241,7 @@ def render_health_page() -> None:
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("▶️ Run Health Check", width="stretch"):
+        if st.button("▶️ Run Health Check", use_container_width=True, help="Execute umcp health CLI command"):
             with st.spinner("Running health check..."):
                 try:
                     result = subprocess.run(
@@ -1235,7 +1266,7 @@ def render_health_page() -> None:
                     st.error(f"Error running health check: {e}")
 
     with col2:
-        if st.button("🧪 Run Tests (Quick)", width="stretch"):
+        if st.button("🧪 Run Tests (Quick)", use_container_width=True, help="Run pytest with --tb=short -q"):
             with st.spinner("Running quick tests..."):
                 try:
                     result = subprocess.run(

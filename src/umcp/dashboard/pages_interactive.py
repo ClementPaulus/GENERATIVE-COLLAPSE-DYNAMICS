@@ -89,7 +89,7 @@ def render_test_templates_page() -> None:
 
     for i, (name, preset) in enumerate(presets.items()):
         with preset_cols[i]:
-            if st.button(f"📌 {name}", key=f"preset_{name}", width="stretch"):
+            if st.button(f"📌 {name}", key=f"preset_{name}", use_container_width=True):
                 st.session_state.template_coords = preset["coords"]
                 st.session_state.template_weights = preset["weights"]
                 st.rerun()
@@ -99,7 +99,13 @@ def render_test_templates_page() -> None:
     # Coordinate input
     st.subheader("🎯 Coordinates (Ψ)")
 
-    n_dims = st.slider("Number of dimensions", min_value=2, max_value=8, value=len(st.session_state.template_coords))
+    n_dims = st.slider(
+        "Number of dimensions",
+        min_value=2,
+        max_value=8,
+        value=len(st.session_state.template_coords),
+        help="Trace vector dimensionality",
+    )
 
     # Adjust arrays if dimension changed
     while len(st.session_state.template_coords) < n_dims:
@@ -164,7 +170,11 @@ def render_test_templates_page() -> None:
     # Epsilon clipping
     st.subheader("🔒 ε-Clipping Policy")
     epsilon = st.select_slider(
-        "Epsilon (ε)", options=[1e-8, 1e-7, 1e-6, 1e-5, 1e-4], value=1e-6, format_func=lambda x: f"{x:.0e}"
+        "Epsilon (ε)",
+        options=[1e-8, 1e-7, 1e-6, 1e-5, 1e-4],
+        value=1e-6,
+        format_func=lambda x: f"{x:.0e}",
+        help="Guard band for coordinate clamping",
     )
 
     st.divider()
@@ -172,13 +182,13 @@ def render_test_templates_page() -> None:
     # ========== PROCESS BUTTON ==========
     process_col1, process_col2, process_col3 = st.columns([2, 1, 1])
     with process_col1:
-        process_button = st.button("🚀 Run Tier Translation", type="primary", width="stretch")
+        process_button = st.button("🚀 Run Tier Translation", type="primary", use_container_width=True)
     with process_col2:
-        if st.button("🗑️ Clear Audit Log", width="stretch"):
+        if st.button("🗑️ Clear Audit Log", use_container_width=True):
             st.session_state.audit_log = []
             st.rerun()
     with process_col3:
-        export_audit = st.button("📤 Export Audit", width="stretch")
+        export_audit = st.button("📤 Export Audit", use_container_width=True)
 
     if process_button:
         # Start audit
@@ -402,7 +412,7 @@ def render_test_templates_page() -> None:
                             "Weight": t0["raw_weights"],
                         }
                     )
-                    st.dataframe(t0_df, hide_index=True, width="stretch")
+                    st.dataframe(t0_df, hide_index=True, use_container_width=True)
 
             # TIER 1 OUTPUT
             with tier_cols[1]:
@@ -597,6 +607,7 @@ def render_batch_validation_page() -> None:
             "Choose casepacks to validate",
             [cp["id"] for cp in casepacks],
             default=[cp["id"] for cp in casepacks[:3]] if len(casepacks) >= 3 else [cp["id"] for cp in casepacks],
+            help="Pick casepacks for batch validation",
         )
 
     with col2:
@@ -612,9 +623,9 @@ def render_batch_validation_page() -> None:
 
     opt_cols = st.columns(4)
     with opt_cols[0]:
-        strict_mode = st.checkbox("Strict Mode", value=False)
+        strict_mode = st.checkbox("Strict Mode", value=False, help="Fail on warnings")
     with opt_cols[1]:
-        verbose = st.checkbox("Verbose Output", value=False)
+        verbose = st.checkbox("Verbose Output", value=False, help="Show full stdout/stderr")
     with opt_cols[2]:
         fail_fast = st.checkbox("Fail Fast", value=False, help="Stop on first failure")
     with opt_cols[3]:
@@ -623,7 +634,7 @@ def render_batch_validation_page() -> None:
     st.divider()
 
     # ========== Run Batch ==========
-    if st.button("🚀 Run Batch Validation", width="stretch", disabled=not selected_casepacks):
+    if st.button("🚀 Run Batch Validation", use_container_width=True, disabled=not selected_casepacks):
         results = []
         progress = st.progress(0, text="Starting batch validation...")
         status_container = st.container()
@@ -737,7 +748,9 @@ def render_batch_validation_page() -> None:
                         return "background-color: #f8d7da"
                     return "background-color: #fff3cd"
 
-                st.dataframe(results_df.style.map(color_status, subset=["Status"]), width="stretch", hide_index=True)
+                st.dataframe(
+                    results_df.style.map(color_status, subset=["Status"]), use_container_width=True, hide_index=True
+                )
 
     st.divider()
 
@@ -793,7 +806,7 @@ def render_live_runner_page() -> None:
             verbose = st.toggle("Verbose Output", value=False, help="Show detailed output")
 
         with ctrl_cols[3]:
-            fail_on_warning = st.toggle("Fail on Warning", value=False)
+            fail_on_warning = st.toggle("Fail on Warning", value=False, help="Treat warnings as errors")
 
     st.divider()
 
@@ -801,11 +814,11 @@ def render_live_runner_page() -> None:
     run_cols = st.columns([1, 1, 2])
 
     with run_cols[0]:
-        run_button = st.button("▶️ Run Validation", width="stretch", type="primary")
+        run_button = st.button("▶️ Run Validation", use_container_width=True, type="primary")
 
     with run_cols[1]:
         # Stop button placeholder (for future async support)
-        st.button("⏹️ Stop", width="stretch", disabled=True)
+        st.button("⏹️ Stop", use_container_width=True, disabled=True)
 
     with run_cols[2]:
         st.empty()  # Spacer
@@ -942,7 +955,7 @@ def render_live_runner_page() -> None:
                 with col, st.container(border=True):
                     st.markdown(f"**{cp['id']}**")
                     st.caption(f"v{cp['version']} • {cp['test_vectors']} vectors")
-                    if st.button("▶️ Run", key=f"run_{cp['id']}", width="stretch"):
+                    if st.button("▶️ Run", key=f"run_{cp['id']}", use_container_width=True):
                         with st.spinner(f"Validating {cp['id']}..."):
                             result = subprocess.run(
                                 [sys.executable, "-m", "umcp", "validate", f"casepacks/{cp['id']}"],
