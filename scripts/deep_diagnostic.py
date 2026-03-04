@@ -11,14 +11,13 @@ from pathlib import Path
 
 import numpy as np
 from scipy.integrate import quad
-from scipy.optimize import brentq
 
 # Workspace setup
 _WS = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(_WS / "src"))
 sys.path.insert(0, str(_WS))
 
-from umcp.frozen_contract import EPSILON, P_EXPONENT
+from umcp.frozen_contract import C_STAR, C_TRAP, EPSILON, OMEGA_TRAP, gamma_omega
 from umcp.kernel_optimized import compute_kernel_outputs
 
 # ═══════════════════════════════════════════════════════════════════
@@ -28,7 +27,7 @@ from umcp.kernel_optimized import compute_kernel_outputs
 
 def find_c_star() -> float:
     """Find c* where f'(c) = ln((1-c)/c) + 1/c = 0."""
-    return brentq(lambda c: np.log((1 - c) / c) + 1 / c, 0.01, 0.99)
+    return C_STAR  # Imported from frozen_contract (bisection-derived)
 
 
 def f_coupling(c: float) -> float:
@@ -183,19 +182,18 @@ print("-" * 50)
 
 omega_stable = 0.038
 omega_collapse = 0.30
-omega_trap = brentq(lambda om: om**3 / (1 - om + EPSILON) - 1, 0.1, 0.99)
-c_trap = 1 - omega_trap
+omega_trap = OMEGA_TRAP
+c_trap = C_TRAP
 
 
-def gamma(omega: float) -> float:
-    return omega**P_EXPONENT / (1 - omega + EPSILON)
+# gamma_omega imported from frozen_contract — no local reimplementation
 
 
 print("  Four structural omegas in ascending order:")
-print(f"    ω_stable  = {omega_stable:.6f}   Γ = {gamma(omega_stable):.8f}")
-print(f"    ω*        = {omega_star:.6f}   Γ = {gamma(omega_star):.8f}")
-print(f"    ω_collapse= {omega_collapse:.6f}   Γ = {gamma(omega_collapse):.8f}")
-print(f"    ω_trap    = {omega_trap:.6f}   Γ = {gamma(omega_trap):.8f}")
+print(f"    ω_stable  = {omega_stable:.6f}   Γ = {gamma_omega(omega_stable):.8f}")
+print(f"    ω*        = {omega_star:.6f}   Γ = {gamma_omega(omega_star):.8f}")
+print(f"    ω_collapse= {omega_collapse:.6f}   Γ = {gamma_omega(omega_collapse):.8f}")
+print(f"    ω_trap    = {omega_trap:.6f}   Γ = {gamma_omega(omega_trap):.8f}")
 print()
 print(f"  {omega_stable:.3f} < {omega_star:.3f} < {omega_collapse:.3f} < {omega_trap:.3f}")
 print()
@@ -280,7 +278,7 @@ def gamma_prime(omega: float) -> float:
 
 def gamma_elasticity(omega: float) -> float:
     """Elasticity: ω·Γ'/Γ = how many percent Γ changes per percent ω change."""
-    return omega * gamma_prime(omega) / gamma(omega)
+    return omega * gamma_prime(omega) / gamma_omega(omega)
 
 
 hdr_gp = "Gamma'"
@@ -293,7 +291,7 @@ for label, om in [
     ("c_trap", omega_trap),
     ("near pole", 0.90),
 ]:
-    g = gamma(om)
+    g = gamma_omega(om)
     gp = gamma_prime(om)
     el = gamma_elasticity(om)
     print(f"  {label:15s}  {om:8.4f}  {g:12.6f}  {gp:12.4f}  {el:10.4f}")

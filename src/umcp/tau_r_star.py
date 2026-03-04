@@ -452,7 +452,7 @@ def classify_phase(tau_R_star: float, omega: float, *, epsilon: float = EPSILON)
     if omega > 1.0 - 10 * epsilon:
         return ThermodynamicPhase.POLE
 
-    if math.isinf(tau_R_star) or math.isnan(tau_R_star):
+    if not math.isfinite(tau_R_star):
         return ThermodynamicPhase.POLE
 
     # Free-return surface: τ_R* ≈ 0

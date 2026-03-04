@@ -53,6 +53,45 @@ LAMBDA: float = 0.2  # λ
 TOL_SEAM: float = 0.005  # |s| ≤ tol_seam for PASS
 
 # =============================================================================
+# DERIVED STRUCTURAL CONSTANTS (deterministic from ε, p, α)
+# =============================================================================
+
+
+def _bisect(f, lo: float, hi: float, tol: float = 1e-15, maxiter: int = 200) -> float:
+    """Pure-numpy bisection (no scipy dependency). f(lo) and f(hi) must have opposite signs."""
+    f_lo = f(lo)
+    for _ in range(maxiter):
+        mid = (lo + hi) / 2
+        f_mid = f(mid)
+        if (f_lo > 0) == (f_mid > 0):
+            lo, f_lo = mid, f_mid
+        else:
+            hi = mid
+        if hi - lo < tol:
+            break
+    return (lo + hi) / 2
+
+
+# c* ≈ 0.7822 — logistic self-dual fixed point where S + κ is maximized
+# Solves: ln((1-c)/c) + 1/c = 0 (f'(c) = 0 for f = S + κ per channel)
+C_STAR: float = _bisect(
+    lambda c: np.log((1 - c) / c) + 1 / c,
+    0.01,
+    0.99,
+)
+
+# ω_trap ≈ 0.6823 — trapping threshold where Γ(ω_trap) = α
+# Solves: ω³/(1-ω+ε) = 1 (Cardano root of x³+x-1=0 at p=3, α=1)
+OMEGA_TRAP: float = _bisect(
+    lambda om: om**P_EXPONENT / (1 - om + EPSILON) - ALPHA,
+    0.01,
+    1 - EPSILON,
+)
+
+# c_trap ≈ 0.3177 — channel-space trapping threshold
+C_TRAP: float = 1.0 - OMEGA_TRAP
+
+# =============================================================================
 # TIMEZONE
 # =============================================================================
 

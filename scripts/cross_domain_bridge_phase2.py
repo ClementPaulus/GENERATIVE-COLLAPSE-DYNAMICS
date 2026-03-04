@@ -27,7 +27,7 @@ from scipy.optimize import brentq, minimize_scalar
 sys.path.insert(0, "src")
 sys.path.insert(0, ".")
 
-from umcp.frozen_contract import EPSILON
+from umcp.frozen_contract import C_STAR, C_TRAP, EPSILON
 from umcp.kernel_optimized import compute_kernel_outputs
 
 
@@ -39,9 +39,9 @@ def banner(title: str) -> None:
 
 w8 = np.ones(8) / 8
 
-# Fundamental constants
-c_star = brentq(lambda c: np.log((1 - c) / c) + 1 / c, 0.01, 0.99)
-c_trap = 1 - brentq(lambda om: om**3 / (1 - om + EPSILON) - 1, 0.1, 0.99)
+# Fundamental constants — imported from frozen_contract (derived from ε, p, α)
+c_star = C_STAR
+c_trap = C_TRAP
 
 
 def fisher_theta(c: float) -> float:

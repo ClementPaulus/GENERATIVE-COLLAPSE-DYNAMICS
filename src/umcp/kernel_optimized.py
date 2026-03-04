@@ -227,11 +227,13 @@ class OptimizedKernelComputer:
         Definition 6 from KERNEL_SPECIFICATION.md.
         Shannon entropy is the degenerate limit when the collapse field is removed.
         """
-        entropy = 0.0
-        for ci, wi in zip(c, w, strict=False):
-            if wi > 0:  # Skip zero-weight coordinates (OPT-17)
-                entropy += wi * self._bernoulli_entropy(ci)
-        return entropy
+        # Vectorized: compute h(c_i) for all channels at once
+        h = np.where(
+            (c > 0) & (c < 1),
+            -c * np.log(c) - (1 - c) * np.log(1 - c),
+            0.0,
+        )
+        return float(np.dot(w, h))
 
     def _compute_curvature(self, c: np.ndarray) -> float:
         """

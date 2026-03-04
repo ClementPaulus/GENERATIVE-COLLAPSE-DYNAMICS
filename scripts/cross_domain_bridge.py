@@ -30,12 +30,13 @@ from __future__ import annotations
 import sys
 
 import numpy as np
-from scipy.optimize import brentq
 
 sys.path.insert(0, "src")
 sys.path.insert(0, ".")
 
-from umcp.frozen_contract import ALPHA, EPSILON, P_EXPONENT, TOL_SEAM
+from scipy.optimize import brentq
+
+from umcp.frozen_contract import ALPHA, C_STAR, C_TRAP, EPSILON, OMEGA_TRAP, P_EXPONENT, TOL_SEAM
 from umcp.kernel_optimized import compute_kernel_outputs
 
 # ── Import cost functions (handle both old and new signatures) ──
@@ -59,10 +60,10 @@ def section(title: str) -> None:
 # ══════════════════════════════════════════════════════════════════
 # FUNDAMENTAL CONSTANTS
 # ══════════════════════════════════════════════════════════════════
-c_star = brentq(lambda c: np.log((1 - c) / c) + 1 / c, 0.01, 0.99)
+c_star = C_STAR
 omega_star = 1 - c_star
-c_trap = 1 - brentq(lambda om: om**3 / (1 - om + EPSILON) - 1, 0.1, 0.99)
-omega_trap = 1 - c_trap
+c_trap = C_TRAP
+omega_trap = OMEGA_TRAP
 
 # Structural landmarks
 LANDMARKS = {

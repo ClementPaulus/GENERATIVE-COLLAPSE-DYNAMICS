@@ -1,27 +1,14 @@
-docs: update all instruction files with 28 identities, refined math, and spine highlighting
+Tighten active files: centralize constants, vectorize kernel, eliminate duplication
 
-- AXIOM.md: add "Mathematics of Return: 28 Verified Identities" section with
-  Fisher geometry, one-formula principle, five structural constants, p=3 cubic
-  identity, integrity bound as solvability, composition laws, closure algebra,
-  regime partition. Correct Lemma 41 (S+kappa maximum at c*). Update domain
-  count to 14.
+- frozen_contract.py: Add _bisect() helper (pure-numpy, no scipy), compute
+  C_STAR (0.7822), OMEGA_TRAP (0.6823), C_TRAP (0.3177) at module load
+- kernel_optimized.py: Vectorize _compute_entropy() — replace Python loop
+  with np.where + np.dot one-liner
+- deep_diagnostic.py: Import gamma_omega/C_STAR/C_TRAP/OMEGA_TRAP from
+  frozen_contract instead of local reimplementations
+- cross_domain_bridge.py: Use C_STAR/C_TRAP/OMEGA_TRAP from frozen_contract
+  instead of recomputing via brentq at module level
+- cross_domain_bridge_phase2.py: Same constant centralization; retain brentq
+  for parametric p-sweep only
 
-- copilot-instructions.md: add "Spina ad Primum Intuitum" (spine at a glance)
-  with full ASCII diagram, six invariants, five constants, three identities,
-  three regimes with Fisher space percentages. Add "Mathematica Derivata"
-  with 7 key results from 28 identities. Update test count to 5,247.
-
-- CLAUDE.md: add spine section with ASCII diagram and stop descriptions.
-  Add 28 identities key results summary (7 bullets).
-
-- AGENTS.md: add spine and identities sections. Update key paths with
-  three diagnostic scripts.
-
-- README.md: add spine visualization to At-a-Glance. Rewrite kernel section
-  with Fisher coordinates, one-formula, five constants, corrected regime
-  table (Stable 12.5% / Watch 24.4% / Collapse 63.1%), composition laws.
-  Add 28 Structural Identities to Key Discoveries. Add identities badge.
-  Update TOC and essential reading table.
-
-All changes derive from Axiom-0 and the 28 computationally verified
-structural identities (E1-E8, B1-B12, D1-D8).
+All 5,247 tests pass. Lint clean. Integrity updated.
