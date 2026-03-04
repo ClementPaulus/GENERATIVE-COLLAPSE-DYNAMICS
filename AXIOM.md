@@ -122,7 +122,7 @@ The tier system maps onto three epistemic states — the minimum required to des
 | Agent 2 | Retained / Archive | F = 1 − ω (fidelity) | What survives measurement and is kept |
 | Agent 3 | Unmeasured / Unknown | Γ(ω) = ω^p/(1−ω) | The cost of crossing the boundary into the unknown |
 
-The kernel identity F = 1 − ω is the formal statement that retention (Agent 2) is everything not consumed by measurement (Agent 1). The return axiom governs transitions: Agent 3 → Agent 1 (discovery), Agent 1 → Agent 2 (retention). The equator c = 1/2 is the boundary of maximum epistemic symmetry — measurement is equally sensitive to both sides (Fisher metric minimized, entropy maximized, S + κ = 0 exactly). See: Lemma 5 (S = ln 2 iff c = 1/2), Lemma 41 (S + κ ≤ 0 with equality at c = 1/2), T19 (Fano-Fisher duality h″ = −g_F).
+The kernel identity F = 1 − ω is the formal statement that retention (Agent 2) is everything not consumed by measurement (Agent 1). The return axiom governs transitions: Agent 3 → Agent 1 (discovery), Agent 1 → Agent 2 (retention). The equator c = 1/2 is the boundary of maximum epistemic symmetry — measurement is equally sensitive to both sides (Fisher metric minimized, entropy maximized, S + κ = 0 exactly). See: Lemma 5 (S = ln 2 iff c = 1/2), Lemma 41 (S + κ = 0 at the equator c = 1/2; S + κ ≤ ln 2 globally), T19 (Fano-Fisher duality h″ = −g_F).
 
 **DOI**: 10.5281/zenodo.16526052 (Three-Agent Epistemic Field Model, Paulus 2025)
 

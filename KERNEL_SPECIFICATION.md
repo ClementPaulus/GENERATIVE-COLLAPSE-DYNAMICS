@@ -962,30 +962,27 @@ S(t) + κ(t) ≤ ln(2)
 Equivalently: High entropy requires low (negative) log-integrity.
 
 **Proof**:
-Define f(c) = h(c) + ln(c) where h(c) = -c ln c - (1-c) ln(1-c).
+Define f(c) = h(c) + ln(c) where h(c) = -c ln c - (1-c) ln(1-c) is the binary entropy.
+
+Taking the derivative:
 
 ```
-f(c) = -c ln c - (1-c) ln(1-c) + ln c
-     = (1-c) ln c - (1-c) ln(1-c) - c ln c + ln c
-     = (1-c)[ln c - ln(1-c)] + ln c - c ln c
+f'(c) = h'(c) + 1/c = -ln(c/(1-c)) + 1/c
 ```
 
-Taking derivative: f'(c) = -ln(c/(1-c)) + 1/c - 1
-Setting f'(c) = 0 yields c = 1/2 (maximum).
+Setting f'(c) = 0: the critical point is at c\* ≈ 0.7822 (solved numerically),
+where f(c\*) ≈ 0.2785 < ln(2) ≈ 0.6931.
 
-```
-f(1/2) = ln(2) + ln(1/2) = ln(2) - ln(2) = 0...
-```
+Boundary analysis confirms the bound:
+- At c = 1/2: h(1/2) = ln(2), κ = ln(1/2) = -ln(2), so f(1/2) = 0.
+- For c → ε: S → 0, κ → ln(ε) → -∞, so f → -∞.
+- For c → 1-ε: S → 0, κ → ln(1-ε) ≈ 0, so f → 0.
 
-Wait, let me recalculate. At c = 1/2: h(1/2) = ln(2), κ = ln(1/2) = -ln(2).
-So S + κ = ln(2) - ln(2) = 0 at the symmetric point.
+Since max f(c) ≈ 0.2785 < ln(2) ≈ 0.6931, the bound S + κ ≤ ln(2) holds strictly.
 
-For c → ε: S → 0, κ → ln(ε) < 0, so S + κ → ln(ε) < ln(2) ✓
-For c → 1-ε: S → 0, κ → ln(1-ε) ≈ 0, so S + κ → 0 < ln(2) ✓
-
-The maximum of S + κ is at c = 1/2 where it equals 0, but we need the bound...
-
-**Corrected Statement**: S(t) ≤ ln(2) - κ(t) when κ(t) ≤ 0, which gives S(t) ≤ ln(2) + |κ(t)|.
+Note: f'(1/2) = 1.0 ≠ 0 — the equator c = 1/2 is NOT the maximum of f.
+It is the unique **zero-crossing** where S + κ = 0 exactly. The maximum lies at
+c* ≈ 0.7822, well below ln(2), confirming the bound.
 
 **Interpretation**: Entropy and log-integrity are **coupled**—systems cannot have both high uncertainty and high integrity simultaneously.
 
@@ -1266,7 +1263,7 @@ This inverts the standard relationship between theory and constants. Standard fr
 
 ### Debugging with Lemmas
 
-If a computed run violates the bounds in Lemmas 1-34, the implementation is almost certainly nonconformant. Check:
+If a computed run violates the bounds in Lemmas 1-46, the implementation is almost certainly nonconformant. Check:
 
 - Clipping applied before logarithms (Lemma 1, Lemma 3)
 - Weight normalization (Σw_i = 1)
@@ -1287,7 +1284,7 @@ If a computed run violates the bounds in Lemmas 1-34, the implementation is almo
 - Changes to default conventions (ε, normalization constants, domain generators) require **closure declarations**
 - Implementation changes that preserve mathematical definitions do not require versioning (but must pass conformance tests)
 
-**Current Version**: UMCP v2.0.0 (as of UMCP Manuscript v1.0.0, §8)
+**Current Version**: UMCP v2.1.5
 
 ---
 

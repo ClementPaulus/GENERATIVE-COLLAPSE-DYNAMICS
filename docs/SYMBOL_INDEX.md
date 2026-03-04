@@ -1,7 +1,7 @@
 # UMCP Symbol Index
 
-**Fast lookup table for reserved symbols**  
-**Version:** 1.0.0  
+**Fast lookup table for reserved symbols**
+**Version:** 1.0.0
 **Last Updated:** 2026-01-21
 
 This index provides rapid symbol lookup with Unicode, ASCII, and file encodings. Required for preventing symbol capture and ensuring protocol reproducibility.
@@ -39,10 +39,10 @@ See also:
 | **D_θ(t)** | 0/1 | Return-domain generator (declared at Tier-0; used to define return candidates) |
 | **U_θ(t)** | 1 | Return candidate set under metric and tolerance |
 | **∞_rec** | 0/1 | Typed "no return observed within horizon" marker |
-| **Γ(ω; p, ε)** | 1.5 | Closure defining D_ω for seam budget (must be frozen) |
-| **R** | 1.5 | Return-credit estimator (closure-defined; required for seam budget) |
-| **D_ω** | 1.5 | Drift dissipation term from Γ (closure-defined) |
-| **D_C** | 1.5 | Curvature dissipation term (typically αC, closure-defined) |
+| **Γ(ω; p, ε)** | 0 | Drift cost closure (closure-defined, frozen per contract; required for seam budget) |
+| **R** | 0 | Return-credit estimator (closure-defined; required for seam budget) |
+| **D_ω** | 0 | Drift dissipation term from Γ (closure-defined) |
+| **D_C** | 0 | Curvature dissipation term (typically αC, closure-defined) |
 
 ---
 
@@ -298,7 +298,7 @@ reserved_symbols:
   - symbol: omega      # ASCII identifier
     latex: ω           # Unicode/LaTeX
     tier: 1            # Tier classification
-    
+
 # Typed boundary states
 return_time: INF_REC   # Not a number; typed state
 ```

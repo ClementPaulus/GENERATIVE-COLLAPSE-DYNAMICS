@@ -1,9 +1,10 @@
-"""Tests for KERNEL_SPECIFICATION.md Lemmas 24–34.
+"""Tests for KERNEL_SPECIFICATION.md Lemmas 22, 24–34.
 
 These lemmas are the formal mathematical guarantees the protocol claims.
 Each is a falsifiable property of existing kernel functions.
 
 Lemmas tested:
+  22 — Collapse gate monotonicity under threshold relaxation
   24 — Return stability under small perturbation
   25 — Closure perturbation bound (ε shift → κ shift)
   26 — Entropy–drift coherence bound Θ ∈ [0, 2]
@@ -12,6 +13,7 @@ Lemmas tested:
   29 — Return probability bound (wide η → return)
   30 — Weight perturbation stability
   31 — Embedding consistency (zero-weight dims don't change F, ω, κ)
+  32 — Temporal coarse-graining stability
   33 — Sufficient condition for finite return
   34 — Drift threshold via AM-GM gap
 """
@@ -397,3 +399,264 @@ class TestLemma34_AMGMGap:
         gap_het = ko_het.F - ko_het.IC
 
         assert gap_het > gap_homo
+
+
+# ============================================================================
+# Lemma 22 — Collapse Gate Monotonicity Under Threshold Relaxation
+# ============================================================================
+
+
+class TestLemma22_CollapseGateMonotonicity:
+    """Tightening collapse thresholds increases the collapse-flagged set.
+
+    Lemma 22: Let T_tight be timesteps flagged as collapse under tight gates,
+    T_relaxed under relaxed gates.  Then T_tight ⊇ T_relaxed.
+    Order-preserving under threshold variation.
+    """
+
+    @staticmethod
+    def _classify_regime(
+        omega: float,
+        F: float,
+        S: float,
+        C: float,
+        omega_thresh: float,
+        F_thresh: float,
+        S_thresh: float,
+        C_thresh: float,
+    ) -> str:
+        """Classify a single timestep.  Collapse if ω ≥ omega_thresh.
+        Stable if all four gates pass.  Otherwise Watch.
+        """
+        if omega >= omega_thresh:
+            return "Collapse"
+        if omega < omega_thresh and F_thresh < F and S_thresh > S and C_thresh > C:
+            return "Stable"
+        return "Watch"
+
+    def test_tighter_thresholds_flag_more_collapse(self) -> None:
+        """Tighter ω threshold → more timesteps flagged as Collapse."""
+        n = 8
+        w = normalize_weights(np.ones(n) / n)
+        traces = [RNG.uniform(0.1, 0.9, size=n) for _ in range(200)]
+
+        tight_thresh = 0.20
+        relaxed_thresh = 0.40
+
+        collapse_tight = set()
+        collapse_relaxed = set()
+        for i, c in enumerate(traces):
+            ko = compute_kernel(c, w, tau_R=1.0, epsilon=EPSILON)
+            if self._classify_regime(ko.omega, ko.F, ko.S, ko.C, tight_thresh, 0.90, 0.15, 0.14) == "Collapse":
+                collapse_tight.add(i)
+            if self._classify_regime(ko.omega, ko.F, ko.S, ko.C, relaxed_thresh, 0.90, 0.15, 0.14) == "Collapse":
+                collapse_relaxed.add(i)
+
+        # Relaxed threshold is higher ω → fewer flagged as collapse
+        assert collapse_relaxed.issubset(collapse_tight), (
+            f"Monotonicity violated: {collapse_relaxed - collapse_tight} in relaxed but not tight"
+        )
+
+    def test_relaxed_stable_gates_reduce_collapse(self) -> None:
+        """Relaxing all four gates reduces collapse+watch set size."""
+        n = 5
+        w = normalize_weights(np.ones(n) / n)
+        traces = [RNG.uniform(0.05, 0.95, size=n) for _ in range(100)]
+
+        # Tight: strict gates
+        non_stable_tight = 0
+        # Relaxed: looser gates
+        non_stable_relaxed = 0
+
+        for c in traces:
+            ko = compute_kernel(c, w, tau_R=1.0, epsilon=EPSILON)
+            if self._classify_regime(ko.omega, ko.F, ko.S, ko.C, 0.038, 0.90, 0.15, 0.14) != "Stable":
+                non_stable_tight += 1
+            if self._classify_regime(ko.omega, ko.F, ko.S, ko.C, 0.10, 0.70, 0.50, 0.50) != "Stable":
+                non_stable_relaxed += 1
+
+        assert non_stable_relaxed <= non_stable_tight
+
+
+# ============================================================================
+# Lemma 29 — Return Probability Under Bounded Random Walk
+# ============================================================================
+
+
+class TestLemma29_ReturnProbabilityBoundedWalk:
+    """Under bounded random walk, return is almost certain if η > 2σ√n.
+
+    Lemma 29: For bounded random walk on [0,1]ⁿ with step size σ,
+    if η > 2σ√n then P_return → 1 as H_rec → ∞.
+    """
+
+    def test_bounded_walk_returns(self) -> None:
+        """Bounded random walk with wide η returns with high probability."""
+        n = 4
+        sigma = 0.02
+        eta = 2.5 * sigma * np.sqrt(n)  # > 2σ√n
+        H_rec = 500
+
+        returns = 0
+        trials = 50
+        for _ in range(trials):
+            # Generate bounded random walk
+            trace = np.zeros((H_rec + 1, n))
+            trace[0] = RNG.uniform(0.3, 0.7, size=n)
+            for t in range(1, H_rec + 1):
+                step = RNG.normal(0, sigma, size=n)
+                trace[t] = np.clip(trace[0 + t - 1] + step, 0.01, 0.99)
+
+            # Check for return: any later timestep within η of t=0
+            origin = trace[0]
+            for t in range(1, H_rec + 1):
+                if np.linalg.norm(trace[t] - origin) < eta:
+                    returns += 1
+                    break
+
+        assert returns / trials >= 0.80, f"Return rate {returns / trials} too low — Lemma 29 expects near-certainty"
+
+    def test_narrow_eta_reduces_returns(self) -> None:
+        """Narrow η (< 2σ√n) reduces return probability."""
+        n = 4
+        sigma = 0.05
+        eta_wide = 3.0 * sigma * np.sqrt(n)
+        eta_narrow = 0.5 * sigma * np.sqrt(n)
+        H_rec = 200
+
+        returns_wide = 0
+        returns_narrow = 0
+        trials = 50
+        for _ in range(trials):
+            trace = np.zeros((H_rec + 1, n))
+            trace[0] = RNG.uniform(0.3, 0.7, size=n)
+            for t in range(1, H_rec + 1):
+                step = RNG.normal(0, sigma, size=n)
+                trace[t] = np.clip(trace[t - 1] + step, 0.01, 0.99)
+
+            origin = trace[0]
+            for t in range(1, H_rec + 1):
+                if np.linalg.norm(trace[t] - origin) < eta_wide:
+                    returns_wide += 1
+                    break
+            for t in range(1, H_rec + 1):
+                if np.linalg.norm(trace[t] - origin) < eta_narrow:
+                    returns_narrow += 1
+                    break
+
+        assert returns_wide >= returns_narrow, "Wider η should produce at least as many returns"
+
+
+# ============================================================================
+# Lemma 32 — Temporal Coarse-Graining Stability
+# ============================================================================
+
+
+class TestLemma32_TemporalCoarseGraining:
+    """Coarse-grained kernel outputs are bounded perturbations of fine-grained averages.
+
+    Lemma 32: |F̄(t') − (1/M) Σ F(Mt'+k)| ≤ ε_coarse(M) → 0 as M → 1.
+    """
+
+    def test_coarsened_F_close_to_fine_average(self) -> None:
+        """Coarse-grained F is close to average of fine-grained F values."""
+        n = 5
+        w = normalize_weights(np.ones(n) / n)
+        T = 100
+        M = 5  # coarsening factor
+
+        # Generate smooth trace
+        trace = np.zeros((T, n))
+        trace[0] = RNG.uniform(0.3, 0.7, size=n)
+        for t in range(1, T):
+            step = RNG.normal(0, 0.02, size=n)
+            trace[t] = np.clip(trace[t - 1] + step, 0.01, 0.99)
+
+        T_prime = T // M
+        for t_prime in range(T_prime):
+            # Fine-grained: compute F for each sub-step, average
+            fine_Fs = []
+            for k in range(M):
+                idx = M * t_prime + k
+                ko = compute_kernel(trace[idx], w, tau_R=1.0, epsilon=EPSILON)
+                fine_Fs.append(ko.F)
+            avg_fine_F = np.mean(fine_Fs)
+
+            # Coarse-grained: average coordinates, then compute F
+            coarse_c = np.mean(trace[M * t_prime : M * (t_prime + 1)], axis=0)
+            coarse_c = np.clip(coarse_c, EPSILON, 1 - EPSILON)
+            ko_coarse = compute_kernel(coarse_c, w, tau_R=1.0, epsilon=EPSILON)
+
+            # F is linear in c_i, so for equal weights F̄ = avg(F) exactly
+            assert abs(ko_coarse.F - avg_fine_F) < 1e-10, (
+                f"F coarsening error too large: {abs(ko_coarse.F - avg_fine_F)}"
+            )
+
+    def test_coarsened_kappa_bounded_perturbation(self) -> None:
+        """Coarse-grained κ is a bounded perturbation of fine-grained average."""
+        n = 4
+        w = normalize_weights(np.ones(n) / n)
+        T = 60
+        M = 3
+
+        trace = np.zeros((T, n))
+        trace[0] = RNG.uniform(0.3, 0.7, size=n)
+        for t in range(1, T):
+            step = RNG.normal(0, 0.01, size=n)
+            trace[t] = np.clip(trace[t - 1] + step, 0.05, 0.95)
+
+        T_prime = T // M
+        max_kappa_error = 0.0
+        for t_prime in range(T_prime):
+            fine_kappas = []
+            for k in range(M):
+                idx = M * t_prime + k
+                ko = compute_kernel(trace[idx], w, tau_R=1.0, epsilon=EPSILON)
+                fine_kappas.append(ko.kappa)
+            avg_fine_kappa = np.mean(fine_kappas)
+
+            coarse_c = np.mean(trace[M * t_prime : M * (t_prime + 1)], axis=0)
+            coarse_c = np.clip(coarse_c, EPSILON, 1 - EPSILON)
+            ko_coarse = compute_kernel(coarse_c, w, tau_R=1.0, epsilon=EPSILON)
+
+            kappa_error = abs(ko_coarse.kappa - avg_fine_kappa)
+            max_kappa_error = max(max_kappa_error, kappa_error)
+
+        # κ is nonlinear (Jensen's gap), but for smooth traces with small M
+        # the perturbation should be bounded
+        assert max_kappa_error < 0.5, f"κ coarsening error unbounded: {max_kappa_error}"
+
+    def test_finer_coarsening_reduces_error(self) -> None:
+        """Smaller M → smaller coarsening error (ε_coarse → 0 as M → 1)."""
+        n = 4
+        w = normalize_weights(np.ones(n) / n)
+        T = 60
+
+        trace = np.zeros((T, n))
+        trace[0] = RNG.uniform(0.3, 0.7, size=n)
+        for t in range(1, T):
+            step = RNG.normal(0, 0.01, size=n)
+            trace[t] = np.clip(trace[t - 1] + step, 0.05, 0.95)
+
+        errors_by_M: dict[int, float] = {}
+        for M in [2, 3, 5, 10]:
+            T_prime = T // M
+            max_err = 0.0
+            for t_prime in range(T_prime):
+                fine_kappas = []
+                for k in range(M):
+                    idx = M * t_prime + k
+                    ko = compute_kernel(trace[idx], w, tau_R=1.0, epsilon=EPSILON)
+                    fine_kappas.append(ko.kappa)
+                avg_fine_kappa = np.mean(fine_kappas)
+
+                coarse_c = np.mean(trace[M * t_prime : M * (t_prime + 1)], axis=0)
+                coarse_c = np.clip(coarse_c, EPSILON, 1 - EPSILON)
+                ko_coarse = compute_kernel(coarse_c, w, tau_R=1.0, epsilon=EPSILON)
+                max_err = max(max_err, abs(ko_coarse.kappa - avg_fine_kappa))
+            errors_by_M[M] = max_err
+
+        # Monotonicity: smaller M should give smaller error (approximately)
+        assert errors_by_M[2] <= errors_by_M[10] + 0.01, (
+            f"Expected ε_coarse to grow with M: M=2→{errors_by_M[2]:.4f}, M=10→{errors_by_M[10]:.4f}"
+        )

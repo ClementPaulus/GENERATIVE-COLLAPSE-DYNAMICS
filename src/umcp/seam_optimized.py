@@ -2,12 +2,16 @@
 Optimized Seam Accounting Module
 
 Implements computational optimizations for multi-seam chains based on
-Lemmas 18-21, 27 from KERNEL_SPECIFICATION.md.
+Lemmas 18-21, 27, 45-46 from KERNEL_SPECIFICATION.md.
 
 Key optimizations:
 - OPT-10: Incremental ledger updates (Lemma 20)
 - OPT-11: Residual accumulation monitoring (Lemma 27)
 - Early failure detection for non-returning dynamics
+
+Extended lemma coverage:
+- Lemma 45: Seam composition is associative — (s₁∘s₂)∘s₃ = s₁∘(s₂∘s₃)
+- Lemma 46: Identity seam exists — s∘e = e∘s = s (Δκ=0, zero residual)
 
 Interconnections:
 - Used by: weld computation, publication infrastructure
