@@ -107,6 +107,7 @@ from umcp.dashboard.pages_analysis import (
     render_formula_builder_page,
     render_time_series_page,
 )
+from umcp.dashboard.pages_closures import render_closure_explorer_page
 from umcp.dashboard.pages_core import (
     render_casepacks_page,
     render_closures_page,
@@ -211,6 +212,7 @@ __all__ = [
     "render_brain_kernel_page",
     "render_canon_explorer_page",
     "render_casepacks_page",
+    "render_closure_explorer_page",
     "render_closures_page",
     "render_cognitive_traversal_page",
     "render_comparison_page",
@@ -365,6 +367,7 @@ def main() -> None:
         "Casepacks": ("📦", render_casepacks_page),
         "Contracts": ("📜", render_contracts_page),
         "Closures": ("🔧", render_closures_page),
+        "Closure Explorer": ("🗂️", render_closure_explorer_page),
         "Live Runner": ("▶️", render_live_runner_page),
         "Batch Validation": ("📋", render_batch_validation_page),
         "Test Templates": ("🧪", render_test_templates_page),
@@ -388,7 +391,7 @@ def main() -> None:
         f"""
         <div class="sidebar-brand">
             <div class="title">🔬 UMCP</div>
-            <div class="version">v{__version__} · 44 pages · 14 domains</div>
+            <div class="version">v{__version__} · 45 pages · 14 domains</div>
         </div>
         """,
         unsafe_allow_html=True,

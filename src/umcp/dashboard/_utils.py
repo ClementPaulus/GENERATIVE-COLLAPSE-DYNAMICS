@@ -897,6 +897,7 @@ NAV_CATEGORIES: dict[str, list[str]] = {
         "Casepacks",
         "Contracts",
         "Closures",
+        "Closure Explorer",
         "Live Runner",
         "Batch Validation",
         "Test Templates",
