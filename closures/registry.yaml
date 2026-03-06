@@ -833,3 +833,24 @@ registry:
           - "closures/evolution/brain_kernel.py"
           - "src/umcp/epistemic_weld.py"
           - "canon/semiotics_anchors.yaml"
+
+    continuity_theory:
+      - name: "butzbach_embedding"
+        path: "closures/continuity_theory/butzbach_embedding.py"
+        description: "Butzbach embedding closure: 20 systems × 8 channels. Proves Continuity Theory (Butzbach 2026) is the n=1 degenerate limit of GCD. Demonstrates scalar limit (c=IC at n=1), cascade=log-integrity, geometric slaughter blindness, and formal Rosetta mapping."
+        contract: "UMA.INTSTACK.v1"
+        inputs: ["system_profiles"]
+        outputs: ["F", "omega", "S", "C", "kappa", "IC", "heterogeneity_gap", "regime", "butzbach_c", "blind_spot"]
+        channels:
+          - "membrane_integrity"
+          - "metabolic_activity"
+          - "genetic_fidelity"
+          - "repair_capacity"
+          - "energy_homeostasis"
+          - "signal_transduction"
+          - "reproductive_competence"
+          - "environmental_sensing"
+        frozen_params:
+          epsilon: 1.0e-8
+          n_channels: 8
+          n_systems: 20

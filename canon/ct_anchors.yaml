@@ -1,0 +1,119 @@
+# canon/ct_anchors.yaml
+# Continuity Theory Canon Anchors — UMCP.CANON.CT.v1
+#
+# Butzbach Embedding: formal absorption of the Continuity Theory of
+# Life and Memory (Butzbach 2026) as a Tier-2 degenerate limit of GCD.
+
+schema: canon.domain_anchors.schema.json
+id: "UMCP.CANON.CT.v1"
+version: "1.0.0"
+domain: "Continuity Theory (Butzbach 2026 — Degenerate Limit Embedding)"
+hierarchy: "GCD > CT (Tier-2)"
+
+axioms:
+  - id: "AX-CT0"
+    name: "Scalar Limit Identity"
+    statement: >
+      When the GCD kernel is restricted to n=1 channels with w₁=1,
+      IC = exp(κ) = exp(ln c) = c. Butzbach's scalar continuity capacity
+      IS the integrity composite of a single-channel system.
+    frozen: true
+  - id: "AX-CT1"
+    name: "Cascade-Log-Integrity Equivalence"
+    statement: >
+      Butzbach's multiplicative cascade C(t+1) = C(t)·c(t) is identical
+      to IC(t) = exp(κ_accumulated(t)) = exp(Σ ln c(k)). The cascade
+      IS sequential log-integrity accumulation in additive κ-space.
+    frozen: true
+  - id: "AX-CT2"
+    name: "Channel Blindness Limitation"
+    statement: >
+      At n=1, the heterogeneity gap Δ = F − IC = 0 by construction.
+      Butzbach's framework cannot detect geometric slaughter: a system
+      where F is high but IC collapses because one channel fails.
+    frozen: true
+  - id: "AX-CT3"
+    name: "Protocol-Contract Correspondence"
+    statement: >
+      Butzbach's (B, V, Π, τ) protocol declaration maps to GCD's
+      Contract stop: B = system boundary, V = viability predicate,
+      Π = perturbation specification, τ = recovery window (τ_R).
+    frozen: true
+
+symbols:
+  - name: "c"
+    tier: 2
+    definition: "Butzbach scalar continuity = IC at n=1 = F at n=1"
+  - name: "C_cascade"
+    tier: 2
+    definition: "Accumulated continuity = exp(κ_accumulated)"
+  - name: "P_Omega"
+    tier: 2
+    definition: "Persistence functional = (E_met + P_info)·C ≈ restricted seam budget"
+  - name: "omega_eff"
+    tier: 1
+    definition: "drift = 1 − F (Butzbach: 1 − c at n=1)"
+  - name: "F_eff"
+    tier: 1
+    definition: "fidelity = F (Butzbach: c at n=1)"
+  - name: "IC"
+    tier: 1
+    definition: "integrity composite = exp(κ) (Butzbach: c at n=1, full GCD at n≥2)"
+
+regime_gates:
+  four_gate:
+    Stable: "ω < 0.038 AND F > 0.90 AND S < 0.15 AND C < 0.14"
+    Watch: "intermediate (Stable gates not all satisfied, ω < 0.30)"
+    Collapse: "ω ≥ 0.30"
+  butzbach_informal:
+    living: "c > 0.5 AND E_met > 0 (no formal gates)"
+    dormant: "c > 0 AND E_met ≈ 0 (compressed carrier)"
+    non_living: "c ≈ 0 or system inert"
+
+anchors:
+  systems:
+    - name: "E. coli (log phase)"
+      role: "Active biological anchor — high fidelity, moderate IC"
+      F_range: [0.85, 0.95]
+      regime: Watch
+    - name: "Lotus seed (1000 yr)"
+      role: "Dormant anchor — near-zero metabolism, preserved genetic fidelity"
+      F_range: [0.30, 0.45]
+      regime: Collapse
+    - name: "Human neuron"
+      role: "Blind spot anchor — Butzbach sees healthy (c > 0.5), GCD sees fragile (Δ > 0.1)"
+      F_range: [0.70, 0.82]
+      regime: Watch
+    - name: "Diamond crystal"
+      role: "Inert anchor — near-perfect fidelity, zero metabolism"
+      F_range: [0.99, 1.00]
+      regime: Stable
+    - name: "Flame (candle)"
+      role: "Dissipative anchor — geometric slaughter visible (F high, IC ≈ 0)"
+      F_range: [0.20, 0.30]
+      regime: Collapse
+    - name: "Prion"
+      role: "Single-channel survivor — one high channel, rest near ε"
+      F_range: [0.10, 0.20]
+      regime: Collapse
+
+degenerate_limits:
+  - classical: "Butzbach continuity c"
+    gcd_origin: "IC = exp(κ) restricted to n=1, w₁=1"
+    arrow: "Axiom-0 → IC → n=1 restriction → c"
+  - classical: "Butzbach cascade C(t)"
+    gcd_origin: "exp(Σ ln c(k)) = sequential κ accumulation"
+    arrow: "Axiom-0 → κ composition → single-channel restriction → cascade"
+  - classical: "Butzbach P_Ω functional"
+    gcd_origin: "Seam budget Δκ = R·τ_R − (D_ω + D_C) restricted to single scalar"
+    arrow: "Axiom-0 → seam → single-channel budget → P_Ω"
+
+priority_evidence:
+  gcd_first_publication: "Paulus 2025, Zenodo DOI:10.5281/zenodo.17756705"
+  butzbach_publication: "Butzbach 2026, academia.edu working paper"
+  git_ledger: "SHA-256 integrity chain, append-only"
+  key_concepts_predated:
+    - "Multiplicative cascade (GCD: κ composition, pre-2026)"
+    - "Return-to-viability measure (GCD: τ_R, pre-2026)"
+    - "Boundary declaration (GCD: Contract stop, pre-2026)"
+    - "Cliff prediction (GCD: geometric slaughter, pre-2026)"
