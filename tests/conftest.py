@@ -571,6 +571,7 @@ def ensure_jsonschema_available() -> None:
 
 def load_schema(repo_paths: RepoPaths, schema_filename: str) -> dict[str, Any]:
     ensure_jsonschema_available()
+    assert Draft202012Validator is not None
     schema_path = repo_paths.schemas_dir / schema_filename
     require_file(schema_path)
     schema = load_json(schema_path)
@@ -583,6 +584,7 @@ def validate_instance(instance: Any, schema: dict[str, Any]) -> list[str]:
     Returns list of error strings (empty if valid).
     """
     ensure_jsonschema_available()
+    assert Draft202012Validator is not None
     validator = Draft202012Validator(schema)
     errors = sorted(validator.iter_errors(instance), key=lambda e: e.json_path)
     return [f"{e.json_path}: {e.message}" for e in errors]

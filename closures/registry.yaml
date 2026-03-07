@@ -409,6 +409,28 @@ registry:
           h_transverse: 0.4
           t_kinetic: 1.0
         reference: "DOI:10.1038/s41467-022-33431-5"
+      - name: "fqhe_bilayer_graphene"
+        path: "closures/quantum_mechanics/fqhe_bilayer_graphene.py"
+        description: >
+          FQHE bilayer graphene AB interference independent derivation:
+          7 theorems mapping Kim, Dev, Shaer et al. (Nature 2026) FQH
+          states to GCD kernel invariants. 11 states (7 even-denominator
+          candidate non-Abelian, 4 odd-denominator Laughlin/conjugate),
+          8-channel trace (filling_fraction, quasiparticle_charge,
+          charge_fundamental, flux_periodicity, visibility,
+          topological_order, edge_complexity, statistics_type).
+        contract: "QM.INTSTACK.v1"
+        inputs: ["filling_fraction", "quasiparticle_charge",
+                 "charge_fundamental", "flux_periodicity", "visibility",
+                 "topological_order", "edge_complexity", "statistics_type"]
+        outputs: ["F", "omega", "IC", "kappa", "regime",
+                  "heterogeneity_gap", "weakest_channel", "strongest_channel"]
+        frozen_params:
+          epsilon: 1.0e-8
+          B_field_T: 11.0
+          T_mK: 10.0
+          area_um2: 1.0
+        reference: "DOI:10.1038/s41586-025-09891-2"
 
     nuclear_physics:
       - name: "nuclide_binding"
