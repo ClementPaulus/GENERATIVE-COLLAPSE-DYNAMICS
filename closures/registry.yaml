@@ -854,3 +854,29 @@ registry:
           epsilon: 1.0e-8
           n_channels: 8
           n_systems: 20
+
+    consciousness_coherence:
+      - name: "coherence_kernel"
+        path: "closures/consciousness_coherence/coherence_kernel.py"
+        description: "Consciousness coherence kernel: 20 systems × 8 channels → Tier-1 invariants. Corrected formalization of Jackson-Jackson (2026) consciousness constant thesis. Jackson's constant renamed ξ_J (xi-Jackson) to avoid Tier-1 κ symbol capture. Arithmetic errors corrected. Tests whether harmonic-ratio proximity to ξ_J = 7.2 predicts composite integrity."
+        contract: "UMA.INTSTACK.v1"
+        inputs: ["coherence_system_profiles"]
+        outputs: ["F", "omega", "S", "C", "kappa", "IC", "heterogeneity_gap", "regime", "coherence_type", "xi_j_diagnostic"]
+        channels:
+          - "harmonic_ratio"
+          - "recursive_depth"
+          - "return_fidelity"
+          - "spectral_coherence"
+          - "phase_stability"
+          - "information_density"
+          - "temporal_persistence"
+          - "cross_scale_coupling"
+        frozen_params:
+          epsilon: 1.0e-8
+          n_channels: 8
+          n_systems: 20
+          xi_j: 7.2
+        cross_references:
+          - "closures/evolution/brain_kernel.py"
+          - "closures/dynamic_semiotics/semiotic_kernel.py"
+          - "src/umcp/kernel_optimized.py"
