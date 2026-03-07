@@ -389,6 +389,26 @@ registry:
           d_PBE_TS_AA: 2.86
           d_PBE_MBD_AA: 3.07
         reference: "DOI:10.1021/acsnano.5c16052"
+      - name: "quantum_dimer_model"
+        path: "closures/quantum_mechanics/quantum_dimer_model.py"
+        description: >
+          Triangular lattice QDM independent derivation: 7 theorems mapping
+          Yan, Samajdar, Wang, Sachdev & Meng (Nat. Commun. 2022) phase
+          diagram to GCD kernel invariants. 13 phases (6 topological, 5
+          crystal, 2 trivial), 8-channel trace (dimer_filling,
+          topological_order, string_coherence, symmetry_preservation,
+          spectral_gap, fractionalization, vison_momentum, phase_stability).
+        contract: "QM.INTSTACK.v1"
+        inputs: ["dimer_filling", "topological_order", "string_coherence",
+                 "symmetry_preservation", "spectral_gap", "fractionalization",
+                 "vison_momentum", "phase_stability"]
+        outputs: ["F", "omega", "IC", "kappa", "regime",
+                  "heterogeneity_gap", "weakest_channel", "strongest_channel"]
+        frozen_params:
+          epsilon: 1.0e-8
+          h_transverse: 0.4
+          t_kinetic: 1.0
+        reference: "DOI:10.1038/s41467-022-33431-5"
 
     nuclear_physics:
       - name: "nuclide_binding"
