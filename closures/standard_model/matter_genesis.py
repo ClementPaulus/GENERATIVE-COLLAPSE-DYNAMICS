@@ -1160,7 +1160,7 @@ def build_mass_origins() -> list[MassOrigin]:
     )
 
     # ── Water molecule ──
-    water_mass_gev = 18.015 * 0.931494e-3  # amu to GeV
+    water_mass_gev = 18.015 * 0.931494  # amu to GeV
     quark_in_water = 10 * quark_mass_in_p + 8 * quark_mass_in_n  # 2H + O → 10p + 8n
     electron_mass_in_water = 10 * 0.000511  # 10 electrons
     origins.append(
@@ -1412,6 +1412,9 @@ def _prove_T_MG_3(act_ii: list[GenesisEntity]) -> dict[str, Any]:
         "name": "Binding Mass Deficit",
     }
 
+    quark_sum_p = 0.0
+    deficit_p = 0.0
+
     if proton:
         quark_sum_p = 2 * 0.00216 + 0.00467  # current quark masses
         deficit_p = 1.0 - quark_sum_p / proton.mass_GeV
@@ -1425,16 +1428,18 @@ def _prove_T_MG_3(act_ii: list[GenesisEntity]) -> dict[str, Any]:
         results["pion_mass_MeV"] = pion.mass_GeV * 1000
         results["pion_quark_current_mass_MeV"] = quark_sum_pi * 1000
 
-    proven = proton is not None and deficit_p > 0.98  # 98%+ of proton mass is NOT from Higgs
-    results["proven"] = proven
-    results["insight"] = (
-        f"The proton's quark content is {quark_sum_p * 1000:.1f} MeV but the proton "
-        f"weighs {proton.mass_GeV * 1000:.1f} MeV. The 'missing' "
-        f"{deficit_p * 100:.1f}% is energy stored in the gluon field and quark kinetic "
-        "energy. This is the dominant source of all visible mass in the universe."
-        if proton
-        else "Could not compute — proton entity missing."
-    )
+    if proton:
+        proven = deficit_p > 0.98  # 98%+ of proton mass is NOT from Higgs
+        results["proven"] = proven
+        results["insight"] = (
+            f"The proton's quark content is {quark_sum_p * 1000:.1f} MeV but the proton "
+            f"weighs {proton.mass_GeV * 1000:.1f} MeV. The 'missing' "
+            f"{deficit_p * 100:.1f}% is energy stored in the gluon field and quark kinetic "
+            "energy. This is the dominant source of all visible mass in the universe."
+        )
+    else:
+        results["proven"] = False
+        results["insight"] = "Could not compute — proton entity missing."
     return results
 
 
@@ -1770,6 +1775,109 @@ def _build_narrative(result: GenesisResult) -> dict[str, str]:
         f"  Proton mass deficit: {t3.get('proton_deficit', 0) * 100:.1f}% is QCD binding\n"
         f"  Proton quark mass: {t3.get('proton_quark_mass_MeV', 0):.1f} MeV out of "
         f"{t3.get('proton_mass_MeV', 0):.1f} MeV total\n"
+    )
+
+    # ── Act IV ──
+    act_iv_data = result.acts.get("Act IV: Electronic Shell")
+    t5 = result.theorem_results.get("T-MG-5", {})
+    t6 = result.theorem_results.get("T-MG-6", {})
+    sections["act_iv"] = (
+        "ACT IV: THE ELECTRONIC SHELL — how protons arrange electrons\n\n"
+        "Nuclei capture electrons into quantized shells. The Pauli exclusion principle "
+        "forces each electron into a distinct quantum state, and this shell structure "
+        "IS the periodic table. The transition from nuclear to atomic degrees of freedom "
+        "is a phase boundary: nuclear channels (magic numbers, pairing, shell filling) "
+        "die, and electronic channels (valence, electronegativity, ionization energy) "
+        "emerge.\n\n"
+        "The kernel registers this as an IC drop — 12 channels now, but many are "
+        "near-zero for extreme elements (noble gases have zero electron affinity, "
+        "alkali metals have low ionization energy). The geometric mean punishes any "
+        "channel near ε.\n\n"
+        + (
+            f"Kernel: ⟨F⟩ = {act_iv_data.mean_F:.4f}, ⟨IC⟩ = {act_iv_data.mean_IC:.4f}\n"
+            f"  Doubly-magic nuclei (He-4, O-16, Ca-40, Pb-208): ⟨IC⟩ = {t5.get('mean_IC_doubly_magic', 0):.4f}\n"
+            f"  Block structure: d-block ⟨F⟩ = {t6.get('block_mean_F', {}).get('d', 0):.4f} (highest — "
+            "transition metals have moderate values in ALL channels, no channel kills IC)\n"
+            if act_iv_data
+            else "Act IV data unavailable.\n"
+        )
+    )
+
+    # ── Act V ──
+    act_v_data = result.acts.get("Act V: Chemical Bond")
+    t7 = result.theorem_results.get("T-MG-7", {})
+    sections["act_v"] = (
+        "ACT V: THE CHEMICAL BOND — atoms share electrons to form molecules\n\n"
+        "Chemistry is what happens when electronic shells overlap. Atoms share, donate, "
+        "or steal electrons to reach more stable configurations. Of the 12 atomic channels, "
+        "8 die at this boundary (nuclear remnants like BE/A and magic proximity, plus "
+        "atomic-specific details like block ordinal and radius). Five new channels emerge: "
+        "bond order, polarity, symmetry, and thermal properties.\n\n"
+        "A paradox appears: highly symmetric molecules can have LOWER kernel coherence.\n"
+        "Nonpolar molecules (zero polarity channel) → IC crushed by the geometric mean. "
+        "The most 'ordered' structures in chemistry are the least coherent in the kernel, "
+        "because the kernel measures channel DIVERSITY, not human notions of simplicity.\n\n"
+        + (
+            f"Kernel: ⟨F⟩ = {act_v_data.mean_F:.4f}, ⟨IC⟩ = {act_v_data.mean_IC:.4f}\n"
+            f"  Polar molecules (n={t7.get('n_polar', 0)}): ⟨IC⟩ = {t7.get('mean_IC_polar_molecules', 0):.4f}\n"
+            f"  Nonpolar molecules (n={t7.get('n_nonpolar', 0)}): ⟨IC⟩ = {t7.get('mean_IC_nonpolar_molecules', 0):.4f}\n"
+            "  → Zero polarity kills IC through geometric mean: the symmetry-coherence paradox.\n"
+            if act_v_data
+            else "Act V data unavailable.\n"
+        )
+    )
+
+    # ── Act VI ──
+    act_vi_data = result.acts.get("Act VI: Bulk Emergence")
+    t9 = result.theorem_results.get("T-MG-9", {})
+    sections["act_vi"] = (
+        "ACT VI: BULK EMERGENCE — molecules aggregate into materials\n\n"
+        "~10²³ molecules aggregate and new properties emerge that no single molecule "
+        "possesses: melting point, thermal conductivity, electrical conductivity. "
+        "The channel count drops to 6 — maximum information compression. Five molecular "
+        "channels die (bond order, polarity, symmetry) and 3 bulk channels emerge "
+        "(thermal conductivity, boiling point, electrical conductivity).\n\n"
+        "IC stabilizes near 0.10 — the lowest in the ladder, but not zero. The kernel "
+        "distinguishes metals from insulators sharply: metals have moderate values across "
+        "all 6 bulk channels, while insulators have near-zero electrical conductivity that "
+        "destroys their geometric mean.\n\n"
+        + (
+            f"Kernel: ⟨F⟩ = {act_vi_data.mean_F:.4f}, ⟨IC⟩ = {act_vi_data.mean_IC:.4f}\n"
+            f"  Metals (n={t9.get('n_metals', 0)}): ⟨F⟩ = {t9.get('mean_F_metals', 0):.4f}, "
+            f"⟨IC⟩ = {t9.get('mean_IC_metals', 0):.4f}\n"
+            f"  Insulators (n={t9.get('n_insulators', 0)}): ⟨F⟩ = {t9.get('mean_F_insulators', 0):.4f}, "
+            f"⟨IC⟩ = {t9.get('mean_IC_insulators', 0):.4f}\n"
+            "  → Electrical conductivity is the bulk-scale analogue of color charge at fundamental scale.\n"
+            if act_vi_data
+            else "Act VI data unavailable.\n"
+        )
+    )
+
+    # ── IC trajectory commentary ──
+    sections["ic_trajectory"] = (
+        "THE IC TRAJECTORY — why coherence declines at larger scales\n\n"
+        "Across the six acts, IC traces a distinctive arc:\n"
+        "  Fundamental: 0.295 → Composite: 0.004 → Nuclear: 0.441 → "
+        "Atomic: 0.178 → Molecular: 0.105 → Bulk: 0.097\n\n"
+        "The confinement cliff (0.295 → 0.004) is the deepest collapse: four channels "
+        "die simultaneously. Nuclear binding recovers IC dramatically (0.004 → 0.441) — "
+        "this is the only UPWARD transition, because nuclei regain coherence through "
+        "new channels (binding energy, magic numbers, pairing) that are all well-populated.\n\n"
+        "From nuclear onward, IC declines monotonically. This is not information loss — "
+        "it is information REDISTRIBUTION. Each successive scale adds channels that are "
+        "partially populated (near-zero for some entities), and the geometric mean "
+        "punishes any channel near ε. The decline reflects increasing channel heterogeneity, "
+        "not decreasing physical richness.\n\n"
+        "The heterogeneity gap (Δ = F − IC) tells the real story: F stays healthy "
+        "(atoms: 0.46, molecules: 0.36, bulk: 0.25) while IC drops faster. "
+        "The gap IS the diversity — many channels contributing unevenly, which is precisely "
+        "what makes atoms chemically distinct, molecules functionally specialized, and "
+        "materials macroscopically different.\n\n"
+        "In GCD terms: collapse is generative. Each phase boundary destroys old channels "
+        "and creates new ones. The monotonic IC decline at upper scales is the signature "
+        "of increasing specialization — the system trades multiplicative coherence for "
+        "functional diversity. Return happens not through IC recovery but through the "
+        "structural identities (F + ω = 1, IC ≤ F) holding at every single scale."
     )
 
     # ── Act VII (mass summary) ──
