@@ -19,12 +19,18 @@ All endpoints use lazy imports for optional dependencies.
 from __future__ import annotations
 
 import math
-from typing import Any
+from typing import Any, overload
 
 from fastapi import APIRouter, HTTPException, Query, Security
 from pydantic import BaseModel, Field
 
 
+@overload
+def _native(obj: dict[str, Any]) -> dict[str, Any]: ...
+@overload
+def _native(obj: list[Any]) -> list[Any]: ...
+@overload
+def _native(obj: Any) -> Any: ...
 def _native(obj: Any) -> Any:
     """Convert numpy scalars to Python natives for JSON serialization."""
     if isinstance(obj, dict):
@@ -50,10 +56,10 @@ try:
 except ImportError:  # direct-run fallback
     from fastapi.security import APIKeyHeader as _AKH
 
-    def require_public(api_key: str | None = Security(_AKH(name="X-API-Key", auto_error=False))) -> str:  # type: ignore[misc]
+    def require_public(api_key: str | None = Security(_AKH(name="X-API-Key", auto_error=False))) -> str:  # type: ignore[misc,unused-ignore]
         return api_key or "public"
 
-    def require_admin(api_key: str | None = Security(_AKH(name="X-API-Key", auto_error=False))) -> str:  # type: ignore[misc]
+    def require_admin(api_key: str | None = Security(_AKH(name="X-API-Key", auto_error=False))) -> str:  # type: ignore[misc,unused-ignore]
         raise HTTPException(status_code=401, detail="Admin key required")
 
 
@@ -1733,9 +1739,9 @@ async def compare_traces(
     return {
         "n_traces": len(traces),
         "results": results,
-        "F_range": [min(r["F"] for r in results), max(r["F"] for r in results)],
-        "IC_range": [min(r["IC"] for r in results), max(r["IC"] for r in results)],
-        "gap_range": [min(r["gap"] for r in results), max(r["gap"] for r in results)],
+        "F_range": [min(float(r["F"]) for r in results), max(float(r["F"]) for r in results)],
+        "IC_range": [min(float(r["IC"]) for r in results), max(float(r["IC"]) for r in results)],
+        "gap_range": [min(float(r["gap"]) for r in results), max(float(r["gap"]) for r in results)],
     }
 
 
