@@ -1,6 +1,6 @@
 # Copilot Instructions for GENERATIVE-COLLAPSE-DYNAMICS
 
-**UMCP v2.1.5** · **6,756 tests** · **17 domains** · **128 closure modules** · **56 lemmas** · **28 structural identities** · **50 dashboard pages**
+**UMCP v2.1.5** · **6,915 tests** · **17 domains** · **129 closure modules** · **66 lemmas** · **28 structural identities** · **50 dashboard pages**
 
 ## Foundational Principle — Read This First
 
@@ -497,7 +497,7 @@ All papers use RevTeX4-2 (`revtex4-2` document class) and share `Bibliography.bi
 
 ```bash
 pip install -e ".[all]"                     # Dev install (core + api + viz + dev tools)
-pytest                                       # 6,756 tests (pytest --collect-only | grep "::" | wc -l to verify)
+pytest                                       # 6,915 tests (pytest --collect-only | grep "::" | wc -l to verify)
 python scripts/update_integrity.py          # MUST run after changing any tracked file
 umcp validate .                             # Validate entire repo
 umcp validate casepacks/hello_world --strict # Validate casepack (strict = fail on warnings)
@@ -563,7 +563,7 @@ umcp validate <target>
 
 ## Test Patterns
 
-**6,756 test cases** across **115 test files** in `tests/` (114 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_248_*`). Single `tests/conftest.py` provides:
+**6,915 test cases** across **116 test files** in `tests/` (115 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_249_*`). Single `tests/conftest.py` provides:
 - Frozen `RepoPaths` dataclass (session-scoped) with all critical paths
 - `@lru_cache` helpers: `_read_file()`, `_parse_json()`, `_parse_yaml()`, `_compile_schema()`
 - Convention: `test_<subject>_<behavior>()` for functions; `TestCLI*` classes with `subprocess.run` for CLI integration
@@ -604,9 +604,10 @@ umcp validate <target>
 | `test_246` | Particle matter map (cross-scale kernel) | 102 |
 | `test_247` | Quincke rollers (magnetic active matter) | 185 |
 | `test_248` | Matter genesis (particle→atom→mass narrative) | 163 |
+| `test_249` | Stellar ages cosmology — Tomasetti et al. 2026 (oldest MW stars, H0 tension) | 159 |
 | `closures/` | Closure-specific tests (kinematics phase) | 27 |
 | Infrastructure | Kernel, seam, frozen contract, extensions, uncertainty, calculator, coverage, etc. | 510 |
-| **TOTAL** | | **6,756** |
+| **TOTAL** | | **6,915** |
 
 ## Extension System
 

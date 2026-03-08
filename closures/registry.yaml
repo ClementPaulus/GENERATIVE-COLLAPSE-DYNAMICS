@@ -324,6 +324,21 @@ registry:
         cross_references:
           - "closures/astronomy/distance_ladder.py"
           - "closures/astronomy/gravitational_dynamics.py"
+      - name: "stellar_ages_cosmology"
+        path: "closures/astronomy/stellar_ages_cosmology.py"
+        description: "Oldest MW stars as cosmic clocks — Tomasetti et al. 2026 (A&A 707, A111). 23 samples, 10 theorems (T-SC-1–10), H0 ≤ 68.3 km/s/Mpc"
+        contract: "ASTRO.INTSTACK.v1"
+        inputs: ["age", "mass", "metallicity", "alpha_fe", "teff", "logg", "av", "age_err_stat"]
+        outputs: ["F", "omega", "IC", "kappa", "S", "C", "gap", "regime"]
+        frozen_params:
+          AGE_PEAK: 13.6
+          T_U_LOWER_BOUND: 13.8
+          H0_UPPER: 68.3
+          N_FINAL: 160
+          N_GOLDEN: 67
+        cross_references:
+          - "closures/astronomy/cosmology.py"
+          - "closures/astronomy/stellar_evolution.py"
 
     quantum_mechanics:
       - name: "wavefunction_collapse"
