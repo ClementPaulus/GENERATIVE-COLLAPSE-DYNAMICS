@@ -14,6 +14,7 @@ from __future__ import annotations
 import os
 
 import matplotlib
+import matplotlib.axes
 
 matplotlib.use("Agg")
 import matplotlib.colors as mcolors
@@ -75,7 +76,7 @@ GLOW_SUBTLE = [patheffects.withStroke(linewidth=2, foreground=BG_DARK)]
 
 
 def _info_box(
-    ax: plt.Axes,
+    ax: matplotlib.axes.Axes,
     x: float,
     y: float,
     text: str,
@@ -1245,7 +1246,7 @@ def plot_periodic_heatmap() -> None:
     cbar = fig.colorbar(sm, ax=ax, shrink=0.45, aspect=22, pad=0.02)
     cbar.set_label("Kernel Fidelity  F", fontsize=17, color=TEXT_PRIMARY)
     cbar.ax.tick_params(colors=TEXT_SECONDARY)
-    cbar.outline.set_edgecolor(BG_BORDER)
+    cbar.outline.set_edgecolor(BG_BORDER)  # type: ignore[union-attr]
 
     # Block labels with enhanced styling
     ax.text(
