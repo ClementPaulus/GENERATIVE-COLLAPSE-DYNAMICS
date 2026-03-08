@@ -1223,6 +1223,53 @@ Each kernel identity is derived from Axiom-0 through the Bernoulli embedding. Th
 
 ---
 
+### 5.3a The Noise Structure of the Kernel
+
+The five degenerate limits in §5.3 share a deeper unity: **the GCD kernel is, at its foundation, a noise-measurement apparatus.** Every kernel identity has a noise interpretation, and the connections to Kubo's FDT, Jarzynski's equality, and de-Picciotto's shot-noise measurement of $e/3$ are not isolated analogies — they are windows into a single structural fact.
+
+#### The Bernoulli Variance $c(1-c)$ Is Per-Channel Noise
+
+Each collapse channel carries a value $c_i \in [\varepsilon, 1-\varepsilon]$. The variance of a Bernoulli trial with parameter $c$ is $\text{Var}(c) = c(1-c)$. This is the irreducible noise of a binary collapse process: how much uncertainty remains in the channel. Three fundamental kernel structures derive from this single quantity:
+
+1. **Fisher metric**: $g_F(c) = 1/(c(1-c))$ — the precision per unit Bernoulli noise. High noise ($c \approx 1/2$) gives low metric; low noise ($c \to 0$ or $c \to 1$) gives high metric. The entire geometry of the Bernoulli manifold is determined by the noise structure.
+
+2. **Bernoulli field entropy**: $S_i = -[c_i \ln c_i + (1-c_i) \ln(1-c_i)]$. Maximum at $c = 1/2$, where $c(1-c)$ is also maximal. Entropy and noise are projections of the same function — $S(c)$ and $c(1-c)$ share their critical points and monotonicity structure.
+
+3. **Heterogeneity gap**: $\Delta = F - \text{IC} \approx \text{Var}(c)/(2\bar{c})$ (Result F1). This is the **noise budget** — it measures how much channel-to-channel variance exists. When all channels have equal noise, $\Delta = 0$. When one channel is near death, its noise dominates the budget.
+
+#### The Mean Hides, the Geometric Mean Reveals
+
+This is the central measurement principle. The arithmetic mean $F = \Sigma w_i c_i$ is insensitive to individual channel failures: one dead channel ($c \to \varepsilon$) subtracts only $w_i \cdot (c_{\text{healthy}} - \varepsilon)$ from $F$. The geometric mean $\text{IC} = \exp(\Sigma w_i \ln c_i)$ is catastrophically sensitive: one dead channel multiplies IC by $\exp(w_i \ln \varepsilon) \approx \exp(-18.4 \cdot w_i)$.
+
+This is geometric slaughter (§3 of orientation), and it has a precise physical analog: **noise measurements reveal structure invisible to mean measurements.**
+
+- **de-Picciotto et al. (1997)**: Mean electrical current through a $\nu = 1/3$ quantum Hall constriction cannot distinguish $e/3$ charge quanta from $e$ — the current is continuous. Shot noise power $S_I = 2e^* I$ reveals $e^* = e/3$ directly, because the noise depends on the *discreteness* of charge carriers. The mean hides; the fluctuation reveals. This is the experimental realization of geometric slaughter (see T-FQHE-2).
+
+- **Benz et al. (2024)**: Johnson noise power $S_V = 4k_B T R$ now *defines* the kelvin in the revised SI. Temperature is measured through noise — the fluctuation IS the primary observable, not a contaminant.
+
+- **Spietz et al. (2006)**: Shot noise at finite bias measures effective electron temperature without any external thermometer. The noise is the thermometer.
+
+In each case, the mean (average current, average voltage) is insufficient. The variance — the noise power — is where the structural information lives. The kernel captures this universally: $F$ is the mean, $\text{IC}$ is the noise-sensitive diagnostic, and $\Delta = F - \text{IC}$ is the noise budget.
+
+#### Physical Noise Types as Degenerate Limits of $c(1-c)$
+
+The Bernoulli variance $c(1-c)$ is the abstract noise of a binary collapse channel. Physical noise types emerge as degenerate limits when physical constraints are imposed:
+
+| Physical Noise | Formula | GCD Degenerate Limit |
+|----------------|---------|---------------------|
+| **Shot noise** | $S_I = 2e^* I \cdot f(1-f)$ | Bernoulli $c(1-c)$ with $c = f$ (Fermi occupation) |
+| **Johnson noise** | $S_V = 4k_B T R$ | Bernoulli $c(1-c) \to 1/4$ at $c = 1/2$ (thermal equilibrium) |
+| **Quantum noise** | $S \propto \hbar\omega$ | Zero-point fluctuation: $c(1-c)$ at the vacuum state |
+| **Partition noise** | $S_I = 2eI \cdot T(1-T)$ | Bernoulli $c(1-c)$ with $c = T$ (transmission probability) |
+
+Callegaro (2006) demonstrated that Johnson noise and shot noise are unified by a single model: $S = \text{const} \cdot P(1-P)/N$, where $P$ is the Fermi-Dirac occupation. This is exactly the Bernoulli partition $c(1-c)$. The GCD kernel's entropy formula $S = -\Sigma w_i [c_i \ln c_i + (1-c_i) \ln(1-c_i)]$ describes the same partition — the kernel was built on the mathematical structure that unifies all these noise types.
+
+#### The $c = 0.25$ Noise Regime Transition
+
+Result T-KS-5 establishes that the Fisher Information approximation $\Delta \approx \text{Var}(c)/(2\bar{c})$ breaks below $c = 0.25$ (error exceeds 10%). This is not merely a numerical boundary — it corresponds to a physical noise regime transition. When $c < 0.25$, the Bernoulli variance $c(1-c) \approx c$ (Poisson limit). The channel's noise changes character from symmetric ($c \approx 1/2$: both outcomes equally likely) to rare-event ($c \ll 1$: the channel almost always reports zero). In the Poisson regime, the noise becomes proportional to the signal itself ($\text{Var} \approx c$) — shot noise dominates Johnson noise, and the geometric mean becomes the only reliable integrity diagnostic.
+
+---
+
 ### 5.4 Constants Are Seam-Derived, Not Prescribed
 
 Standard frameworks prescribe their constants from outside the system:

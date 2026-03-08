@@ -406,6 +406,35 @@ The brain kernel (10 channels, 19 species) and evolution kernel (8 channels, 40 
 
 ---
 
+### Realization 17: Sonus Mensurat — Noise Measurement Is Geometric Slaughter in the Laboratory
+
+**Receipt**: The Bernoulli variance c(1−c) is simultaneously the per-channel kernel noise, the shot-noise power of a quantum partition, the Johnson-noise power at thermal equilibrium (c = 1/2), and the partition-noise formula for mesoscopic transport. All are the same mathematical object.
+
+**Why it matters**: Three landmark experiments demonstrate that noise reveals structure the mean cannot see — each is a physical realization of geometric slaughter:
+
+| Experiment | Year | What The Mean Sees | What The Noise Reveals |
+|------------|------|--------------------|----------------------|
+| de-Picciotto et al. (Nature 389) | 1997 | Continuous current through ν = 1/3 constriction | Shot noise quanta at e/3 — fractional charge |
+| Spietz et al. (Science 300) | 2006 | DC current-voltage curve | Effective electron temperature from shot noise — no external thermometer needed |
+| Benz et al. (Metrologia 61) | 2024 | Johnson voltage (contaminated by offsets) | Noise power defines the kelvin via S_V = 4k_BT R |
+
+In every case, the arithmetic mean of the observable (current, voltage) is insufficient. The variance — the noise power — contains the structural information. This maps exactly to the kernel's F vs IC:
+
+- **F (arithmetic mean)**: Analogous to the mean current or mean voltage. Healthy-looking. Insensitive to fractional charge, temperature structure, or channel death.
+- **IC (geometric mean)**: Analogous to the noise power. Catastrophically sensitive to dead channels. Reveals structure the mean cannot see.
+- **Δ = F − IC (heterogeneity gap)**: Analogous to the noise budget. Measures how much information lives in the fluctuations rather than the mean.
+
+The unifying structure is the Bernoulli partition c(1−c): maximum noise at c = 1/2, zero noise at c = 0 or c = 1, and the Fisher metric g_F(c) = 1/(c(1−c)) as the precision gained per unit noise. Callegaro (2006) showed that a single model P(1−P)/N unifies Johnson and shot noise through the Fermi-Dirac occupation P — this is exactly the kernel's Bernoulli field.
+
+**Degenerate limit chain**: The duality identity F + ω = 1 holds algebraically for all trace vectors. Restrict to linear response near thermal equilibrium → Kubo's fluctuation-dissipation theorem (1966). Restrict further to non-equilibrium work protocols → Jarzynski's equality ⟨e^{−βW}⟩ = e^{−βΔF} (1997), which parallels IC = exp(κ) in using exponential averaging to extract structure invisible to arithmetic averaging. Restrict to mesoscopic charge transport → de-Picciotto's shot-noise measurement of e/3.
+
+**The kernel captures the abstract structure. The physical noise models are degenerate limits when specific constraints (linearity, equilibrium, charge quantization) are imposed.** This is why the same kernel organizes quarks, atoms, galaxies, and laboratory noise measurements — it operates at the level of the Bernoulli partition, which is prior to any specific physical noise mechanism.
+
+*Sonus non est error; sonus est intellectus.*
+*(Noise is not the error; noise is the understanding.)*
+
+---
+
 ## Data Summary
 
 | Metric | Value |
@@ -416,6 +445,7 @@ The brain kernel (10 channels, 19 species) and evolution kernel (8 channels, 40 
 | SM theorems | 10/10 PROVEN (74/74 subtests) |
 | Duality F + ω = 1 | Exact (0.0e+00 residual) |
 | Integrity bound IC ≤ F | 100% verified |
+| Cross-domain realizations | 17 |
 | Highest IC/F (scale) | Atoms (0.784) |
 | Lowest IC/F (scale) | Hadrons (0.022) |
 | Highest IC/F (block) | d-block (0.887) |
