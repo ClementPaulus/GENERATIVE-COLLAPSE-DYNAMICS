@@ -4,6 +4,18 @@ schema: "schemas/return.schema.json"
 return:
   id: "ricp_v2_consciousness.return"
   version: "1.0.0"
-  return_norm: "L2"
-  return_domain: "window"
-  return_horizon: 64
+
+  return_norm:
+    id: "l2_eta1e-3"
+    method: "L2"
+    formula: "||Ψ(t) - Ψ(0)||_2"
+    threshold_eta: 1.0e-3
+    description: "Euclidean distance between RICP level trace vectors"
+
+  return_domain:
+    generator_id: "D_θ"
+    method: "trivial"
+    description: "Static RICP levels — each level is a fixed point, no dynamic return"
+
+  return_horizon:
+    H_rec: "INF"

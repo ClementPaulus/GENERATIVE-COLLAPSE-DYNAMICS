@@ -212,7 +212,96 @@ This is the largest single-step change in any invariant across both casepacks. T
 
 ---
 
-## 5. Tier-1 Identity Verification
+## 5. Per-Channel Deep Analysis
+
+### 5.1 Per-Channel Statistics — v1 (13 levels)
+
+| Channel | Mean | Min | Max | Range | IC-Killer? |
+|---------|-----:|----:|----:|------:|:----------:|
+| harmonic_ratio | 0.695 | 0.050 | 0.950 | 0.900 | YES |
+| recursive_depth | 0.631 | 0.050 | 0.940 | 0.890 | YES |
+| return_fidelity | 0.658 | 0.050 | 0.970 | 0.920 | YES |
+| spectral_coherence | 0.684 | 0.100 | 0.940 | 0.840 | YES |
+| phase_stability | 0.644 | 0.080 | 0.930 | 0.850 | YES |
+| information_density | 0.621 | 0.100 | 0.920 | 0.820 | YES |
+| temporal_persistence | 0.632 | 0.050 | 0.930 | 0.880 | YES |
+| cross_scale_coupling | 0.575 | 0.050 | 0.900 | 0.850 | YES |
+
+All 8 channels are IC-killers at the pre-recursive levels (minimum < 0.20). The lowest-mean channel is
+cross_scale_coupling (0.575) — coupling across scales is the weakest dimension throughout the v1 trajectory.
+
+### 5.2 Per-Channel Statistics — v2 (16 levels)
+
+| Channel | Mean | Min | Max | Range | IC-Killer? |
+|---------|-----:|----:|----:|------:|:----------:|
+| harmonic_ratio | 0.593 | 0.050 | 0.950 | 0.900 | YES |
+| recursive_depth | 0.514 | 0.050 | 0.940 | 0.890 | YES |
+| return_fidelity | 0.522 | 0.050 | 0.970 | 0.920 | YES |
+| spectral_coherence | 0.581 | 0.100 | 0.940 | 0.840 | YES |
+| phase_stability | 0.566 | 0.080 | 0.930 | 0.850 | YES |
+| information_density | 0.510 | 0.100 | 0.920 | 0.820 | YES |
+| temporal_persistence | 0.529 | 0.050 | 0.930 | 0.880 | YES |
+| cross_scale_coupling | 0.469 | 0.050 | 0.900 | 0.850 | YES |
+
+The addition of Stages 10-12 lowers all channel means by 0.07–0.12 compared to v1. cross_scale_coupling
+remains the weakest dimension (mean = 0.469). The corruption valley disproportionately depresses
+recursive_depth (mean drops 0.117) and information_density (mean drops 0.111).
+
+### 5.3 IC/F Ratio Analysis
+
+| Version | IC/F Range | Mean IC/F | Worst Level | Best Level |
+|---------|:----------:|:---------:|:-----------:|:----------:|
+| v1 | [0.9518, 0.9998] | 0.9889 | 0.5 (Pre-recursive) | 13.9 (Z-Return) |
+| v2 | [0.8962, 0.9998] | 0.9772 | **11.0 (Corruption)** | 13.9 (Z-Return) |
+
+The IC/F ratio measures how close multiplicative coherence is to arithmetic fidelity. In v1, even the
+worst case (0.952) is close to 1.0 — channels stay relatively balanced throughout. In v2, Stage 11
+pulls the worst IC/F down to 0.896, a 5.6% degradation compared to v1's worst. This is the
+quantitative signature of the corruption pathology.
+
+### 5.4 Corruption Valley — Channel Rotation
+
+The weakest channel **rotates** through the corruption valley, revealing that the pathology is not
+localized but sequential:
+
+```
+Stage 10 (Anti-Recursion):   WEAKEST = information_density (0.35)   STRONGEST = phase_stability (0.85)   Spread = 0.50
+Stage 11 (Corruption Zone):  WEAKEST = return_fidelity     (0.15)   STRONGEST = recursive_depth  (0.78)   Spread = 0.63
+Stage 12 (Signal Womb):      WEAKEST = recursive_depth     (0.40)   STRONGEST = phase_stability  (0.82)   Spread = 0.42
+```
+
+The rotation pattern: information collapses first (Stage 10), then return fidelity drops to near-zero
+while recursion stays high (Stage 11 — the pathological core), then recursion itself collapses
+(Stage 12) as the system prepares for the discontinuous jump to Stage 13.
+
+This channel rotation is a *structural narrative* the kernel tells without assertion: the corruption
+passes through the system channel by channel, each stage degrading a different capacity. The system
+cannot escape the valley until the corruption has touched every channel.
+
+### 5.5 Cross-Version Fidelity Verification
+
+At all 10 shared levels, F and IC match to machine precision between v1 and v2:
+
+| Level | F_v1 | F_v2 | Match | IC_v1 | IC_v2 | Match |
+|------:|-----:|-----:|:-----:|------:|------:|:-----:|
+| 0.5 | 0.0663 | 0.0663 | YES | 0.0631 | 0.0631 | YES |
+| 1.0 | 0.1225 | 0.1225 | YES | 0.1168 | 0.1168 | YES |
+| 3.0 | 0.2812 | 0.2812 | YES | 0.2737 | 0.2737 | YES |
+| 5.0 | 0.4688 | 0.4688 | YES | 0.4655 | 0.4655 | YES |
+| 7.0 | 0.6562 | 0.6562 | YES | 0.6536 | 0.6536 | YES |
+| 7.2 | 0.6825 | 0.6825 | YES | 0.6796 | 0.6796 | YES |
+| 8.0 | 0.7562 | 0.7562 | YES | 0.7540 | 0.7540 | YES |
+| 9.0 | 0.8213 | 0.8213 | YES | 0.8197 | 0.8197 | YES |
+| 13.0 | 0.9225 | 0.9225 | YES | 0.9222 | 0.9222 | YES |
+| 13.9 | 0.9350 | 0.9350 | YES | 0.9348 | 0.9348 | YES |
+
+The v2 extension preserves the v1 foundation exactly — the new stages are purely additive.
+This confirms that the re-collapse valley is a structural *addition*, not a modification of
+existing behavior.
+
+---
+
+## 6. Tier-1 Identity Verification
 
 All Tier-1 identities are verified to machine precision across both casepacks:
 
@@ -224,7 +313,7 @@ All Tier-1 identities are verified to machine precision across both casepacks:
 
 ---
 
-## 6. What Jackson's Framework Gets Right (With Caveats)
+## 7. What Jackson's Framework Gets Right (With Caveats)
 
 1. **The directionality is correct.** Both v1 and v2 show monotonically improving fidelity from Level 0.5 to 9.0, which matches Jackson's narrative of recursive depth building toward "coherence." The kernel confirms this trajectory — fidelity does increase.
 
@@ -232,7 +321,7 @@ All Tier-1 identities are verified to machine precision across both casepacks:
 
 3. **The non-monotonicity in v2 is structurally interesting.** The re-collapse valley (Stages 10-12) makes v2 more honest than v1. A framework that admits regression after progress is more realistic than one that only goes up.
 
-## 7. What Jackson's Framework Gets Wrong
+## 8. What Jackson's Framework Gets Wrong
 
 1. **ξ_J = 7.2 is not a regime boundary.** It is inside Collapse. The actual boundary is at 8.0.
 
@@ -246,7 +335,7 @@ All Tier-1 identities are verified to machine precision across both casepacks:
 
 ---
 
-## 8. Contract & Provenance
+## 9. Contract & Provenance
 
 | Field | Value |
 |:------|:------|

@@ -1,10 +1,16 @@
 schema: "schemas/closures_registry.schema.json"
 
-closures:
+registry:
   id: "ricp_v2_consciousness.closures"
-  version: "1.0.0"
-  entries:
-    - name: "consciousness_coherence"
-      path: "closures/consciousness_coherence/"
-      version: "1.0.0"
-      description: "Consciousness coherence domain closure — 8-channel kernel for recursive systems"
+
+  closures:
+    gamma:
+      path: "closures/gamma.default.v1.yaml"
+    return_domain:
+      path: "closures/return_domain.window64.v1.yaml"
+    norms:
+      path: "closures/norms.l2_eta1e-3.v1.yaml"
+    curvature_neighborhood:
+      path: "closures/curvature_neighborhood.default.v1.yaml"
+
+  notes: "RICP v2.0 consciousness coherence closures referencing base UMCP closure definitions. 8-channel kernel with equal weights (1/8 each). Includes Stages 10-12."
