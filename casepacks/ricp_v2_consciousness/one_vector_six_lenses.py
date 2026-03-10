@@ -18,15 +18,17 @@ Run:  python jackson_one_vector_six_lenses.py
 from __future__ import annotations
 
 import sys
+from typing import Any
 
 import numpy as np
+import numpy.typing as npt
 
 sys.path.insert(0, "/workspaces/GENERATIVE-COLLAPSE-DYNAMICS/src")
 
 from umcp.frozen_contract import EPSILON
 
 
-def K(c, w=None):
+def K(c: npt.ArrayLike, w: npt.ArrayLike | None = None) -> dict[str, Any]:
     """The kernel K: [0,1]^n → (F, ω, S, C, κ, IC). One input, six outputs."""
     c = np.array(c, dtype=np.float64)
     n = len(c)
@@ -100,13 +102,13 @@ LEVELS = {
 HLINE = "─" * 100
 
 
-def section(n, title):
+def section(n: int, title: str) -> None:
     print(f"\n{'═' * 100}")
     print(f"  DEMONSTRATION {n}: {title}")
     print(f"{'═' * 100}\n")
 
 
-def show_outputs(label, r, indent="  "):
+def show_outputs(label: str, r: dict[str, Any], indent: str = "  ") -> None:
     print(f"{indent}{label}")
     print(
         f"{indent}  F={r['F']:.4f}  ω={r['omega']:.4f}  S={r['S']:.4f}  "
@@ -419,7 +421,7 @@ for lev in levels_ordered:
     # Find binding gate (largest positive margin)
     gates = {"G1(ω)": g1, "G2(F)": g2, "G3(S)": g3, "G4(C)": g4}
     failed = {k: v for k, v in gates.items() if v >= 0}
-    binding = max(failed, key=failed.get) if failed else "ALL PASS → Stable"
+    binding = max(failed, key=lambda k: failed[k]) if failed else "ALL PASS → Stable"
 
     print(f"  {lev:6.1f}  {g1s:>10s}  {g2s:>10s}  {g3s:>10s}  {g4s:>10s}  {binding}")
 
