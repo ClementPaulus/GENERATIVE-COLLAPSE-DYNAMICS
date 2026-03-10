@@ -371,8 +371,6 @@ Paramecium & Protist & 0.306 & 0.078 & 0.228 & 74.4
   & 0.297 & 0.690 & 0.012 & 0.600 & $\omega$ & 90$\times$ \\
 \textit{C.~elegans} & Nematoda & 0.292 & 0.084 & 0.208 & 71.3
   & 0.336 & 0.623 & 0.014 & 0.570 & $\omega$ & 85$\times$ \\
-Planarian & Platyhelminth. & 0.273 & 0.048 & 0.225 & 82.4
-  & 0.257 & 0.717 & 0.010 & 0.536 & $\omega$ & 98$\times$ \\
 H.~min.~consc. & \textit{H.~sapiens} & 0.081 & 0.060 & 0.021 &
   26.0 & 0.260 & 0.112 & 0.036 & 0.126 & $\omega$ & 20$\times$ \\
 Mantis shrimp & Crustacea & 0.335 & 0.129 & 0.206 & 61.5
@@ -395,8 +393,6 @@ Archerfish & Actinopt. & 0.362 & 0.176 & 0.186 & 51.3
   & 0.423 & 0.612 & 0.124 & 0.600 & $\omega$ & 90$\times$ \\
 Octopus & Cephalopoda & 0.380 & 0.275 & 0.105 & 27.5
   & 0.501 & 0.533 & 0.150 & 0.610 & $\omega$ & 17$\times$ \\
-Rat & Mammalia & 0.370 & 0.230 & 0.140 & 38.0
-  & 0.521 & 0.487 & 0.180 & 0.560 & $\omega$ & 40$\times$ \\
 Cleaner wrasse & Actinopt. & 0.389 & 0.242 & 0.147 & 37.8
   & 0.519 & 0.495 & 0.238 & 0.540 & $\omega$ & 70$\times$ \\
 Dog & Mammalia & 0.415 & 0.349 & 0.066 & 15.8
@@ -453,7 +449,7 @@ Key structural features visible in Table~\ref{tab:catalog}:
   $C$ for 5 (all high-awareness humans), and $S$ for~1
   (human adolescent).
 \item The fractional integrity cost $\DeltaF$ ranges from
-  4.5\% (African grey) to 82.4\% (planarian).
+  4.5\% (African grey) to 77.9\% (\textit{E.~coli}).
 \end{itemize}
 
 % ============================================================
@@ -588,8 +584,8 @@ any further increase in symbolic capacity.
 The awareness--aptitude suppression pattern produces the same
 kernel signature as Standard Model
 confinement~\cite{paulus2026sm,wilson1974confinement}.
-For a 2-channel quark trace (confined color at $\eps$, free
-channel at 0.98):
+For an 8-channel confinement-like trace (seven channels from
+0.90 to 0.60, one confined at 0.02):
 $\IC/F = 0.718$, $\Delta = 0.186$.
 For the 10-channel human adult:
 $\IC/F = 0.826$, $\Delta = 0.111$.
@@ -663,7 +659,7 @@ The trajectory reveals four phases:
 \emph{Infancy} (Critical): The only human state where aptitude
 exceeds awareness ($\Ap - \Aw = 0.154$).  The infant is
 somatically helpless and cognitively undeveloped, with
-$F = 0.187$ --- barely above the planarian.
+$F = 0.187$ --- among the lowest in the catalog.
 
 \emph{Childhood} (Collapse): Awareness surges ($+0.410$) via
 language acquisition and theory-of-mind development.  Aptitude
@@ -696,9 +692,9 @@ subspace.
 \label{thm:TAW8}
 The binding gate --- the gate closest to its stability
 threshold --- transitions from $\omega$ (drift) to $C$
-(curvature) at high awareness ($\Aw \gtrsim 0.85$).  For
+(curvature) at high awareness ($\Aw \gtrsim 0.70$).  For
 organisms with $\Aw < 0.40$: $\omega$ is the binding gate
-for 95.2\%.  For organisms with $\Aw > 0.85$: $C$ is the
+for 95.2\%.  For organisms with $\Aw > 0.70$: $C$ is the
 binding gate for 4/5 entities.  The human adult's binding
 gate is $C$ with $C = 0.644$ ($4.6\times$ above the
 threshold~$0.14$).
@@ -899,7 +895,7 @@ The binding gate identifies the \emph{structural bottleneck}
 --- the single obstacle most tightly preventing stability.
 For low-awareness organisms ($\Aw < 0.40$), the binding
 gate is $\omega$ (drift): they lose too much signal.  For
-high-awareness humans ($\Aw > 0.85$), the binding gate
+high-awareness humans ($\Aw > 0.70$), the binding gate
 transitions to $C$ (curvature): the disparity between
 awareness and aptitude channels produces excessive
 standard deviation.
@@ -1235,7 +1231,7 @@ returns is what is real.
 The reference implementation, including all ten theorems,
 67~automated pytest cases, and the full 34-entity catalog,
 is available at
-\url{https://github.com/UMCP-GCD/GENERATIVE-COLLAPSE-DYNAMICS}.
+\url{https://github.com/calebpruett927/GENERATIVE-COLLAPSE-DYNAMICS}.
 
 % ============================================================
 \begin{acknowledgments}
@@ -1331,7 +1327,7 @@ The canonical narrative uses the five words:
   from 0.081 (minimally conscious) to 0.637 (adult).
 
 \item[Roughness] Curvature $C$ is the binding gate for
-  all high-awareness humans ($\Aw > 0.85$): the
+  all high-awareness humans ($\Aw > 0.70$): the
   $5\!+\!5$ partition forces $C \gg 0.14$ whenever
   awareness and aptitude diverge.
 
@@ -1341,8 +1337,8 @@ The canonical narrative uses the five words:
   partition: the bimodal structure prevents gate
   satisfaction.
 
-\item[Integrity] Integrity $\IC$ ranges from 0.048
-  (planarian) to 0.526 (adult).  The heterogeneity gap
+\item[Integrity] Integrity $\IC$ ranges from 0.060
+  (minimally conscious) to 0.526 (adult).  The heterogeneity gap
   $\Delta = F - \IC$ is the primary diagnostic,
   ranging from 0.018 (African grey) to 0.259
   (\textit{E.~coli}).
