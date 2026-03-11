@@ -78,8 +78,9 @@ This is both a validation pipeline and a **grammatical structure** for how claim
 Before beginning substantive work, run the orientation script:
 
 ```bash
-python scripts/orientation.py          # Full orientation — 7 sections, ~10 seconds
+python scripts/orientation.py          # Full orientation — 10 sections, ~10 seconds
 python scripts/orientation.py -s 3     # Single section (e.g., §3: geometric slaughter)
+python scripts/orientation_checkpoint.py --verify  # Verify understanding (must PASS)
 ```
 
 This script does not describe the system. It **re-derives** the key structural insights through live computation. Each section builds on the previous:
@@ -93,8 +94,13 @@ This script does not describe the system. It **re-derives** the key structural i
 | 5 | Confinement Cliff | IC drops 98% at quark→hadron boundary | `IC/F: 0.94 → 0.01` |
 | 6 | Scale Inversion | Atoms restore IC with new degrees of freedom | `IC/F: 0.01 → 0.96` |
 | 7 | Full Spine | Contract → Kernel → Budget → Verdict on real data | `Watch: CONFORMANT` |
+| 8 | Equator Convergence | S + κ = 0 at c = 1/2 (four-way convergence) | `f(1/2) = 0.0` |
+| 9 | Super-Exponential | IC convergence faster than exponential | `gap shrinks 28.5×` |
+| 10 | Seam Composition | Associative algebra with identity (monoid) | `|error| = 5.55e-17` |
 
 **Why this matters for compounding awareness**: Reading documentation produces familiarity. Running the orientation produces understanding. The orientation script preserves the *derivation chains* — each insight follows structurally from the previous one. A session that runs the orientation arrives at the same understanding as the session that discovered these phenomena, because the numbers ARE the understanding.
+
+**Empirical evidence**: Agents that skipped orientation called IC ≤ F a "reformulation of AM-GM" — which is wrong. IC ≤ F is strictly more general: it is the **solvability condition** (c₁,₂ = F ± √(F²−IC²) requires IC ≤ F for real solutions) and it has **composition laws** (IC geometric, F arithmetic) that AM-GM lacks. Agents that ran orientation caught this error because the derivation chain was loaded. The checkpoint (`orientation_checkpoint.py --verify`) ensures this chain is loaded before substantive work begins.
 
 The corresponding Latin terms for these discoveries are catalogued in `MANIFESTUM_LATINUM.md` §IV.E with cross-references back to each orientation section.
 
@@ -164,7 +170,7 @@ Rank is a property of the trace vector — measured, not chosen (*gradus non eli
 | **2** | 2 | Effective 2-channel structure | C = g(F, κ) determined | Special |
 | **3** | 3 | General heterogeneous (n ≥ 3) | F, κ, C mutually independent | Generic |
 
-Rank-1 ⊂ Rank-2 ⊂ Rank-3. Almost all real-world systems are rank-3. Full formalization: [KERNEL_SPECIFICATION.md](KERNEL_SPECIFICATION.md) §4c (Definitions 16–19).
+Rank-1 ⊂ Rank-2 ⊂ Rank-3. Almost all real-world systems are rank-3. Full formalization: [KERNEL_SPECIFICATION.md](../KERNEL_SPECIFICATION.md) §4c (Definitions 16–19).
 
 **THREE REGIMES** (derived from gates, never asserted):
 

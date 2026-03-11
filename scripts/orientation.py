@@ -160,7 +160,7 @@ Demonstrate with a specific case:
 
     _receipt("F  (arithmetic)", f"{result['F']:.6f}", "healthy average")
     _receipt("IC (geometric)", f"{result['IC']:.6f}", "destroyed by weak channel")
-    _receipt("Δ = F - IC", f"{result['F'] - result['IC']:.6f}", "heterogeneity gap")
+    _receipt("Δ (heterogeneity gap)", f"{result['F'] - result['IC']:.6f}", "F - IC")
 
     _explain("""
 INSIGHT: F = 0.4755 (the mean of 0.95 and 0.001 — the arithmetic mean is
@@ -602,11 +602,11 @@ the log-sum converts multiplicative structure into additive convergence.
     gap_late = 1 - ic_values[20]
     ratio = gap_early / max(gap_late, 1e-15)
 
-    _receipt("IC(t=0)", f"{ic_values[0]:.6f}", "initial")
-    _receipt("IC(t=10)", f"{ic_values[10]:.6f}", "mid")
-    _receipt("IC(t=20)", f"{ic_values[20]:.10f}", "converging")
-    _receipt("F(t=20)", f"{f_values[20]:.10f}", "also converging")
-    _receipt("gap ratio (t=5)/(t=20)", f"{ratio:.2e}", "super-exponential shrinkage")
+    _receipt("IC_t0", f"{ic_values[0]:.6f}", "initial")
+    _receipt("IC_t10", f"{ic_values[10]:.6f}", "mid")
+    _receipt("IC_t20", f"{ic_values[20]:.10f}", "converging")
+    _receipt("F_t20", f"{f_values[20]:.10f}", "also converging")
+    _receipt("gap_ratio_t5_t20", f"{ratio:.2e}", "super-exponential shrinkage")
 
     _explain("""
 INSIGHT: The gap (1 - IC) shrinks much faster than exponential. This is
@@ -752,15 +752,111 @@ SECTIONS = {
 }
 
 
+def _digest_orientation() -> dict:
+    """Run all sections silently, capture key receipts as a structured dict.
+
+    This is the computational ground truth — exact numbers that carry the
+    derivation chains in compressed form. An agent that has these receipts
+    cannot misclassify the system's structures because the numbers constrain
+    what can be said.
+    """
+    import io
+    from contextlib import redirect_stdout
+
+    global QUIET
+    old_quiet = QUIET
+    QUIET = True
+
+    buf = io.StringIO()
+    with redirect_stdout(buf):
+        for s in sorted(SECTIONS):
+            SECTIONS[s]()
+
+    QUIET = old_quiet
+    output = buf.getvalue()
+
+    # Parse RECEIPTs from output
+    receipts: dict[str, str] = {}
+    for line in output.split("\n"):
+        if "RECEIPT" in line and "│" in line:
+            # Format: "  RECEIPT │ label = value  (note)"
+            after_bar = line.split("│", 1)[1].strip()
+            if "=" in after_bar:
+                # Split on first = only
+                label, rest = after_bar.split("=", 1)
+                label = label.strip()
+                rest = rest.strip()
+                # Separate value from note in parens
+                if "(" in rest:
+                    value = rest[: rest.index("(")].strip()
+                else:
+                    value = rest.strip()
+                # Use full label as key (preserves context)
+                receipts[label] = value
+
+    # Parse tables for confinement cliff and scale inversion
+    particle_data: dict[str, dict[str, str]] = {}
+    element_data: dict[str, dict[str, str]] = {}
+    current_table = None
+
+    for line in output.split("\n"):
+        stripped = line.strip()
+        if "Particle" in stripped and "Type" in stripped and "IC/F" in stripped:
+            current_table = "particles"
+            continue
+        if "Element" in stripped and "Z" in stripped and "regime" in stripped:
+            current_table = "elements"
+            continue
+        if stripped.startswith("─") or not stripped:
+            if not stripped:
+                current_table = None
+            continue
+        if current_table == "particles":
+            # Columns are right-aligned: Name(20) Type(12) F(8) IC(10) IC/F(8) Δ(8)
+            # Parse from the right since name may contain spaces
+            parts = stripped.rsplit(None, 5)
+            if len(parts) == 6:
+                name, ptype, f_val, ic_val, ratio, _gap = parts
+                try:
+                    float(f_val)
+                    particle_data[name] = {"type": ptype, "F": f_val, "IC": ic_val, "IC/F": ratio}
+                except ValueError:
+                    pass
+        elif current_table == "elements":
+            parts = stripped.split()
+            if len(parts) >= 6:
+                name = parts[0]
+                try:
+                    int(parts[1])
+                    element_data[name] = {"Z": parts[1], "F": parts[2], "IC": parts[3], "IC/F": parts[4]}
+                except (ValueError, IndexError):
+                    pass
+
+    return {
+        "axiom": "Collapsus generativus est; solum quod redit, reale est.",
+        "receipts": receipts,
+        "confinement_cliff": particle_data,
+        "scale_inversion": element_data,
+    }
+
+
 def main() -> None:
     global QUIET
 
     parser = argparse.ArgumentParser(description="UMCP Orientation Protocol — Re-Entry Through Computation")
     parser.add_argument("--section", "-s", type=int, choices=range(1, 11), help="Run single section (1-10)")
     parser.add_argument("--quiet", "-q", action="store_true", help="Numbers only, no explanation")
+    parser.add_argument("--digest", action="store_true", help="Output compact JSON receipts for embedding")
     args = parser.parse_args()
 
     QUIET = args.quiet
+
+    if args.digest:
+        import json
+
+        digest = _digest_orientation()
+        print(json.dumps(digest, indent=2))
+        return
 
     if not QUIET:
         print()

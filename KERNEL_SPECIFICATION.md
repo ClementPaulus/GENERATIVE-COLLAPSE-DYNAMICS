@@ -1111,7 +1111,7 @@ Lemmas 35–46 extend the formal foundation to **empirical physics**:
 
 ## 4c. Effective Rank Classification (Structural Dimensionality of the Kernel)
 
-> *Gradus non eligitur; mensuratur.* — Rank is not chosen; it is measured.
+> _Gradus non eligitur; mensuratur._ — Rank is not chosen; it is measured.
 
 **Purpose**: This section formalizes the **rank classification** of trace vectors — the effective number of independent degrees of freedom that the kernel K produces for a given input. The general kernel has rank 3. Special input structures yield degenerate rank-2 or rank-1 outputs. The rank is a **structural property of the trace vector**, not a parameter or a choice.
 
@@ -1129,7 +1129,7 @@ The kernel K: [0,1]ⁿ × Δⁿ → ℝ⁶ maps trace vectors (c, w) to six outp
 | C2 | Log-integrity relation | Algebraic (exact) | IC = exp(κ) | Reduces 5 → 4 free outputs |
 | C3 | Entropy-curvature coupling | Statistical (CLT) | S ≈ f(F, C) | Reduces 4 → 3 free outputs |
 
-The **effective rank** of a kernel evaluation K(c, w) is the number of *independently varying* quantities among its 6 outputs, after accounting for all active constraints. The maximum effective rank is 3, attained when F, κ, and C are mutually independent.
+The **effective rank** of a kernel evaluation K(c, w) is the number of _independently varying_ quantities among its 6 outputs, after accounting for all active constraints. The maximum effective rank is 3, attained when F, κ, and C are mutually independent.
 
 **Verification**: PCA on 10,000 random traces, n = 4 to 64, yields rank-at-99%-variance = 3 for all n (Identity #29, TIER_SYSTEM.md §Rank-3 Theorem). Computational proof: `python scripts/unified_geometry.py` §1.
 
@@ -1168,9 +1168,10 @@ A trace vector c ∈ [0,1]ⁿ with weights w ∈ Δⁿ is **rank-2** when C is a
 
 **Structural meaning**: Two quantities suffice — any pair from {F, κ, C} determines the third. The heterogeneity gap Δ = F − IC is fully determined by the average level.
 
-**Why it matters**: The solvability condition for trace recovery (Identity #4, IC ≤ F) becomes an *equality* condition at rank-2: given F and IC, the channels are reconstructible. At rank-3, knowing F and IC leaves the channel distribution underdetermined — you need C as the third coordinate.
+**Why it matters**: The solvability condition for trace recovery (Identity #4, IC ≤ F) becomes an _equality_ condition at rank-2: given F and IC, the channels are reconstructible. At rank-3, knowing F and IC leaves the channel distribution underdetermined — you need C as the third coordinate.
 
 **Example**:
+
 | Channels | F | IC | C | Δ = F − IC | Rank |
 |----------|----|----|---|-----------|:----:|
 | (0.9, 0.1) | 0.500 | 0.300 | 0.800 | 0.200 | 2 |
@@ -1193,9 +1194,10 @@ A trace vector c ∈ [0,1]ⁿ with weights w ∈ Δⁿ is **rank-1** when all ch
 
 **Structural meaning**: One quantity suffices — F alone determines all other kernel outputs. The system has no internal structure; every channel looks the same.
 
-**Why it matters**: Rank-1 is the **baseline** against which heterogeneity is measured. The integrity bound IC ≤ F becomes an *equality* (IC = F) only at rank-1. Any departure from homogeneity (even a single channel deviating) opens the gap Δ = F − IC > 0 and promotes the system to rank-2 or rank-3.
+**Why it matters**: Rank-1 is the **baseline** against which heterogeneity is measured. The integrity bound IC ≤ F becomes an _equality_ (IC = F) only at rank-1. Any departure from homogeneity (even a single channel deviating) opens the gap Δ = F − IC > 0 and promotes the system to rank-2 or rank-3.
 
 **Example**:
+
 | c₀ (all channels) | F | IC | C | Δ | κ | Rank |
 |:------------------:|----|----|---|---|---|:----:|
 | 0.90 | 0.900 | 0.900 | 0.000 | 0.000 | −0.105 | 1 |
@@ -1227,9 +1229,9 @@ The three ranks form a strict hierarchy under constraint count:
 - **Rank-2 → Rank-1**: All channels converge to a single value. C → 0, IC → F.
 
 **Physical interpretation**:
-- **Rank-1 systems** are perfectly homogeneous — every channel carries the same signal. This is the *thermodynamic equilibrium* of the kernel. No differentiation, no structure, no heterogeneity to exploit.
+- **Rank-1 systems** are perfectly homogeneous — every channel carries the same signal. This is the _thermodynamic equilibrium_ of the kernel. No differentiation, no structure, no heterogeneity to exploit.
 - **Rank-2 systems** have a single axis of differentiation — "good channels vs bad channels." Binary classification. The 2-channel solvability condition c₁,₂ = F ± √(F² − IC²) applies exactly.
-- **Rank-3 systems** have structured heterogeneity — the *distribution* of channel values matters, not just their mean and product. This is where confinement cliffs, scale inversions, and cross-domain bridges live. Most real-world systems are rank-3.
+- **Rank-3 systems** have structured heterogeneity — the _distribution_ of channel values matters, not just their mean and product. This is where confinement cliffs, scale inversions, and cross-domain bridges live. Most real-world systems are rank-3.
 
 ### Rank Classification Rules (Summary)
 
@@ -1245,7 +1247,7 @@ The maximum effective rank of the kernel is **3**, independent of input dimensio
 
 > For all n ≥ 3, PCA on random traces c ∈ [0,1]ⁿ yields rank-at-99%-variance = 3.
 
-Adding channels does not add degrees of freedom. The kernel *compresses* n input dimensions to at most 3 output dimensions. Input dimensionality is narrative; output rank is structure. *Gradus structurae est, non narrationis.*
+Adding channels does not add degrees of freedom. The kernel _compresses_ n input dimensions to at most 3 output dimensions. Input dimensionality is narrative; output rank is structure. _Gradus structurae est, non narrationis._
 
 ---
 

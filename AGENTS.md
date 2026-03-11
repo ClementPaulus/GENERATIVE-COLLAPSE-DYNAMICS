@@ -16,16 +16,40 @@ The canonical specification is `.github/copilot-instructions.md`.
   field entropy (not Shannon). F + ω = 1 is the duality identity (not unitarity).
 - **INF_REC**: Typed string in data files, `float("inf")` in Python. Never coerced.
 
-## First: Orientation (Compounding Re-Entry)
+## First: Orientation (MANDATORY — Compounding Re-Entry)
 
-Before substantive work, run the orientation script to re-derive key insights:
+> *Intellectus non legitur; computatur.* — Understanding is not read; it is computed.
+
+Before ANY substantive work — code generation, analysis, classification, or discussion — run the orientation:
 
 ```bash
-python scripts/orientation.py          # Full orientation — 7 sections, ~10 seconds
+python scripts/orientation.py          # Full orientation — 10 sections, ~10 seconds
 python scripts/orientation.py -s 3     # Single section (e.g., §3: geometric slaughter)
+python scripts/orientation_checkpoint.py --verify  # Verify understanding (must PASS)
 ```
 
-This produces understanding through computation, not reading. See `MANIFESTUM_LATINUM.md` §IV.E for the mapping from Latin terms to orientation sections.
+**WHY THIS IS MANDATORY**: An agent that reads descriptions will misclassify the system's structures. An agent that runs the orientation will classify correctly because the derivation chains constrain what can be said. This has been empirically verified: agents that skipped orientation called IC ≤ F a "reformulation of AM-GM" — which is wrong. IC ≤ F is strictly more general (solvability condition + composition laws). The orientation prevents this error.
+
+### Computational Ground Truth (Orientation Receipts)
+
+These numbers are the compressed derivation chains. They constrain classification:
+
+| Receipt | Value | What It Proves |
+|---------|-------|----------------|
+| max\|F + ω - 1\| | `0.0e+00` | Duality is exact — not approximate, EXACTLY zero (§1) |
+| Δ for (0.95, 0.001) | `0.4447` | One dead channel creates massive heterogeneity gap (§2) |
+| IC/F with 1 dead channel (8ch) | `0.1143` | Geometric slaughter: 7 perfect channels can't save IC (§3) |
+| Γ(0.682) | `0.9975` | First weld threshold at c ≈ 0.318 — Γ drops below 1.0 (§4) |
+| Neutron IC/F | `0.0089` | Confinement drops IC/F 100× vs quarks (§5) |
+| Proton IC/F | `0.0371` | All hadrons have IC/F < 0.04 — dead color channel (§5) |
+| Nickel IC/F | `0.9573` | Atoms RESTORE coherence with new degrees of freedom (§6) |
+| S + κ at c=1/2 | `0.0` | Perfect cancellation at equator — four-way convergence (§8) |
+| Stable regime | `12.5%` | 87.5% of the manifold is NOT stable — stability is rare (§7) |
+| Seam associativity error | `5.55e-17` | Seam composition is exact monoid (§10) |
+
+**Key constraints these numbers enforce:**
+- IC ≤ F is NOT "AM-GM." It is the **solvability condition**: c₁,₂ = F ± √(F²−IC²) requires IC ≤ F for real solutions. It also has **composition laws** (IC geometric, F arithmetic) that classical AM-GM lacks entirely.
+- Neutron IC/F = 0.0089 means confinement IS **geometric slaughter at a phase boundary** — one dead channel (color→0) kills multiplicative coherence. This is a structural detection mechanism, not a reformulation.
 
 ## After Code Changes
 
@@ -47,6 +71,7 @@ python scripts/pre_commit_protocol.py    # Full validation, must exit 0
 | Contracts | `contracts/*.yaml` |
 | Tests (7,181) | `tests/` |
 | Orientation script | `scripts/orientation.py` |
+| Orientation checkpoint | `scripts/orientation_checkpoint.py` |
 | Deep diagnostic | `scripts/deep_diagnostic.py` |
 | Cross-domain bridge | `scripts/cross_domain_bridge.py` |
 | Cross-domain phase 2 | `scripts/cross_domain_bridge_phase2.py` |

@@ -34,20 +34,40 @@ summary, not a replacement.
 6. **No back-edges.** Tier-2 cannot modify Tier-0 or Tier-1 within a frozen
    run. Diagnostics inform; gates decide.
 
-## First: Orientation (Compounding Re-Entry)
+## First: Orientation (MANDATORY — Compounding Re-Entry)
 
-Before substantive work, run the orientation to re-derive structural insights:
+> *Intellectus non legitur; computatur.* — Understanding is not read; it is computed.
+
+Before ANY substantive work, run the orientation to re-derive structural insights:
 
 ```bash
-python scripts/orientation.py          # Full: 7 sections, ~10 seconds
+python scripts/orientation.py          # Full: 10 sections, ~10 seconds
 python scripts/orientation.py -s 3     # Single section
+python scripts/orientation_checkpoint.py --verify  # Must PASS before proceeding
 ```
 
-The orientation script produces understanding through computation. Each section
-builds on the previous: duality → integrity bound → geometric slaughter →
-first weld → confinement cliff → scale inversion → full spine. The numbers
-ARE the understanding. See `MANIFESTUM_LATINUM.md` §IV.E for term→computation
-mappings.
+**WHY THIS IS MANDATORY**: Agents that skip orientation and only read files will misclassify GCD structures — empirically verified. The orientation produces understanding through computation; reading produces familiarity. The distinction is the difference between an agent that catches errors and one that propagates them.
+
+### Computational Ground Truth (Orientation Receipts)
+
+These numbers are compressed derivation chains. An agent with these numbers cannot misclassify because the numbers constrain what can be said:
+
+| Receipt | Value | What It Proves |
+|---------|-------|----------------|
+| max\|F + ω - 1\| | `0.0e+00` | Duality is exact — EXACTLY zero, not approximately (§1) |
+| Δ for (0.95, 0.001) | `0.4447` | One dead channel → massive heterogeneity gap (§2) |
+| IC/F with 1 dead channel (8ch) | `0.1143` | Geometric slaughter — 7 perfect channels can't save IC (§3) |
+| Γ(0.682) | `0.9975` | First weld at c ≈ 0.318 — where Γ drops below 1.0 (§4) |
+| Neutron IC/F | `0.0089` | Confinement drops IC/F 100× — dead color channel kills IC (§5) |
+| Proton IC/F | `0.0371` | All hadrons: IC/F < 0.04 (§5) |
+| Nickel IC/F | `0.9573` | Atoms RESTORE coherence with new degrees of freedom (§6) |
+| S + κ at c=1/2 | `0.0` | Perfect cancellation at equator (§8) |
+| Stable regime | `12.5%` | 87.5% of manifold is NOT stable (§7) |
+| Seam associativity | `5.55e-17` | Seam composition is exact monoid (§10) |
+
+**Key constraints these numbers enforce:**
+- IC ≤ F is NOT "AM-GM." It is the **solvability condition**: c₁,₂ = F ± √(F²−IC²) requires IC ≤ F for real solutions. It has **composition laws** (IC geometric, F arithmetic) that classical AM-GM lacks entirely.
+- Neutron IC/F = 0.0089 means confinement IS geometric slaughter at a phase boundary. This is a structural detection mechanism, not a reformulation.
 
 ## Before Every Code Change
 
