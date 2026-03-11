@@ -1,11 +1,13 @@
 {
   "pythonVersion": "3.12",
   "pythonPlatform": "Linux",
+  "pythonPath": "/usr/local/bin/python",
   "reportMissingImports": "warning",
   "reportMissingModuleSource": "none",
   "extraPaths": [
     "src",
     "closures",
-    "scripts"
+    "scripts",
+    "/usr/local/lib/python3.12/site-packages"
   ]
 }

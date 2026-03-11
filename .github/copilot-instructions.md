@@ -1,6 +1,6 @@
 # Copilot Instructions for GENERATIVE-COLLAPSE-DYNAMICS
 
-**UMCP v2.1.5** · **7,442 tests** · **17 domains** · **130 closure modules** · **76 lemmas** · **29 structural identities** · **50 dashboard pages**
+**UMCP v2.1.5** · **7,442 tests** · **18 domains** · **133 closure modules** · **76 lemmas** · **29 structural identities** · **50 dashboard pages**
 
 ## Foundational Principle — Read This First
 
@@ -139,7 +139,7 @@ The entire system can be grasped through **one axiom, one spine, five words, six
 | **ε** | 10⁻⁸ | Guard band: pole at ω=1 does not affect measurements to machine precision |
 | **p** | 3 | Unique integer where ω_trap is a Cardano root of x³+x−1=0 |
 | **α** | 1.0 | Curvature cost coefficient (unit coupling) |
-| **tol_seam** | 0.005 | Width where IC ≤ F holds at 100% across all 16 domains |
+| **tol_seam** | 0.005 | Width where IC ≤ F holds at 100% across all 18 domains |
 | **c\*** | 0.7822 | Logistic self-dual fixed point: maximizes S + κ per channel |
 
 **THREE ALGEBRAIC IDENTITIES** (always true, by construction):
@@ -265,7 +265,7 @@ The kernel K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC) has four primitive equ
 
 ### Frozen Parameters (from `frozen_contract.py` — Seam-Derived, Not Prescribed)
 
-These values are the unique constants where seams close consistently across all 16 domains. They are discovered by the mathematics, not chosen by convention. All code **must** reference these from `frozen_contract.py`, never hardcode alternatives.
+These values are the unique constants where seams close consistently across all 18 domains. They are discovered by the mathematics, not chosen by convention. All code **must** reference these from `frozen_contract.py`, never hardcode alternatives.
 
 | Parameter | Value | Symbol | Role | Source |
 |-----------|-------|--------|------|--------|
@@ -381,7 +381,7 @@ If not built, all operations fall back to NumPy transparently. Same formulas, sa
 parameters — Tier-0 Protocol only (no Tier-1 symbols redefined). Build:
 `cd src/umcp_cpp && mkdir build && cd build && cmake .. && make`
 
-**Closure domains** (17 total, each in `closures/<domain>/`):
+**Closure domains** (18 total, each in `closures/<domain>/`):
 
 ```
 closures/
@@ -401,6 +401,7 @@ closures/
 ├── dynamic_semiotics/        # 30 sign systems, 8-channel semiotic kernel (see SEMIOTIC_CONVERGENCE.md)
 ├── consciousness_coherence/  # 20 systems, coherence kernel, 7 theorems (T-CC-1 through T-CC-7)
 ├── continuity_theory/        # Continuity law closures
+├── awareness_cognition/      # 5+5 channel awareness-aptitude kernel, 10 theorems (T-AW-1 through T-AW-10)
 └── standard_model/           # Subatomic kernel (31 particles), 10 proven theorems
 ```
 
@@ -698,7 +699,7 @@ There is no fourth option. No external framework is co-equal with Axiom-0 inside
 
 2. **Classical results are degenerate limits, not sources.** The arrow of derivation runs FROM Axiom-0 TO classical results. Strip the channel semantics from IC ≤ F and you get AM-GM. Strip the collapse field from S and you get Shannon entropy. Strip the cost function from F + ω = 1 and you get unitarity. The classical versions are what remain when degrees of freedom are removed.
 
-3. **Frozen parameters are seam-derived, not prescribed.** Standard frameworks prescribe constants from outside (α = 0.05 by convention, 3σ by tradition, hyperparameters by cross-validation). UMCP's frozen parameters are the unique values where seams close consistently: p = 3 is discovered (not chosen), tol_seam = 0.005 is where IC ≤ F holds at 100% across 16 domains, ε = 10⁻⁸ is where the pole at ω = 1 does not affect any measurement to machine precision.
+3. **Frozen parameters are seam-derived, not prescribed.** Standard frameworks prescribe constants from outside (α = 0.05 by convention, 3σ by tradition, hyperparameters by cross-validation). UMCP's frozen parameters are the unique values where seams close consistently: p = 3 is discovered (not chosen), tol_seam = 0.005 is where IC ≤ F holds at 100% across 18 domains, ε = 10⁻⁸ is where the pole at ω = 1 does not affect any measurement to machine precision.
 
 4. **Three-valued verdicts, not boolean.** CONFORMANT / NONCONFORMANT / NON_EVALUABLE. There is always a third state. *Tertia via semper patet.*
 

@@ -201,11 +201,11 @@ TEST_CASE("Batch computation matches single", "[kernel][batch]") {
 
     for (size_t t = 0; t < T; ++t) {
         auto single = kern.compute(trace.data() + t * n, w.data(), n);
-        REQUIRE(batch.F[t] == Approx(single.F).epsilon(1e-14));
-        REQUIRE(batch.omega[t] == Approx(single.omega).epsilon(1e-14));
-        REQUIRE(batch.S[t] == Approx(single.S).epsilon(1e-12));
-        REQUIRE(batch.kappa[t] == Approx(single.kappa).epsilon(1e-14));
-        REQUIRE(batch.IC[t] == Approx(single.IC).epsilon(1e-14));
+        REQUIRE(batch[t].F == Approx(single.F).epsilon(1e-14));
+        REQUIRE(batch[t].omega == Approx(single.omega).epsilon(1e-14));
+        REQUIRE(batch[t].S == Approx(single.S).epsilon(1e-12));
+        REQUIRE(batch[t].kappa == Approx(single.kappa).epsilon(1e-14));
+        REQUIRE(batch[t].IC == Approx(single.IC).epsilon(1e-14));
     }
 }
 
@@ -214,14 +214,14 @@ TEST_CASE("Batch computation matches single", "[kernel][batch]") {
 TEST_CASE("Error propagation (OPT-12, Lemma 23)", "[kernel][error]") {
     KernelComputer kern;
     double eps = 1e-8;
-    auto bounds = kern.propagate_error(1e-4, eps);
+    auto bounds = kern.propagate_error(1e-4);
 
-    REQUIRE(bounds.delta_F == Approx(1e-4));
-    REQUIRE(bounds.delta_omega == Approx(1e-4));
-    REQUIRE(bounds.delta_kappa > 0.0);
-    REQUIRE(bounds.delta_S > 0.0);
+    REQUIRE(bounds.F == Approx(1e-4));
+    REQUIRE(bounds.omega == Approx(1e-4));
+    REQUIRE(bounds.kappa > 0.0);
+    REQUIRE(bounds.S > 0.0);
     // Lipschitz constant for kappa is 1/epsilon
-    REQUIRE(bounds.delta_kappa == Approx(1e-4 / eps).epsilon(1e-10));
+    REQUIRE(bounds.kappa == Approx(1e-4 / eps).epsilon(1e-10));
 }
 
 // ═══════════════════ Seam Chain ═════════════════════════════════
@@ -278,20 +278,21 @@ TEST_CASE("SHA-256 known test vectors", "[integrity]") {
     SHA256Hasher hasher;
 
     SECTION("Empty string") {
-        auto h = hasher.hash_bytes(std::vector<uint8_t>{});
+        std::vector<uint8_t> empty{};
+        auto h = hasher.hash_bytes(empty.data(), empty.size());
         REQUIRE(h == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
     }
 
     SECTION("'abc'") {
         std::vector<uint8_t> data = {'a', 'b', 'c'};
-        auto h = hasher.hash_bytes(data);
+        auto h = hasher.hash_bytes(data.data(), data.size());
         REQUIRE(h == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
     }
 
     SECTION("'abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq'") {
         std::string s = "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq";
         std::vector<uint8_t> data(s.begin(), s.end());
-        auto h = hasher.hash_bytes(data);
+        auto h = hasher.hash_bytes(data.data(), data.size());
         REQUIRE(h == "248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1");
     }
 }
@@ -314,7 +315,7 @@ TEST_CASE("SHA-256 file hashing", "[integrity]") {
 
     // Verify matches hash_bytes
     std::vector<uint8_t> data = {'H','e','l','l','o',',',' ','U','M','C','P','!'};
-    REQUIRE(h == hasher.hash_bytes(data));
+    REQUIRE(h == hasher.hash_bytes(data.data(), data.size()));
 
     // Verify
     REQUIRE(hasher.verify_file(tmp, h) == true);

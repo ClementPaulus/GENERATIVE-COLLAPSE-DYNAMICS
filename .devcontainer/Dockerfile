@@ -26,8 +26,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     biber \
     latexmk \
     chktex \
-    # Build tools (scipy/numpy compilation fallback)
+    # Build tools (scipy/numpy compilation fallback + C++ accelerator)
     build-essential \
+    cmake \
     gfortran \
     # CLI utilities
     jq \

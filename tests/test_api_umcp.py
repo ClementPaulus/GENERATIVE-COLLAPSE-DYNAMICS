@@ -602,12 +602,12 @@ def test_spine_identities_verified(client, auth_headers):
 # ============================================================================
 
 
-def test_domains_list_all_17(client, auth_headers):
-    """Test domains endpoint returns all 17 domains."""
+def test_domains_list_all_18(client, auth_headers):
+    """Test domains endpoint returns all 18 domains."""
     response = client.get("/domains", headers=auth_headers)
     assert response.status_code == 200
     data = response.json()
-    assert len(data) == 17
+    assert len(data) == 18
     names = {d["name"] for d in data}
     # Verify key domains are present
     for expected in ("GCD", "SM", "ATOM", "EVO", "SEM", "CONSC", "CT", "MATL", "EVERY"):

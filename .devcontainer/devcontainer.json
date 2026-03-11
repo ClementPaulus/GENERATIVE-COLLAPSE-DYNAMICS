@@ -50,7 +50,8 @@
 				"redhat.vscode-yaml",
 				"james-yu.latex-workshop",
 				"github.copilot-chat",
-				"github.vscode-pull-request-github"
+				"github.vscode-pull-request-github",
+				"ms-vscode.cpp-devtools"
 			],
 
 			"settings": {

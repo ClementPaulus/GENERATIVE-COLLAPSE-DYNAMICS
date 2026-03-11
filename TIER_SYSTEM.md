@@ -118,7 +118,7 @@ The kernel outputs six values, but only **four are independent computations** (p
 
 **Why S is computed but not free**: Entropy S = −Σ wᵢ h(cᵢ) is a concave function of the channels. By Jensen's inequality, for fixed mean F and standard deviation C, the entropy is bounded. As n grows, the CLT forces S toward its conditional expectation given (F, C). The correlation corr(C, S) → −1 as n → ∞. S is a primitive *computation* (it requires its own formula) but not a primitive *degree of freedom* (its value is asymptotically determined by F and C).
 
-### Identities (theorems about the definitions — 0 violations across 10,162 tests in 17 domains)
+### Identities (theorems about the definitions — 0 violations across 10,162 tests in 18 domains)
 
 | Identity | Type | Why It Holds | Structural Meaning |
 |----------|------|-------------|-------------------|
@@ -448,7 +448,7 @@ The field is required by `schemas/contract.schema.json` and `schemas/canon.ancho
 - ✅ **Tier-1**: The kernel function defined, verified, and mathematically complete
   - 4 primitive equations (F, κ, S, C) + 2 derived values (ω = 1−F, IC = exp(κ)) — defining K: [0,1]ⁿ × Δⁿ → ℝ⁶
   - 3 effective degrees of freedom (F, κ, C) — rank invariant to input dimensionality (n = 4..64)
-  - 3 algebraic identities + 1 statistical constraint — verified across 10,162 tests in 17 domains
+  - 3 algebraic identities + 1 statistical constraint — verified across 10,162 tests in 18 domains
   - 46 lemmas, 29 structural identities, 5 structural constants (c*, c_trap, ε, p, tol_seam)
   - Reserved symbols: F, ω, S, C, κ, IC, τ_R (all six outputs + τ_R are Tier-1)
   - Three-agent structural reading: Measuring (ω), Archive (F), Unknown (Γ(ω))

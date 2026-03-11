@@ -43,7 +43,7 @@ python scripts/pre_commit_protocol.py    # Full validation, must exit 0
 | Validation | `src/umcp/validator.py` |
 | Seam budget | `src/umcp/seam_optimized.py` |
 | Epistemic weld | `src/umcp/epistemic_weld.py` |
-| Closures (16 domains) | `closures/` |
+| Closures (18 domains) | `closures/` |
 | Contracts | `contracts/*.yaml` |
 | Tests (7,181) | `tests/` |
 | Orientation script | `scripts/orientation.py` |

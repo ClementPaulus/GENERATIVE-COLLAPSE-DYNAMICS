@@ -24,8 +24,8 @@ Kernel Endpoints:
   POST /kernel/budget       - Verify seam budget identity
   POST /kernel/spine        - Full spine evaluation (Contract → Stance)
 
-Domain Endpoints (17 domains):
-  GET  /domains             - List all 17 UMCP domains with metadata
+Domain Endpoints (18 domains):
+  GET  /domains             - List all 18 UMCP domains with metadata
   POST /astro/*             - Astronomy closures (6 endpoints)
   POST /nuclear/*           - Nuclear physics closures (6 endpoints)
   POST /qm/*                - Quantum mechanics closures (6 endpoints)
@@ -104,7 +104,7 @@ API_DESCRIPTION = """
 **100+ endpoints** across kernel computation, validation, ledger analysis,
 thermodynamic diagnostics, epistemic cost tracking, insight discovery,
 cross-domain Rosetta translation, live orientation, and domain-specific
-closure computations across **17 domains** from particle physics to
+closure computations across **18 domains** from particle physics to
 consciousness coherence.
 
 **The Spine**: CONTRACT → CANON → CLOSURES → INTEGRITY LEDGER → STANCE
@@ -599,7 +599,7 @@ async def root() -> HTMLResponse:
       <li><span class="method get">GET</span><a href="/contracts">/contracts</a> List contracts</li>
       <li><span class="method get">GET</span><a href="/closures">/closures</a> List closures</li>
       <li><span class="method get">GET</span><a href="/ledger">/ledger</a> Query the return log</li>
-      <li><span class="method get">GET</span><a href="/domains">/domains</a> List all 17 domains</li>
+      <li><span class="method get">GET</span><a href="/domains">/domains</a> List all 18 domains</li>
       <li><span class="method get">GET</span><a href="/metrics">/metrics</a> Operational metrics &amp; stats</li>
     </ul>
   </div>
@@ -617,7 +617,7 @@ async def root() -> HTMLResponse:
   </div>
 
   <div class="section">
-    <h2>Domain Closures (17 Domains)</h2>
+    <h2>Domain Closures (18 Domains)</h2>
     <ul class="endpoints">
       <li><span class="method get">GET</span><a href="/sm/particles">/sm/particles</a> Standard Model &mdash; 31 particles, 8-channel trace</li>
       <li><span class="method get">GET</span><a href="/sm/theorems">/sm/theorems</a> Standard Model &mdash; 10 proven theorems</li>
@@ -678,7 +678,7 @@ async def root() -> HTMLResponse:
     </ul>
   </div>
 
-  <p class="foot">UMCP &mdash; Universal Measurement Contract Protocol &middot; 100+ endpoints &middot; 17 Domains &middot; Axiom-0: <em>Collapse is generative; only what returns is real.</em></p>
+  <p class="foot">UMCP &mdash; Universal Measurement Contract Protocol &middot; 100+ endpoints &middot; 18 Domains &middot; Axiom-0: <em>Collapse is generative; only what returns is real.</em></p>
 </div>
 </body>
 </html>
@@ -3246,7 +3246,7 @@ class ClosureResult(BaseModel):
 async def list_domains(
     api_key: str = Security(require_public),
 ) -> list[DomainInfo]:
-    """List all 17 UMCP domains with metadata."""
+    """List all 18 UMCP domains with metadata."""
     return [
         DomainInfo(
             name="GCD",
@@ -3399,6 +3399,15 @@ async def list_domains(
             closures=2,
             contract="CT.INTSTACK.v1",
             canon="ct_anchors.yaml",
+            casepack="—",
+        ),
+        DomainInfo(
+            name="AWR",
+            description="Awareness cognition — 5+5 channel awareness-aptitude kernel, 10 theorems",
+            tier="Tier-2",
+            closures=3,
+            contract="AWR.INTSTACK.v1",
+            canon="—",
             casepack="—",
         ),
     ]
