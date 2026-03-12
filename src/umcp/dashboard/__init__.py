@@ -139,6 +139,7 @@ from umcp.dashboard.pages_interactive import (
     render_batch_validation_page,
     render_live_runner_page,
     render_test_templates_page,
+    render_work_template_page,
 )
 from umcp.dashboard.pages_management import (
     render_api_integration_page,
@@ -254,6 +255,7 @@ __all__ = [
     "render_test_templates_page",
     "render_time_series_page",
     "render_unified_geometry_view",
+    "render_work_template_page",
     "section_divider",
     "translate_to_gcd",
 ]
@@ -385,6 +387,7 @@ def main() -> None:
         "Live Runner": ("▶️", render_live_runner_page),
         "Batch Validation": ("📋", render_batch_validation_page),
         "Test Templates": ("🧪", render_test_templates_page),
+        "Work Templates": ("📐", render_work_template_page),
         # Diagnostics
         "τ_R* Diagnostic": ("🩺", render_tau_r_star_page),
         "Epistemic": ("🧿", render_epistemic_page),
@@ -405,7 +408,7 @@ def main() -> None:
         f"""
         <div class="sidebar-brand">
             <div class="title">🔬 UMCP</div>
-            <div class="version">v{__version__} · 45 pages · 15 domains</div>
+            <div class="version">v{__version__} · 46 pages · 15 domains</div>
         </div>
         """,
         unsafe_allow_html=True,

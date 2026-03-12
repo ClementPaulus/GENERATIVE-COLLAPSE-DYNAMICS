@@ -340,12 +340,12 @@ def render_bookmarks_page() -> None:
 
 
 def render_api_integration_page() -> None:
-    """Render the API integration page for real-time sync."""
+    """Render the API integration page with endpoint reference, example payloads, and live testing."""
     if st is None:
         return
 
     st.title("🔌 API Integration")
-    st.caption("Connect to the UMCP REST API for real-time data sync")
+    st.caption("64 REST endpoints · Kernel computation · Domain closures · Live testing")
 
     # Initialize API settings
     if "api_settings" not in st.session_state:
@@ -356,11 +356,28 @@ def render_api_integration_page() -> None:
             "auto_sync": False,
         }
 
+    # ========== Quick Reference ==========
+    st.markdown("""
+    The UMCP REST API exposes the full kernel, validation engine, and all 18 domain
+    closures over HTTP. Start it with:
+
+    ```bash
+    uvicorn umcp.api_umcp:app --reload --host 0.0.0.0 --port 8000
+    ```
+
+    **OpenAPI docs**: `http://localhost:8000/docs` (Swagger UI) ·
+    `http://localhost:8000/redoc` (ReDoc)
+
+    **Auth**: Read/compute endpoints are public. Admin endpoints require
+    `X-API-Key` header (set `UMCP_ADMIN_KEY` env var). Use `UMCP_DEV_MODE=1` for development.
+    """)
+
+    st.divider()
+
     # ========== Connection Settings ==========
-    st.subheader("⚙️ Connection Settings")
+    st.subheader("⚙️ Connection")
 
-    col1, col2 = st.columns([2, 1])
-
+    col1, col2, col3 = st.columns([2, 1, 1])
     with col1:
         api_url = st.text_input(
             "API URL",
@@ -369,7 +386,6 @@ def render_api_integration_page() -> None:
             help="Base URL of the UMCP REST API",
         )
         st.session_state.api_settings["url"] = api_url
-
     with col2:
         if st.button("🔗 Test Connection", use_container_width=True):
             try:
@@ -379,27 +395,276 @@ def render_api_integration_page() -> None:
                 with urllib.request.urlopen(f"{api_url}/health", timeout=5) as response:
                     data = json.loads(response.read().decode())
                     st.session_state.api_settings["connected"] = True
-                    st.success(f"✅ Connected! API Status: {data.get('status', 'OK')}")
+                    st.success(f"✅ Connected! Status: {data.get('status', 'OK')}")
             except urllib.error.URLError as e:
                 st.session_state.api_settings["connected"] = False
                 st.error(f"❌ Connection failed: {e.reason}")
             except Exception as e:
                 st.session_state.api_settings["connected"] = False
                 st.error(f"❌ Error: {e}")
-
-    # Connection status
-    status = "🟢 Connected" if st.session_state.api_settings["connected"] else "🔴 Disconnected"
-    st.markdown(f"**Status:** {status}")
+    with col3:
+        status = "🟢 Connected" if st.session_state.api_settings["connected"] else "🔴 Disconnected"
+        st.markdown(f"**{status}**")
 
     st.divider()
 
-    # ========== API Endpoints ==========
-    st.subheader("📡 API Endpoints")
+    # ========== Endpoint Reference ==========
+    st.subheader("📡 Endpoint Reference (64 endpoints)")
+
+    endpoint_groups = {
+        "System": [
+            ("GET", "/health", "System health, metrics, domain count"),
+            ("GET", "/version", "API and validator version info"),
+            ("GET", "/metrics", "Operational metrics and request stats"),
+        ],
+        "Kernel (Core)": [
+            ("POST", "/kernel/compute", "Compute kernel invariants (F, ω, S, C, κ, IC)"),
+            ("POST", "/kernel/batch", "Batch kernel computation (multiple traces)"),
+            ("POST", "/kernel/budget", "Verify seam budget identity (Γ, D_C, Δκ)"),
+            ("POST", "/kernel/spine", "Full spine evaluation (Contract → Stance)"),
+        ],
+        "Validation": [
+            ("POST", "/validate", "Validate a casepack or repository"),
+            ("GET", "/casepacks", "List available casepacks"),
+            ("GET", "/casepacks/{id}", "Get casepack details"),
+            ("POST", "/casepacks/{id}/run", "Run a casepack validation"),
+        ],
+        "Ledger & Contracts": [
+            ("GET", "/ledger", "Query the return log ledger"),
+            ("GET", "/contracts", "List available contracts"),
+            ("GET", "/closures", "List registered closures"),
+        ],
+        "Analysis": [
+            ("POST", "/regime/classify", "Classify regime from invariants"),
+            ("POST", "/analysis/timeseries", "Time series analysis of traces"),
+            ("POST", "/analysis/statistics", "Statistical summary of traces"),
+            ("POST", "/analysis/correlation", "Cross-channel correlation analysis"),
+            ("GET", "/analysis/ledger", "Ledger analytics and trends"),
+        ],
+        "Conversion": [
+            ("POST", "/convert/measurements", "Unit conversion (SI aware)"),
+            ("POST", "/convert/embed", "Embed raw values into [0,1] trace"),
+        ],
+        "Uncertainty": [
+            ("POST", "/uncertainty/propagate", "Propagate measurement uncertainty"),
+        ],
+        "Calculator": [
+            ("POST", "/calculate", "Universal kernel calculator"),
+        ],
+        "Outputs": [
+            ("GET", "/badge/status.svg", "Status badge (SVG)"),
+            ("GET", "/badge/regime.svg", "Regime badge (SVG)"),
+            ("GET", "/output/ascii/gauge", "ASCII gauge visualization"),
+            ("GET", "/output/ascii/sparkline", "ASCII sparkline of ω history"),
+            ("GET", "/output/markdown/report", "Markdown validation report"),
+            ("GET", "/output/mermaid/regime", "Mermaid regime diagram"),
+            ("GET", "/output/html/card", "HTML card widget"),
+            ("GET", "/output/latex/invariants", "LaTeX invariant equations"),
+            ("GET", "/output/junit", "JUnit XML test report"),
+            ("GET", "/output/jsonld", "JSON-LD linked data output"),
+        ],
+        "Standard Model": [
+            ("GET", "/sm/particles", "31-particle catalog with kernel data"),
+            ("GET", "/sm/theorems", "10 proven theorems (74/74 subtests)"),
+        ],
+        "Domains": [
+            ("GET", "/domains", "List all 18 UMCP domains with metadata"),
+            ("GET", "/canon", "Canon anchors across all domains"),
+            ("GET", "/canon/{domain}", "Domain-specific canon anchors"),
+            ("GET", "/atomic/elements", "118-element periodic kernel data"),
+            ("GET", "/evolution/organisms", "40-organism evolution kernel"),
+            ("POST", "/finance/embed", "Finance portfolio embedding"),
+        ],
+        "Astronomy": [
+            ("POST", "/astro/luminosity", "Stellar luminosity closure"),
+            ("POST", "/astro/distance", "Distance modulus closure"),
+            ("POST", "/astro/spectral", "Spectral classification"),
+            ("POST", "/astro/evolution", "Stellar evolution closure"),
+            ("POST", "/astro/orbital", "Orbital mechanics closure"),
+            ("POST", "/astro/dynamics", "Galactic dynamics closure"),
+        ],
+        "Nuclear Physics": [
+            ("POST", "/nuclear/binding", "Bethe-Weizsäcker binding energy"),
+            ("POST", "/nuclear/alpha-decay", "Alpha decay closure"),
+            ("POST", "/nuclear/shell", "Nuclear shell model"),
+            ("POST", "/nuclear/fissility", "Fissility parameter"),
+            ("POST", "/nuclear/decay-chain", "Decay chain analysis"),
+            ("POST", "/nuclear/double-sided", "Double-sided nuclear analysis"),
+        ],
+        "Quantum Mechanics": [
+            ("POST", "/qm/collapse", "Wavefunction collapse closure"),
+            ("POST", "/qm/entanglement", "Entanglement closure"),
+            ("POST", "/qm/tunneling", "Tunneling closure"),
+            ("POST", "/qm/harmonic-oscillator", "Harmonic oscillator closure"),
+            ("POST", "/qm/spin", "Spin measurement closure"),
+            ("POST", "/qm/uncertainty", "Uncertainty relation closure"),
+        ],
+        "WEYL Cosmology": [
+            ("GET", "/weyl/background", "FLRW background cosmology"),
+            ("GET", "/weyl/sigma", "σ₈ clustering amplitude"),
+            ("GET", "/weyl/des-y3", "DES Year 3 data"),
+            ("GET", "/weyl/umcp-mapping", "WEYL-to-UMCP mapping"),
+        ],
+    }
+
+    if pd is not None:
+        for group_name, endpoints in endpoint_groups.items():
+            with st.expander(f"**{group_name}** ({len(endpoints)} endpoints)", expanded=False):
+                rows = [{"Method": m, "Path": p, "Description": d} for m, p, d in endpoints]
+                st.dataframe(
+                    pd.DataFrame(rows),
+                    use_container_width=True,
+                    hide_index=True,
+                    column_config={
+                        "Method": st.column_config.TextColumn(width="small"),
+                        "Path": st.column_config.TextColumn(width="medium"),
+                    },
+                )
+    else:
+        for group_name, endpoints in endpoint_groups.items():
+            with st.expander(f"**{group_name}** ({len(endpoints)})", expanded=False):
+                for method, path, desc in endpoints:
+                    st.markdown(f"- **{method}** `{path}` — {desc}")
+
+    st.divider()
+
+    # ========== Example Payloads ==========
+    st.subheader("📋 Example Payloads")
+
+    example_tabs = st.tabs(
+        [
+            "Kernel Compute",
+            "Batch Compute",
+            "Spine Evaluation",
+            "Regime Classify",
+            "Validate",
+        ]
+    )
+
+    with example_tabs[0]:
+        st.markdown("**POST `/kernel/compute`** — Compute kernel invariants from a trace vector")
+        st.code(
+            """{
+    "coordinates": [0.85, 0.72, 0.91, 0.68, 0.77, 0.83],
+    "weights": [0.167, 0.167, 0.167, 0.167, 0.166, 0.166],
+    "epsilon": 1e-8
+}""",
+            language="json",
+        )
+        st.markdown("**Response:**")
+        st.code(
+            """{
+    "F": 0.793333,
+    "omega": 0.206667,
+    "S": 0.389012,
+    "C": 0.148533,
+    "kappa": -0.247821,
+    "IC": 0.780512,
+    "heterogeneity_gap": 0.012821,
+    "regime": "WATCH",
+    "identities": {
+        "duality_residual": 0.0,
+        "integrity_bound_holds": true,
+        "log_integrity_residual": 0.0
+    }
+}""",
+            language="json",
+        )
+
+    with example_tabs[1]:
+        st.markdown("**POST `/kernel/batch`** — Multiple trace vectors in one call")
+        st.code(
+            """{
+    "traces": [
+        {"coordinates": [0.95, 0.92, 0.97, 0.91], "weights": [0.25, 0.25, 0.25, 0.25]},
+        {"coordinates": [0.45, 0.42, 0.48, 0.40], "weights": [0.25, 0.25, 0.25, 0.25]},
+        {"coordinates": [0.12, 0.08, 0.15, 0.05], "weights": [0.25, 0.25, 0.25, 0.25]}
+    ],
+    "epsilon": 1e-8
+}""",
+            language="json",
+        )
+        st.markdown("Returns an array of kernel outputs — one per trace.")
+
+    with example_tabs[2]:
+        st.markdown("**POST `/kernel/spine`** — Full spine traversal (Contract → Stance)")
+        st.code(
+            """{
+    "coordinates": [0.85, 0.72, 0.91, 0.68],
+    "weights": [0.25, 0.25, 0.25, 0.25],
+    "contract": {
+        "epsilon": 1e-8,
+        "p_exponent": 3,
+        "alpha": 1.0,
+        "tol_seam": 0.005
+    }
+}""",
+            language="json",
+        )
+        st.markdown(
+            "Returns all five spine stops: contract echo, kernel invariants, "
+            "regime gates (4 individual checks), seam budget (Γ, D_C, Δκ), and final stance."
+        )
+
+    with example_tabs[3]:
+        st.markdown("**POST `/regime/classify`** — Classify regime from pre-computed invariants")
+        st.code(
+            """{
+    "omega": 0.15,
+    "F": 0.85,
+    "S": 0.42,
+    "C": 0.28
+}""",
+            language="json",
+        )
+        st.markdown("**Response:**")
+        st.code(
+            """{
+    "regime": "WATCH",
+    "gates": {
+        "omega_gate": false,
+        "F_gate": false,
+        "S_gate": false,
+        "C_gate": false
+    },
+    "critical": false,
+    "classification_reason": "omega in [0.038, 0.30)"
+}""",
+            language="json",
+        )
+
+    with example_tabs[4]:
+        st.markdown("**POST `/validate`** — Validate a casepack")
+        st.code(
+            """{
+    "target": "casepacks/hello_world",
+    "strict": false,
+    "verbose": false
+}""",
+            language="json",
+        )
+        st.markdown("**Response:**")
+        st.code(
+            """{
+    "run_status": "CONFORMANT",
+    "target_path": "casepacks/hello_world",
+    "summary": {
+        "counts": {"errors": 0, "warnings": 0, "targets_total": 1}
+    },
+    "timestamp": "2026-03-12T10:42:00Z"
+}""",
+            language="json",
+        )
+
+    st.divider()
+
+    # ========== Live Testing ==========
+    st.subheader("🧪 Live Endpoint Testing")
 
     if not st.session_state.api_settings["connected"]:
-        st.warning("Connect to the API first to test endpoints.")
+        st.warning("Connect to the API above to test endpoints live.")
     else:
-        tabs = st.tabs(["🏥 Health", "📒 Ledger", "📦 Casepacks", "✅ Validate"])
+        tabs = st.tabs(["🏥 Health", "📒 Ledger", "📦 Casepacks", "✅ Validate", "⚙️ Kernel"])
 
         with tabs[0]:
             st.markdown("### Health Check")
@@ -466,6 +731,34 @@ def render_api_integration_page() -> None:
                             st.error("❌ NONCONFORMANT")
 
                         st.json(data)
+                except Exception as e:
+                    st.error(f"❌ Error: {e}")
+
+        with tabs[4]:
+            st.markdown("### Kernel Compute")
+            kernel_input = st.text_area(
+                "Request Body (JSON)",
+                value='{\n    "coordinates": [0.85, 0.72, 0.91, 0.68],\n    "weights": [0.25, 0.25, 0.25, 0.25]\n}',
+                height=120,
+                key="api_kernel_input",
+            )
+            if st.button("⚙️ Compute Kernel", key="api_kernel_compute"):
+                try:
+                    import urllib.request
+
+                    req_data = kernel_input.encode()
+                    req = urllib.request.Request(
+                        f"{api_url}/kernel/compute",
+                        data=req_data,
+                        headers={"Content-Type": "application/json"},
+                        method="POST",
+                    )
+
+                    with urllib.request.urlopen(req, timeout=10) as response:
+                        data = json.loads(response.read().decode())
+                        st.json(data)
+                except json.JSONDecodeError:
+                    st.error("❌ Invalid JSON in request body")
                 except Exception as e:
                     st.error(f"❌ Error: {e}")
 

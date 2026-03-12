@@ -1,5 +1,5 @@
 """
-Interactive dashboard pages: Test Templates, Batch Validation, Live Runner.
+Interactive dashboard pages: Test Templates, Batch Validation, Live Runner, Work Templates.
 """
 # pyright: reportUnknownMemberType=false
 # pyright: reportUnknownVariableType=false
@@ -13,6 +13,7 @@ import json
 import subprocess
 import sys
 from datetime import datetime
+from typing import Any
 
 from umcp.dashboard._deps import np, pd, st
 from umcp.dashboard._utils import (
@@ -968,3 +969,545 @@ def render_live_runner_page() -> None:
                                 st.success("✅ Pass")
                             else:
                                 st.error("❌ Fail")
+
+
+# ============================================================================
+# Work Templates — Guided domain closure implementation with 5 full examples
+# ============================================================================
+
+# Pre-built work template examples (domain → config)
+_WORK_TEMPLATE_EXAMPLES: dict[str, dict[str, Any]] = {
+    "Weather Station": {
+        "description": (
+            "A weather monitoring station with 6 sensors. Each sensor reading is "
+            "normalized to [0,1] to form the trace vector. Channel death occurs when "
+            "a sensor fails (value → ε), triggering geometric slaughter in IC."
+        ),
+        "domain": "Environmental Science",
+        "channels": [
+            ("temperature", 0.82, 0.20, "°C normalized: (T - T_min) / (T_max - T_min)"),
+            ("humidity", 0.65, 0.15, "Relative humidity / 100"),
+            ("pressure", 0.91, 0.20, "Barometric: (P - 950) / (1050 - 950) hPa"),
+            ("wind_speed", 0.45, 0.15, "Wind: min(v, v_max) / v_max"),
+            ("visibility", 0.78, 0.15, "Visibility: min(d, 20km) / 20km"),
+            ("uv_index", 0.33, 0.15, "UV: min(uv, 11) / 11"),
+        ],
+        "contract_notes": (
+            "**Normalization**: All sensors map to [0,1] using domain bounds. "
+            "Pressure uses 950-1050 hPa range. Wind caps at 100 km/h. "
+            "**ε-policy**: Failed sensors clamp to ε = 10⁻⁸ (frozen). "
+            "**Expected regime**: Stable when all sensors operational. "
+            "Watch when 1-2 sensors degrade. Collapse on multi-sensor failure."
+        ),
+    },
+    "Software Deployment": {
+        "description": (
+            "Monitoring a software release pipeline. Each channel tracks a deployment "
+            "health dimension. The trace vector captures whether the system is returning "
+            "to stable operation after a release (deployment = collapse event)."
+        ),
+        "domain": "DevOps / SRE",
+        "channels": [
+            ("error_rate", 0.95, 0.20, "1 - (errors/requests), high = healthy"),
+            ("latency_p99", 0.72, 0.20, "1 - min(p99/budget, 1), budget=500ms"),
+            ("cpu_headroom", 0.68, 0.15, "1 - (cpu_usage / cpu_limit)"),
+            ("memory_headroom", 0.81, 0.15, "1 - (mem_usage / mem_limit)"),
+            ("test_coverage", 0.88, 0.15, "Fraction of tests passing"),
+            ("rollback_distance", 0.60, 0.15, "1 - (changes / max_changes)"),
+        ],
+        "contract_notes": (
+            "**Interpretation**: A deployment is a collapse event. τ_R measures how many "
+            "monitoring intervals until metrics return to pre-deploy baselines. "
+            "**Drift** = how far metrics have moved from the healthy baseline. "
+            "**Return** = demonstrated recovery (metrics back within SLO). "
+            "**IC killer**: A single channel at ε (e.g., error_rate crash) triggers "
+            "geometric slaughter — IC collapses even if other channels are fine."
+        ),
+    },
+    "Clinical Trial Cohort": {
+        "description": (
+            "Tracking a clinical trial cohort across 5 measurable endpoints. "
+            "Each endpoint is normalized against the expected therapeutic window. "
+            "The kernel detects whether the cohort maintains coherence across all "
+            "endpoints or shows heterogeneous response (high Δ = F - IC)."
+        ),
+        "domain": "Biomedical Research",
+        "channels": [
+            ("primary_endpoint", 0.74, 0.30, "Efficacy: response rate vs. target"),
+            ("safety_score", 0.88, 0.25, "1 - (adverse_events / threshold)"),
+            ("adherence", 0.91, 0.15, "Protocol adherence rate"),
+            ("biomarker_response", 0.42, 0.15, "Biomarker change vs. expected"),
+            ("retention", 0.85, 0.15, "Patient retention rate"),
+        ],
+        "contract_notes": (
+            "**Heterogeneity gap matters**: F may look acceptable while IC reveals "
+            "that one endpoint (e.g., biomarker at 0.42) is dragging coherence down. "
+            "**NON_EVALUABLE**: If data is insufficient for an endpoint, the verdict "
+            "is the third state — not 'pass' or 'fail' but 'cannot evaluate'. "
+            "**Seam**: Each interim analysis is a seam crossing. Policy changes "
+            "require a formal weld (pre/post tests, κ-continuity)."
+        ),
+    },
+    "Supply Chain Resilience": {
+        "description": (
+            "Measuring supply chain resilience across 7 dimensions. Each channel "
+            "represents a measurable aspect of the supply network. The kernel "
+            "reveals whether apparent average health (F) masks fragility in "
+            "specific links (low IC from channel heterogeneity)."
+        ),
+        "domain": "Operations / Logistics",
+        "channels": [
+            ("supplier_diversity", 0.62, 0.15, "1 - HHI concentration index"),
+            ("lead_time_reliability", 0.78, 0.15, "On-time delivery fraction"),
+            ("inventory_coverage", 0.85, 0.15, "Days of supply / target days"),
+            ("transport_redundancy", 0.55, 0.10, "Alternative routes / total"),
+            ("quality_yield", 0.92, 0.15, "Acceptance rate at inspection"),
+            ("cost_stability", 0.71, 0.15, "1 - |ΔP/P| over period"),
+            ("demand_forecast_accuracy", 0.68, 0.15, "1 - MAPE"),
+        ],
+        "contract_notes": (
+            "**The gap is the insight**: A supply chain with F=0.73 (looks okay) but "
+            "IC=0.45 (one link is fragile) has Δ=0.28 — the average hides the risk. "
+            "**Transport redundancy** at 0.55 with weight 0.10 is the IC killer here. "
+            "Even at low weight, the geometric mean punishes it. "
+            "**Regime interpretation**: Stable = resilient network. Watch = monitor fragile links. "
+            "Collapse = critical path failure imminent."
+        ),
+    },
+    "Student Learning Assessment": {
+        "description": (
+            "Assessing student learning coherence across 6 competency dimensions. "
+            "Each channel measures demonstrated proficiency normalized to [0,1]. "
+            "The kernel reveals whether learning is uniform (IC ≈ F, low Δ) or "
+            "whether excellence in some areas masks gaps in others."
+        ),
+        "domain": "Education / Assessment",
+        "channels": [
+            ("conceptual_understanding", 0.81, 0.20, "Conceptual assessment score"),
+            ("procedural_fluency", 0.77, 0.15, "Procedural skill score"),
+            ("problem_solving", 0.65, 0.20, "Novel problem performance"),
+            ("communication", 0.88, 0.15, "Written/oral explanation quality"),
+            ("collaboration", 0.72, 0.15, "Peer assessment of teamwork"),
+            ("self_regulation", 0.58, 0.15, "Metacognitive skill score"),
+        ],
+        "contract_notes": (
+            "**F vs IC tells the story**: A student with F=0.74 (B-grade average) and "
+            "IC=0.71 (coherent across channels) is in a different position than F=0.74 "
+            "with IC=0.35 (brilliant at some, struggling at others). "
+            "**Self-regulation** at 0.58 is the weakest channel. If it drops further, "
+            "geometric slaughter begins — overall coherence degrades faster than the "
+            "average suggests. "
+            "**Return**: Demonstrated improvement over time = re-entry to higher IC. "
+            "τ_R measures how many assessment cycles until coherence is restored."
+        ),
+    },
+}
+
+
+def render_work_template_page() -> None:
+    """Render the Work Template page — guided domain closure implementation.
+
+    Provides 5 full worked examples showing how to take a real-world domain,
+    define channels, compute kernel invariants, and interpret the results
+    through the GCD lens. Each example is a complete, runnable spine traversal.
+    """
+    if st is None or np is None or pd is None:
+        return
+
+    st.title("📐 Work Templates")
+    st.caption(
+        "Guided examples for implementing your own domain closure — 5 complete worked examples from diverse fields"
+    )
+
+    # ========== Introduction ==========
+    st.markdown("""
+    **What is a Work Template?** A step-by-step guide for taking *your* domain data,
+    encoding it as a trace vector, running it through the GCD kernel, and reading the
+    results. Each example below is a complete implementation — from channel definition
+    through kernel computation to verdict interpretation.
+
+    **The pattern is always the same** (the Spine):
+
+    1. **Contract** — Define your channels, normalization, and weights *before* looking at data
+    2. **Canon** — Compute F, ω, S, C, κ, IC from the trace vector
+    3. **Closures** — Apply regime gates and seam budget
+    4. **Integrity Ledger** — Verify identities (F + ω = 1, IC ≤ F, IC = exp(κ))
+    5. **Stance** — Read the verdict: Stable / Watch / Collapse
+    """)
+
+    st.info(
+        "💡 **Quick start**: Pick an example below that's closest to your domain, "
+        "then modify the channels and weights for your data."
+    )
+
+    st.divider()
+
+    # ========== Example Selector ==========
+    example_names = list(_WORK_TEMPLATE_EXAMPLES.keys())
+    selected_example = st.selectbox(
+        "Select a worked example",
+        example_names,
+        help="Each example includes full channel definitions, computation, and interpretation",
+    )
+
+    example = _WORK_TEMPLATE_EXAMPLES[selected_example]
+
+    # ========== Example Header ==========
+    st.markdown(f"## 📋 Example: {selected_example}")
+    st.markdown(f"**Domain**: {example['domain']}")
+    st.markdown(example["description"])
+
+    st.divider()
+
+    # ========== STOP 1: Contract ==========
+    st.markdown("### 🔒 Stop 1: Contract (*Liga*)")
+    st.markdown(
+        "Define channels, normalization rules, and weights **before** examining data. "
+        "The contract is frozen for the duration of the analysis."
+    )
+
+    with st.expander("📖 Contract Notes", expanded=True):
+        st.markdown(example["contract_notes"])
+
+    # Channel table with editable values
+    st.markdown("#### Channel Definitions")
+
+    channels = example["channels"]
+    channel_names = [ch[0] for ch in channels]
+    channel_defaults = [ch[1] for ch in channels]
+    channel_weights = [ch[2] for ch in channels]
+    channel_descs = [ch[3] for ch in channels]
+
+    # Allow users to modify values
+    n_ch = len(channels)
+    edited_values: list[float] = []
+    edited_weights: list[float] = []
+
+    # Display as a structured table with inputs
+    for i in range(0, n_ch, 3):
+        cols = st.columns(min(3, n_ch - i))
+        for j, col in enumerate(cols):
+            idx = i + j
+            if idx < n_ch:
+                with col, st.container(border=True):
+                    st.markdown(f"**{channel_names[idx]}**")
+                    st.caption(channel_descs[idx])
+                    val = st.number_input(
+                        "Value",
+                        min_value=0.0,
+                        max_value=1.0,
+                        value=float(channel_defaults[idx]),
+                        step=0.01,
+                        format="%.3f",
+                        key=f"wt_{selected_example}_{idx}_v",
+                    )
+                    wt = st.number_input(
+                        "Weight",
+                        min_value=0.0,
+                        max_value=1.0,
+                        value=float(channel_weights[idx]),
+                        step=0.01,
+                        format="%.3f",
+                        key=f"wt_{selected_example}_{idx}_w",
+                    )
+                    edited_values.append(val)
+                    edited_weights.append(wt)
+
+    # Weight normalization
+    w_sum = sum(edited_weights)
+    if abs(w_sum - 1.0) > 1e-6:
+        st.warning(f"⚠️ Weights sum to {w_sum:.4f} — normalizing to 1.0")
+        edited_weights = [w / w_sum for w in edited_weights]
+
+    # Frozen parameters display
+    st.markdown("#### Frozen Parameters (*Trans Suturam Congelatum*)")
+    param_cols = st.columns(5)
+    frozen_labels = [
+        ("ε", "1e-8", "Guard band"),
+        ("p", "3", "Drift exponent"),
+        ("α", "1.0", "Curvature cost"),
+        ("tol_seam", "0.005", "Seam tolerance"),
+        ("c*", "0.7822", "Self-dual fixed point"),
+    ]
+    for col, (sym, val, desc) in zip(param_cols, frozen_labels, strict=False):
+        with col:
+            st.metric(sym, val, help=desc)
+
+    st.divider()
+
+    # ========== STOP 2: Canon — Compute kernel ==========
+    st.markdown("### ⚙️ Stop 2: Canon (*Dic*)")
+    st.markdown("Compute the six kernel invariants from the trace vector.")
+
+    c_arr = np.array(edited_values)
+    w_arr = np.array(edited_weights)
+
+    # Epsilon clamp — frozen parameter from contract
+    from umcp.frozen_contract import EPSILON
+
+    c_clamped = np.clip(c_arr, EPSILON, 1.0 - EPSILON)
+
+    # Compute kernel invariants
+    if _HAS_KERNEL:
+        computer = OptimizedKernelComputer(epsilon=EPSILON)
+        outputs = computer.compute(c_clamped, w_arr)
+        F = outputs.F
+        omega = outputs.omega
+        S = outputs.S
+        C = outputs.C
+        kappa = outputs.kappa
+        IC = outputs.IC
+        het_gap = outputs.heterogeneity_gap
+    else:
+        F = float(np.sum(w_arr * c_clamped))
+        omega = 1.0 - F
+        kappa = float(np.sum(w_arr * np.log(c_clamped)))
+        IC = float(np.exp(kappa))
+        S = 0.0
+        for ci, wi in zip(c_clamped, w_arr, strict=False):
+            if wi > 0 and 0 < ci < 1:
+                S += wi * (-ci * np.log(ci) - (1 - ci) * np.log(1 - ci))
+        S = float(S)
+        C = float(np.std(c_clamped, ddof=0) / 0.5)
+        het_gap = F - IC
+
+    # Display invariants
+    inv_cols = st.columns(6)
+    invariant_data = [
+        ("F", F, "Fidelity — what survived"),
+        ("ω", omega, "Drift — what was lost"),
+        ("S", S, "Bernoulli field entropy"),
+        ("C", C, "Curvature — channel coupling"),
+        ("κ", kappa, "Log-integrity"),
+        ("IC", IC, "Integrity composite"),
+    ]
+    for col, (sym, val, desc) in zip(inv_cols, invariant_data, strict=False):
+        with col:
+            st.metric(sym, f"{val:.6f}", help=desc)
+
+    st.metric("Δ (heterogeneity gap)", f"{het_gap:.6f}", help="F − IC: how much the average hides")
+
+    # Bar chart of channels
+    if pd is not None:
+        ch_df = pd.DataFrame(
+            {
+                "Channel": channel_names[: len(edited_values)],
+                "Value": edited_values,
+                "Weight": edited_weights,
+            }
+        )
+        st.bar_chart(ch_df.set_index("Channel")["Value"], use_container_width=True)
+
+    st.divider()
+
+    # ========== STOP 3: Closures — Regime gates ==========
+    st.markdown("### 📏 Stop 3: Closures (*Reconcilia*)")
+    st.markdown("Apply the four-gate regime classification and seam budget.")
+
+    # Regime gates
+    gate_omega = omega < 0.038
+    gate_F = F > 0.90
+    gate_S = S < 0.15
+    gate_C = C < 0.14
+    all_stable = gate_omega and gate_F and gate_S and gate_C
+
+    if all_stable:
+        regime = "STABLE"
+    elif omega >= 0.30:
+        regime = "COLLAPSE"
+    else:
+        regime = "WATCH"
+
+    critical_overlay = IC < 0.30
+
+    # Gate display
+    gate_cols = st.columns(4)
+    gates = [
+        ("ω < 0.038", gate_omega, f"ω = {omega:.4f}"),
+        ("F > 0.90", gate_F, f"F = {F:.4f}"),
+        ("S < 0.15", gate_S, f"S = {S:.4f}"),
+        ("C < 0.14", gate_C, f"C = {C:.4f}"),
+    ]
+    for col, (label, passed, detail) in zip(gate_cols, gates, strict=False):
+        with col:
+            icon = "✅" if passed else "❌"
+            st.markdown(f"{icon} **{label}**")
+            st.caption(detail)
+
+    # Regime badge
+    regime_colors = {"STABLE": "#28a745", "WATCH": "#ffc107", "COLLAPSE": "#dc3545"}
+    color = regime_colors.get(regime, "#6c757d")
+    st.markdown(
+        f'<div style="padding: 12px; border-left: 6px solid {color}; '
+        f'background: {color}22; border-radius: 8px; margin: 10px 0;">'
+        f'<h3 style="margin: 0; color: {color};">Regime: {regime}'
+        f"{'  ⚠️ CRITICAL' if critical_overlay else ''}</h3>"
+        f"</div>",
+        unsafe_allow_html=True,
+    )
+
+    # Seam budget
+    gamma = omega**3 / (1 - omega + EPSILON)
+    d_c = 1.0 * C  # α = 1.0
+    total_debit = gamma + d_c
+
+    budget_cols = st.columns(3)
+    with budget_cols[0]:
+        st.metric("Γ(ω)", f"{gamma:.6f}", help="Drift cost: ω³/(1-ω+ε)")
+    with budget_cols[1]:
+        st.metric("D_C", f"{d_c:.6f}", help="Curvature debit: α·C")
+    with budget_cols[2]:
+        st.metric("Total Debit", f"{total_debit:.6f}", help="Γ(ω) + D_C")
+
+    st.divider()
+
+    # ========== STOP 4: Integrity Ledger ==========
+    st.markdown("### 📒 Stop 4: Integrity Ledger (*Inscribe*)")
+    st.markdown("Verify the three algebraic identities — these must hold by construction.")
+
+    id_1_residual = abs(F + omega - 1.0)
+    id_2_holds = IC <= F + 1e-12
+    id_3_residual = abs(IC - np.exp(kappa))
+
+    check_cols = st.columns(3)
+    with check_cols[0]:
+        icon = "✅" if id_1_residual < 1e-9 else "❌"
+        st.markdown(f"{icon} **F + ω = 1** (duality identity)")
+        st.caption(f"|residual| = {id_1_residual:.2e}")
+    with check_cols[1]:
+        icon = "✅" if id_2_holds else "❌"
+        st.markdown(f"{icon} **IC ≤ F** (integrity bound)")
+        st.caption(f"IC = {IC:.6f}, F = {F:.6f}")
+    with check_cols[2]:
+        icon = "✅" if id_3_residual < 1e-9 else "❌"
+        st.markdown(f"{icon} **IC = exp(κ)** (log-integrity relation)")
+        st.caption(f"|residual| = {id_3_residual:.2e}")
+
+    st.divider()
+
+    # ========== STOP 5: Stance ==========
+    st.markdown("### 📜 Stop 5: Stance (*Sententia*)")
+    st.markdown("The verdict is **derived**, never asserted.")
+
+    verdict_all_pass = id_1_residual < 1e-9 and id_2_holds and id_3_residual < 1e-9
+    verdict = "CONFORMANT" if verdict_all_pass else "NONCONFORMANT"
+
+    st.markdown(
+        f'<div style="padding: 16px; border: 2px solid {"#28a745" if verdict_all_pass else "#dc3545"}; '
+        f'border-radius: 8px; text-align: center; margin: 10px 0;">'
+        f'<h2 style="margin: 0;">{"✅" if verdict_all_pass else "❌"} {verdict}</h2>'
+        f'<p style="margin: 5px 0 0 0;">Regime: {regime} · Δ = {het_gap:.4f} · '
+        f"IC/F = {IC / F:.4f}</p></div>",
+        unsafe_allow_html=True,
+    )
+
+    # Interpretation in context
+    st.markdown("#### 📖 Domain Interpretation")
+
+    # Identify weakest channel
+    min_idx = int(np.argmin(c_clamped))
+    min_name = channel_names[min_idx] if min_idx < len(channel_names) else f"c_{min_idx + 1}"
+    min_val = float(c_clamped[min_idx])
+
+    ic_f_ratio = IC / F if F > 0 else 0
+
+    if regime == "STABLE":
+        st.success(
+            f"**{selected_example}** is in a **Stable** regime. All channels are healthy, "
+            f"coherence is high (IC/F = {ic_f_ratio:.3f}), and drift is minimal. "
+            f"The weakest channel is **{min_name}** at {min_val:.3f} — monitor it for degradation."
+        )
+    elif regime == "WATCH":
+        st.warning(
+            f"**{selected_example}** is in a **Watch** regime. "
+            f"Drift ω = {omega:.4f} indicates the system has moved from its baseline. "
+            f"The heterogeneity gap Δ = {het_gap:.4f} suggests {'some channels are weaker than the average implies' if het_gap > 0.05 else 'channels are relatively uniform'}. "
+            f"The weakest channel (**{min_name}** = {min_val:.3f}) is the primary IC drag."
+        )
+    else:
+        st.error(
+            f"**{selected_example}** is in a **Collapse** regime. "
+            f"Drift ω = {omega:.4f} exceeds the 0.30 threshold. "
+            f"{'IC is critically low (' + f'{IC:.4f}' + ')' if critical_overlay else ''} "
+            f"The geometric mean has been destroyed by channel heterogeneity — "
+            f"**{min_name}** at {min_val:.3f} is the primary cause."
+        )
+
+    st.divider()
+
+    # ========== Implementation Guide ==========
+    st.markdown("### 🛠️ Implement This in Your Code")
+    st.markdown("Copy this minimal implementation to apply the GCD kernel to your own data.")
+
+    code_channels = ", ".join([f'"{n}"' for n in channel_names[: len(edited_values)]])
+    code_values = ", ".join([f"{v:.3f}" for v in edited_values])
+    code_weights = ", ".join([f"{w:.3f}" for w in edited_weights])
+
+    st.code(
+        f'''"""
+{selected_example} — GCD Kernel Implementation
+Domain: {example["domain"]}
+"""
+from umcp.kernel_optimized import OptimizedKernelComputer
+from umcp.frozen_contract import EPSILON
+import numpy as np
+
+# --- Stop 1: Contract (freeze before evidence) ---
+channels = [{code_channels}]
+c = np.array([{code_values}])           # trace vector
+w = np.array([{code_weights}])           # weights (sum = 1)
+
+# --- Stop 2: Canon (compute kernel) ---
+computer = OptimizedKernelComputer(epsilon=EPSILON)
+result = computer.compute(np.clip(c, EPSILON, 1 - EPSILON), w)
+
+print(f"F  = {{result.F:.6f}}")           # Fidelity
+print(f"ω  = {{result.omega:.6f}}")       # Drift
+print(f"S  = {{result.S:.6f}}")           # Bernoulli field entropy
+print(f"C  = {{result.C:.6f}}")           # Curvature
+print(f"κ  = {{result.kappa:.6f}}")       # Log-integrity
+print(f"IC = {{result.IC:.6f}}")          # Integrity composite
+print(f"Δ  = {{result.heterogeneity_gap:.6f}}")  # Het gap
+
+# --- Stop 3: Closures (regime gates) ---
+stable = (result.omega < 0.038 and result.F > 0.90
+          and result.S < 0.15 and result.C < 0.14)
+regime = "STABLE" if stable else "COLLAPSE" if result.omega >= 0.30 else "WATCH"
+print(f"Regime: {{regime}}")
+
+# --- Stop 4: Ledger (verify identities) ---
+assert abs(result.F + result.omega - 1.0) < 1e-9, "Duality violated"
+assert result.IC <= result.F + 1e-12, "Integrity bound violated"
+assert abs(result.IC - np.exp(result.kappa)) < 1e-9, "Log-integrity violated"
+
+# --- Stop 5: Stance ---
+print("CONFORMANT — all identities hold")
+''',
+        language="python",
+    )
+
+    st.divider()
+
+    # ========== All Examples Reference ==========
+    st.markdown("### 📚 All Work Template Examples")
+
+    for name, ex in _WORK_TEMPLATE_EXAMPLES.items():
+        icon = "📌" if name == selected_example else "📋"
+        with st.expander(f"{icon} {name} — {ex['domain']}", expanded=False):
+            st.markdown(ex["description"])
+            ch_data = []
+            for ch_name, ch_val, ch_wt, ch_desc in ex["channels"]:
+                ch_data.append(
+                    {
+                        "Channel": ch_name,
+                        "Default Value": f"{ch_val:.3f}",
+                        "Weight": f"{ch_wt:.3f}",
+                        "Description": ch_desc,
+                    }
+                )
+            if pd is not None:
+                st.dataframe(
+                    pd.DataFrame(ch_data),
+                    use_container_width=True,
+                    hide_index=True,
+                )

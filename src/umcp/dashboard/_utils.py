@@ -901,6 +901,7 @@ NAV_CATEGORIES: dict[str, list[str]] = {
         "Live Runner",
         "Batch Validation",
         "Test Templates",
+        "Work Templates",
     ],
     "Diagnostics": [
         "τ_R* Diagnostic",

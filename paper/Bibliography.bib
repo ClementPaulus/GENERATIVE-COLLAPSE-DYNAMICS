@@ -1394,3 +1394,256 @@
   doi          = {10.1016/j.jhevol.2009.04.009},
   note         = {Cognitive buffer model: brain size vs reproductive rate and somatic growth}
 }
+
+% ------------------------------------------------------------
+% OPoly26 / Polymer MLIP Dataset & Related References
+% (Levine et al. 2025 — arXiv:2512.23117v2)
+% ------------------------------------------------------------
+
+@misc{levine2025opoly26,
+  author       = {Levine, Daniel S. and Liesen, Nicholas and Chua, Lauren
+                  and Barroso-Luque, Luis and Wood, Brandon M. and
+                  Dzamba, Michael and Fu, Xiang and Kroonblawd, Matthew
+                  and Goldman, Nir and Blau, Samuel M. and Zitnick,
+                  C. Lawrence},
+  title        = {The Open Polymers 2026 ({OPoly26}) Dataset, Evaluations,
+                  and Models for Polymer Simulations with Machine Learning
+                  Interatomic Potentials},
+  year         = {2025},
+  eprint       = {2512.23117},
+  archiveprefix = {arXiv},
+  primaryclass = {physics.chem-ph},
+  url          = {https://arxiv.org/abs/2512.23117v2},
+  note         = {6.35M DFT frames ($\omega$B97M-V/def2-TZVPD);
+                  train 5,902,827 / val 201,865 / test 248,391;
+                  8 polymer categories; 22 solvents; 34 ion species;
+                  1.2M CPU-hours AFIR reactivity;
+                  UMA-s-1p2 achieves F=0.9635 (GCD Stable regime).
+                  CC BY 4.0}
+}
+
+@misc{levine2025omol25,
+  author       = {Levine, Daniel S. and others},
+  title        = {The Open Molecules 2025 ({OMol25}) Dataset, Evaluations,
+                  and Models},
+  year         = {2025},
+  note         = {Companion small-molecule dataset; cross-domain synergy
+                  with OPoly26 demonstrates geometric slaughter in
+                  reactivity channels}
+}
+
+@misc{wood2025uma,
+  author       = {Wood, Brandon M. and others},
+  title        = {{UMA}: A Family of Universal Models for Atoms},
+  year         = {2025},
+  eprint       = {2506.23971},
+  archiveprefix = {arXiv},
+  url          = {https://arxiv.org/abs/2506.23971},
+  note         = {UMA-s-1p1 (no OPoly26) and UMA-s-1p2 (with OPoly26);
+                  UMA-s-1p2 is ONLY model achieving GCD Stable regime
+                  on 8-channel polymer error profile}
+}
+
+@misc{fu2025esen,
+  author       = {Fu, Xiang and Wood, Brandon M. and Barroso-Luque, Luis
+                  and Levine, Daniel S. and Gao, Mingyu and Dzamba, Michael
+                  and Zitnick, C. Lawrence},
+  title        = {Learning Smooth and Expressive Interatomic Potentials
+                  for Physical Property Prediction},
+  year         = {2025},
+  eprint       = {2502.12147},
+  archiveprefix = {arXiv},
+  primaryclass = {physics.comp-ph},
+  url          = {https://arxiv.org/abs/2502.12147},
+  note         = {eSEN architecture used in OPoly26 baseline training}
+}
+
+@article{hayashi2022radonpy,
+  author       = {Hayashi, Yoshihiro and Shiomi, Junichiro and
+                  Morikawa, Junko and Yoshida, Ryo},
+  title        = {{RadonPy}: automated physical property calculation using
+                  all-atom classical molecular dynamics simulations for
+                  polymer informatics},
+  journal      = {npj Computational Materials},
+  volume       = {8},
+  pages        = {222},
+  year         = {2022},
+  doi          = {10.1038/s41524-022-00906-6},
+  note         = {1,077 homopolymers from PoLyInfo; source of traditional
+                  polymer compositions in OPoly26}
+}
+
+@misc{simm2025simpoly,
+  author       = {Simm, Gregor N. C. and others},
+  title        = {{SimPoly}: Simulation of Polymers with Machine Learning
+                  Force Fields Derived from First Principles},
+  year         = {2025},
+  eprint       = {2510.13696},
+  archiveprefix = {arXiv},
+  primaryclass = {physics.chem-ph},
+  url          = {https://arxiv.org/abs/2510.13696},
+  note         = {Prior polymer MLIP work; mixed DFT levels;
+                  OPoly26 reports 66\% improvement over SimPoly-trained
+                  models on polymer energy MAE}
+}
+
+@article{matsumura2025gnnp,
+  author       = {Matsumura, N. and Yoshimoto, Y. and Yamazaki, T. and
+                  Amano, T. and Noda, T. and Ebata, N. and Kasano, T.
+                  and Sakai, Y.},
+  title        = {Generator of Neural Network Potential for Molecular
+                  Dynamics: Constructing Robust and Accurate Potentials
+                  with Active Learning for Nanosecond-Scale Simulations},
+  journal      = {Journal of Chemical Theory and Computation},
+  volume       = {21},
+  pages        = {3832--3846},
+  year         = {2025},
+  doi          = {10.1021/acs.jctc.4c01787},
+  note         = {Prior polymer-specific MLIP; GCD kernel analysis shows
+                  COLLAPSE+CRITICAL regime on OPoly26 polymer categories}
+}
+
+@article{neese2025orca6,
+  author       = {Neese, Frank},
+  title        = {Software Update: The {ORCA} Program System---Version 6.0},
+  journal      = {WIREs Computational Molecular Science},
+  volume       = {15},
+  pages        = {e70019},
+  year         = {2025},
+  doi          = {10.1002/wcms.70019},
+  note         = {DFT package used for all OPoly26 calculations;
+                  integral thresh 1e-12, tcut 1e-13, DEFGRID3}
+}
+
+@article{mardirossian2016wb97mv,
+  author       = {Mardirossian, Narbe and Head-Gordon, Martin},
+  title        = {$\omega${B97M-V}: A combinatorially optimized,
+                  range-separated hybrid, meta-{GGA} density functional
+                  with {VV10} nonlocal correlation},
+  journal      = {The Journal of Chemical Physics},
+  volume       = {144},
+  pages        = {214110},
+  year         = {2016},
+  doi          = {10.1063/1.4952647},
+  note         = {DFT functional used throughout OPoly26}
+}
+
+@article{weigend2005def2,
+  author       = {Weigend, Florian and Ahlrichs, Reinhart},
+  title        = {Balanced basis sets of split valence, triple zeta valence
+                  and quadruple zeta valence quality for {H} to {Rn}:
+                  Design and assessment of accuracy},
+  journal      = {Physical Chemistry Chemical Physics},
+  volume       = {7},
+  pages        = {3297--3305},
+  year         = {2005},
+  doi          = {10.1039/B508541A},
+  note         = {def2-TZVPD basis set used in OPoly26 DFT calculations}
+}
+
+@article{maeda2016afir,
+  author       = {Maeda, Satoshi and Harabuchi, Yu and Takagi, Makito
+                  and Taketsugu, Tetsuya and Morokuma, Keiji},
+  title        = {Artificial Force Induced Reaction ({AFIR}) Method for
+                  Exploring Quantum Chemical Potential Energy Surfaces},
+  journal      = {The Chemical Record},
+  volume       = {16},
+  pages        = {2232--2245},
+  year         = {2016},
+  doi          = {10.1002/tcr.201600043},
+  note         = {AFIR method used for OPoly26 reactivity data generation;
+                  single-ended bond dissociation with stochastic diversity}
+}
+
+@article{thompson2022lammps,
+  author       = {Thompson, Aidan P. and Aktulga, H. Metin and Berger,
+                  Richard and others},
+  title        = {{LAMMPS}---a flexible simulation tool for particle-based
+                  materials modeling at the atomic, meso, and continuum
+                  scales},
+  journal      = {Computer Physics Communications},
+  volume       = {271},
+  pages        = {108171},
+  year         = {2022},
+  doi          = {10.1016/j.cpc.2021.108171},
+  note         = {MD engine used for OPoly26 trajectory generation}
+}
+
+@article{wang2004gaff,
+  author       = {Wang, Junmei and Wolf, Romain M. and Caldwell, James W.
+                  and Kollman, Peter A. and Case, David A.},
+  title        = {Development and testing of a general amber force field},
+  journal      = {Journal of Computational Chemistry},
+  volume       = {25},
+  pages        = {1157--1174},
+  year         = {2004},
+  doi          = {10.1002/jcc.20035},
+  note         = {GAFF/GAFF2 force field used for OPoly26 classical MD}
+}
+
+@article{kim2029openmacromoleculargenome,
+  author       = {Kim, Seonghwan and Schroeder, Charles M. and
+                  Jackson, Nicholas E.},
+  title        = {Open Macromolecular Genome: Generative Design of
+                  Synthetically Accessible Polymers},
+  journal      = {ACS Polymers Au},
+  volume       = {3},
+  pages        = {318--330},
+  year         = {2023},
+  doi          = {10.1021/acspolymersau.3c00045},
+  note         = {Source of fluoropolymer compositions in OPoly26;
+                  12M synthetic polymer SMILES from template reactions}
+}
+
+@article{kiirikki2024nmrlipid,
+  author       = {Kiirikki, A. M. and others},
+  title        = {Overlay databank unlocks data-driven analyses of
+                  biomolecules for all},
+  journal      = {Nature Communications},
+  volume       = {15},
+  pages        = {1136},
+  year         = {2024},
+  doi          = {10.1038/s41467-024-45189-z},
+  note         = {NMRlipid database; source of 47 lipid types from
+                  674 simulations in OPoly26}
+}
+
+@misc{batatia2023mace,
+  author       = {Batatia, Ilyes and Kov{\'a}cs, D{\'a}vid P{\'e}ter
+                  and Simm, Gregor N. C. and Ortner, Christoph and
+                  Cs{\'a}nyi, G{\'a}bor},
+  title        = {{MACE}: Higher Order Equivariant Message Passing Neural
+                  Networks for Fast and Accurate Force Fields},
+  year         = {2023},
+  eprint       = {2206.07697},
+  archiveprefix = {arXiv},
+  primaryclass = {stat.ML},
+  note         = {MACE architecture; contextual reference for MLIP
+                  architecture comparisons in OPoly26}
+}
+
+@article{kroonblawd2022pdms,
+  author       = {Kroonblawd, Matthew and Goldman, Nir and Maiti, Amitesh
+                  and Lewicki, James},
+  title        = {Polymer degradation through chemical change: a
+                  quantum-based test of inferred reactions in irradiated
+                  polydimethylsiloxane},
+  year         = {2022},
+  note         = {Source of Si-polymer radiation degradation protocols
+                  for OPoly26 OOD test set}
+}
+
+@article{taylor2023architector,
+  author       = {Taylor, Michael G. and Burrill, Daniel J. and
+                  Janssen, Jan and Batista, Enrique R. and Perez, Danny
+                  and Yang, Ping},
+  title        = {Architector for high-throughput cross-periodic table
+                  {3D} complex building},
+  journal      = {Nature Communications},
+  volume       = {14},
+  pages        = {2786},
+  year         = {2023},
+  doi          = {10.1038/s41467-023-38169-2},
+  note         = {Modified Molecule class used for AFIR preparation
+                  in OPoly26 reactivity data generation}
+}

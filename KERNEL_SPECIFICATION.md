@@ -1440,10 +1440,10 @@ $$\mu_n \equiv \int_0^1 f(c) \cdot c^n\, dc = \frac{(n+1)H_{n+1} - (n+2)}{(n+1)^
 where $H_k = \sum_{j=1}^k 1/j$ is the $k$-th harmonic number. E4 is $\mu_0 = -1/2$. N2 is $\mu_1 = 0$ (the centroid vanishes). N1 adds the Fisher-weighted integral $\int_0^1 g_F \cdot S\, dc = \pi^2/3 = 2\zeta(2)$, connecting kernel geometry to the Basel constant.
 
 **Summary**: The identity network reduces the kernel from a black box to a constrained geometric object:
-- The perturbation chain (Cluster 3) explains *why* the bounds hold.
-- The composition algebra (Cluster 4) enables *prediction without re-computation*.
-- The spectral family (Cluster 6) proves $f = S + \kappa$ is *fully characterized*.
-- The fixed-point triangle (Cluster 5) shows the manifold has a *two-point skeleton*.
+- The perturbation chain (Cluster 3) explains _why_ the bounds hold.
+- The composition algebra (Cluster 4) enables _prediction without re-computation_.
+- The spectral family (Cluster 6) proves $f = S + \kappa$ is _fully characterized_.
+- The fixed-point triangle (Cluster 5) shows the manifold has a _two-point skeleton_.
 
 ---
 
