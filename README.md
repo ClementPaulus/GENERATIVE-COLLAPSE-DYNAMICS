@@ -7,7 +7,7 @@
 [![UMCP v2.1.5](https://img.shields.io/badge/UMCP-v2.1.5-orange.svg)](pyproject.toml)
 [![Tests: 7,442](https://img.shields.io/badge/tests-7%2C442-brightgreen.svg)](tests/)
 [![Domains: 18](https://img.shields.io/badge/domains-18-blueviolet.svg)](closures/)
-[![Closures: 133](https://img.shields.io/badge/closures-133-informational.svg)](closures/)
+[![Closures: 134](https://img.shields.io/badge/closures-134-informational.svg)](closures/)
 [![Theorems: 136](https://img.shields.io/badge/theorems-136_proven-ff69b4.svg)](closures/)
 [![Identities: 38](https://img.shields.io/badge/identities-38_verified-9cf.svg)](scripts/)
 
@@ -17,7 +17,7 @@
 
 This is not a simulation. It is a **metrological enforcement engine**: schema conformance, kernel identity verification, regime classification, and SHA-256 integrity checking — producing a three-valued `CONFORMANT` / `NONCONFORMANT` / `NON_EVALUABLE` verdict for every run.
 
-**Python + C++ integration**: The framework is written in Python with **18 domains**, **133 closure modules**, **136 proven theorems**, and **7,442 tests**. An optional C++17 accelerator (`src/umcp_cpp/`) provides 50–80× speedup for three hot paths — kernel computation, seam chain accumulation, and SHA-256 integrity — via a pybind11 zero-copy NumPy bridge. The Python wrapper (`umcp.accel`) auto-detects the compiled extension at import time; if unavailable, every call falls back transparently to the equivalent NumPy implementation. Same formulas, same frozen parameters, same results to machine precision — the C++ layer is Tier-0 Protocol only and redefines no Tier-1 symbols.
+**Python + C++ integration**: The framework is written in Python with **18 domains**, **134 closure modules**, **136 proven theorems**, and **7,442 tests**. An optional C++17 accelerator (`src/umcp_cpp/`) provides 50–80× speedup for three hot paths — kernel computation, seam chain accumulation, and SHA-256 integrity — via a pybind11 zero-copy NumPy bridge. The Python wrapper (`umcp.accel`) auto-detects the compiled extension at import time; if unavailable, every call falls back transparently to the equivalent NumPy implementation. Same formulas, same frozen parameters, same results to machine precision — the C++ layer is Tier-0 Protocol only and redefines no Tier-1 symbols.
 
 ---
 
@@ -114,7 +114,7 @@ Every claim, measurement, validation, and narrative in UMCP follows exactly **fi
 
 ### The Three-Tier Stack
 
-Tier-1 (38 structural identities, 46 lemmas, 136 proven theorems) → Tier-0 (7,442 tests, 133 closure modules, C++17 accelerator) → Tier-2 (18 domains from particle physics to consciousness). One-way dependency. No back-edges within a frozen run.
+Tier-1 (38 structural identities, 46 lemmas, 136 proven theorems) → Tier-0 (7,442 tests, 134 closure modules, C++17 accelerator) → Tier-2 (18 domains from particle physics to consciousness). One-way dependency. No back-edges within a frozen run.
 
 ![Tier Architecture](images/10_tier_architecture.png)
 
@@ -257,16 +257,16 @@ src/umcp_cpp/                   # Optional C++ accelerator (Tier-0 Protocol)
 | **Schemas** | 17 | `schemas/*.schema.json` | JSON Schema files validating all artifacts |
 | **Canon Anchors** | 14 | `canon/*.yaml` | Domain-specific canonical reference points |
 | **Casepacks** | 17 | `casepacks/` | Reproducible validation bundles |
-| **Closure Domains** | 18 | `closures/*/` | Domain closure packages (133 modules) |
+| **Closure Domains** | 18 | `closures/*/` | Domain closure packages (134 modules) |
 | **Closure Registry** | 1 | `closures/registry.yaml` | Central listing of all closures |
 | **Validator Rules** | 1 | `validator_rules.yaml` | Semantic rule definitions (E101, W201, ...) |
-| **Integrity** | 1 | `integrity/sha256.txt` | SHA-256 checksums for 164 tracked files |
+| **Integrity** | 1 | `integrity/sha256.txt` | SHA-256 checksums for 172 tracked files |
 
 ---
 
 ## Closure Domains
 
-UMCP validates across **18 domains** with **133 closure modules**, each encoding real-world measurements into the 8-channel kernel trace:
+UMCP validates across **18 domains** with **134 closure modules**, each encoding real-world measurements into the 8-channel kernel trace:
 
 ### Standard Model — 9 modules
 
@@ -320,7 +320,7 @@ The crown jewel: 31 particles mapped through the GCD kernel with **10 proven the
 
 **Key discovery (double slit)**: Wave and particle are *both channel-deficient extremes*. The kernel-optimal state is partial measurement (V=0.70, D=0.71) where all channels are alive — the **complementarity cliff** (>5× IC gap).
 
-### Materials Science — 14 modules
+### Materials Science — 15 modules
 
 | Module | What It Encodes |
 |--------|----------------|
@@ -331,6 +331,7 @@ The crown jewel: 31 particles mapped through the GCD kernel with **10 proven the
 | `debye_thermal.py` | Debye thermal model |
 | `elastic_moduli.py` | Elastic moduli computation |
 | `magnetic_properties.py` | Magnetic property analysis |
+| `opoly26_polymer_dataset.py` | OPoly26 polymer ML dataset (800+ data points, 5 models, 9 tables) |
 | `phase_transition.py` | Phase transition dynamics |
 | `surface_catalysis.py` | Surface catalysis reactions |
 | `gap_capture_ss1m.py` | SS1M gap capture |
@@ -893,6 +894,24 @@ This closure fills the previously identified gap between cold nuclear matter (bi
 
 ---
 
+### Recent Kernel Closure Synthesis: OPoly26 Polymer ML
+
+**The first ML force-field benchmark mapped through the GCD kernel** was added in `closures/materials_science/opoly26_polymer_dataset.py`, encoding 800+ data points from Dajnowicz et al. (arXiv:2512.23117v2) — the OPoly26 polymer dataset and UMA family of universal ML force fields. A 12-experiment deep analysis suite probed 15 trace vectors across 3 projection types (Energy MAE, Force MAE, OMol25 task MAE) × 5 models. Full analysis in `paper/OPOLY26_INTERCONNECTION_ANALYSIS.md`.
+
+**Key findings from 12 structural experiments**:
+
+- **All 3 algebraic identities hold exactly** (max|F+ω−1| = 0.0e+00, IC≤F violations = 0, max|IC−exp(κ)| = 0.0e+00) — the polymer data lives on the same Bernoulli manifold as particles, atoms, and stars.
+- **Geometric slaughter is universal**: Killing any single channel drops IC by 89.7–90.0%, uniform across channels for balanced models.
+- **Sensitivity ratio of 89,750,542×**: UMA-s-1p1's electrolyte channel has sensitivity 90 million times larger than its other channels — the most extreme ratio seen in any domain closure. A tiny electrolyte improvement would produce orders-of-magnitude IC gain.
+- **Entropy is the binding gate** (60% of traces): The best polymer models aren't limited by fidelity or drift — they're limited by the information-theoretic spread of their error profiles. This changes what "improvement" means for ML force fields.
+- **Regression seam detected**: Adding polymer data alone (OPoly26 without OMol25) causes Δκ = −1.47 (genuine regression), but the combined UMA-s-1p2 recovers with Δκ = +1.54 — the seam calculus detects domain narrowing before diverse training restores generalization.
+- **Composition algebra has a validity domain**: IC geometric composition works within 0.00003 for same-phase subsystems but fails by 0.53 (10,000× worse) across the coherent/fragmented boundary.
+- **Coherence proxy Θ shows 0% agreement** with the full 4-gate regime — confirming that single-number summaries destroy structural information. The kernel is irreducible to a scalar.
+
+This closure extends materials science into the mesoscopic molecular-dynamics scale — previously unprobed — and demonstrates that the return axiom captures ML model quality as a structural phenomenon, not just an error metric.
+
+---
+
 ## Papers & Publications
 
 ### Compiled Papers
@@ -907,12 +926,13 @@ This closure fills the previously identified gap between cold nuclear matter (bi
 | `consciousness_coherence.tex` | Consciousness Coherence: Seven Theorems in the GCD Kernel | `paper/` |
 | `awareness_cognition_kernel.tex` | Awareness-Cognition Kernel: Ten Theorems Across Phylogeny | `paper/` |
 | `RCFT_FREEZE_WELD.md` | RCFT Freeze–Weld Identity: From Publication to Proven Kernel | `paper/` |
+| `OPOLY26_INTERCONNECTION_ANALYSIS.md` | OPoly26 Polymer ML × GCD: Cross-Domain Interconnection Analysis | `paper/` |
 
 All papers use RevTeX4-2 (LaTeX) or Markdown. Build LaTeX: `pdflatex → bibtex → pdflatex → pdflatex`.
 
 ### Zenodo Publications (9 DOIs)
 
-The framework is anchored by peer-reviewed Zenodo publications covering the core theory, physics coherence proofs, casepack specifications, and domain applications. Bibliography: `paper/Bibliography.bib` (109 entries, including PDG 2024, foundational QFT papers, classical references, RHIC/STAR measurements, active matter, stellar ages cosmology, semiotic theory, consciousness coherence, and awareness-cognition).
+The framework is anchored by peer-reviewed Zenodo publications covering the core theory, physics coherence proofs, casepack specifications, and domain applications. Bibliography: `paper/Bibliography.bib` (127 entries, including PDG 2024, foundational QFT papers, classical references, RHIC/STAR measurements, active matter, stellar ages cosmology, semiotic theory, consciousness coherence, awareness-cognition, and polymer ML force fields).
 
 ### Key DOIs
 
@@ -934,7 +954,7 @@ The framework is anchored by peer-reviewed Zenodo publications covering the core
 │   ├── epistemic_weld.py      # Epistemic cost tracking
 │   ├── fleet/                 # Distributed validation
 │   └── dashboard/             # Modular Streamlit dashboard
-├── closures/                  # 18 domains, 133 modules
+├── closures/                  # 18 domains, 134 modules
 │   ├── standard_model/        # 31 particles, 10 theorems
 │   ├── atomic_physics/        # 118 elements, Tier-1 proof
 │   ├── quantum_mechanics/     # Double slit, entanglement, tunneling, QDM, FQHE
@@ -957,7 +977,7 @@ The framework is anchored by peer-reviewed Zenodo publications covering the core
 ├── canon/                     # 14 canonical anchor files
 ├── casepacks/                 # 17 reproducible validation bundles
 ├── tests/                     # 120 test files, 7,442 tests
-├── paper/                     # 7 LaTeX papers + 1 Markdown paper + Bibliography.bib (109 entries)
+├── paper/                     # 7 LaTeX papers + 2 Markdown papers + Bibliography.bib (127 entries)
 ├── integrity/                 # SHA-256 checksums
 ├── ledger/                    # Append-only validation log
 ├── scripts/                   # Pre-commit protocol, integrity update
@@ -1123,6 +1143,12 @@ python scripts/identity_deep_probes.py      # N11-N16: moment families, composit
 16. **Consciousness is software**: The Hardware substrate (neurons, EQ, synapses) shows modest gaps between humans and other intelligent species. The Software substrate (language, temporal integration, social cognition) shows the chasm (0.967 vs 0.433 human vs chimp).
 
 17. **Semiotic convergence — GCD IS a semiotic system**: The Peirce sign triad (Object–Sign–Interpretant) maps exactly to the GCD pipeline (x(t)–Ψ(t)–kernel invariants) at six structural levels. The seam is the formal mechanism that completes Peirce's unlimited semiosis: signs that *return* (τ_R < ∞) are welds; signs that don't (τ_R = ∞_rec) are *gestus*. Channel-IC correlation analysis across 30 sign systems reveals meaning = density × depth (semiotic_density r = +0.886 with IC), not stability × resemblance (iconic_persistence r ≈ 0). GCD's own tools — kernel equations, Latin lexicon, discourse spine, Python codebase — share `iconic_persistence` as weakest channel, confirming the root trade-off: abstraction over iconicity. See [SEMIOTIC_CONVERGENCE.md](SEMIOTIC_CONVERGENCE.md).
+
+18. **Entropy as binding gate in ML force fields**: Across 15 OPoly26 polymer traces, entropy S is the dominant bottleneck for 60% of models — not drift ω or fidelity F. The best ML force fields are limited by the information-theoretic spread of their error profiles, not by mean error magnitude. This structural insight changes what "improvement" means: reducing entropy (making error profiles more uniform) matters more than reducing mean error.
+
+19. **89.75-million sensitivity ratio — extreme channel pathology**: UMA-s-1p1's electrolyte channel has ∂IC/∂c = 1,088,402, while all other channels sit at ~0.012. The system's integrity hangs on a single thread. This is the most extreme sensitivity ratio observed in any of the 18 domain closures — directly actionable intelligence for ML force-field developers.
+
+20. **Composition algebra validity domain**: IC geometric composition (IC₁₂ = √(IC₁·IC₂)) is exact within 0.00003 for same-phase subsystems but fails by 0.53 when composing across the coherent/fragmented phase boundary. You cannot compose across a phase transition — the algebra has a validity domain tied to structural similarity.
 
 ---
 
