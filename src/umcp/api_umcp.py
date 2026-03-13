@@ -1782,7 +1782,10 @@ class KernelComputeResponse(BaseModel):
     kappa: float = Field(..., description="Log-integrity")
     IC: float = Field(..., description="Integrity composite (geometric mean)")
     heterogeneity_gap: float = Field(..., description="F - IC (heterogeneity measure)")
-    regime: str = Field(..., description="Regime classification")
+    regime: str = Field(
+        ...,
+        description="Heterogeneity regime (homogeneous/coherent/heterogeneous/fragmented) — gap-based, not the canonical 4-gate STABLE/WATCH/COLLAPSE",
+    )
     is_homogeneous: bool = Field(..., description="Whether all coordinates equal")
 
 

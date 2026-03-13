@@ -65,7 +65,7 @@ class KernelOutputs:
     kappa: float  # Log-integrity
     IC: float  # Integrity composite (geometric mean)
     heterogeneity_gap: float  # F - IC (heterogeneity measure)
-    regime: str  # Homogeneity regime classification
+    regime: str  # Heterogeneity regime (homogeneous/coherent/heterogeneous/fragmented) — NOT the canonical 4-gate regime; see KernelDiagnostics.regime for STABLE/WATCH/COLLAPSE
     is_homogeneous: bool  # Early detection flag
     computation_mode: str  # "fast_homogeneous" or "full_heterogeneous"
 
