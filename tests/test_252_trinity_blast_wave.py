@@ -1,6 +1,6 @@
 """Tests for Trinity Blast Wave closure — trinity_blast_wave.py.
 
-Validates 16 theorems (T-TB-1 through T-TB-16), 29 entity constructions
+Validates 19 theorems (T-TB-1 through T-TB-19), 29 entity constructions
 across 3 categories (fireball, device, reference), Tier-1 identity
 universality, trace vector construction, fission-fusion bridge, and
 narrative generation.
@@ -11,7 +11,7 @@ Test count target: ~200 tests covering:
     - Device entity construction (3 entities)
     - Reference entity construction (2 entities)
     - Trace vector channel normalization
-    - 16 theorem proofs with subtests
+    - 19 theorem proofs with subtests
     - Tier-1 identity universality (F+ω=1, IC≤F, IC=exp(κ))
     - Regime classification
     - Fission-fusion bridge data
@@ -39,6 +39,7 @@ from closures.nuclear_physics.trinity_blast_wave import (
     E_EXTRACTED_J,
     FISSION_EFFICIENCY,
     GAMMA_AIR,
+    KAPPA_CONCENTRATION_THRESHOLD,
     KT_TO_J,
     MACH_REF,
     MACK_DATA,
@@ -884,6 +885,149 @@ class TestThreeRegimeStructure:
 
 
 # ═══════════════════════════════════════════════════════════════
+# FOUR-WAVE RETURN HIERARCHY (T-TB-17)
+# ═══════════════════════════════════════════════════════════════
+
+
+class TestFourWaveReturn:
+    """Test T-TB-17: Four-Wave Return Hierarchy."""
+
+    def test_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-17"]
+        assert t["proven"], f"T-TB-17 failed: {t['passed']}/{t['tests']}"
+
+    def test_shock_channels_returned_first(self, full_analysis):
+        """Shock channels (5,6,7) are all > 0.99 at earliest time."""
+        t = full_analysis.theorem_results["T-TB-17"]
+        assert t["shock_high"]
+
+    def test_global_channels_low_initially(self, full_analysis):
+        """Energy and power_law are < 0.50 at earliest time."""
+        t = full_analysis.theorem_results["T-TB-17"]
+        assert t["global_low"]
+
+    def test_return_order(self, full_analysis):
+        """self_sim crosses 0.90 before energy before power_law."""
+        t = full_analysis.theorem_results["T-TB-17"]
+        assert t["order_correct"]
+
+    def test_binding_constant(self, full_analysis):
+        """binding_fidelity has zero variance across all times."""
+        t = full_analysis.theorem_results["T-TB-17"]
+        assert t["bind_constant"]
+        assert t["bind_std"] < 1e-6
+
+    def test_local_global_split(self, full_analysis):
+        """Mean of returned >> mean of unreturned at t=0.10ms."""
+        t = full_analysis.theorem_results["T-TB-17"]
+        assert t["mean_returned"] > 1.5 * t["mean_unreturned"]
+
+    def test_four_distinct_waves(self, full_analysis):
+        """At least 4 distinct crossing times."""
+        t = full_analysis.theorem_results["T-TB-17"]
+        times = t["crossing_times_ms"]
+        finite_times = sorted({ct for ct in times if ct < float("inf")})
+        assert len(finite_times) >= 4
+
+    def test_binding_never_returns(self, full_analysis):
+        """binding_fidelity never reaches RETURN_THRESHOLD."""
+        t = full_analysis.theorem_results["T-TB-17"]
+        # binding is channel 7
+        assert t["crossing_times_ms"][7] == float("inf")
+
+    def test_wave_structure_has_five_entries(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-17"]
+        assert len(t["wave_structure"]) == 5
+
+    def test_insight_mentions_four_wave(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-17"]
+        assert "Four-wave" in t["insight"]
+
+
+# ═══════════════════════════════════════════════════════════════
+# PROPORTIONAL RETURN (T-TB-18)
+# ═══════════════════════════════════════════════════════════════
+
+
+class TestProportionalReturn:
+    """Test T-TB-18: Proportional Return."""
+
+    def test_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-18"]
+        assert t["proven"], f"T-TB-18 failed: {t['passed']}/{t['tests']}"
+
+    def test_t_over_tau_value(self, full_analysis):
+        """t/τ_rad ≈ 0.52 at t = 0.10 ms."""
+        t = full_analysis.theorem_results["T-TB-18"]
+        assert abs(t["t_over_tau_rad"] - 0.521) < 0.05
+
+    def test_four_channels_returned(self, full_analysis):
+        """Exactly 4 of 8 channels returned at t = 0.10 ms."""
+        t = full_analysis.theorem_results["T-TB-18"]
+        assert t["n_returned_0_10ms"] == 4
+
+    def test_proportionality(self, full_analysis):
+        """t/τ_rad ≈ returned_fraction within 10%."""
+        t = full_analysis.theorem_results["T-TB-18"]
+        assert t["proportionality_gap"] < 0.10
+
+    def test_return_fraction_half(self, full_analysis):
+        """Return fraction is exactly 0.50."""
+        t = full_analysis.theorem_results["T-TB-18"]
+        assert t["return_fraction"] == 0.5
+
+    def test_insight_mentions_proportional(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-18"]
+        assert "Proportional" in t["insight"]
+
+
+# ═══════════════════════════════════════════════════════════════
+# KAPPA CONCENTRATION (T-TB-19)
+# ═══════════════════════════════════════════════════════════════
+
+
+class TestKappaConcentration:
+    """Test T-TB-19: Kappa Concentration (Geometric Slaughter)."""
+
+    def test_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-19"]
+        assert t["proven"], f"T-TB-19 failed: {t['passed']}/{t['tests']}"
+
+    def test_top2_above_threshold(self, full_analysis):
+        """Top-2 κ channels > KAPPA_CONCENTRATION_THRESHOLD."""
+        t = full_analysis.theorem_results["T-TB-19"]
+        assert t["top2_fraction"] > KAPPA_CONCENTRATION_THRESHOLD
+
+    def test_bottom4_negligible(self, full_analysis):
+        """Bottom-4 (shock channels) contribute < 5% of κ."""
+        t = full_analysis.theorem_results["T-TB-19"]
+        assert t["bottom4_fraction"] < 0.05
+
+    def test_ic_loss_significant(self, full_analysis):
+        """IC loss from heterogeneity > 5%."""
+        t = full_analysis.theorem_results["T-TB-19"]
+        assert t["ic_loss_fraction"] > 0.05
+
+    def test_energy_dominates(self, full_analysis):
+        """energy_consistency alone > 40% of κ."""
+        t = full_analysis.theorem_results["T-TB-19"]
+        assert t["energy_fraction"] > 0.40
+
+    def test_sweet_spot_more_uniform(self, full_analysis):
+        """At sweet spot, κ is less concentrated (more uniform)."""
+        t = full_analysis.theorem_results["T-TB-19"]
+        assert t["top2_sweet_fraction"] < t["top2_fraction"]
+
+    def test_kappa_per_channel_has_8(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-19"]
+        assert len(t["kappa_per_channel"]) == 8
+
+    def test_insight_mentions_slaughter(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-19"]
+        assert "slaughter" in t["insight"].lower()
+
+
+# ═══════════════════════════════════════════════════════════════
 # FISSION-FUSION BRIDGE
 # ═══════════════════════════════════════════════════════════════
 
@@ -993,6 +1137,15 @@ class TestNarrative:
     def test_narrative_three_regime(self, full_analysis):
         assert "THREE-REGIME STRUCTURE" in full_analysis.narrative
 
+    def test_narrative_four_wave_return(self, full_analysis):
+        assert "FOUR-WAVE RETURN HIERARCHY" in full_analysis.narrative
+
+    def test_narrative_proportional_return(self, full_analysis):
+        assert "PROPORTIONAL RETURN" in full_analysis.narrative
+
+    def test_narrative_kappa_concentration(self, full_analysis):
+        assert "KAPPA CONCENTRATION" in full_analysis.narrative
+
     def test_narrative_yield(self, full_analysis):
         assert "20.2 kt" in full_analysis.narrative
 
@@ -1018,10 +1171,10 @@ class TestFullAnalysis:
         assert full_analysis.tier1_violations == 0
 
     def test_theorems_count(self, full_analysis):
-        assert full_analysis.summary["n_theorems_total"] == 16
+        assert full_analysis.summary["n_theorems_total"] == 19
 
     def test_all_theorems_proven_summary(self, full_analysis):
-        assert full_analysis.summary["n_theorems_proven"] == 16
+        assert full_analysis.summary["n_theorems_proven"] == 19
 
     def test_yield_in_summary(self, full_analysis):
         """Extracted yield should be within 25% of official."""
