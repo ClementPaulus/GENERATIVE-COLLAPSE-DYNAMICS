@@ -1,6 +1,6 @@
 # Copilot Instructions for GENERATIVE-COLLAPSE-DYNAMICS
 
-**UMCP v2.1.5** · **7,442 tests** · **18 domains** · **133 closure modules** · **46 lemmas** · **38 structural identities** · **50 dashboard pages**
+**UMCP v2.1.5** · **7,442 tests** · **18 domains** · **133 closure modules** · **46 lemmas** · **44 structural identities** · **50 dashboard pages**
 
 ## Foundational Principle — Read This First
 
@@ -189,7 +189,7 @@ Stability is rare — 87.5% of the manifold lies outside it. Return from collaps
 
 > *Numeri sunt intellectus.* — The numbers are the understanding.
 
-38 identities have been derived from Axiom-0 and verified to machine precision. They fall into four series. Run `scripts/deep_diagnostic.py`, `scripts/cross_domain_bridge.py`, `scripts/cross_domain_bridge_phase2.py`, `scripts/identity_verification.py`, `scripts/identity_deep_probes.py`, and `scripts/unified_geometry.py` to re-derive them computationally.
+44 identities have been derived from Axiom-0 and verified to machine precision. They fall into four series (E: 8, B: 12, D: 8, N: 16). Run `scripts/deep_diagnostic.py`, `scripts/cross_domain_bridge.py`, `scripts/cross_domain_bridge_phase2.py`, `scripts/identity_verification.py`, `scripts/identity_deep_probes.py`, and `scripts/unified_geometry.py` to re-derive them computationally.
 
 **Key results (for instant orientation)**:
 
@@ -203,7 +203,7 @@ Stability is rare — 87.5% of the manifold lies outside it. Return from collaps
 
 **Identity Network — 6 Connection Clusters** (run `scripts/identity_connections.py` to re-derive):
 
-The 38 identities form a connected network. Key clusters: (1) **Equator Web** — c=1/2 is a quintuple fixed point (E1,N4,N16,E8); (2) **Dual Bounds** — IC ≤ F below, S ≤ h(F) above (B2,N10); (3) **Perturbation Chain** — N3→N8→B2: the integrity bound follows from the kernel's own Taylor structure (correction −C²/(8F²) is always negative); (4) **Composition Algebra** — gap composition Δ₁₂ = (Δ₁+Δ₂)/2 + (√IC₁−√IC₂)²/2 with Hellinger-like correction (D6,N12,D8); (5) **Fixed-Point Triangle** — three special points (c=1/2, c\*=0.7822, c_trap=0.3178) connected by the reflection formula N16; (6) **Spectral Family** — all polynomial moments of f=S+κ have closed forms with harmonic numbers, and ∫g_F·S dc = π²/3 = 2ζ(2) (E4,N1,N2,N11).
+The 44 identities form a connected network. Key clusters: (1) **Equator Web** — c=1/2 is a quintuple fixed point (E1,N4,N16,E8); (2) **Dual Bounds** — IC ≤ F below, S ≤ h(F) above (B2,N10); (3) **Perturbation Chain** — N3→N8→B2: the integrity bound follows from the kernel's own Taylor structure (correction −C²/(8F²) is always negative); (4) **Composition Algebra** — gap composition Δ₁₂ = (Δ₁+Δ₂)/2 + (√IC₁−√IC₂)²/2 with Hellinger-like correction (D6,N12,D8); (5) **Fixed-Point Triangle** — three special points (c=1/2, c\*=0.7822, c_trap=0.3178) connected by the reflection formula N16; (6) **Spectral Family** — all polynomial moments of f=S+κ have closed forms with harmonic numbers, and ∫g_F·S dc = π²/3 = 2ζ(2) (E4,N1,N2,N11).
 
 ### Modus Cogitandi (How to Reason in This System)
 
@@ -282,7 +282,7 @@ The UMCP tier system has exactly three tiers. No half-tiers. No confusion. Every
 
 | Tier | Name | Role | Mutable? |
 |------|------|------|----------|
-| **1** | **The Kernel** | The mathematical function K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC). Four primitive equations (F, κ, S, C) and two derived values (ω = 1−F, IC = exp(κ)), with 3 effective degrees of freedom (F, κ, C) — S is asymptotically determined by F and C. Provable identities (F + ω = 1, IC ≤ F, IC = exp(κ), S ≈ f(F,C)), 46 lemmas, 38 structural identities, and 5 structural constants. Domain-independent. | NEVER within a run. Promotion only through seam weld across runs. |
+| **1** | **The Kernel** | The mathematical function K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC). Four primitive equations (F, κ, S, C) and two derived values (ω = 1−F, IC = exp(κ)), with 3 effective degrees of freedom (F, κ, C) — S is asymptotically determined by F and C. Provable identities (F + ω = 1, IC ≤ F, IC = exp(κ), S ≈ f(F,C)), 46 lemmas, 44 structural identities, and 5 structural constants. Domain-independent. | NEVER within a run. Promotion only through seam weld across runs. |
 | **0** | **Protocol** | Operational machinery: embedding raw data into [0,1]ⁿ, computing the Tier-1 kernel (code implements formulas), regime gates, seam calculus, contracts, schemas, SHA-256, three-valued verdicts. The code is Tier-0; what it computes is Tier-1. | Configuration frozen per run. |
 | **2** | **Expansion Space** | Domain closures that choose which real-world quantities become the trace vector c and weights w. Channel selection, entity catalogs, normalization, domain-specific theorems. Validated through Tier-0 against Tier-1. | Freely extensible; validated before trust. |
 
@@ -290,7 +290,7 @@ The UMCP tier system has exactly three tiers. No half-tiers. No confusion. Every
 
 ### Tier-1 Reserved Symbols (IMMUTABLE — The Kernel Function)
 
-The kernel K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC) has four primitive equations and two derived values, but only **3 effective degrees of freedom** (F, κ, C). S is asymptotically determined by F and C (corr(C,S) → −1 as n → ∞). All six outputs are Tier-1. The 3 algebraic identities (F + ω = 1, IC ≤ F, IC = exp(κ)) and 1 statistical constraint (S ≈ f(F,C)) are theorems about this function. The 46 lemmas, 38 identities, and structural constants (c* = 0.7822, c_trap = 0.3178) are further properties of the same mathematical object.
+The kernel K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC) has four primitive equations and two derived values, but only **3 effective degrees of freedom** (F, κ, C). S is asymptotically determined by F and C (corr(C,S) → −1 as n → ∞). All six outputs are Tier-1. The 3 algebraic identities (F + ω = 1, IC ≤ F, IC = exp(κ)) and 1 statistical constraint (S ≈ f(F,C)) are theorems about this function. The 46 lemmas, 44 identities, and structural constants (c* = 0.7822, c_trap = 0.3178) are further properties of the same mathematical object.
 
 | Symbol | Name | Formula | Range | Status | Structural Role |
 |--------|------|---------|-------|--------|-----------------|

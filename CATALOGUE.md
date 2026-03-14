@@ -368,7 +368,7 @@ Rank-1 ⊂ Rank-2 ⊂ Rank-3. Almost all real-world systems are rank-3.
 
 ### 1.14 Identity Connection Clusters
 
-The 38 identities form a network with 6 computationally verified clusters.
+The 44 identities (E: 8, B: 12, D: 8, N: 16) form a network with 6 computationally verified clusters.
 
 | Tag | Cluster | Members | Structural Insight | Lineage |
 |-----|---------|---------|-------------------|---------|

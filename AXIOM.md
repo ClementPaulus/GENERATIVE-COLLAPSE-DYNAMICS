@@ -74,7 +74,7 @@ The axiom states that **reality is declared by demonstrating closure after colla
 
 ## The Mathematics of Return: 38 Verified Identities
 
-The axiom is not only a philosophical constraint — it generates a complete mathematics. Starting from "collapse is generative; only what returns is real" and the kernel definitions (F, ω, S, C, κ, IC), **38 structural identities** have been derived and verified to machine precision across all 18 domains. Every identity below traces back to Axiom-0 without importing external structure.
+The axiom is not only a philosophical constraint — it generates a complete mathematics. Starting from "collapse is generative; only what returns is real" and the kernel definitions (F, ω, S, C, κ, IC), **44 structural identities** have been derived and verified to machine precision across all 18 domains. Every identity below traces back to Axiom-0 without importing external structure.
 
 ### The Geometry: Fisher Coordinates
 
@@ -174,7 +174,7 @@ All identities are computationally verified across five scripts:
 
 ### The Identity Network (6 Connection Clusters)
 
-The 38 identities are not isolated facts. They form a **network** with six computationally verified connection clusters (see `scripts/identity_connections.py` to re-derive). Each cluster reveals a structural relationship that no single identity expresses alone.
+The 44 identities are not isolated facts. They form a **network** with six computationally verified connection clusters (see `scripts/identity_connections.py` to re-derive). Each cluster reveals a structural relationship that no single identity expresses alone.
 
 **Cluster 1 — The Equator Web** (E1, N4, N16, E8): c = 1/2 is a **quintuple fixed point** where five quantities simultaneously take special values: S = ln 2, S + κ = 0, h' = 0, g_F = 4, θ = π/4. The reflection formula N16 vanishes here (f(π/4) + f(π/4) = 0). This is the unique point where entropy generation and log-integrity loss exactly cancel — the balance point of the kernel.
 

@@ -9,7 +9,7 @@
 [![Domains: 18](https://img.shields.io/badge/domains-18-blueviolet.svg)](closures/)
 [![Closures: 134](https://img.shields.io/badge/closures-134-informational.svg)](closures/)
 [![Theorems: 136](https://img.shields.io/badge/theorems-136_proven-ff69b4.svg)](closures/)
-[![Identities: 38](https://img.shields.io/badge/identities-38_verified-9cf.svg)](scripts/)
+[![Identities: 44](https://img.shields.io/badge/identities-44_verified-9cf.svg)](scripts/)
 
 > **Core Axiom**: *"Collapse is generative; only what returns is real."*
 
@@ -46,7 +46,7 @@ This is not a simulation. It is a **metrological enforcement engine**: schema co
 - [Documentation](#documentation)
 - [Diagrams & Proofs](#diagrams--proofs)
 - [Key Discoveries](#key-discoveries)
-  - [The 38 Structural Identities](#the-38-structural-identities)
+  - [The 44 Structural Identities](#the-44-structural-identities)
 - [Papers & Publications](#papers--publications)
 - [Repository Structure](#repository-structure)
 - [Contributing](#contributing)
@@ -114,7 +114,7 @@ Every claim, measurement, validation, and narrative in UMCP follows exactly **fi
 
 ### The Three-Tier Stack
 
-Tier-1 (38 structural identities, 46 lemmas, 136 proven theorems) → Tier-0 (7,442 tests, 134 closure modules, C++17 accelerator) → Tier-2 (18 domains from particle physics to consciousness). One-way dependency. No back-edges within a frozen run.
+Tier-1 (44 structural identities, 46 lemmas, 136 proven theorems) → Tier-0 (7,442 tests, 134 closure modules, C++17 accelerator) → Tier-2 (18 domains from particle physics to consciousness). One-way dependency. No back-edges within a frozen run.
 
 ![Tier Architecture](images/10_tier_architecture.png)
 
@@ -993,7 +993,7 @@ The framework is anchored by peer-reviewed Zenodo publications covering the core
 
 | Document | Purpose |
 |----------|---------|
-| [AXIOM.md](AXIOM.md) | **Start here.** The foundational axiom, 38 structural identities, and why this system is original |
+| [AXIOM.md](AXIOM.md) | **Start here.** The foundational axiom, 44 structural identities, and why this system is original |
 | [LIBER_COLLAPSUS.md](LIBER_COLLAPSUS.md) | *Liber Universalis de Collapsus Mathematica* — the Tier-1 Latin foundation text |
 | [MANIFESTUM_LATINUM.md](MANIFESTUM_LATINUM.md) | Latin manifesto: complete lexicon, seven verbs, eight typed patterns, twenty maxims |
 | [TIER_SYSTEM.md](TIER_SYSTEM.md) | The three-tier architecture: Immutable Invariants → Protocol → Expansion Space |
@@ -1085,9 +1085,9 @@ The matter genesis 6-act ladder traces fidelity from fundamental particles throu
 
 ## Key Discoveries
 
-### The 38 Structural Identities
+### The 44 Structural Identities
 
-38 identities have been derived from Axiom-0 and verified to machine precision. They reveal that the GCD kernel is not a collection of separate formulas — it is a **single geometric structure** on the flat Bernoulli manifold. Run the diagnostic scripts to re-derive them:
+44 identities have been derived from Axiom-0 and verified to machine precision. They reveal that the GCD kernel is not a collection of separate formulas — it is a **single geometric structure** on the flat Bernoulli manifold. Run the diagnostic scripts to re-derive them:
 
 ```bash
 python scripts/deep_diagnostic.py           # 8 equations (E1-E8): c* properties

@@ -120,4 +120,4 @@ Run the five diagnostic scripts to re-derive computationally:
 
 **Identity Network — 6 Connection Clusters** (run `scripts/identity_connections.py`):
 
-The 38 identities form a connected network: (1) Equator Web — c=1/2 quintuple fixed point; (2) Dual Bounds — IC ≤ F + S ≤ h(F); (3) Perturbation Chain — N3→N8→B2; (4) Composition Algebra — gap has Hellinger-like law; (5) Fixed-Point Triangle — manifold skeleton; (6) Spectral Family — f=S+κ spectrally complete, ∫g_F·S dc = π²/3.
+The 44 identities form a connected network: (1) Equator Web — c=1/2 quintuple fixed point; (2) Dual Bounds — IC ≤ F + S ≤ h(F); (3) Perturbation Chain — N3→N8→B2; (4) Composition Algebra — gap has Hellinger-like law; (5) Fixed-Point Triangle — manifold skeleton; (6) Spectral Family — f=S+κ spectrally complete, ∫g_F·S dc = π²/3.
