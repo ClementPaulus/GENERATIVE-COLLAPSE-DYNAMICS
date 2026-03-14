@@ -1,17 +1,17 @@
 """Tests for Trinity Blast Wave closure — trinity_blast_wave.py.
 
-Validates 8 theorems (T-TB-1 through T-TB-8), 29 entity constructions
+Validates 16 theorems (T-TB-1 through T-TB-16), 29 entity constructions
 across 3 categories (fireball, device, reference), Tier-1 identity
 universality, trace vector construction, fission-fusion bridge, and
 narrative generation.
 
-Test count target: ~130 tests covering:
+Test count target: ~200 tests covering:
     - Frozen physics constants (Taylor-Sedov params, Pu-239, iron peak)
     - Mack photograph data table (24 time-radius pairs)
     - Device entity construction (3 entities)
     - Reference entity construction (2 entities)
     - Trace vector channel normalization
-    - 8 theorem proofs with subtests
+    - 16 theorem proofs with subtests
     - Tier-1 identity universality (F+ω=1, IC≤F, IC=exp(κ))
     - Regime classification
     - Fission-fusion bridge data
@@ -560,9 +560,327 @@ class TestTheorems:
         assert t["passed"] == t["tests"]
 
     def test_all_theorems_proven(self, full_analysis):
-        """All 8 theorems must be proven."""
+        """All 13 theorems must be proven."""
         for tid, result in full_analysis.theorem_results.items():
             assert result["proven"], f"{tid} not proven"
+
+
+# ═══════════════════════════════════════════════════════════════
+# NEW THEOREMS T-TB-9 THROUGH T-TB-13
+# ═══════════════════════════════════════════════════════════════
+
+
+class TestCoordinatedDecay:
+    """T-TB-9: Coordinated Decay — rank-preserving geometric slaughter."""
+
+    def test_T_TB_9_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-9"]
+        assert t["proven"], f"T-TB-9 failed: min_ch={t.get('min_channel_value')}"
+
+    def test_T_TB_9_subtests(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-9"]
+        assert t["passed"] == t["tests"]
+
+    def test_min_channel_well_above_epsilon(self, full_analysis):
+        """No fireball channel reaches ε — unlike QGP confinement."""
+        t = full_analysis.theorem_results["T-TB-9"]
+        assert t["min_channel_value"] > 0.10
+
+    def test_multiple_significant_channels(self, full_analysis):
+        """At least 3 channels contribute > 5% of κ-loss."""
+        t = full_analysis.theorem_results["T-TB-9"]
+        assert t["significant_channels"] >= 3
+
+    def test_channel_kappa_fractions_sum(self, full_analysis):
+        """Channel κ fractions should sum to ~1.0."""
+        t = full_analysis.theorem_results["T-TB-9"]
+        total = sum(t["channel_kappa_fractions"].values())
+        assert abs(total - 1.0) < 0.01
+
+    def test_no_single_channel_dominates(self, full_analysis):
+        """No single channel should have > 60% of κ-loss."""
+        t = full_analysis.theorem_results["T-TB-9"]
+        assert t["top_contributor_fraction"] < 0.60
+
+    def test_insight_contains_rank_preserving(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-9"]
+        assert "Rank-preserving" in t["insight"]
+
+
+class TestDecoherenceField:
+    """T-TB-10: Decoherence Field Expansion — gap grows with R(t)."""
+
+    def test_T_TB_10_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-10"]
+        assert t["proven"], f"T-TB-10 failed: growth={t.get('growth_factor')}"
+
+    def test_T_TB_10_subtests(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-10"]
+        assert t["passed"] == t["tests"]
+
+    def test_early_gap_small(self, full_analysis):
+        """Early gap should be < 0.05 (relatively coherent)."""
+        t = full_analysis.theorem_results["T-TB-10"]
+        assert t["early_gap"] < 0.05
+
+    def test_late_gap_larger(self, full_analysis):
+        """Late gap should be > early gap."""
+        t = full_analysis.theorem_results["T-TB-10"]
+        assert t["late_gap"] > t["early_gap"]
+
+    def test_growth_factor_substantial(self, full_analysis):
+        """Gap growth factor > 3×."""
+        t = full_analysis.theorem_results["T-TB-10"]
+        assert t["growth_factor"] > 3.0
+
+    def test_decoherence_has_physical_radius(self, full_analysis):
+        """The decoherence field has a measurable spatial extent."""
+        t = full_analysis.theorem_results["T-TB-10"]
+        assert t["R_late_m"] > 100  # > 100 m at late times
+
+    def test_decoherence_area_positive(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-10"]
+        assert t["decoherence_area_km2"] > 0
+
+
+class TestPredictionAmplification:
+    """T-TB-11: Prediction Amplification — ln(c) asymmetry."""
+
+    def test_T_TB_11_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-11"]
+        assert t["proven"], f"T-TB-11 failed: amp={t.get('amplification_factor')}"
+
+    def test_T_TB_11_subtests(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-11"]
+        assert t["passed"] == t["tests"]
+
+    def test_ic_shifts_more_than_f(self, full_analysis):
+        """ΔIC/IC > ΔF/F for single-channel perturbation."""
+        t = full_analysis.theorem_results["T-TB-11"]
+        assert t["delta_IC_rel_pct"] > t["delta_F_rel_pct"]
+
+    def test_amplification_exceeds_unity(self, full_analysis):
+        """Amplification factor > 1 (IC more sensitive than F)."""
+        t = full_analysis.theorem_results["T-TB-11"]
+        assert t["amplification_factor"] > 1.0
+
+    def test_penalty_ratio_superlinear(self, full_analysis):
+        """Halving c more than doubles the κ penalty (ratio > 1.5)."""
+        t = full_analysis.theorem_results["T-TB-11"]
+        assert t["penalty_ratio"] > 1.5
+
+    def test_perturbed_channel_is_blast(self, full_analysis):
+        """The perturbed channel should be a blast channel, not binding."""
+        t = full_analysis.theorem_results["T-TB-11"]
+        assert t["perturbed_channel"] != "binding_fidelity"
+
+
+class TestNuclearIrreversibility:
+    """T-TB-12: Nuclear Irreversibility — two-zone decoherence."""
+
+    def test_T_TB_12_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-12"]
+        assert t["proven"], f"T-TB-12 failed: std={t.get('binding_std')}"
+
+    def test_T_TB_12_subtests(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-12"]
+        assert t["passed"] == t["tests"]
+
+    def test_binding_exactly_constant(self, full_analysis):
+        """Binding fidelity std ≈ 0 across all fireball entities."""
+        t = full_analysis.theorem_results["T-TB-12"]
+        assert t["binding_std"] < 1e-10
+
+    def test_binding_matches_pu239(self, full_analysis):
+        """Binding fidelity = Pu-239 BE/peak ratio."""
+        t = full_analysis.theorem_results["T-TB-12"]
+        assert abs(t["binding_mean"] - BINDING_PU239) < 1e-6
+
+    def test_mach_changes_significantly(self, full_analysis):
+        """Mach fidelity channel decays from first to last entity."""
+        t = full_analysis.theorem_results["T-TB-12"]
+        assert t["mach_delta"] > 0.10
+
+    def test_two_zone_structure(self, full_analysis):
+        """Blast decays while binding stays → two distinct zones."""
+        t = full_analysis.theorem_results["T-TB-12"]
+        # Binding std ≈ 0 AND mach changes → two-zone proven
+        assert t["binding_std"] < 1e-10
+        assert t["mach_first"] > t["mach_last"]
+
+    def test_insight_contains_two_zone(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-12"]
+        assert "Two-zone" in t["insight"]
+
+
+class TestSensitivityDivergence:
+    """T-TB-13: Sensitivity Divergence — weaker → more sensitive."""
+
+    def test_T_TB_13_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-13"]
+        assert t["proven"], f"T-TB-13 failed: ratio={t.get('sensitivity_ratio')}"
+
+    def test_T_TB_13_subtests(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-13"]
+        assert t["passed"] == t["tests"]
+
+    def test_channel_weakens(self, full_analysis):
+        """The diagnostic channel gets weaker over time."""
+        t = full_analysis.theorem_results["T-TB-13"]
+        assert t["c_late"] < t["c_early"]
+
+    def test_sensitivity_increases(self, full_analysis):
+        """Sensitivity grows as channel weakens (ratio > 1.5)."""
+        t = full_analysis.theorem_results["T-TB-13"]
+        assert t["sensitivity_ratio"] > 1.5
+
+    def test_positive_feedback_mechanism(self, full_analysis):
+        """Late sensitivity > early sensitivity (positive feedback loop)."""
+        t = full_analysis.theorem_results["T-TB-13"]
+        assert t["sensitivity_late"] > t["sensitivity_early"]
+
+    def test_diagnostic_channel_is_mach(self, full_analysis):
+        """Uses mach_fidelity as the diagnostic channel."""
+        t = full_analysis.theorem_results["T-TB-13"]
+        assert t["channel"] == "mach_fidelity"
+
+
+# ═══════════════════════════════════════════════════════════════
+# T-TB-14: RADIATION COUPLING
+# ═══════════════════════════════════════════════════════════════
+
+
+class TestRadiationCoupling:
+    """T-TB-14: Radiation Coupling — τ_rad ≈ 192 μs governs early E_eff/E."""
+
+    def test_T_TB_14_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-14"]
+        assert t["proven"], f"T-TB-14 failed: {t.get('passed')}/{t.get('tests')}"
+
+    def test_T_TB_14_subtests(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-14"]
+        assert t["passed"] >= 3
+
+    def test_tau_rad_value(self, full_analysis):
+        """τ_rad ≈ 192 μs."""
+        t = full_analysis.theorem_results["T-TB-14"]
+        assert 150 < t["tau_rad_us"] < 250
+
+    def test_xi_departure_at_earliest(self, full_analysis):
+        """ξ < 1 at the earliest data point (radiation not yet coupled)."""
+        t = full_analysis.theorem_results["T-TB-14"]
+        assert t["xi_earliest"] < 1.0
+
+    def test_self_sim_depressed_early(self, full_analysis):
+        """Self-similarity channel < 0.85 at earliest point."""
+        t = full_analysis.theorem_results["T-TB-14"]
+        assert t["c_self_sim_earliest"] < 0.85
+
+    def test_energy_fraction_low(self, full_analysis):
+        """E_eff/E < 0.70 at earliest point (energy trapped in radiation)."""
+        t = full_analysis.theorem_results["T-TB-14"]
+        assert t["e_fraction_earliest"] < 0.70
+
+    def test_insight_mentions_radiation(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-14"]
+        assert "Radiation" in t["insight"] or "radiation" in t["insight"]
+
+
+# ═══════════════════════════════════════════════════════════════
+# T-TB-15: MACH CLIFF
+# ═══════════════════════════════════════════════════════════════
+
+
+class TestMachCliff:
+    """T-TB-15: Mach Cliff — logarithmic shock death drives gap explosion."""
+
+    def test_T_TB_15_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-15"]
+        assert t["proven"], f"T-TB-15 failed: {t.get('passed')}/{t.get('tests')}"
+
+    def test_T_TB_15_subtests(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-15"]
+        assert t["passed"] >= 3
+
+    def test_mach_decays(self, full_analysis):
+        """Latest Mach number much smaller than initial."""
+        t = full_analysis.theorem_results["T-TB-15"]
+        assert t["M_latest"] < 10.0
+
+    def test_kappa_penalty(self, full_analysis):
+        """κ_mach contribution is meaningfully negative at latest point."""
+        t = full_analysis.theorem_results["T-TB-15"]
+        assert t["kappa_mach"] < -0.02
+
+    def test_gap_explosion(self, full_analysis):
+        """Late gap exceeds 5× the minimum gap."""
+        t = full_analysis.theorem_results["T-TB-15"]
+        assert t["gap_ratio"] > 5.0
+
+    def test_gap_latest_positive(self, full_analysis):
+        """Latest gap is positive and substantial."""
+        t = full_analysis.theorem_results["T-TB-15"]
+        assert t["gap_latest"] > 0.03
+
+    def test_insight_mentions_cliff(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-15"]
+        assert "cliff" in t["insight"] or "death" in t["insight"]
+
+
+# ═══════════════════════════════════════════════════════════════
+# T-TB-16: THREE-REGIME STRUCTURE
+# ═══════════════════════════════════════════════════════════════
+
+
+class TestThreeRegimeStructure:
+    """T-TB-16: Three-Regime Structure — radiation → self-similar → decay."""
+
+    def test_T_TB_16_proven(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-16"]
+        assert t["proven"], f"T-TB-16 failed: {t.get('passed')}/{t.get('tests')}"
+
+    def test_T_TB_16_subtests(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-16"]
+        assert t["passed"] >= 4
+
+    def test_all_regimes_populated(self, full_analysis):
+        """All three regimes have at least one entity."""
+        t = full_analysis.theorem_results["T-TB-16"]
+        assert t["n_radiation"] > 0
+        assert t["n_self_similar"] > 0
+        assert t["n_decay"] > 0
+
+    def test_self_similar_dominates(self, full_analysis):
+        """Most entities fall in the self-similar regime."""
+        t = full_analysis.theorem_results["T-TB-16"]
+        assert t["n_self_similar"] > t["n_radiation"]
+        assert t["n_self_similar"] > t["n_decay"]
+
+    def test_self_similar_best_F(self, full_analysis):
+        """Self-similar phase has higher mean F than radiation phase."""
+        t = full_analysis.theorem_results["T-TB-16"]
+        assert t["mean_F_self_similar"] > t["mean_F_radiation"]
+
+    def test_self_similar_min_gap(self, full_analysis):
+        """Self-similar phase has minimum gap (best coherence)."""
+        t = full_analysis.theorem_results["T-TB-16"]
+        assert t["min_gap_self_similar"] <= t["min_gap_radiation"]
+        assert t["min_gap_self_similar"] <= t["min_gap_decay"]
+
+    def test_u_shaped_trajectory(self, full_analysis):
+        """Gap minimum is in the interior (not at endpoints)."""
+        t = full_analysis.theorem_results["T-TB-16"]
+        assert 0 < t["gap_min_index"] < 23  # Not first or last
+
+    def test_entity_counts_sum(self, full_analysis):
+        """All 24 fireball entities accounted for."""
+        t = full_analysis.theorem_results["T-TB-16"]
+        total = t["n_radiation"] + t["n_self_similar"] + t["n_decay"]
+        assert total == 24
+
+    def test_insight_mentions_three(self, full_analysis):
+        t = full_analysis.theorem_results["T-TB-16"]
+        assert "Three" in t["insight"] or "three" in t["insight"]
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -657,6 +975,24 @@ class TestNarrative:
         assert "FISSION" in full_analysis.narrative
         assert "FUSION" in full_analysis.narrative
 
+    def test_narrative_coordinated_decay(self, full_analysis):
+        assert "COORDINATED DECAY" in full_analysis.narrative
+
+    def test_narrative_decoherence_field(self, full_analysis):
+        assert "DECOHERENCE FIELD" in full_analysis.narrative
+
+    def test_narrative_prediction_amplification(self, full_analysis):
+        assert "PREDICTION AMPLIFICATION" in full_analysis.narrative
+
+    def test_narrative_radiation_coupling(self, full_analysis):
+        assert "RADIATION COUPLING" in full_analysis.narrative
+
+    def test_narrative_mach_cliff(self, full_analysis):
+        assert "MACH CLIFF" in full_analysis.narrative
+
+    def test_narrative_three_regime(self, full_analysis):
+        assert "THREE-REGIME STRUCTURE" in full_analysis.narrative
+
     def test_narrative_yield(self, full_analysis):
         assert "20.2 kt" in full_analysis.narrative
 
@@ -682,10 +1018,10 @@ class TestFullAnalysis:
         assert full_analysis.tier1_violations == 0
 
     def test_theorems_count(self, full_analysis):
-        assert full_analysis.summary["n_theorems_total"] == 8
+        assert full_analysis.summary["n_theorems_total"] == 16
 
     def test_all_theorems_proven_summary(self, full_analysis):
-        assert full_analysis.summary["n_theorems_proven"] == 8
+        assert full_analysis.summary["n_theorems_proven"] == 16
 
     def test_yield_in_summary(self, full_analysis):
         """Extracted yield should be within 25% of official."""
