@@ -50,7 +50,7 @@ Tier-1   THE KERNEL (mathematical object)
          │   S ≈ f(F, C) [statistical, tightens with n]     │
          │   corr(C, S) → −1 as n → ∞ (CLT)                │
          │                                                  │
-         │ 46 LEMMAS · 38 IDENTITIES · 8 EQUATIONS         │
+         │ 46 LEMMAS · 44 IDENTITIES · 8 EQUATIONS         │
          │ (all properties of this one function)            │
          └─────────────────────────────────────────────────┘
          Immutable. Domain-independent. Mathematically complete.
@@ -217,7 +217,7 @@ The three agents are not imposed from outside. They are the structural reading o
 
 - **IS the kernel function**: Four primitive formulas (F, κ, S, C) and two derived values (ω = 1−F, IC = exp(κ)) define K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC). All six outputs, and all provable properties, are Tier-1.
 - **IS the identities**: F + ω = 1, IC ≤ F, IC = exp(κ) are theorems *about* the kernel function. They are part of Tier-1 because they cannot exist without the definitions that produce them.
-- **IS the lemmas and structural constants**: The 46 lemmas, 38 identities, c* = 0.7822, c_trap = 0.3178 — all properties of the same function.
+- **IS the lemmas and structural constants**: The 46 lemmas, 44 identities, c* = 0.7822, c_trap = 0.3178 — all properties of the same function.
 - **IS internally structured**: The 4 primitives are independently *computed* (each has its own formula); 2 values are algebraically derived (ω, IC); and 1 statistical constraint (S ≈ f(F,C)) reduces the effective degrees of freedom to 3. The rank-3 structure is not a tier distinction — it is the internal dependency structure of the kernel function itself, proven invariant to input dimensionality (n = 4..64).
 - **NOT diagnostics**: ω and IC are derived from primitives but are NOT diagnostics. Diagnostics (heterogeneity regime labels, Stable/Watch/Collapse classification, seam PASS/FAIL) are Tier-0 *interpretations*. ω and IC are Tier-1 *outputs* that appear in the immutable identities.
 - **NOT computation**: The *code* that evaluates the formulas is Tier-0. The *formulas themselves* are Tier-1. `kernel_optimized.py` is a Tier-0 implementation of the Tier-1 function.

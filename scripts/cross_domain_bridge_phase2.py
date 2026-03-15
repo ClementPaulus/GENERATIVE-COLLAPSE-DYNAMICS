@@ -606,11 +606,17 @@ identities = [
     ("N2", "Coupling centroid", "∫₀¹ (S+κ)·c dc = 0"),
     ("N3", "Rank-2 closed form", "IC = √(F²−C²/4) for n=2"),
     ("N4", "Equator quintuple", "5 properties converge at c=½"),
+    ("N5", "Fano-Fisher duality", "h″(c) = −g_F(c) ∀ c ∈ (0,1)"),
     ("N6", "Triple peak identity", "(1−c*)/c* = exp(−1/c*) = (S+κ)|_{c*}"),
+    ("N7", "Asymptotic IC-curvature", "IC² ≈ F² − β_n·C², β₂ = 1/4 exact"),
     ("N8", "Log-integrity correction", "κ = ln(F) − C²/(8F²) + O(C⁴)"),
+    ("N9", "Budget cost crossover", "Γ = D_C at ω ≈ 0.58"),
     ("N10", "Jensen entropy bound", "S ≤ h(F), = iff homogeneous"),
     ("N11", "Moment family", "μ_n = [(n+1)H_{n+1}−(n+2)]/[(n+1)²(n+2)]"),
     ("N12", "Gap composition", "Δ₁₂ = (Δ₁+Δ₂)/2 + (√IC₁−√IC₂)²/2"),
+    ("N13", "Entropy moment table", "∫₀¹ cⁿ·S dc = rational closed form"),
+    ("N14", "Jensen entropy-fidelity", "S ≤ h(F), equality iff homogeneous"),
+    ("N15", "Gap Taylor expansion", "Δ ≈ C²/(8F) for small heterogeneity"),
     ("N16", "Reflection formula", "f(θ)+f(π/2−θ) = 2ln(tanθ)cos(2θ)"),
 ]
 

@@ -876,12 +876,12 @@ independently derived from Axiom-0 on the bounded trace.
 The classical inequality is what remains when the channel semantics are discarded.
 
 % -------------------------
-% Structural identities summary (38 identities; 46 lemmas)
+% Structural identities summary (44 identities; 46 lemmas)
 % -------------------------
 \section{Structural identities and lemma inventory}
 \label{sec:identities}
 
-The Tier-1 kernel and its Tier-0 protocol machinery yield 38 structural identities and 46 lemmas,
+The Tier-1 kernel and its Tier-0 protocol machinery yield 44 structural identities and 46 lemmas,
 verified computationally to machine precision ($<10^{-16}$ residual) across all domain closures.
 The full derivation chain is available via five diagnostic scripts in the repository;
 the key results are summarized below.

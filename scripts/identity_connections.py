@@ -1,5 +1,5 @@
 """
-Identity Connection Analysis — What do the 38 identities teach us?
+Identity Connection Analysis — What do the 44 identities teach us?
 
 Traces the six connection clusters that emerge when the E, B, D, and N
 series are viewed together. Each cluster is verified computationally.
@@ -270,7 +270,7 @@ print("=" * 70)
 print("  SUMMARY: The Identity Network")
 print("=" * 70)
 print("""
-  The 38 identities are not isolated facts. They form a NETWORK with
+  The 44 identities are not isolated facts. They form a NETWORK with
   six connection clusters:
 
   1. EQUATOR WEB (E1, N4, N16, E8)
