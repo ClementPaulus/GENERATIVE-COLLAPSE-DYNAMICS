@@ -246,7 +246,7 @@ contract:
     kinematic_return_required: true
 
   notes: >
-    KIN.INTSTACK.v1 extends UMA.INTSTACK.v1 with a complete kinematics layer.
+    KIN.INTSTACK.v1 extends GCD.INTSTACK.v1 with a complete kinematics layer.
     It provides mathematical foundations for position, velocity, acceleration,
     momentum, and energy within the UMCP framework. Trajectories are validated
     against conservation laws and return conditions in phase space. All quantities

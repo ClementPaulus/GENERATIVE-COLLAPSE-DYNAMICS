@@ -615,7 +615,7 @@ class TestKinematicsContract:
 
         assert "version" in c
         assert "parent_contract" in c
-        assert c["parent_contract"] == "UMA.INTSTACK.v1"
+        assert c["parent_contract"] == "GCD.INTSTACK.v1"
         assert "embedding" in c
         assert "tier_1_kernel" in c
         assert "axioms" in c

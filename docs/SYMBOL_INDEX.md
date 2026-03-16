@@ -220,7 +220,7 @@ IC = exp(κ)         (exact inverse)
 | **K_stability** | K_stability | Stability index ∈ [0,1] | Stable: K > 0.7<br>Watch: 0.3-0.7<br>Unstable: K < 0.3 |
 | **Γ_kin** | Gamma_kin | {(x,v) : x,v ∈ [0,1]} | Phase space domain |
 
-**Kinematics Principle:** These symbols extend UMA.INTSTACK.v1 for physics-based motion analysis. All base Tier-1 symbols remain frozen.
+**Kinematics Principle:** These symbols extend GCD.INTSTACK.v1 for physics-based motion analysis. All base Tier-1 symbols remain frozen.
 
 **File Locations:**
 - Definitions: [canon/kin_anchors.yaml](canon/kin_anchors.yaml)

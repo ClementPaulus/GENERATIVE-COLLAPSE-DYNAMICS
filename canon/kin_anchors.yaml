@@ -54,7 +54,7 @@ axioms:
       K_stability → 0 indicates instability/divergence.
 
 tier_1_invariants:
-  description: "Kinematics-specific frozen symbols - extend UMA.INTSTACK.v1"
+  description: "Kinematics-specific frozen symbols - extend GCD.INTSTACK.v1"
 
   reserved_symbols:
     position:
