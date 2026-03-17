@@ -102,7 +102,7 @@ _RESULTS_CACHE: list[SpacetimeKernelResult] | None = None
 
 
 def _get_results() -> list[SpacetimeKernelResult]:
-    """Compute or return cached results for all 37 entities."""
+    """Compute or return cached results for all 40 entities."""
     global _RESULTS_CACHE
     if _RESULTS_CACHE is None:
         _RESULTS_CACHE = compute_all_spacetime()
@@ -179,7 +179,7 @@ def prove_theorem_TST1() -> TheoremResult:
     details["g_analytical"] = g_analytical
     details["rel_error"] = rel_error
 
-    # Test 4: All 25 entities have positive gradient
+    # Test 4: All 40 entities have positive gradient
     results = _get_results()
     tests_total += 1
     all_entity_positive = all(r.gradient > 0 for r in results)
@@ -240,7 +240,7 @@ def prove_theorem_TST2() -> TheoremResult:
         tests_passed += 1
     details["tidal_ratio_high_low"] = ratio
 
-    # Test 3: All 25 entities report positive tidal
+    # Test 3: All 40 entities report positive tidal
     results = _get_results()
     tests_total += 1
     all_entity_positive = all(r.tidal > 0 for r in results)
@@ -775,7 +775,7 @@ def prove_theorem_TST10() -> TheoremResult:
         and the log-integrity relation IC = exp(kappa) hold for BOTH.
 
     PROOF METHOD:
-        Verify Tier-1 identities across all 25 entities in all 5 categories.
+        Verify Tier-1 identities across all 40 entities in all 9 categories.
     """
     tests_passed = 0
     tests_total = 0
@@ -783,21 +783,21 @@ def prove_theorem_TST10() -> TheoremResult:
 
     results = _get_results()
 
-    # Test 1: F + omega = 1 for all 25 entities
+    # Test 1: F + omega = 1 for all 40 entities
     tests_total += 1
     max_duality_error = max(abs(r.F + r.omega - 1.0) for r in results)
     if max_duality_error < 1e-12:
         tests_passed += 1
     details["max_duality_error"] = max_duality_error
 
-    # Test 2: IC <= F for all 25 entities
+    # Test 2: IC <= F for all 40 entities
     tests_total += 1
     all_bounded = all(r.IC <= r.F + 1e-12 for r in results)
     if all_bounded:
         tests_passed += 1
     details["IC_le_F_all"] = all_bounded
 
-    # Test 3: IC = exp(kappa) for all 25 entities
+    # Test 3: IC = exp(kappa) for all 40 entities
     tests_total += 1
     max_exp_error = max(abs(r.IC - np.exp(r.kappa)) for r in results)
     if max_exp_error < 1e-10:
@@ -838,6 +838,7 @@ def prove_theorem_TST10() -> TheoremResult:
         "composite",
         "cognitive",
         "biological",
+        "boundary",
     }
     if categories == expected:
         tests_passed += 1

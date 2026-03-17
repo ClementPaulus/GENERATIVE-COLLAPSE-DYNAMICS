@@ -79,8 +79,8 @@ structure accumulates through iterated collapse-return cycles,
 and what survives each cycle is measurable by the same
 diagnostic kernel.  We trace the geometry of what returns
 from quarks ($10^{-15}$\,m) through nuclei, atoms, stars,
-galaxies, neurons, and memory wells, encoding 37~entities
-across 8~categories as 8-channel trace vectors --- with
+galaxies, neurons, and memory wells, encoding 40~entities
+across 9~categories as 8-channel trace vectors --- with
 channel values assigned from domain-specific observables ---
 and computing the kernel invariants
 $(F, \omega, S, C, \kappa, \IC)$ at every level.
@@ -100,7 +100,7 @@ accumulation pattern is triple: space accumulates as iterated
 $|\kappa|$ (mass is accumulated well depth), time emerges from
 the rate and cost of return cycles ($c_1 / \Gam'$), and memory
 accumulates as well geometry shaped by repeated traversal.
-Ten Tier-2 theorems, verified by 129~automated tests
+Ten Tier-2 theorems, verified by 175~automated tests
 (0~failures), formalize these three modes of accumulation and
 the cross-scale pattern they produce.
 \end{abstract}
@@ -164,7 +164,7 @@ and at every rung the same three questions are asked:
   what does it reveal?
 \end{enumerate}
 
-The answer, across 37~entities spanning $10^{-15}$\,m to
+The answer, across 40~entities spanning $10^{-15}$\,m to
 macroscopic scales, is always the same: the gap $\Delta$
 measures channel heterogeneity.  Large $\Delta$ means one or
 more channels are near zero while others remain high ---
@@ -246,7 +246,7 @@ definitions and hold for any valid input.
 \item \textbf{Time emerges from return cost}
   (Definition~\ref{def:temporal}, Theorem~\ref{thm:T4}):
   Effective temporal resolution $\mathcal{T} = c_1/\Gam'$
-  orders all 37~entities consistently, from the photon
+  orders all 40~entities consistently, from the photon
   ($\mathcal{T} \approx 0$) to the neutron star ($\mathcal{T}
   \approx 18$), with cost asymmetry producing the arrow of
   time (Theorem~\ref{thm:T8}).
@@ -275,7 +275,7 @@ definitions and hold for any valid input.
   independently of the encoding.
 \item \textbf{Structural consistency across all scales}
   (Theorem~\ref{thm:T10}):
-  All 37~entities in 8~categories obey the three kernel
+  All 40~entities in 9~categories obey the three kernel
   identities ($F + \omega = 1$, $\IC \leq F$,
   $\IC = e^{\kappa}$).  These identities are mathematical
   theorems that hold for \emph{any} input in $[0,1]^n$ ---
@@ -317,7 +317,7 @@ Exponentiating both sides gives
 $\IC = \exp(\sum w_i \ln c_i) \leq \sum w_i c_i = F$.
 Equality holds iff all $c_i$ are equal, since $\ln$ is
 strictly concave.  Computationally verified to $< 10^{-12}$
-residual across all 37~entities (Theorem~\ref{thm:T10}).
+residual across all 40~entities (Theorem~\ref{thm:T10}).
 \end{proof}
 \end{lemma}
 
@@ -369,7 +369,7 @@ all costs would change the ordering.  Nevertheless,
 $\mathcal{T}$ is a \emph{diagnostic definition}, not a
 derivation from first principles --- it was selected because
 it produces physically sensible orderings across all
-37~entities, and this circularity should be noted: the
+40~entities, and this circularity should be noted: the
 definition is partly validated by the ordering it produces.
 An independent derivation of temporal resolution from the
 kernel axioms alone remains an open problem.
@@ -747,7 +747,7 @@ gravitational field strength.
 
 \begin{remark}
 Positivity is verified at 100~uniformly spaced points and
-for all 37~entities.  The analytical form agrees with the
+for all 40~entities.  The analytical form agrees with the
 numerical derivative to relative error $< 10^{-5}$.
 (4/4 sub-tests.)
 \end{remark}
@@ -764,7 +764,7 @@ $\Gam(\omega) = \omega^3/(1 - \omega + \eps)$ is
 $\Gam''(\omega) = [6\omega(1{-}\omega{+}\eps)^2 -
 6\omega^2(1{-}\omega{+}\eps) + 2\omega^3] /
 (1{-}\omega{+}\eps)^3$.  Positivity is verified at
-100~grid points and for all 37~entities.  The minimum
+100~grid points and for all 40~entities.  The minimum
 value across the grid is $\Gam''(0.01) > 0$.
 (3/3 sub-tests.)
 \end{remark}
@@ -800,7 +800,7 @@ This follows algebraically: $\Gam(\omega) = \omega^3/
 (1 - \omega + \eps)$ contains no $c_i$ or $w_i$
 terms.  The gradient $\Gam'(\omega)$ is a function of
 $\omega$ alone.  Verified by computing $\Gam'$ for all
-37~entities and confirming that entities with the same
+40~entities and confirming that entities with the same
 $\omega$ (within $10^{-6}$) produce identical gradients.
 (3/3 sub-tests.)
 \end{remark}
@@ -939,7 +939,7 @@ accumulation mode of the pattern.
 \begin{remark}
 Linearity is exact: $\mathrm{depth}(2N) = 2\,\mathrm{depth}(N)$
 to $< 10^{-12}$, verified over $N \in \{1, 10, 100, 1000\}$
-for all 37~entities.  The neutron star ($|\Delta\kappa| = 0.128$)
+for all 40~entities.  The neutron star ($|\Delta\kappa| = 0.128$)
 reaches depth~1.28 in 10~cycles; the photon ($|\Delta\kappa| =
 18.42$) reaches depth~184.2 in the same count, matching the
 extreme gravity of collapsed objects.  Mass is not a property
@@ -1068,15 +1068,18 @@ parameter~$b$.
 \end{theorem}
 
 \begin{remark}
-The four lensing classes partition all 37~entities
+The four lensing classes partition all 40~entities
 consistently.  Perfect ring ($\Delta < 0.02$): neutron star
 (0.001), magnetar (0.003), pulsar (0.005), galaxy cluster
 (0.006), grief (0.006), spiral galaxy (0.007), healthy memory
 (0.014).  Thick arc ($0.02 \leq \Delta < 0.10$): quark (0.033),
 iron-56 (0.036), carbon-12 (0.073), habit loop (0.089).
-Thin arc ($0.10 \leq \Delta < 0.30$): PTSD (0.115), black
-hole (0.121), proton (0.134), electron (0.141), photon (0.245).
-No entity in this catalog reaches the distorted threshold.
+Thin arc ($0.10 \leq \Delta < 0.30$): turbulent flow (0.110),
+decoherence event (0.112), PTSD (0.115), black
+hole (0.121), proton (0.134), electron (0.141),
+glass (0.157), photon (0.245).
+No entity in this catalog reaches the distorted threshold
+($\Delta \geq 0.30$).
 (4/4 sub-tests.)
 \end{remark}
 
@@ -1792,7 +1795,7 @@ density before structure can nucleate.
 
 \begin{theorem}[T-ST-10: Cross-Scale Universality]
 \label{thm:T10}
-All 37~entities in all 8~categories obey the three Tier-1
+All 40~entities in all 9~categories obey the three Tier-1
 kernel identities:
 \begin{enumerate}
 \item $F + \omega = 1$ to $< 10^{-12}$ for all entities.
@@ -1801,7 +1804,7 @@ kernel identities:
 \end{enumerate}
 The trauma well has lower $\IC$ than the healthy memory
 ($\IC_{\text{PTSD}} = 0.366 < \IC_{\text{healthy}} = 0.767$).
-All 8~categories are represented and non-empty.
+All 9~categories are represented and non-empty.
 \end{theorem}
 
 \begin{remark}
@@ -1865,6 +1868,9 @@ $10^{-6}$--$10^{-3}$\,m & Biological &
 --- & Cognitive &
   4 & 0.633 & 0.902 &
   Memory wells: PTSD = confinement of the mind \\
+--- & Boundary &
+  3 & 0.389 & 0.651 &
+  No recovery: glass, turbulence, decoherence \\
 \end{tabular}
 \end{ruledtabular}
 \end{table*}
@@ -1890,29 +1896,53 @@ it is the precondition for nuclear binding.  The PTSD well
 is not a permanent state; it is the precondition for
 therapeutic recovery.  \emph{Only what returns is real.}
 
-\begin{remark}[Entity Selection and Coverage]
+\begin{remark}[Entity Selection and Boundary Cases]
 \label{rem:selection}
-The 37~entities were selected to span the scale ladder from
-$10^{-15}$\,m to macroscopic scales, with at least three
-entities per category.  This is a \emph{curated catalog},
-not a representative sample: the entities were chosen because
-they are well-studied systems with known physical properties
-that could be encoded in the 8-channel schema.  Systems that
-would challenge the pattern are instructive to consider.
-Glasses and amorphous solids lack periodic collapse-return
-cycles, making the cycle\_return\_rate ($c_1$) ambiguous.
-Turbulent flows have well-defined energy cascades but no
-obvious trajectory closure.  Quantum decoherence events are
-irreversible by definition, yielding $c_1 \approx 0$ and
-$\mathcal{T} \approx 0$ --- these would occupy the same
-structural position as the photon (effectively frozen time)
-rather than contradicting the pattern.  The two-step pattern
-(geometric slaughter followed by recovery) has not been
-tested on systems where the recovery step fails permanently
---- for example, radioactive decay chains that terminate at
-stable isotopes without restoring dead channels.  Extending
-the catalog to include such boundary cases is necessary
-before the structural claims can be considered robust.
+The 40~entities span the scale ladder from $10^{-15}$\,m to
+macroscopic scales, with at least three entities per
+category.  This is a \emph{curated catalog}, not a
+representative sample.  To test the pattern's limits, three
+boundary cases --- systems where the recovery step may fail
+--- are included as a dedicated category.
+
+\emph{Glass (amorphous solid)}: frozen disorder with no
+periodic collapse-return cycles ($c_1 = 0.08$, $c_5 = 0.10$).
+Result: $F = 0.405$, $\IC/F = 0.613$, Collapse regime.
+Four dead channels create a heterogeneity gap ($\Delta =
+0.157$) comparable to the subatomic mean --- but unlike
+nuclei, there is no recovery step.  The glass \emph{stays}
+in Collapse because the frozen structure never returns.
+
+\emph{Turbulent flow}: energy cascades and vortex
+circulation ($c_3 = 0.85$, $c_6 = 0.80$) but no trajectory
+closure ($c_5 = 0.05$).  Result: $F = 0.513$, $\IC/F =
+0.785$, Collapse regime.  This is the highest $\IC/F$ of the
+three boundary cases --- turbulence is dynamically rich but
+structurally incomplete, and the single dead closure channel
+is partially compensated by strong gradient and circulation.
+
+\emph{Decoherence event}: irreversible coherence loss
+($c_1 = 0.02$, $c_5 = 0.03$, $c_6 = 0.05$).  Result:
+$F = 0.250$, $\IC/F = 0.554$, deep Collapse ($\omega =
+0.75$).  Remark~5 in the prior version predicted this would
+occupy ``the same structural position as the photon.''  The
+kernel reveals a more nuanced picture: both share $c_1
+\approx 0$ (no return) and both are in Collapse, but the
+photon's $\IC/F = 0.067$ reflects \emph{extremely} dead
+channels ($c_2, c_3, c_6 < 0.001$), while the decoherence
+event's channels, though low, are not as extreme.  The
+prediction is partially confirmed (both are
+no-return systems in Collapse) and partially refined (they
+differ by an order of magnitude in $\IC/F$).
+
+All three boundary cases satisfy the Tier-1 identities
+to machine precision.  Their structural significance: they
+are systems where geometric slaughter occurs but recovery
+\emph{does not follow}.  This does not contradict the
+two-step pattern; it confirms that the pattern has a
+testable boundary --- recovery is not guaranteed, and the
+kernel correctly classifies non-returning systems as
+structurally incomplete.
 \end{remark}
 
 \textbf{Compounding as structural enrichment.}
@@ -1946,7 +1976,7 @@ stands on the axiom alone.
 
 Every theorem in this paper is machine-verified.  The
 reference implementation~\cite{umcpmetadatarepo} includes
-the full entity catalog (37~entities, 8~categories), the
+the full entity catalog (40~entities, 9~categories), the
 kernel computation, and the theorem-proving harness.  To
 reproduce all results:
 
@@ -1994,7 +2024,7 @@ universal truth.
 
 We have traced the geometry of what returns from quarks to
 memory wells, using a single axiom, a single kernel, and a
-single budget surface.  Across 37~entities and 8~categories
+single budget surface.  Across 40~entities and 9~categories
 spanning twenty orders of magnitude, one structural pattern
 recurs: \emph{structure accumulates through iterated
 collapse-return cycles}, and the kernel measures how that
@@ -2070,7 +2100,7 @@ given a fixed encoding scheme):
 \item \textbf{Time emerges from return cost}
   (Definition~\ref{def:temporal}, Theorems~\ref{thm:T4},
   \ref{thm:T8}).
-  $\mathcal{T} = c_1/\Gam'$ ranks all 37~entities from
+  $\mathcal{T} = c_1/\Gam'$ ranks all 40~entities from
   photon ($\approx 0$) to neutron star ($\approx 18$).
   Cost ratio: $\Gam(0.90)/\Gam(0.10) = 6.56 \times 10^{3}$.
   \emph{Falsified by}: an entity whose independently
@@ -2097,7 +2127,7 @@ verify implementation correctness):
 \item \textbf{Budget gradient structures the manifold}
   (Theorem~\ref{thm:T1}).
   $\dd\Gam/\dd\omega > 0$ at 100~grid points and all
-  37~positions; minimum $\Gam'(0.01) = 3.0 \times 10^{-4}$.
+  40~positions; minimum $\Gam'(0.01) = 3.0 \times 10^{-4}$.
   This is a mathematical property of $\Gam$ with $p = 3$.
   (4/4 sub-tests.)
 
@@ -2105,7 +2135,7 @@ verify implementation correctness):
   (Theorem~\ref{thm:T10}).
   $F + \omega = 1$ to $< 10^{-12}$; $\IC \leq F$ with zero
   violations; $\IC = e^{\kappa}$ to $< 10^{-10}$.  All
-  8~categories represented.  These identities hold for any
+  9~categories represented.  These identities hold for any
   input in $[0,1]^n$; they verify the implementation, not
   the encoding.  (6/6 sub-tests.)
 \end{enumerate}

@@ -56,8 +56,8 @@ class TestSpacetimeKernel:
     """Smoke tests for the spacetime kernel module."""
 
     def test_catalog_count(self) -> None:
-        """37 entities in the catalog."""
-        assert len(SPACETIME_CATALOG) == 37
+        """40 entities in the catalog."""
+        assert len(SPACETIME_CATALOG) == 40
 
     def test_channel_count(self) -> None:
         """All entities have 8 channels."""
@@ -75,7 +75,7 @@ class TestSpacetimeKernel:
                 assert 0.0 <= c <= 1.0, f"{entity.name}, ch{i}: {c}"
 
     def test_categories_present(self) -> None:
-        """All 8 categories represented."""
+        """All 9 categories represented."""
         cats = {e.category for e in SPACETIME_CATALOG}
         assert cats == {
             "subatomic",
@@ -86,6 +86,7 @@ class TestSpacetimeKernel:
             "composite",
             "biological",
             "cognitive",
+            "boundary",
         }
 
     @pytest.mark.parametrize(
@@ -99,6 +100,7 @@ class TestSpacetimeKernel:
             ("composite", 5),
             ("biological", 4),
             ("cognitive", 4),
+            ("boundary", 3),
         ],
     )
     def test_category_counts(self, category: str, expected: int) -> None:
@@ -111,10 +113,10 @@ class TestSpacetimeKernel:
         with pytest.raises(ValueError, match="expected 8 channels"):
             SpacetimeEntity("bad", "test", (0.5, 0.5))
 
-    def test_compute_all_returns_37(self) -> None:
-        """compute_all_spacetime returns 37 results."""
+    def test_compute_all_returns_40(self) -> None:
+        """compute_all_spacetime returns 40 results."""
         results = compute_all_spacetime()
-        assert len(results) == 37
+        assert len(results) == 40
 
     def test_kernel_result_types(self) -> None:
         """All kernel results have correct types."""
@@ -133,25 +135,25 @@ class TestSpacetimeKernel:
 
 
 class TestTier1Identities:
-    """Verify Tier-1 identities for all 25 entities."""
+    """Verify Tier-1 identities for all 40 entities."""
 
     @pytest.fixture(scope="class")
     def all_results(self) -> list[SpacetimeKernelResult]:
         return compute_all_spacetime()
 
-    @pytest.mark.parametrize("idx", range(25))
+    @pytest.mark.parametrize("idx", range(40))
     def test_duality_identity(self, all_results: list[SpacetimeKernelResult], idx: int) -> None:
         """F + omega = 1 for each entity."""
         r = all_results[idx]
         assert abs(r.F + r.omega - 1.0) < 1e-12, f"{r.name}: F+omega={r.F + r.omega}"
 
-    @pytest.mark.parametrize("idx", range(25))
+    @pytest.mark.parametrize("idx", range(40))
     def test_integrity_bound(self, all_results: list[SpacetimeKernelResult], idx: int) -> None:
         """IC <= F for each entity."""
         r = all_results[idx]
         assert r.IC <= r.F + 1e-12, f"{r.name}: IC={r.IC} > F={r.F}"
 
-    @pytest.mark.parametrize("idx", range(25))
+    @pytest.mark.parametrize("idx", range(40))
     def test_log_integrity(self, all_results: list[SpacetimeKernelResult], idx: int) -> None:
         """IC = exp(kappa) for each entity."""
         r = all_results[idx]

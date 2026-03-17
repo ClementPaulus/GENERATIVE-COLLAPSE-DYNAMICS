@@ -274,7 +274,7 @@ CHANNEL_NAMES: list[str] = [
 
 
 # ===========================================================================
-# ENTITY CATALOG — 25 Spacetime Objects
+# ENTITY CATALOG — 40 Spacetime Objects
 # ===========================================================================
 # Channel values grounded in astrophysical scaling relations and
 # cognitive neuroscience biomarkers. Each value in [0, 1].
@@ -520,6 +520,27 @@ SPACETIME_CATALOG: list[SpacetimeEntity] = [
         (0.70, 0.80, 0.45, 0.40, 0.60, 0.65, 0.55, 0.55),
         "Inflammatory-resolution cycle; memory B cells enable return.",
     ),
+    # ── BOUNDARY (3) ─────────────────────────────────────────────
+    # Systems that challenge the two-step pattern.  Selected because
+    # Remark 5 names them as cases where the recovery step may fail.
+    SpacetimeEntity(
+        "Glass (amorphous solid)",
+        "boundary",
+        (0.88, 0.08, 0.40, 0.10, 0.85, 0.10, 0.08, 0.75),
+        "Frozen disorder; no periodic cycles, no trajectory closure — metastable without return.",
+    ),
+    SpacetimeEntity(
+        "Turbulent flow",
+        "boundary",
+        (0.55, 0.70, 0.50, 0.85, 0.30, 0.05, 0.80, 0.35),
+        "Energy cascades and vortex circulation, but trajectories never close.",
+    ),
+    SpacetimeEntity(
+        "Decoherence event",
+        "boundary",
+        (0.40, 0.02, 0.15, 0.60, 0.50, 0.03, 0.05, 0.25),
+        "Irreversible coherence loss; c1 approx 0, no return by definition.",
+    ),
 ]
 
 
@@ -615,7 +636,7 @@ def compute_entity_kernel(entity: SpacetimeEntity) -> SpacetimeKernelResult:
 
 
 def compute_all_spacetime() -> list[SpacetimeKernelResult]:
-    """Compute kernel for all 25 spacetime entities."""
+    """Compute kernel for all 40 spacetime entities."""
     return [compute_entity_kernel(e) for e in SPACETIME_CATALOG]
 
 
@@ -629,13 +650,24 @@ def main() -> None:
     results = compute_all_spacetime()
 
     print("=" * 100)
-    print("SPACETIME MEMORY KERNEL — 25 Entities Across 5 Categories")
+    print("SPACETIME MEMORY KERNEL — 40 Entities Across 9 Categories")
     print("Channels: coherence_persistence, cycle_return_rate, well_depth_norm,")
     print("          gradient_strength, tidal_symmetry, trajectory_closure,")
     print("          circulation_area, heterogeneity_profile")
     print("=" * 100)
 
-    for cat in ["stellar", "planetary", "diffuse", "composite", "cognitive"]:
+    all_cats = [
+        "subatomic",
+        "nuclear_atomic",
+        "stellar",
+        "planetary",
+        "diffuse",
+        "composite",
+        "cognitive",
+        "biological",
+        "boundary",
+    ]
+    for cat in all_cats:
         cat_results = [r for r in results if r.category == cat]
         print(f"\n{'─' * 100}")
         print(f"  {cat.upper()} ({len(cat_results)} entities)")
@@ -654,7 +686,7 @@ def main() -> None:
     print(f"\n{'=' * 100}")
     print("CROSS-CATEGORY SUMMARY")
     print(f"{'=' * 100}")
-    for cat in ["stellar", "planetary", "diffuse", "composite", "cognitive"]:
+    for cat in all_cats:
         cat_results = [r for r in results if r.category == cat]
         avg_F = np.mean([r.F for r in cat_results])
         avg_IC = np.mean([r.IC for r in cat_results])
