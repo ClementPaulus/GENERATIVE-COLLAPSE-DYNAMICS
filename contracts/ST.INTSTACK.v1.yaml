@@ -1,0 +1,63 @@
+schema: schemas/contract.schema.json
+contract:
+  id: ST.INTSTACK.v1
+  version: 1.0.0
+  timezone: UTC
+  parent_contract: GCD.INTSTACK.v1
+  tier_level: 2
+  embedding:
+    interval: [0.0, 1.0]
+    face: pre_clip
+    oor_policy: clip_and_flag
+    epsilon: 1.0e-08
+  tier_1_kernel:
+    reserved_symbols:
+      # === GCD Tier-1 invariants (inherited, frozen) ===
+      - omega
+      - F
+      - S
+      - C
+      - tau_R
+      - kappa
+      - IC
+      - IC_min
+      # === Spacetime Memory channel observables (8 channels) ===
+      - coherence_persistence      # Fraction of kappa retained per cycle
+      - cycle_return_rate          # Fraction of cycles achieving tau_R < inf
+      - well_depth_norm            # Accumulated |kappa| normalized to max
+      - gradient_strength          # d_Gamma/d_omega normalized to regime
+      - tidal_symmetry             # 1 - |asymmetry| of d2_Gamma across well
+      - trajectory_closure         # Loop closure gap in (F, kappa, C) space
+      - circulation_area           # Enclosed area of collapse-return loop
+      - heterogeneity_profile      # 1 - Delta/F (channel uniformity)
+    weights_policy: nonnegative_sum_to_one
+    frozen_parameters:
+      # === GCD inherited (frozen) ===
+      p: 3
+      alpha: 1.0
+      lambda: 0.2
+      eta: 0.001
+      alpha_energy: 1.0
+      beta_energy: 0.5
+      tau_0: 10.0
+      C_crit: 0.2
+      # === Spacetime Memory domain parameters ===
+      n_channels: 8
+      n_entities: 40
+      n_categories: 9
+    tolerances:
+      tol_seam: 0.005
+      tol_id: 1.0e-09
+  axioms:
+    - id: AX-ST0
+      name: Budget Surface Duality
+      statement: >
+        The budget surface z(omega, C) = Gamma(omega) + alpha*C encodes
+        both space (manifold geometry) and time (poloidal circulation)
+        as structural consequences of the kernel's invariants.
+    - id: AX-ST1
+      name: Gravity is Budget Gradient
+      statement: >
+        Gravitational strength maps to d_Gamma/d_omega evaluated on the
+        budget surface. Attraction emerges when the gradient steepens —
+        mass curves the surface, the surface dictates trajectories.

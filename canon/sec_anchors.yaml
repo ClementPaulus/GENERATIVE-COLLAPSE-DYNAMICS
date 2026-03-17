@@ -1,0 +1,93 @@
+# canon/sec_anchors.yaml
+# Security Canon Anchors — UMCP.CANON.SEC.v1
+# Cross-references: contracts/SECURITY.INTSTACK.v1.yaml, closures/security/
+schema: canon.domain_anchors.schema.json
+id: "UMCP.CANON.SEC.v1"
+version: "1.0.0"
+domain: "Security (Trust Validation and Integrity)"
+hierarchy: "GCD > SECURITY (Tier-2)"
+description: >
+  Canon anchors for the security domain closure.
+  Applies UMCP architecture to cybersecurity validation: anti-virus/malware
+  detection, anti-scam/phishing detection, identity verification, privacy
+  protection, and network trust assessment. Maps security state to a
+  6-channel trace vector. Core axiom translation: "What Returns Through
+  Collapse Is Real" becomes "What Survives Validation Is Trusted."
+  Includes privacy auditor (PII detection + masking), threat classifier,
+  behavior profiler, reputation analyzer, and security daemon.
+
+axioms:
+  - id: "AX-SEC0"
+    name: "Trust Duality"
+    statement: >
+      Every security assessment partitions trust exhaustively:
+      what is validated (F) + what fails validation (omega) = 1.
+      High F = trusted system state. High omega = compromised or
+      unverified state. No third reservoir.
+    frozen: true
+
+  - id: "AX-SEC1"
+    name: "Validation as Return"
+    statement: >
+      A security claim is real only if it returns through validation.
+      Unvalidated assertions have tau_R = infinity (no return =
+      no trust credit). This is the security translation of Axiom-0.
+    frozen: true
+
+  - id: "AX-SEC2"
+    name: "Integrity as Multiplicative Coherence"
+    statement: >
+      Security integrity (IC) is the geometric mean of all channel
+      scores. One failed channel (e.g., compromised authentication)
+      drives IC toward epsilon regardless of other channels —
+      geometric slaughter applied to trust assessment.
+    frozen: true
+
+symbols:
+  - name: "F"
+    tier: 1
+    definition: "Fidelity — aggregate trust score across 6 security channels"
+  - name: "IC"
+    tier: 1
+    definition: "Integrity composite — multiplicative trust coherence"
+  - name: "omega"
+    tier: 1
+    definition: "Drift — aggregate trust deficit"
+
+channels:
+  - name: file_integrity
+    weight: 0.1667
+    definition: "File hash validation score"
+  - name: malware_confidence
+    weight: 0.1667
+    definition: "Malware detection confidence"
+  - name: phishing_score
+    weight: 0.1667
+    definition: "Phishing/fraud detection score"
+  - name: auth_strength
+    weight: 0.1667
+    definition: "Authentication strength"
+  - name: pii_protection
+    weight: 0.1667
+    definition: "PII protection level"
+  - name: network_trust
+    weight: 0.1667
+    definition: "Network trust indicator"
+
+anchors:
+  SEC-A1:
+    name: "Clean system (all validations pass)"
+    description: "All 6 channels above 0.95 — high F, near-zero omega, Stable regime"
+    regime: "Stable"
+  SEC-A2:
+    name: "PII exposure detected"
+    description: "pii_protection drops — IC collapses via geometric slaughter on privacy channel"
+    regime: "Watch"
+  SEC-A3:
+    name: "Active breach (authentication failure)"
+    description: "auth_strength near epsilon — Collapse regime, all trust scores degraded"
+    regime: "Collapse"
+  SEC-A4:
+    name: "Phishing attempt detected"
+    description: "phishing_score elevated — Watch regime with targeted channel drift"
+    regime: "Watch"

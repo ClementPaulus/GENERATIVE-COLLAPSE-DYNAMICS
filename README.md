@@ -17,7 +17,7 @@
 
 This is not a simulation. It is a **metrological enforcement engine**: schema conformance, kernel identity verification, regime classification, and SHA-256 integrity checking — producing a three-valued `CONFORMANT` / `NONCONFORMANT` / `NON_EVALUABLE` verdict for every run.
 
-**Python + C++ integration**: The framework is written in Python with **18 domains**, **135 closure modules**, **155 proven theorems**, and **7,875 tests**. An optional C++17 accelerator (`src/umcp_cpp/`) provides 50–80× speedup for three hot paths — kernel computation, seam chain accumulation, and SHA-256 integrity — via a pybind11 zero-copy NumPy bridge. The Python wrapper (`umcp.accel`) auto-detects the compiled extension at import time; if unavailable, every call falls back transparently to the equivalent NumPy implementation. Same formulas, same frozen parameters, same results to machine precision — the C++ layer is Tier-0 Protocol only and redefines no Tier-1 symbols.
+**Python + C++ integration**: The framework is written in Python with **20 domains**, **139 closure modules**, **155 proven theorems**, and **8,239 tests**. An optional C++17 accelerator (`src/umcp_cpp/`) provides 50–80× speedup for three hot paths — kernel computation, seam chain accumulation, and SHA-256 integrity — via a pybind11 zero-copy NumPy bridge. The Python wrapper (`umcp.accel`) auto-detects the compiled extension at import time; if unavailable, every call falls back transparently to the equivalent NumPy implementation. Same formulas, same frozen parameters, same results to machine precision — the C++ layer is Tier-0 Protocol only and redefines no Tier-1 symbols.
 
 ---
 
@@ -127,7 +127,7 @@ Every claim, measurement, validation, and narrative in UMCP follows exactly **fi
 
 ### The Three-Tier Stack
 
-Tier-1 (44 structural identities, 46 lemmas, 155 proven theorems) → Tier-0 (7,875 tests, 135 closure modules, C++17 accelerator) → Tier-2 (18 domains from particle physics to consciousness). One-way dependency. No back-edges within a frozen run.
+Tier-1 (44 structural identities, 46 lemmas, 155 proven theorems) → Tier-0 (8,239 tests, 139 closure modules, C++17 accelerator) → Tier-2 (20 domains from particle physics to consciousness). One-way dependency. No back-edges within a frozen run.
 
 ![Tier Architecture](images/10_tier_architecture.png)
 
@@ -168,7 +168,7 @@ That's it. The dashboard auto-detects all casepacks, contracts, closures, and le
 | Category | Pages | Highlights |
 |----------|-------|------------|
 | **Core** | Overview, Domain Overview, Health, Ledger, Metrics | System-wide health monitoring, conformance tracking, kernel metric trends |
-| **Science Domains** | Cosmology, Astronomy, Nuclear, Quantum, Atomic Physics, Standard Model, Materials Science, Finance, RCFT, Security, Everyday Physics, Dynamic Semiotics | Interactive closure exploration for all 18 domains with live kernel computation |
+| **Science Domains** | Cosmology, Astronomy, Nuclear, Quantum, Atomic Physics, Standard Model, Materials Science, Finance, RCFT, Security, Everyday Physics, Dynamic Semiotics | Interactive closure exploration for all 20 domains with live kernel computation |
 | **Evolution & Cognition** | Evolution Kernel, Brain Kernel, Awareness Manifold, Cognitive Traversal | 40-organism evolution kernel, 10-channel brain analysis, compositional traversal |
 | **Analysis** | Regime, Time Series, Comparison, Formula Builder, Precision | Regime phase diagrams, cross-domain comparison, custom formula evaluation |
 | **Exploration** | Canon Explorer, Geometry, Rosetta Translation (9 lenses), Orientation, Physics, Kinematics | Cross-domain Rosetta translation (incl. Semiotics lens), three-layer geometry visualization |
@@ -182,7 +182,7 @@ That's it. The dashboard auto-detects all casepacks, contracts, closures, and le
 - **Live validation** — run `umcp validate` on any casepack directly from the browser
 - **Regime visualization** — interactive phase space plots with Stable / Watch / Collapse classification
 - **Kernel computation** — compute F, ω, S, C, κ, IC on custom trace vectors in real time
-- **Cross-domain comparison** — compare kernel outputs across all 18 domains
+- **Cross-domain comparison** — compare kernel outputs across all 20 domains
 - **Auto-refresh mode** — continuously monitor validation status
 - **Responsive layout** with compact mode for data-dense views
 
@@ -222,7 +222,7 @@ casepacks/my_experiment/
 └── expected/              # Expected outputs for verification
 ```
 
-UMCP ships with **17 casepacks** spanning all 18 domains.
+UMCP ships with **17 casepacks** spanning all 20 domains.
 
 ### Core Engine
 
@@ -279,7 +279,7 @@ src/umcp_cpp/                   # Optional C++ accelerator (Tier-0 Protocol)
 
 ## Closure Domains
 
-UMCP validates across **18 domains** with **135 closure modules**, each encoding real-world measurements into the 8-channel kernel trace:
+UMCP validates across **20 domains** with **139 closure modules**, each encoding real-world measurements into the 8-channel kernel trace:
 
 ### Standard Model — 11 modules
 
@@ -680,7 +680,7 @@ umcp integrity                             # Verify SHA-256 checksums
 umcp validate .                            # Full repo validation → CONFORMANT
 
 # 3. Run the test suite
-pytest -v --tb=short                       # 7,875 tests
+pytest -v --tb=short                       # 8,239 tests
 ```
 
 ### C++ Accelerator — Build & Verify
@@ -708,7 +708,7 @@ cd src/umcp_cpp/build && ctest --output-on-failure && cd ../../..
 umcp-api                                   # Or: uvicorn umcp.api_umcp:app --reload --port 8000
 
 # Streamlit dashboard (http://localhost:8501) — see Interactive Dashboard section for details
-umcp-dashboard                             # 50 pages, 18 domains, real-time kernel exploration
+umcp-dashboard                             # 50 pages, 20 domains, real-time kernel exploration
 ```
 
 ### Development Loop — Edit, Validate, Commit
@@ -798,7 +798,7 @@ umcp validate <target>
 The GitHub Actions workflow (`.github/workflows/validate.yml`) enforces:
 
 1. **Lint** — `ruff format --check` + `ruff check` + `mypy`
-2. **Test** — Full pytest suite (7,875 tests, 121 test files)
+2. **Test** — Full pytest suite (8,239 tests, 123 test files)
 3. **Validate** — Baseline + strict validation (both must return CONFORMANT)
 
 ### Pre-Commit Protocol
@@ -817,7 +817,7 @@ This mirrors CI exactly: format → lint → type-check → integrity → test �
 
 ## Test Suite
 
-**7,875 tests** across **121 test files**, organized by tier and domain:
+**8,239 tests** across **123 test files**, organized by tier and domain:
 
 | Test Range | Domain | Tests |
 |------------|--------|------:|
@@ -906,7 +906,7 @@ The framework is anchored by peer-reviewed Zenodo publications covering the core
 │   ├── epistemic_weld.py      # Epistemic cost tracking
 │   ├── fleet/                 # Distributed validation
 │   └── dashboard/             # Modular Streamlit dashboard
-├── closures/                  # 18 domains, 135 modules
+├── closures/                  # 20 domains, 139 modules
 │   ├── standard_model/        # 31 particles, 10 theorems
 │   ├── atomic_physics/        # 118 elements, Tier-1 proof
 │   ├── quantum_mechanics/     # Double slit, entanglement, tunneling, QDM, FQHE
@@ -922,13 +922,15 @@ The framework is anchored by peer-reviewed Zenodo publications covering the core
 │   ├── dynamic_semiotics/     # 30 sign systems, semiotic kernel
 │   ├── consciousness_coherence/ # 20 systems, coherence kernel, 7 theorems
 │   ├── awareness_cognition/  # 34 organisms, 5+5 channels, 10 theorems
+│   ├── clinical_neuroscience/ # 10-channel cortical/structural/metabolic/systemic kernel
+│   ├── spacetime_memory/      # 40 entities, 8-channel budget-surface kernel, 10 theorems
 │   ├── continuity_theory/     # Continuity law closures
 │   └── finance/ & security/   # Applied domains
-├── contracts/                 # 13 mathematical contracts (YAML)
+├── contracts/                 # 21 mathematical contracts (YAML)
 ├── schemas/                   # 17 JSON Schema files
-├── canon/                     # 14 canonical anchor files
+├── canon/                     # 21 canonical anchor files
 ├── casepacks/                 # 17 reproducible validation bundles
-├── tests/                     # 121 test files, 7,875 tests
+├── tests/                     # 123 test files, 8,239 tests
 ├── paper/                     # 9 LaTeX papers + 2 Markdown papers + Bibliography.bib (140 entries)
 ├── integrity/                 # SHA-256 checksums
 ├── ledger/                    # Append-only validation log

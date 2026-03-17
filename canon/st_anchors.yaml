@@ -1,0 +1,138 @@
+# canon/st_anchors.yaml
+# Spacetime Memory Canon Anchors — UMCP.CANON.ST.v1
+# Cross-references: contracts/ST.INTSTACK.v1.yaml, closures/spacetime_memory/
+schema: canon.domain_anchors.schema.json
+id: "UMCP.CANON.ST.v1"
+version: "1.0.0"
+domain: "Spacetime Memory (Budget Surface Geometry)"
+hierarchy: "GCD > ST (Tier-2)"
+description: >
+  Canon anchors for the spacetime memory domain closure.
+  Maps 40 entities across 9 categories (subatomic, nuclear/atomic, stellar,
+  planetary, diffuse, composite, cognitive, biological, boundary) to an
+  8-channel trace vector. Formalizes the connection between space, time,
+  gravity, memory wells, and gravitational lensing as structural consequences
+  of the budget surface Gamma(omega) = omega^3 / (1 - omega + epsilon).
+  Key insight: the same budget surface geometry describes both stellar gravity
+  wells and psychological memory wells (PTSD as asymmetric well with high Delta).
+  10 theorems (T-ST-1 through T-ST-10) proven.
+
+axioms:
+  - id: "AX-ST0"
+    name: "Budget Surface Duality"
+    statement: >
+      Every spacetime entity partitions its coherence budget exhaustively:
+      what persists through collapse-return cycles (F) + what is lost (omega) = 1.
+      High F = tightly bound system (atoms, neutron stars). High omega =
+      diffuse system (intergalactic medium, nebula). No third reservoir.
+    frozen: true
+
+  - id: "AX-ST1"
+    name: "Gravity Is Budget Gradient (T-ST-1)"
+    statement: >
+      Gravitational field strength = first derivative of the budget cost
+      function d_Gamma/d_omega. This gradient is always positive
+      (d_Gamma/d_omega > 0 for all omega in (0,1)), matching the
+      universal attractiveness of gravity.
+    frozen: true
+
+  - id: "AX-ST2"
+    name: "Cubic Onset (T-ST-3)"
+    statement: >
+      Gamma ~ omega^3 for small omega (p = 3). The cubic onset gives
+      gravity the weakest scaling among fundamental forces at small
+      coupling — hierarchy from a frozen exponent, not a tuned parameter.
+    frozen: true
+
+  - id: "AX-ST3"
+    name: "Memory Wells From Iteration (T-ST-6)"
+    statement: >
+      Well depth = N * |Delta_kappa| per cycle. Mass is accumulated |kappa|
+      from iterated collapse-return cycles. A star accumulates nuclear
+      cycles; a trauma memory accumulates re-experiencing cycles. Same
+      kernel, same surface, same accumulation rule.
+    frozen: true
+
+  - id: "AX-ST4"
+    name: "Intrinsic Flatness (T-ST-9)"
+    statement: >
+      The budget surface has vanishing Gaussian curvature (K = 0)
+      everywhere. All structure comes from the embedding into
+      physical space, not intrinsic geometry — consistent with the
+      Bernoulli manifold flatness result (identity I-D1).
+    frozen: true
+
+  - id: "AX-ST5"
+    name: "Cross-Scale Consistency (T-ST-10)"
+    statement: >
+      Cognitive wells (PTSD, healthy memory) and stellar wells
+      (neutron star, black hole) obey the same kernel. The budget
+      surface is scale-invariant — same equations, same frozen
+      parameters, same geometry from quarks to galaxies to minds.
+    frozen: true
+
+symbols:
+  - name: "F"
+    tier: 1
+    definition: "Fidelity — coherence persistence across collapse-return cycles"
+  - name: "IC"
+    tier: 1
+    definition: "Integrity composite — multiplicative coherence of spacetime channels"
+  - name: "omega"
+    tier: 1
+    definition: "Drift — coherence loss per cycle"
+  - name: "Gamma"
+    tier: 0
+    definition: "Budget cost function — Gamma(omega) = omega^p / (1 - omega + epsilon)"
+
+channels:
+  - name: coherence_persistence
+    weight: 0.125
+    definition: "Fraction of kappa retained per cycle"
+  - name: cycle_return_rate
+    weight: 0.125
+    definition: "Fraction of cycles achieving tau_R < infinity"
+  - name: well_depth_norm
+    weight: 0.125
+    definition: "Accumulated |kappa| normalized to max"
+  - name: gradient_strength
+    weight: 0.125
+    definition: "d_Gamma/d_omega normalized to regime"
+  - name: tidal_symmetry
+    weight: 0.125
+    definition: "1 - |asymmetry| of d2_Gamma across well"
+  - name: trajectory_closure
+    weight: 0.125
+    definition: "Loop closure gap in (F, kappa, C) space"
+  - name: circulation_area
+    weight: 0.125
+    definition: "Enclosed area of collapse-return loop"
+  - name: heterogeneity_profile
+    weight: 0.125
+    definition: "1 - Delta/F (channel uniformity)"
+
+anchors:
+  ST-A1:
+    name: "Iron-56 nucleus (tight binding)"
+    description: "Maximum binding energy per nucleon — high F, low omega, tight well"
+    regime: "Stable"
+  ST-A2:
+    name: "Neutron star (extreme compression)"
+    description: "Deepest stellar well — very high well_depth_norm, high gradient_strength"
+    regime: "Watch"
+  ST-A3:
+    name: "Black hole (event horizon)"
+    description: "omega approaches 1 — Gamma diverges, event horizon as omega=1 pole"
+    regime: "Collapse"
+  ST-A4:
+    name: "Healthy memory (symmetric well)"
+    description: "Low Delta, high tidal_symmetry — stable retrieval with minimal distortion"
+    regime: "Stable"
+  ST-A5:
+    name: "Trauma well / PTSD (asymmetric well)"
+    description: "High Delta, low tidal_symmetry — cheap descent into re-experiencing, costly ascent out"
+    regime: "Watch"
+  ST-A6:
+    name: "Intergalactic medium (diffuse)"
+    description: "Lowest well depth, minimal gradient — near-zero coherence persistence"
+    regime: "Collapse"
