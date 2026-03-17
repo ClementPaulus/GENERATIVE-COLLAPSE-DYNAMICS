@@ -24,6 +24,7 @@ from pathlib import Path
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.lines import Line2D
 
 matplotlib.use("Agg")
 
@@ -269,13 +270,12 @@ def chart_heterogeneity_gap(records: list[EntityRecord]) -> None:
         y += 1  # gap between domains
 
     deltas_arr = np.array(deltas)
-    fid_arr = np.array(fidelities)
 
     # Main horizontal bars
-    bars = ax.barh(y_positions, deltas_arr, color=colors, alpha=0.8, height=0.7, edgecolor="white", linewidth=0.3)
+    ax.barh(y_positions, deltas_arr, color=colors, alpha=0.8, height=0.7, edgecolor="white", linewidth=0.3)
 
     # Regime markers on right edge
-    for i, (yp, d, reg) in enumerate(zip(y_positions, deltas, regimes)):
+    for yp, d, reg in zip(y_positions, deltas, regimes, strict=True):
         marker_color = REGIME_COLORS.get(reg, "#999999")
         ax.plot(d + 0.005, yp, "o", color=marker_color, markersize=4, zorder=5)
 
@@ -287,12 +287,12 @@ def chart_heterogeneity_gap(records: list[EntityRecord]) -> None:
     # Domain legend
     from matplotlib.patches import Patch
 
-    legend_elements = [Patch(facecolor=c, label=d) for d, c in DOMAIN_COLORS.items()]
+    legend_elements: list[Patch | Line2D] = [Patch(facecolor=c, label=d) for d, c in DOMAIN_COLORS.items()]
     legend_elements.extend(
         [
-            plt.Line2D([0], [0], marker="o", color="w", markerfacecolor=STABLE_COLOR, markersize=8, label="Stable"),
-            plt.Line2D([0], [0], marker="o", color="w", markerfacecolor=WATCH_COLOR, markersize=8, label="Watch"),
-            plt.Line2D([0], [0], marker="o", color="w", markerfacecolor=COLLAPSE_COLOR, markersize=8, label="Collapse"),
+            Line2D([0], [0], marker="o", color="w", markerfacecolor=STABLE_COLOR, markersize=8, label="Stable"),
+            Line2D([0], [0], marker="o", color="w", markerfacecolor=WATCH_COLOR, markersize=8, label="Watch"),
+            Line2D([0], [0], marker="o", color="w", markerfacecolor=COLLAPSE_COLOR, markersize=8, label="Collapse"),
         ]
     )
     ax.legend(handles=legend_elements, loc="lower right", fontsize=8, ncol=2)
@@ -300,7 +300,7 @@ def chart_heterogeneity_gap(records: list[EntityRecord]) -> None:
 
     fig.tight_layout()
     path = OUT_DIR / "heterogeneity_gap_landscape.png"
-    fig.savefig(path)
+    fig.savefig(str(path))
     plt.close(fig)
     print(f"  ✓ {path.name} ({len(records)} entities)")
 
@@ -330,14 +330,14 @@ def chart_fidelity_integrity_scatter(records: list[EntityRecord]) -> None:
         xy=(max_gap.F, max_gap.IC),
         xytext=(max_gap.F + 0.05, max_gap.IC + 0.05),
         fontsize=7,
-        arrowprops=dict(arrowstyle="->", color="gray", lw=0.8),
+        arrowprops={"arrowstyle": "->", "color": "gray", "lw": 0.8},
     )
     ax.annotate(
         f"{min_gap.name}\nΔ={min_gap.delta:.4f}",
         xy=(min_gap.F, min_gap.IC),
         xytext=(min_gap.F - 0.15, min_gap.IC - 0.08),
         fontsize=7,
-        arrowprops=dict(arrowstyle="->", color="gray", lw=0.8),
+        arrowprops={"arrowstyle": "->", "color": "gray", "lw": 0.8},
     )
 
     ax.set_xlabel("Fidelity  F", fontsize=13)
@@ -349,13 +349,13 @@ def chart_fidelity_integrity_scatter(records: list[EntityRecord]) -> None:
 
     from matplotlib.patches import Patch
 
-    handles = [Patch(facecolor=c, label=d) for d, c in DOMAIN_COLORS.items()]
-    handles.append(plt.Line2D([0], [0], linestyle="--", color="k", alpha=0.4, label="IC = F bound"))
+    handles: list[Patch | Line2D] = [Patch(facecolor=c, label=d) for d, c in DOMAIN_COLORS.items()]
+    handles.append(Line2D([0], [0], linestyle="--", color="k", alpha=0.4, label="IC = F bound"))
     ax.legend(handles=handles, loc="upper left", fontsize=8)
 
     fig.tight_layout()
     path = OUT_DIR / "fidelity_integrity_scatter.png"
-    fig.savefig(path)
+    fig.savefig(str(path))
     plt.close(fig)
     print(f"  ✓ {path.name}")
 
@@ -412,7 +412,7 @@ def chart_kernel_heatmap(records: list[EntityRecord]) -> None:
 
     fig.tight_layout()
     path = OUT_DIR / "cross_domain_kernel_heatmap.png"
-    fig.savefig(path)
+    fig.savefig(str(path))
     plt.close(fig)
     print(f"  ✓ {path.name} ({n} entities × {len(fields)} fields)")
 
@@ -435,7 +435,7 @@ def chart_omega_violins(records: list[EntityRecord]) -> None:
 
     parts = ax.violinplot(data, positions=range(len(data)), showmeans=True, showmedians=True, widths=0.75)
 
-    for i, pc in enumerate(parts["bodies"]):
+    for i, pc in enumerate(parts["bodies"]):  # type: ignore[arg-type]
         pc.set_facecolor(colors_list[i])
         pc.set_alpha(0.7)
     parts["cmeans"].set_color("black")
@@ -470,7 +470,7 @@ def chart_omega_violins(records: list[EntityRecord]) -> None:
 
     fig.tight_layout()
     path = OUT_DIR / "omega_distribution_violin.png"
-    fig.savefig(path)
+    fig.savefig(str(path))
     plt.close(fig)
     print(f"  ✓ {path.name}")
 
@@ -533,7 +533,7 @@ def chart_geometric_slaughter(records: list[EntityRecord]) -> None:
     )
     fig.tight_layout()
     path = OUT_DIR / "geometric_slaughter_map.png"
-    fig.savefig(path)
+    fig.savefig(str(path))
     plt.close(fig)
     print(f"  ✓ {path.name}")
 
@@ -617,9 +617,9 @@ def chart_regime_mosaic(records: list[EntityRecord]) -> None:
     ]
     fig.legend(handles=legend_elements, loc="lower center", ncol=3, fontsize=10)
 
-    fig.tight_layout(rect=[0, 0.04, 1, 0.96])
+    fig.tight_layout(rect=(0, 0.04, 1, 0.96))
     path = OUT_DIR / "regime_mosaic.png"
-    fig.savefig(path)
+    fig.savefig(str(path))
     plt.close(fig)
     print(f"  ✓ {path.name}")
 
@@ -629,7 +629,7 @@ def chart_radar_gallery(records: list[EntityRecord]) -> None:
     """Radar/spider charts: strongest vs weakest entity per domain."""
     domains = list(DOMAIN_COLORS.keys())
 
-    fig, axes = plt.subplots(2, 3, figsize=(18, 12), subplot_kw=dict(polar=True))
+    fig, axes = plt.subplots(2, 3, figsize=(18, 12), subplot_kw={"polar": True})
     axes_flat = axes.flatten()
 
     for idx, domain in enumerate(domains):
@@ -653,8 +653,8 @@ def chart_radar_gallery(records: list[EntityRecord]) -> None:
         angles = np.linspace(0, 2 * np.pi, n_channels, endpoint=False).tolist()
         angles += angles[:1]  # close the polygon
 
-        best_vals = best.trace.tolist() + [best.trace[0]]
-        worst_vals = worst.trace.tolist() + [worst.trace[0]]
+        best_vals = [*best.trace.tolist(), best.trace[0]]
+        worst_vals = [*worst.trace.tolist(), worst.trace[0]]
 
         ax.plot(angles, best_vals, "o-", color=STABLE_COLOR, linewidth=2, markersize=4, label=f"Best IC: {best.name}")
         ax.fill(angles, best_vals, color=STABLE_COLOR, alpha=0.15)
@@ -674,7 +674,7 @@ def chart_radar_gallery(records: list[EntityRecord]) -> None:
     )
     fig.tight_layout()
     path = OUT_DIR / "channel_radar_gallery.png"
-    fig.savefig(path)
+    fig.savefig(str(path))
     plt.close(fig)
     print(f"  ✓ {path.name}")
 
@@ -719,7 +719,7 @@ def chart_delta_phase_diagram(records: list[EntityRecord]) -> None:
             xy=(r.F, r.delta),
             xytext=(r.F + 0.03, r.delta + 0.015),
             fontsize=6,
-            arrowprops=dict(arrowstyle="->", color="gray", lw=0.5),
+            arrowprops={"arrowstyle": "->", "color": "gray", "lw": 0.5},
         )
 
     # Annotate bottom 3
@@ -730,7 +730,7 @@ def chart_delta_phase_diagram(records: list[EntityRecord]) -> None:
             xy=(r.F, r.delta),
             xytext=(r.F - 0.08, r.delta + 0.02),
             fontsize=6,
-            arrowprops=dict(arrowstyle="->", color="gray", lw=0.5),
+            arrowprops={"arrowstyle": "->", "color": "gray", "lw": 0.5},
         )
 
     ax.set_xlabel("Fidelity  F", fontsize=13)
@@ -746,7 +746,7 @@ def chart_delta_phase_diagram(records: list[EntityRecord]) -> None:
 
     fig.tight_layout()
     path = OUT_DIR / "delta_phase_diagram.png"
-    fig.savefig(path)
+    fig.savefig(str(path))
     plt.close(fig)
     print(f"  ✓ {path.name}")
 
@@ -759,7 +759,7 @@ def main() -> None:
 
     print("\nLoading entities from 6 domains...")
     records = gather_all_entities()
-    print(f"  Total: {len(records)} entities across {len(set(r.domain for r in records))} domains")
+    print(f"  Total: {len(records)} entities across {len({r.domain for r in records})} domains")
 
     # Summary stats
     regime_counts = {}
