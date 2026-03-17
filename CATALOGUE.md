@@ -2,7 +2,7 @@
 
 > *Omnia numerantur; nihil latet.* — Everything is counted; nothing is hidden.
 
-**Version**: UMCP v2.1.5 · **Last updated**: 2025-07-25
+**Version**: UMCP v2.1.5 · **Last updated**: 2025-07-26
 
 This document is the **single authoritative index** of every named symbol, constant, identity, lemma, definition, theorem, class, schema, contract, and structural concept in the GENERATIVE-COLLAPSE-DYNAMICS repository. Each entry carries:
 
@@ -58,11 +58,16 @@ This document is the **single authoritative index** of every named symbol, const
       - [Particle Physics Theorems (T1–T10)](#particle-physics-theorems-t1t10)
       - [Matter Genesis Theorems (T-MG-1 through T-MG-10)](#matter-genesis-theorems-t-mg-1-through-t-mg-10)
       - [Particle-Matter Map Theorems (T-PM-1 through T-PM-8)](#particle-matter-map-theorems-t-pm-1-through-t-pm-8)
+      - [Neutrino Oscillation Theorems (T11–T12)](#neutrino-oscillation-theorems-t11t12)
       - [Additional Standard Model Files](#additional-standard-model-files)
     - [3.2 Atomic Physics](#32-atomic-physics)
     - [3.3 Quantum Mechanics](#33-quantum-mechanics)
       - [FQHE Bilayer Graphene (T-FQHE-1 through T-FQHE-7)](#fqhe-bilayer-graphene-t-fqhe-1-through-t-fqhe-7)
       - [Quantum Dimer Model (T-QDM series)](#quantum-dimer-model-t-qdm-series)
+      - [TERS Near-Field Spectroscopy (T-TERS-1 through T-TERS-7)](#ters-near-field-spectroscopy-t-ters-1-through-t-ters-7)
+      - [Atom–Dot Metal-Insulator Transition (T-ADOT-1 through T-ADOT-7)](#atomdot-metalinsulator-transition-t-adot-1-through-t-adot-7)
+      - [Muon Laser Decay (T-MLD-1 through T-MLD-7)](#muon-laser-decay-t-mld-1-through-t-mld-7)
+      - [Double-Slit Interference (T-DSE-1 through T-DSE-7)](#double-slit-interference-t-dse-1-through-t-dse-7)
       - [Additional QM Files](#additional-qm-files)
     - [3.4 Nuclear Physics](#34-nuclear-physics)
       - [QGP/RHIC Theorems (T-QGP-1 through T-QGP-10)](#qgprhic-theorems-t-qgp-1-through-t-qgp-10)
@@ -85,6 +90,8 @@ This document is the **single authoritative index** of every named symbol, const
     - [3.16 Weyl Cosmology](#316-weyl-cosmology)
     - [3.17 Materials Science](#317-materials-science)
     - [3.18 Continuity Theory](#318-continuity-theory)
+    - [3.19 Clinical Neuroscience](#319-clinical-neuroscience)
+    - [3.20 Spacetime Memory](#320-spacetime-memory)
   - [Cross-References](#cross-references)
     - [4.1 Lineage Chains](#41-lineage-chains)
     - [4.2 Cross-Tier Dependencies](#42-cross-tier-dependencies)
@@ -746,8 +753,19 @@ The minimal prose interface for narrating the Canon (SP-2).
 | coupling_constants.py | Running α_s(Q²), α_em(Q²), 1-loop RGE, α_s(M_Z)=0.1180 |
 | cross_sections.py | σ(e⁺e⁻→hadrons), R-ratio, point cross section |
 | symmetry_breaking.py | Higgs VEV=246.22 GeV, Yukawa mass generation |
-| neutrino_oscillation.py | Neutrino oscillation parameters |
 | pmns_mixing.py | PMNS matrix, leptonic mixing angles |
+
+#### Neutrino Oscillation Theorems (T11–T12)
+
+**Channels (3)**: P_mu_to_e, P_mu_to_mu, P_mu_to_tau (flavor probabilities, equal weights 1/3)
+
+| Tag | ID | Name |
+|-----|-----|------|
+| `T2-ν-11` | T11 | Neutrino Oscillation as Periodic Channel Drift |
+| `T2-ν-12` | T12 | Matter-Enhanced Mixing as Regime Transition |
+
+**Source**: `closures/standard_model/neutrino_oscillation.py` (DUNE/LBNF: 1285 km baseline, 2.5 GeV peak)
+**Lineage**: AXIOM-0 → K-F → PMNS matrix → flavor probability trace → return at L/E = 4π/Δm²
 
 ---
 
@@ -800,9 +818,73 @@ The minimal prose interface for narrating the Canon (SP-2).
 
 **Source**: `closures/quantum_mechanics/quantum_dimer_model.py`
 
+#### TERS Near-Field Spectroscopy (T-TERS-1 through T-TERS-7)
+
+**Channels (8)**: polarizability_zz, field_gradient, displacement_norm, screening_factor, mode_projection, self_fraction, periodicity_fidelity, binding_sensitivity
+
+| Tag | ID | Name |
+|-----|-----|------|
+| `T2-TERS-1` | T-TERS-1 | Self/Cross Decomposition as Heterogeneity Gap |
+| `T2-TERS-2` | T-TERS-2 | Screening-Induced Sign Reversal as Seam Event |
+| `T2-TERS-3` | T-TERS-3 | Linear Regime as ε-Controlled Sensitivity |
+| `T2-TERS-4` | T-TERS-4 | Ground-State Neglect as Positional Illusion Bound |
+| `T2-TERS-5` | T-TERS-5 | Periodicity Requirement as Frozen Contract Consistency |
+| `T2-TERS-6` | T-TERS-6 | Binding Distance Sensitivity as κ Finite-Change Bound |
+| `T2-TERS-7` | T-TERS-7 | Mode-Dependent Screening as Channel Projection Theorem |
+
+**Source**: `closures/quantum_mechanics/ters_near_field.py`
+
+#### Atom–Dot Metal-Insulator Transition (T-ADOT-1 through T-ADOT-7)
+
+**Channels (8)**: metallic_stability, tunneling_norm, conductance_log, g_ratio_lowT, coupling_ratio, dot_area_norm, gap_closure, thermal_freedom
+
+| Tag | ID | Name |
+|-----|-----|------|
+| `T2-ADOT-1` | T-ADOT-1 | MI Transition as Collapse Event |
+| `T2-ADOT-2` | T-ADOT-2 | Conductance-Fidelity Ordering |
+| `T2-ADOT-3` | T-ADOT-3 | Temperature-Driven Return Trajectory |
+| `T2-ADOT-4` | T-ADOT-4 | Activation Energy as κ Sensitivity |
+| `T2-ADOT-5` | T-ADOT-5 | Extended Hubbard Heterogeneity |
+| `T2-ADOT-6` | T-ADOT-6 | Mott Gap as Seam Budget Ceiling |
+| `T2-ADOT-7` | T-ADOT-7 | Cross-Scale Universality |
+
+**Source**: `closures/quantum_mechanics/atom_dot_mi_transition.py`
+
+#### Muon Laser Decay (T-MLD-1 through T-MLD-7)
+
+**Channels (8)**: rate_modification, background_ratio_log, field_coupling_log, energy_param_log, pulse_duration_log, omega_log, signal_purity, cos2_interference
+
+| Tag | ID | Name |
+|-----|-----|------|
+| `T2-MLD-1` | T-MLD-1 | Tier-1 Kernel Identities |
+| `T2-MLD-2` | T-MLD-2 | Rate Suppression Monotonicity |
+| `T2-MLD-3` | T-MLD-3 | 50% Floor Universality |
+| `T2-MLD-4` | T-MLD-4 | Parameter Utilization Orders F |
+| `T2-MLD-5` | T-MLD-5 | IC Killed by Weakest Channel |
+| `T2-MLD-6` | T-MLD-6 | Perturbative Limit from Kernel |
+| `T2-MLD-7` | T-MLD-7 | Interference–Balance Anticorrelation |
+
+**Source**: `closures/quantum_mechanics/muon_laser_decay.py`
+
+#### Double-Slit Interference (T-DSE-1 through T-DSE-7)
+
+**Channels (8)**: coherence_visibility, path_distinguishability, slit_availability, phase_coherence, spatial_coherence, source_preparation, wavelength_resolution, environmental_isolation
+
+| Tag | ID | Name |
+|-----|-----|------|
+| `T2-DSE-1` | T-DSE-1 | Tier-1 Kernel Identities |
+| `T2-DSE-2` | T-DSE-2 | Complementarity as Channel Anticorrelation |
+| `T2-DSE-3` | T-DSE-3 | Complementarity Cliff |
+| `T2-DSE-4` | T-DSE-4 | Quantum Eraser Lifts IC Above Cliff |
+| `T2-DSE-5` | T-DSE-5 | Classical Limit as Maximum Channel Death |
+| `T2-DSE-6` | T-DSE-6 | Delayed Choice Invariance |
+| `T2-DSE-7` | T-DSE-7 | Partial Measurement Transcends Both Extremes |
+
+**Source**: `closures/quantum_mechanics/double_slit_interference.py`
+
 #### Additional QM Files
 
-wavefunction_collapse.py, entanglement.py, tunneling.py, harmonic_oscillator.py, spin_measurement.py, uncertainty_principle.py, ters_near_field.py, atom_dot_mi_transition.py, muon_laser_decay.py, double_slit_interference.py
+wavefunction_collapse.py, entanglement.py, tunneling.py, harmonic_oscillator.py, spin_measurement.py, uncertainty_principle.py
 
 ---
 
@@ -1060,6 +1142,64 @@ Butzbach scalar continuity coefficient embedded as degenerate kernel case. Demon
 
 ---
 
+### 3.19 Clinical Neuroscience
+
+**Path**: `closures/clinical_neuroscience/` · **Entities**: 35 neurocognitive states · **Contract**: CON-CN
+
+**Categories (7)**: Healthy, Altered States, Disorders of Consciousness (DOC), Neurodegenerative, Psychiatric, Developmental, TBI
+
+#### Neurocognitive Theorems (T-CN-1 through T-CN-10)
+
+**Channels (10)**: cortical_complexity, default_mode_integrity, global_integration, oscillatory_hierarchy, neuroplasticity_capacity, structural_connectivity, neurotransmitter_tone, metabolic_efficiency, autonomic_regulation, neuroimmune_status
+
+| Tag | ID | Name |
+|-----|-----|------|
+| `T2-CN-1` | T-CN-1 | Consciousness Gradient |
+| `T2-CN-2` | T-CN-2 | DMN Collapse Signature |
+| `T2-CN-3` | T-CN-3 | Entropic Brain Prediction |
+| `T2-CN-4` | T-CN-4 | Anesthesia as Collapse |
+| `T2-CN-5` | T-CN-5 | Formal Tier-1 Compliance |
+| `T2-CN-6` | T-CN-6 | Sleep-Wake Regime Cycle |
+| `T2-CN-7` | T-CN-7 | Healthy Category Supremacy |
+| `T2-CN-8` | T-CN-8 | Psychiatric Channel Dispersion |
+| `T2-CN-9` | T-CN-9 | DOC Hierarchy |
+| `T2-CN-10` | T-CN-10 | Developmental Plasticity |
+
+**Source**: `closures/clinical_neuroscience/neurocognitive_kernel.py`, `closures/clinical_neuroscience/neurocognitive_theorems.py`
+**Lineage**: AXIOM-0 → frozen_contract → kernel_optimized → neurocognitive_kernel → neurocognitive_theorems
+**Cross-refs**: Extends T-AW (§3.8 Awareness-Cognition) and T-CC (§3.7 Consciousness Coherence) into clinical domain
+
+---
+
+### 3.20 Spacetime Memory
+
+**Path**: `closures/spacetime_memory/` · **Entities**: 40 spacetime objects · **Contract**: CON-ST
+
+**Categories (9)**: Subatomic, Nuclear/Atomic, Stellar, Planetary, Diffuse, Composite, Cognitive, Biological, Boundary
+
+#### Spacetime Theorems (T-ST-1 through T-ST-10)
+
+**Channels (8)**: coherence_persistence, cycle_return_rate, well_depth_norm, gradient_strength, tidal_symmetry, trajectory_closure, circulation_area, heterogeneity_profile
+
+| Tag | ID | Name |
+|-----|-----|------|
+| `T2-ST-1` | T-ST-1 | Gravity Is Budget Gradient |
+| `T2-ST-2` | T-ST-2 | Always Attractive |
+| `T2-ST-3` | T-ST-3 | Cubic Onset (Weakest Force) |
+| `T2-ST-4` | T-ST-4 | Time Dilation Near Wells |
+| `T2-ST-5` | T-ST-5 | Gradient Universality |
+| `T2-ST-6` | T-ST-6 | Memory Wells From Iteration |
+| `T2-ST-7` | T-ST-7 | Lensing From Heterogeneity |
+| `T2-ST-8` | T-ST-8 | Arrow of Time From Asymmetry |
+| `T2-ST-9` | T-ST-9 | Intrinsic Flatness (K = 0) |
+| `T2-ST-10` | T-ST-10 | Cross-Scale Consistency |
+
+**Source**: `closures/spacetime_memory/spacetime_kernel.py`, `closures/spacetime_memory/spacetime_theorems.py`
+**Lineage**: AXIOM-0 → frozen_contract → kernel_optimized → spacetime_kernel → spacetime_theorems
+**Key insight**: GR translation — mass as accumulated |κ|, curvature as budget surface geometry, geodesic as least-budget path, event horizon as ω=1 pole
+
+---
+
 ## Cross-References
 
 ### 4.1 Lineage Chains
@@ -1092,10 +1232,14 @@ K-κ, K-IC            →   T0-valIdent                →   T2-PP-3 (Confinemen
 AI-1, AI-2, AI-3    →   T0-valIdent._validate_*    →   tier1_proof.py (10,162 tests)
 Def-11               →   T0-SeamAccum               →   T2-QGP-5 (Reconfinement gap)
 Def-13               →   T0-classifyEp              →   T0-EpVerdict (RETURN/GESTURE)
-FP-ε, FP-p, FP-tol  →   frozen_contract.py         →   All 18 domains
+FP-ε, FP-p, FP-tol  →   frozen_contract.py         →   All 20 domains
 RG-S/W/C/X           →   classify_regime()          →   Domain regime analysis
 L-6, L-30            →   IC sensitivity checks      →   T2-CC-4 (Geometric slaughter)
 I-B3                  →   composition analyzer       →   T2-PM-* (cross-scale)
+K-F, K-κ             →   T0-OptKernel.compute()     →   T2-CN-1 (Consciousness gradient)
+K-IC, L-6            →   IC sensitivity              →   T2-CN-2 (DMN collapse signature)
+AI-1, AI-2           →   T0-valIdent                →   T2-ST-5 (Gradient universality)
+Def-11               →   T0-SeamAccum               →   T2-ST-9 (Intrinsic flatness)
 ```
 
 **One-Way Rule**: Within a frozen run, Tier-1 → Tier-0 → Tier-2. No back-edges.
@@ -1135,15 +1279,15 @@ I-B3                  →   composition analyzer       →   T2-PM-* (cross-scal
 | **Tier-0 total** | **~135** |
 | | |
 | **Tier-2** | |
-| Domain closures | 18 |
-| Closure source files | ~133 |
-| Named theorems (T-XX-N format) | 103 |
-| Distinct trace vector specs | 13 |
-| Total channels across specs | ~110 |
-| Entity catalogs | 8 (≈490 entities total) |
-| **Tier-2 total** | **~275** |
+| Domain closures | 20 |
+| Closure source files | ~137 |
+| Named theorems (T-XX-N format) | 153 |
+| Distinct trace vector specs | 17 |
+| Total channels across specs | ~143 |
+| Entity catalogs | 10 (≈565 entities total) |
+| **Tier-2 total** | **~327** |
 | | |
-| **GRAND TOTAL** | **~546 tagged objects** |
+| **GRAND TOTAL** | **~598 tagged objects** |
 
 ---
 
