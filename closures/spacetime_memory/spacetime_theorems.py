@@ -17,12 +17,12 @@ The ten theorems:
     T-ST-2  Always Attractive              — the gradient is monotonically increasing
     T-ST-3  Cubic Onset (Weakest Force)    — Gamma ~ omega^3 for small omega
     T-ST-4  Time Dilation Near Wells       — arrow asymmetry increases with omega
-    T-ST-5  Equivalence Principle          — all entities follow same gradient
+    T-ST-5  Gradient Universality          — all entities follow same gradient
     T-ST-6  Memory Wells From Iteration    — well depth = N * |Delta_kappa|
     T-ST-7  Lensing From Heterogeneity     — Delta controls lensing morphology
     T-ST-8  Arrow of Time From Asymmetry   — ascent/descent ratio > 1
     T-ST-9  Intrinsic Flatness (K = 0)     — budget surface Gaussian curvature vanishes
-    T-ST-10 Cross-Domain Well Universality — cognitive and stellar wells obey same kernel
+    T-ST-10 Cross-Scale Consistency        — cognitive and stellar wells obey same kernel
 
 Every theorem rests on the three Tier-1 identities:
     F + omega = 1     (duality identity)
@@ -387,12 +387,12 @@ def prove_theorem_TST4() -> TheoremResult:
 
 
 # ═══════════════════════════════════════════════════════════════════
-# T-ST-5: EQUIVALENCE PRINCIPLE
+# T-ST-5: GRADIENT UNIVERSALITY
 # ═══════════════════════════════════════════════════════════════════
 
 
 def prove_theorem_TST5() -> TheoremResult:
-    """T-ST-5: Equivalence Principle.
+    """T-ST-5: Gradient Universality.
 
     STATEMENT:
         All entities with the same omega follow the same budget gradient,
@@ -442,7 +442,7 @@ def prove_theorem_TST5() -> TheoremResult:
     verdict = "PROVEN" if tests_passed == tests_total else "FALSIFIED"
     return TheoremResult(
         name="T-ST-5",
-        statement="Equivalence principle: gradient depends only on omega, not internal structure.",
+        statement="Gradient universality: gradient depends only on omega, not internal structure.",
         n_tests=tests_total,
         n_passed=tests_passed,
         n_failed=tests_total - tests_passed,
@@ -761,12 +761,12 @@ def prove_theorem_TST9() -> TheoremResult:
 
 
 # ═══════════════════════════════════════════════════════════════════
-# T-ST-10: CROSS-DOMAIN WELL UNIVERSALITY
+# T-ST-10: CROSS-SCALE CONSISTENCY
 # ═══════════════════════════════════════════════════════════════════
 
 
 def prove_theorem_TST10() -> TheoremResult:
-    """T-ST-10: Cross-Domain Well Universality.
+    """T-ST-10: Cross-Scale Consistency.
 
     STATEMENT:
         Cognitive memory wells and astrophysical gravity wells obey
@@ -847,7 +847,7 @@ def prove_theorem_TST10() -> TheoremResult:
     verdict = "PROVEN" if tests_passed == tests_total else "FALSIFIED"
     return TheoremResult(
         name="T-ST-10",
-        statement="Cross-domain universality: cognitive and stellar wells obey identical kernel identities.",
+        statement="Cross-scale consistency: cognitive and stellar wells obey identical kernel identities.",
         n_tests=tests_total,
         n_passed=tests_passed,
         n_failed=tests_total - tests_passed,

@@ -24,7 +24,7 @@ Channels (8, equal weights):
     6. circulation_area       — Enclosed area of collapse-return loop
     7. heterogeneity_profile  — 1 - Delta/F (channel uniformity)
 
-Entity catalog: 37 spacetime objects across 8 categories:
+Entity catalog: 40 spacetime objects across 9 categories:
     - subatomic (5):   Up quark, Electron, Proton, Neutron, Photon
     - nuclear_atomic (3): Helium-4 nucleus, Iron-56 nucleus, Carbon-12 atom
     - stellar (7):     Star, Neutron star, White dwarf, Red giant,
@@ -36,10 +36,12 @@ Entity catalog: 37 spacetime objects across 8 categories:
     - cognitive (4):   Healthy memory, Trauma well (PTSD), Habit loop,
                         Grief cycle
     - biological (4):  Neuron, Cortical network, Heart rhythm, Immune response
+    - boundary (3):    Glass, Turbulent flow, Decoherence event
 
-The cognitive category demonstrates the cross-domain unification:
-the exact same budget surface geometry that creates a stellar gravity
-well also creates a psychological memory well. PTSD is an asymmetric
+The cognitive category demonstrates a cross-domain diagnostic
+pattern: the same budget surface geometry that describes a
+stellar gravity well also describes a psychological memory
+well. PTSD is an asymmetric
 well with high heterogeneity gap Delta; a healthy habit is a symmetric
 well with low Delta.
 

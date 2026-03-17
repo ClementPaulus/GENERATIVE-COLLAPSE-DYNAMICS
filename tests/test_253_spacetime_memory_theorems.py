@@ -314,7 +314,7 @@ class TestTheoremTST4:
 
 
 class TestTheoremTST5:
-    """T-ST-5: Equivalence Principle."""
+    """T-ST-5: Gradient Universality."""
 
     def test_proven(self) -> None:
         result = prove_theorem_TST5()
@@ -374,7 +374,7 @@ class TestTheoremTST9:
 
 
 class TestTheoremTST10:
-    """T-ST-10: Cross-Domain Well Universality."""
+    """T-ST-10: Cross-Scale Consistency."""
 
     def test_proven(self) -> None:
         result = prove_theorem_TST10()
