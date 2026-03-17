@@ -17,7 +17,7 @@
 
 This is not a simulation. It is a **metrological enforcement engine**: schema conformance, kernel identity verification, regime classification, and SHA-256 integrity checking — producing a three-valued `CONFORMANT` / `NONCONFORMANT` / `NON_EVALUABLE` verdict for every run.
 
-**Python + C++ integration**: The framework is written in Python with **20 domains**, **151 closure modules**, **226 proven theorems**, and **8,239 tests**. An optional C++17 accelerator (`src/umcp_cpp/`) provides 50–80× speedup for three hot paths — kernel computation, seam chain accumulation, and SHA-256 integrity — via a pybind11 zero-copy NumPy bridge. The Python wrapper (`umcp.accel`) auto-detects the compiled extension at import time; if unavailable, every call falls back transparently to the equivalent NumPy implementation. Same formulas, same frozen parameters, same results to machine precision — the C++ layer is Tier-0 Protocol only and redefines no Tier-1 symbols.
+**Python + C++ integration**: The framework is written in Python with **20 domains**, **152 closure modules**, **241 proven theorems**, and **8,239 tests**. An optional C++17 accelerator (`src/umcp_cpp/`) provides 50–80× speedup for three hot paths — kernel computation, seam chain accumulation, and SHA-256 integrity — via a pybind11 zero-copy NumPy bridge. The Python wrapper (`umcp.accel`) auto-detects the compiled extension at import time; if unavailable, every call falls back transparently to the equivalent NumPy implementation. Same formulas, same frozen parameters, same results to machine precision — the C++ layer is Tier-0 Protocol only and redefines no Tier-1 symbols.
 
 ---
 
@@ -127,7 +127,7 @@ Every claim, measurement, validation, and narrative in UMCP follows exactly **fi
 
 ### The Three-Tier Stack
 
-Tier-1 (44 structural identities, 46 lemmas, 226 proven theorems) → Tier-0 (8,239 tests, 151 closure modules, C++17 accelerator) → Tier-2 (20 domains from particle physics to consciousness). One-way dependency. No back-edges within a frozen run.
+Tier-1 (44 structural identities, 46 lemmas, 241 proven theorems) → Tier-0 (8,239 tests, 152 closure modules, C++17 accelerator) → Tier-2 (20 domains from particle physics to consciousness). One-way dependency. No back-edges within a frozen run.
 
 ![Tier Architecture](images/10_tier_architecture.png)
 
@@ -270,7 +270,7 @@ src/umcp_cpp/                   # Optional C++ accelerator (Tier-0 Protocol)
 | **Schemas** | 17 | `schemas/*.schema.json` | JSON Schema files validating all artifacts |
 | **Canon Anchors** | 21 | `canon/*.yaml` | Domain-specific canonical reference points |
 | **Casepacks** | 24 | `casepacks/` | Reproducible validation bundles |
-| **Closure Domains** | 20 | `closures/*/` | Domain closure packages (151 modules) |
+| **Closure Domains** | 20 | `closures/*/` | Domain closure packages (152 modules) |
 | **Closure Registry** | 1 | `closures/registry.yaml` | Central listing of all closures |
 | **Validator Rules** | 1 | `validator_rules.yaml` | Semantic rule definitions (E101, W201, ...) |
 | **Integrity** | 1 | `integrity/sha256.txt` | SHA-256 checksums for 192 tracked files |
@@ -279,11 +279,11 @@ src/umcp_cpp/                   # Optional C++ accelerator (Tier-0 Protocol)
 
 ## Closure Domains
 
-UMCP validates across **20 domains** with **151 closure modules**, each encoding real-world measurements into the 8-channel kernel trace:
+UMCP validates across **20 domains** with **152 closure modules**, each encoding real-world measurements into the 8-channel kernel trace:
 
-### Standard Model — 11 modules
+### Standard Model — 12 modules
 
-The crown jewel: 31 particles mapped through the GCD kernel with **10 proven theorems** (74/74 subtests at machine precision). Part of a **226-theorem corpus** across 20 formalisms spanning particle physics, quantum mechanics, nuclear physics, materials science, evolution, consciousness, semiotics, awareness-cognition, active matter, and blast-wave dynamics.
+The crown jewel: 31 particles mapped through the GCD kernel with **27 proven theorems** (134/134 subtests at machine precision). Part of a **247-theorem corpus** across 20 formalisms spanning particle physics, quantum mechanics, nuclear physics, materials science, evolution, consciousness, semiotics, awareness-cognition, active matter, and blast-wave dynamics.
 
 | Module | What It Encodes |
 |--------|----------------|
@@ -298,6 +298,7 @@ The crown jewel: 31 particles mapped through the GCD kernel with **10 proven the
 | `pmns_mixing.py` | PMNS matrix, leptonic mixing angles |
 | `matter_genesis.py` | 7 acts of matter: 99 entities, 10 genesis theorems (T-MG-1–T-MG-10), 5 phase boundaries |
 | `particle_matter_map.py` | 6-scale cross-scale kernel, 8 matter ladder theorems (T-PM-1–T-PM-8) |
+| `sm_extended_theorems.py` | 15 extended theorems (T13–T27): PMNS, CKM, Yukawa, coupling RGE, cross sections, matter map |
 
 **Key discoveries**: Confinement visible as a 98.1% IC cliff at the quark→hadron boundary. Neutral particles show 50× IC suppression. Generation monotonicity (Gen1 < Gen2 < Gen3) confirmed in both quarks and leptons.
 
@@ -906,8 +907,8 @@ The framework is anchored by peer-reviewed Zenodo publications covering the core
 │   ├── epistemic_weld.py      # Epistemic cost tracking
 │   ├── fleet/                 # Distributed validation
 │   └── dashboard/             # Modular Streamlit dashboard
-├── closures/                  # 20 domains, 151 modules
-│   ├── standard_model/        # 31 particles, 10 theorems
+├── closures/                  # 20 domains, 152 modules
+│   ├── standard_model/        # 31 particles, 27 theorems
 │   ├── atomic_physics/        # 118 elements, Tier-1 proof
 │   ├── quantum_mechanics/     # Double slit, entanglement, tunneling, QDM, FQHE
 │   ├── nuclear_physics/       # Binding energy, decay chains, QGP/RHIC, Trinity blast wave

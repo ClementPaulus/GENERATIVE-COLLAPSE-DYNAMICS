@@ -1,6 +1,6 @@
 # Copilot Instructions for GENERATIVE-COLLAPSE-DYNAMICS
 
-**UMCP v2.1.5** · **8,239 tests** · **20 domains** · **151 closure modules** · **46 lemmas** · **44 structural identities** · **46 dashboard pages**
+**UMCP v2.1.5** · **8,239 tests** · **20 domains** · **152 closure modules** · **46 lemmas** · **44 structural identities** · **46 dashboard pages**
 
 ## Foundational Principle — Read This First
 
@@ -446,7 +446,7 @@ closures/
 ├── consciousness_coherence/  # 20 systems, coherence kernel, 7 theorems (T-CC-1 through T-CC-7)
 ├── continuity_theory/        # Continuity law closures
 ├── awareness_cognition/      # 5+5 channel awareness-aptitude kernel, 10 theorems (T-AW-1 through T-AW-10)
-├── standard_model/           # Subatomic kernel (31 particles), 10 proven theorems
+├── standard_model/           # Subatomic kernel (31 particles), 27 proven theorems
 ├── clinical_neuroscience/    # 10-channel cortical/structural/metabolic/systemic kernel
 └── spacetime_memory/         # 40 entities, 8-channel budget-surface kernel, 10 theorems (T-ST-1 through T-ST-10)
 ```
@@ -466,6 +466,7 @@ closures/
 | `particle_physics_formalism.py` | 10 proven theorems (74/74 subtests) | Duality exact to 0.0e+00 |
 | `matter_genesis.py` | Particle→atom→mass narrative, 10 theorems (T-MG-1–10) | 99 entities, 7 acts, 5 phase boundaries |
 | `particle_matter_map.py` | 6-scale cross-scale kernel analysis | 8 matter ladder theorems |
+| `sm_extended_theorems.py` | 15 extended theorems (T13–T27) | PMNS, CKM, Yukawa, couplings, cross sections, matter map |
 
 **Atomic Physics closures** (`closures/atomic_physics/`):
 
@@ -491,9 +492,9 @@ closures/
 - `integrity/sha256.txt` — SHA-256 checksums for 192 tracked files
 - `ledger/return_log.csv` — append-only validation log
 
-## Standard Model Formalism (10 Theorems)
+## Standard Model Formalism (27 Theorems)
 
-The particle physics formalism (`closures/standard_model/particle_physics_formalism.py`) proves ten theorems connecting Standard Model physics to GCD kernel patterns. All 10/10 PROVEN with 74/74 subtests. Duality identity F + ω = 1 verified to machine precision (0.0e+00).
+The particle physics formalism (`closures/standard_model/particle_physics_formalism.py`) proves ten theorems connecting Standard Model physics to GCD kernel patterns. All 10/10 PROVEN with 74/74 subtests. Duality identity F + ω = 1 verified to machine precision (0.0e+00). Additionally, `neutrino_oscillation.py` contributes 2 theorems (T11–T12) and `sm_extended_theorems.py` contributes 15 theorems (T13–T27, 60/60 subtests) covering PMNS unitarity, quark-lepton complementarity, Yukawa hierarchy, electroweak mass prediction, asymptotic freedom, coupling unification, R-ratio QCD, flavor thresholds, confinement IC cliff, nuclear binding IC recovery, genesis Tier-1 universality, gap dominance, CKM Jarlskog, six-scale verification, and leptonic CP violation.
 
 | # | Theorem | Tests | Key Result |
 |---|---------|:-----:|------------|
@@ -696,6 +697,7 @@ Extensions use `typing.Protocol` (`ExtensionProtocol` requiring `name`, `version
 | Dashboard pages | `src/umcp/dashboard/` (50 modular pages) |
 | Subatomic particles | `closures/standard_model/subatomic_kernel.py` (31 particles, 8-channel trace) |
 | SM 10 theorems | `closures/standard_model/particle_physics_formalism.py` (74/74 subtests) |
+| SM extended theorems | `closures/standard_model/sm_extended_theorems.py` (15 theorems, 60/60 subtests) |
 | Matter genesis | `closures/standard_model/matter_genesis.py` (99 entities, 10 theorems, 7 acts) |
 | CKM mixing | `closures/standard_model/ckm_mixing.py` (Wolfenstein, Jarlskog) |
 | Running couplings | `closures/standard_model/coupling_constants.py` (α_s, α_em RGE) |
