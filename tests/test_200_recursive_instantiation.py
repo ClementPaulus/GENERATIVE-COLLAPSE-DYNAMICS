@@ -318,18 +318,18 @@ class Test50Integration:
     """End-to-end integration tests."""
 
     def test_50_all_theorems_proven(self, all_theorems: list[TheoremResult]) -> None:
-        """All six theorems must prove."""
+        """All ten theorems must prove."""
         for r in all_theorems:
             assert r.verdict == "PROVEN", f"{r.name} FALSIFIED: {r.details}"
 
-    def test_51_grand_total_26_of_26(self, all_theorems: list[TheoremResult]) -> None:
+    def test_51_grand_total_43_of_43(self, all_theorems: list[TheoremResult]) -> None:
         total = sum(r.n_tests for r in all_theorems)
         passed = sum(r.n_passed for r in all_theorems)
-        assert total == 26
-        assert passed == 26
+        assert total == 43
+        assert passed == 43
 
-    def test_52_six_theorems_returned(self, all_theorems: list[TheoremResult]) -> None:
-        assert len(all_theorems) == 6
+    def test_52_ten_theorems_returned(self, all_theorems: list[TheoremResult]) -> None:
+        assert len(all_theorems) == 10
 
     def test_53_theorem_names_sequential(self, all_theorems: list[TheoremResult]) -> None:
         names = [r.name for r in all_theorems]
@@ -342,7 +342,7 @@ class Test50Integration:
         display_summary(all_theorems)
         out = capsys.readouterr().out
         assert "GRAND TOTAL" in out
-        assert "26/26" in out
+        assert "43/43" in out
 
     def test_55_display_census_runs(self, analysis: RecursiveAnalysis, capsys: pytest.CaptureFixture[str]) -> None:
         display_census(analysis)
