@@ -255,6 +255,13 @@ desktop.ini
 # Duplicate directory issue (recursive clones)
 GENERATIVE-COLLAPSE-DYNAMICS/
 
+# Temp staging / cache files
+.receipt
+.commit_msg.txt
+
+# Stale tarball artifacts
+casepacks/*.tgz
+
 # Editor / IDE (uncomment if you want them ignored repo-wide)
 .vscode/
 .idea/
