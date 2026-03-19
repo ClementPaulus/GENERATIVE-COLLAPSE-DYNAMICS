@@ -1,6 +1,6 @@
 # Copilot Instructions for GENERATIVE-COLLAPSE-DYNAMICS
 
-**UMCP v2.2.3** · **10,091 tests** · **20 domains** · **192 closure modules** · **46 lemmas** · **44 structural identities** · **46 dashboard pages**
+**UMCP v2.2.3** · **10,159 tests** · **20 domains** · **193 closure modules** · **46 lemmas** · **44 structural identities** · **46 dashboard pages**
 
 ## Foundational Principle — Read This First
 
@@ -489,7 +489,7 @@ closures/
 - `casepacks/*/manifest.json` — 24 casepack manifests referencing contract, closures, expected outputs
 - `schemas/*.schema.json` — 17 JSON Schema Draft 2020-12 files validating all artifacts
 - `canon/*.yaml` — 21 canonical anchor files (domain-specific reference points)
-- `integrity/sha256.txt` — SHA-256 checksums for 194 tracked files
+- `integrity/sha256.txt` — SHA-256 checksums for 213 tracked files
 - `ledger/return_log.csv` — append-only validation log
 
 ## Standard Model Formalism (27 Theorems)
@@ -559,11 +559,11 @@ All papers use RevTeX4-2 (`revtex4-2` document class) and share `Bibliography.bi
 
 ```bash
 pip install -e ".[all]"                     # Dev install (core + api + viz + dev tools)
-pytest                                       # 10,091 tests (pytest --collect-only | grep ":" | wc -l to verify)
+pytest                                       # 10,159 tests (pytest --collect-only | grep ":" | wc -l to verify)
 python scripts/update_integrity.py          # MUST run after changing any tracked file
 umcp validate .                             # Validate entire repo
 umcp validate casepacks/hello_world --strict # Validate casepack (strict = fail on warnings)
-umcp integrity                              # Verify SHA-256 checksums (194 tracked files)
+umcp integrity                              # Verify SHA-256 checksums (213 tracked files)
 ```
 
 **⚠️ `python scripts/update_integrity.py` is mandatory** after modifying any `src/umcp/*.py`, `contracts/*.yaml`, `closures/**`, `schemas/**`, or `scripts/*.py` file. It regenerates SHA256 checksums in `integrity/sha256.txt`. CI will fail on mismatch.
@@ -587,8 +587,8 @@ This script mirrors CI exactly and must exit 0 before committing. It runs 11 ste
 5. `git add -A` — stage all changes
 6. Repository health check — drift detection, version sync, freeze verification
 7. Update test count in documentation
-8. Regenerate SHA-256 integrity checksums (194 tracked files)
-9. Pytest bounds — collect tests and verify count within bounds (1000–10000)
+8. Regenerate SHA-256 integrity checksums (213 tracked files)
+9. Pytest bounds — collect tests and verify count within bounds (1000–11000)
 10. `umcp validate .` — contract validation (must be CONFORMANT)
 11. Axiom-0 conformance — terminology, symbol capture, frozen params check
 
@@ -625,12 +625,12 @@ umcp validate <target>
 
 ## Test Patterns
 
-**10,091 test cases** across **144 test files** in `tests/` (143 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_273_*`). Single `tests/conftest.py` provides:
+**10,159 test cases** across **145 test files** in `tests/` (144 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_273_*`). Single `tests/conftest.py` provides:
 - Frozen `RepoPaths` dataclass (session-scoped) with all critical paths
 - `@lru_cache` helpers: `_read_file()`, `_parse_json()`, `_parse_yaml()`, `_compile_schema()`
 - Convention: `test_<subject>_<behavior>()` for functions; `TestCLI*` classes with `subprocess.run` for CLI integration
 - Additional coverage: `test_fleet_worker.py` (Worker, WorkerPool, WorkerConfig), `test_insights.py` (PatternDatabase, InsightEngine)
-- Parametrized tests expand the collected items to 10,091 (verify: `pytest --collect-only | grep "::" | wc -l`)
+- Parametrized tests expand the collected items to 10,159 (verify: `pytest --collect-only | grep "::" | wc -l`)
 
 ### Test Distribution by Range
 
@@ -692,8 +692,8 @@ umcp validate <target>
 | `test_272` | Rigid body dynamics (12 entities, 6 theorems T-RB-1–T-RB-6) | 82 |
 | `test_273` | Volatility surface (12 entities, 6 theorems T-VS-1–T-VS-6) | 82 |
 | `closures/` | Closure-specific tests (kinematics phase) | 27 |
-| Infrastructure | Kernel, seam, frozen contract, extensions, uncertainty, calculator, coverage, etc. | 1,318 |
-| **TOTAL** | | **10,091** |
+| Infrastructure | Kernel, seam, frozen contract, extensions, uncertainty, calculator, coverage, etc. | 1,386 |
+| **TOTAL** | | **10,159** |
 
 ## Extension System
 
@@ -714,7 +714,7 @@ Extensions use `typing.Protocol` (`ExtensionProtocol` requiring `name`, `version
 | C++ kernel/seam/SHA-256 | `src/umcp_cpp/` (headers, pybind11 bindings, Catch2 tests) |
 | Accelerator benchmark | `scripts/benchmark_cpp.py` (correctness + performance) |
 | Fleet architecture | `src/umcp/fleet/` (Scheduler, Worker, Queue, Cache, Tenant) |
-| Dashboard pages | `src/umcp/dashboard/` (50 modular pages) |
+| Dashboard pages | `src/umcp/dashboard/` (46 modular pages) |
 | Subatomic particles | `closures/standard_model/subatomic_kernel.py` (31 particles, 8-channel trace) |
 | SM 10 theorems | `closures/standard_model/particle_physics_formalism.py` (74/74 subtests) |
 | SM extended theorems | `closures/standard_model/sm_extended_theorems.py` (15 theorems, 60/60 subtests) |

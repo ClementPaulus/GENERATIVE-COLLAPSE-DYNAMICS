@@ -13,7 +13,7 @@ The **UMCP tier system** has exactly three tiers. No half-tiers. No confusion.
 
 | Tier | Name | Role |
 |------|------|------|
-| **1** | **The Kernel** | The mathematical function K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC), its six definitions, their provable identities (F + ω = 1, IC ≤ F, IC = exp(κ), S ≈ f(F,C)), and the 46 lemmas, 38 structural identities, and 5 structural constants that follow. 3 effective degrees of freedom (F, κ, C). Domain-independent. Immutable. |
+| **1** | **The Kernel** | The mathematical function K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC), its six definitions, their provable identities (F + ω = 1, IC ≤ F, IC = exp(κ), S ≈ f(F,C)), and the 46 lemmas, 44 structural identities, and 5 structural constants that follow. 3 effective degrees of freedom (F, κ, C). Domain-independent. Immutable. |
 | **0** | **Protocol** | The operational machinery that implements and interprets the Tier-1 kernel: embedding raw data into [0,1]ⁿ, computing the kernel function, applying regime gates, running seam calculus, enforcing contracts/schemas/SHA-256 integrity, and issuing three-valued verdicts. |
 | **2** | **Expansion Space** | Domain closures that choose which real-world quantities become the trace vector c ∈ [0,1]ⁿ and weights w ∈ Δⁿ. Channel selection, entity catalogs, normalization, and domain-specific theorems. Validated through Tier-0 against Tier-1. |
 
@@ -95,7 +95,7 @@ Tier-2   EXPANSION SPACE (domain closures)
 
 ## Tier-1: The Kernel
 
-**What it is**: The kernel is the mathematical function K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC). It takes a trace vector c ∈ [0,1]ⁿ and a weight vector w ∈ Δⁿ (the probability simplex) and produces six invariants. The six formulas define the function. The identities are theorems about it. The 46 lemmas, 38 structural identities, 8 equations, and 5 structural constants are all properties of this one mathematical object.
+**What it is**: The kernel is the mathematical function K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC). It takes a trace vector c ∈ [0,1]ⁿ and a weight vector w ∈ Δⁿ (the probability simplex) and produces six invariants. The six formulas define the function. The identities are theorems about it. The 46 lemmas, 44 structural identities, 8 equations, and 5 structural constants are all properties of this one mathematical object.
 
 Tier-1 is the kernel function *and everything provable about it*. The identities are not separate objects floating above the kernel — they are consequences of the definitions. F + ω = 1 is a theorem about F(c,w) = Σ wᵢcᵢ and ω = 1 − F. IC ≤ F is a theorem about the relationship between the weighted geometric and arithmetic means. They cannot exist without the definitions that produce them.
 
