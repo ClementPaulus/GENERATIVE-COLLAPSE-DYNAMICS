@@ -137,6 +137,20 @@ class TestValidationResult:
         assert result.status == "NON_EVALUABLE"
         assert result.error_count == 0
 
+    def test_info_severity_ignored(self) -> None:
+        """Messages with severity other than error/warning are skipped."""
+        result = ValidationResult(
+            self._make_data(
+                "CONFORMANT",
+                messages=[
+                    {"severity": "info", "text": "just info"},
+                    {"severity": "error", "text": "real error"},
+                ],
+            )
+        )
+        assert result.errors == ["real error"]
+        assert result.warnings == []
+
     def test_data_preserved(self) -> None:
         """Original data dict is accessible."""
         data = self._make_data("CONFORMANT", extra=42)
