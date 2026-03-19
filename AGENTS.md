@@ -19,7 +19,7 @@ The canonical specification is `.github/copilot-instructions.md`.
 ## Lookup Protocol — CATALOGUE.md
 
 When you encounter **any** symbol, lemma, identity, theorem, class, or concept:
-→ Consult `CATALOGUE.md` first. Every formal object has a unique tag (e.g., `K-F`, `L-12`, `I-B2`) with its full definition, tier, and derivation lineage. This eliminates multi-file searches.
+→ Consult `CATALOGUE.md` first. Every formal object has a unique tag (e.g., `K-F`, `L-12`, `I-A2`) with its full definition, tier, and derivation lineage. This eliminates multi-file searches.
 
 ## First: Orientation (MANDATORY — Compounding Re-Entry)
 
@@ -120,4 +120,4 @@ Run the five diagnostic scripts to re-derive computationally:
 
 **Identity Network — 6 Connection Clusters** (run `scripts/identity_connections.py`):
 
-The 44 identities form a connected network: (1) Equator Web — c=1/2 quintuple fixed point; (2) Dual Bounds — IC ≤ F + S ≤ h(F); (3) Perturbation Chain — N3→N8→B2; (4) Composition Algebra — gap has Hellinger-like law; (5) Fixed-Point Triangle — manifold skeleton; (6) Spectral Family — f=S+κ spectrally complete, ∫g_F·S dc = π²/3.
+The 44 identities form a connected network: (1) Equator Web — c=1/2 quintuple fixed point; (2) Dual Bounds — IC ≤ F + S ≤ h(F); (3) Perturbation Chain — A6→B3→A2; (4) Composition Algebra — gap has Hellinger-like law; (5) Fixed-Point Triangle — manifold skeleton; (6) Spectral Family — f=S+κ spectrally complete, ∫g_F·S dc = π²/3.

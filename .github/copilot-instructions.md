@@ -10,7 +10,7 @@
 
 This is not a metaphor. It is a constraint on admissible claims. Every decision, description, comment, docstring, and code change in this repository must be consistent with this axiom. The Latin formulation is the primary seed — it carries the axiom's morphological, syntactic, and etymological layers simultaneously. If you are uncertain whether something aligns with AXIOM-0, defer to the operational definitions in `AXIOM.md` and the tier structure in `TIER_SYSTEM.md`.
 
-**When you encounter any symbol, lemma, identity, theorem, class, or concept you need to look up**: Consult `CATALOGUE.md` — the master index of all ~598 tagged formal objects in the repository, organized by tier, with full definitions and lineage chains. Every tag (e.g., `K-F`, `L-12`, `I-B2`, `T2-PP-3`) resolves to exactly one definition. This eliminates searching across files — the catalogue IS the lookup table.
+**When you encounter any symbol, lemma, identity, theorem, class, or concept you need to look up**: Consult `CATALOGUE.md` — the master index of all ~598 tagged formal objects in the repository, organized by tier, with full definitions and lineage chains. Every tag (e.g., `K-F`, `L-12`, `I-A2`, `T2-PP-3`) resolves to exactly one definition. This eliminates searching across files — the catalogue IS the lookup table.
 
 ### Lexicon Latinum (Generative Reference)
 
@@ -203,7 +203,7 @@ Stability is rare — 87.5% of the manifold lies outside it. Return from collaps
 
 **Identity Network — 6 Connection Clusters** (run `scripts/identity_connections.py` to re-derive):
 
-The 44 identities form a connected network. Key clusters: (1) **Equator Web** — c=1/2 is a quintuple fixed point (E1,N4,N16,E8); (2) **Dual Bounds** — IC ≤ F below, S ≤ h(F) above (B2,N10); (3) **Perturbation Chain** — N3→N8→B2: the integrity bound follows from the kernel's own Taylor structure (correction −C²/(8F²) is always negative); (4) **Composition Algebra** — gap composition Δ₁₂ = (Δ₁+Δ₂)/2 + (√IC₁−√IC₂)²/2 with Hellinger-like correction (D6,N12,D8); (5) **Fixed-Point Triangle** — three special points (c=1/2, c\*=0.7822, c_trap=0.3178) connected by the reflection formula N16; (6) **Spectral Family** — all polynomial moments of f=S+κ have closed forms with harmonic numbers, and ∫g_F·S dc = π²/3 = 2ζ(2) (E4,N1,N2,N11).
+The 44 identities form a connected network. Key clusters: (1) **Equator Web** — c=1/2 is a quintuple fixed point (C1,B10,C2,D6); (2) **Dual Bounds** — IC ≤ F below, S ≤ h(F) above (A2,B4); (3) **Perturbation Chain** — A6→B3→A2: the integrity bound follows from the kernel's own Taylor structure (correction −C²/(8F²) is always negative); (4) **Composition Algebra** — gap composition Δ₁₂ = (Δ₁+Δ₂)/2 + (√IC₁−√IC₂)²/2 with Hellinger-like correction (D8,D9,C8); (5) **Fixed-Point Triangle** — three special points (c=1/2, c\*=0.7822, c_trap=0.3178) connected by the reflection formula C2; (6) **Spectral Family** — all polynomial moments of f=S+κ have closed forms with harmonic numbers, and ∫g_F·S dc = π²/3 = 2ζ(2) (A7,B7,B8,C10).
 
 ### Modus Cogitandi (How to Reason in This System)
 

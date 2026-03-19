@@ -24,9 +24,9 @@ and the three algebraic identities F+ω=1, IC≤F, IC=exp(κ).
 Cross-references:
     L-6   (IC Sensitivity):     ∂IC/∂cᵢ = (wᵢ/cᵢ)·IC
     L-30  (IC Collapse Cascade): cᵢ → ε ⟹ IC → ε^(wᵢ)·IC_rest
-    I-B2  (Integrity Bound):    IC ≤ F
-    I-N3  (Rank-2 Closed Form): IC = √(F² − C²/4)
-    I-N8  (Log-Integrity Corr): κ = ln F − C²/(8F²) + O(C⁴)
+    I-A2  (Integrity Bound):    IC ≤ F
+    I-A6  (Rank-2 Closed Form): IC = √(F² − C²/4)
+    I-B3  (Log-Integrity Corr): κ = ln F − C²/(8F²) + O(C⁴)
     I-B12 (IC Democracy):       CV of IC-drop upon any single channel kill ≈ 7×10⁻⁴
 """
 

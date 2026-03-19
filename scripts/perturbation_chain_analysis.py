@@ -26,7 +26,7 @@ Deeper implications (Phase 2 — information-geometric structure):
     SC   corr(κ_resid, S_resid) > 0.77 S and κ couple through common C² driver
 
 Cross-references:
-    CATALOGUE.md  I-N3, I-N8, I-B2, I-N15, I-N7
+    CATALOGUE.md  I-A6, I-B3, I-A2, I-B9, I-B6
     KERNEL_SPECIFICATION.md  §4c (rank classification), Lemma 11 (Jensen proof)
     identity_verification.py  N3 (line 121), N8 (line ~210)
     identity_connections.py  Cluster 3: Perturbation Chain

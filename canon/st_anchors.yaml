@@ -59,7 +59,7 @@ axioms:
       The budget surface has vanishing Gaussian curvature (K = 0)
       everywhere. All structure comes from the embedding into
       physical space, not intrinsic geometry — consistent with the
-      Bernoulli manifold flatness result (identity I-D1).
+      Bernoulli manifold flatness result (identity I-A4).
     frozen: true
 
   - id: "AX-ST5"

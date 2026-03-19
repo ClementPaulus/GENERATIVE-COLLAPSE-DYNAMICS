@@ -6,7 +6,7 @@
 
 This document is the **single authoritative index** of every named symbol, constant, identity, lemma, definition, theorem, class, schema, contract, and structural concept in the GENERATIVE-COLLAPSE-DYNAMICS repository. Each entry carries:
 
-- **Tag**: Unique identifier (e.g., `K-F`, `L-12`, `I-B2`, `T0-SeamRecord`)
+- **Tag**: Unique identifier (e.g., `K-F`, `L-12`, `I-A2`, `T0-SeamRecord`)
 - **Tier**: 1 (kernel), 0 (protocol), or 2 (expansion)
 - **Lineage**: Where it derives from — either `AXIOM-0` (independent) or a parent tag
 - **Source**: File where it is defined or implemented
@@ -29,11 +29,12 @@ This document is the **single authoritative index** of every named symbol, const
     - [1.9 Lemmas](#19-lemmas)
       - [Core Lemmas (L1–L34)](#core-lemmas-l1l34)
       - [Extended / Empirical Lemmas (L35–L46)](#extended--empirical-lemmas-l35l46)
-    - [1.10 Structural Identities — E-Series](#110-structural-identities--e-series)
-    - [1.11 Structural Identities — B-Series](#111-structural-identities--b-series)
-    - [1.12 Structural Identities — D-Series](#112-structural-identities--d-series)
-    - [1.13 Structural Identities — N-Series](#113-structural-identities--n-series)
+    - [1.10 Structural Identities — Level A (Foundation)](#110-structural-identities--level-a-foundation)
+    - [1.11 Structural Identities — Level B (Structure)](#111-structural-identities--level-b-structure)
+    - [1.12 Structural Identities — Level C (Skeleton)](#112-structural-identities--level-c-skeleton)
+    - [1.13 Structural Identities — Level D (Convergence)](#113-structural-identities--level-d-convergence)
     - [1.14 Identity Connection Clusters](#114-identity-connection-clusters)
+    - [1.15 Derivation Tree](#115-derivation-tree)
   - [Tier-0 — Protocol](#tier-0--protocol)
     - [2.1 Kernel Engine](#21-kernel-engine)
     - [2.2 Seam Budget](#22-seam-budget)
@@ -127,7 +128,7 @@ The kernel has **4 primitive equations** and **2 derived values**, with **3 effe
 | Tag | Symbol | Name | Value | Role | Lineage | Source |
 |-----|--------|------|-------|------|---------|--------|
 | `FP-ε` | ε | Guard band | 10⁻⁸ | ε-clamp: no channel fully dies | Seam-derived | `frozen_contract.EPSILON` |
-| `FP-p` | p | Drift cost exponent | 3 | Unique integer: Cardano root x³+x−1=0 | Seam-derived (I-D5) | `frozen_contract.P_EXPONENT` |
+| `FP-p` | p | Drift cost exponent | 3 | Unique integer: Cardano root x³+x−1=0 | Seam-derived (I-D7) | `frozen_contract.P_EXPONENT` |
 | `FP-α` | α | Curvature cost coefficient | 1.0 | D_C = α·C (unit coupling) | Seam-derived | `frozen_contract.ALPHA` |
 | `FP-λ` | λ | Auxiliary coefficient | 0.2 | Return-rate adaptation speed | Seam-derived | `frozen_contract.LAMBDA` |
 | `FP-tol` | tol_seam | Seam tolerance | 0.005 | \|s\| ≤ tol for PASS | Seam-derived | `frozen_contract.TOL_SEAM` |
@@ -165,17 +166,17 @@ This reduces 6 kernel outputs to **3 effective degrees of freedom**: F, κ, C.
 
 ### 1.5 Structural Constants
 
-Five points partition the Bernoulli manifold (identity I-E7).
+Five points partition the Bernoulli manifold (identity I-D11).
 
 | Tag | Name | Value | Fisher Angle θ/π | Role | Lineage |
 |-----|------|-------|:----------------:|------|---------|
 | `SC-ε` | Guard boundary | 10⁻⁸ | ≈ 0 | No channel fully dies | FP-ε |
-| `SC-ct` | Trapping threshold | 0.3177 | 0.1908 | Γ(ω_trap) = 1 exactly | FP-ct, I-D5 |
+| `SC-ct` | Trapping threshold | 0.3177 | 0.1908 | Γ(ω_trap) = 1 exactly | FP-ct, I-D7 |
 | `SC-eq` | Equator | 0.5000 | 0.2500 | Max entropy, S + κ = 0 | AXIOM-0 |
-| `SC-c*` | Self-dual point | 0.7822 | 0.3538 | Maximizes S + κ per channel | FP-c*, I-E1 |
+| `SC-c*` | Self-dual point | 0.7822 | 0.3538 | Maximizes S + κ per channel | FP-c*, I-C1 |
 | `SC-1ε` | Perfect fidelity boundary | ≈ 1 | ≈ 0.5 | Upper clamp | FP-ε |
 
-The geodesic path ε → c_trap → ½ → c* → 1−ε sums to exactly π (identity I-B10).
+The geodesic path ε → c_trap → ½ → c* → 1−ε sums to exactly π (identity I-D11).
 
 ---
 
@@ -183,9 +184,9 @@ The geodesic path ε → c_trap → ½ → c* → 1−ε sums to exactly π (ide
 
 | Tag | Regime | Condition | Fisher Space % | Lineage |
 |-----|--------|-----------|:--------------:|---------|
-| `RG-S` | **Stable** | ω < 0.038 ∧ F > 0.90 ∧ S < 0.15 ∧ C < 0.14 | 12.5% | FP-tol, I-D7 |
-| `RG-W` | **Watch** | 0.038 ≤ ω < 0.30 (or Stable gates not all met) | 24.4% | FP-tol, I-D7 |
-| `RG-C` | **Collapse** | ω ≥ 0.30 | 63.1% | FP-tol, I-D7 |
+| `RG-S` | **Stable** | ω < 0.038 ∧ F > 0.90 ∧ S < 0.15 ∧ C < 0.14 | 12.5% | FP-tol, I-B11 |
+| `RG-W` | **Watch** | 0.038 ≤ ω < 0.30 (or Stable gates not all met) | 24.4% | FP-tol, I-B11 |
+| `RG-C` | **Collapse** | ω ≥ 0.30 | 63.1% | FP-tol, I-B11 |
 | `RG-X` | **Critical** | IC < 0.30 (severity overlay) | — | K-IC |
 
 Stable is conjunctive (all four gates). Critical is an overlay, not a regime.
@@ -224,7 +225,7 @@ Rank-1 ⊂ Rank-2 ⊂ Rank-3. Almost all real-world systems are rank-3.
 | `Def-14` | Def 14 | Contract Equivalence | Same experiment: identical (contract, closures, sources) | Def-12 |
 | `Def-16` | Def 16 | Effective Rank | rank(c,w) = number of independent kernel constraints | AI-1, AI-2, SC-1 |
 | `Def-17` | Def 17 | Rank-3 (General) | 3 DOF: F, κ, C mutually independent when n ≥ 3 heterogeneous | Def-16 |
-| `Def-18` | Def 18 | Rank-2 (Two-Channel) | 2 DOF: n=2 or effective bimodal; C = g(F,κ) determined | Def-16, I-N3 |
+| `Def-18` | Def 18 | Rank-2 (Two-Channel) | 2 DOF: n=2 or effective bimodal; C = g(F,κ) determined | Def-16, I-A6 |
 | `Def-19` | Def 19 | Rank-1 (Homogeneous) | 1 DOF: all cᵢ = c₀; IC = F, C = 0, Δ = 0 | Def-16 |
 
 **Source**: [KERNEL_SPECIFICATION.md](KERNEL_SPECIFICATION.md) §1–§4c
@@ -280,113 +281,193 @@ Rank-1 ⊂ Rank-2 ⊂ Rank-3. Almost all real-world systems are rank-3.
 | `L-36` | L36 | Generative Flux Bound | Φ_gen = Φ_collapse·(1−S) ≤ Γ(ω)·(1−S) | K-S, L-22 |
 | `L-37` | L37 | Unitarity-Horizon Transition | Δκ ≈ 0.1 marks the boundary where cumulative return cost exceeds local return credit | Def-11, FP-tol |
 | `L-38` | L38 | Universal Horizon Deficit | Cross-domain mean IC at horizon deficit ≈ 0.947 | K-IC (empirical) |
-| `L-39` | L39 | Super-Exponential Convergence | IC convergence to F is faster than exponential as C → 0 | AI-2, I-N8 |
+| `L-39` | L39 | Super-Exponential Convergence | IC convergence to F is faster than exponential as C → 0 | AI-2, I-B3 |
 | `L-40` | L40 | Stable Attractor Radius | Stable regime is an attractor: IC/F > 0.95, ω < 0.05 basin width | RG-S, L-24 |
-| `L-41` | L41 | Entropy-Integrity Anti-Correlation | S + κ ≤ ln 2; equality at c = ½; max(S+κ) = ln 2 − ½ at c* | K-S, K-κ, I-E2 |
+| `L-41` | L41 | Entropy-Integrity Anti-Correlation | S + κ ≤ ln 2; equality at c = ½; max(S+κ) = ln 2 − ½ at c* | K-S, K-κ, I-D1 |
 | `L-42` | L42 | Coherence-Entropy Product | IC·exp(S) ≤ 1; equality iff uniform trace at c = ½ | AI-3, K-S |
 | `L-43` | L43 | RCFT Convergence | Recursive application of kernel to its own outputs converges to a fixed point | K-F, K-IC |
 | `L-44` | L44 | Fractal Return Scaling | Return distances scale as power law in recursion depth | L-43 |
-| `L-45` | L45 | Seam Residual Algebra | Seam composition forms a monoid: associative with identity, verified to 5.55×10⁻¹⁷ | L-20, I-D8 |
+| `L-45` | L45 | Seam Residual Algebra | Seam composition forms a monoid: associative with identity, verified to 5.55×10⁻¹⁷ | L-20, I-C8 |
 | `L-46` | L46 | Weld Closure Composition | Composed welds satisfy: PASS₁ ∧ PASS₂ ⇒ PASS₁₂ if residuals are within tolerance | Def-13, L-27 |
 
 **Source**: [KERNEL_SPECIFICATION.md](KERNEL_SPECIFICATION.md) §4 (L1–L34), §4b (L35–L46)
 
 ---
 
-### 1.10 Structural Identities — E-Series
+### 1.10 Structural Identities — Level A (Foundation)
 
-> Exact critical-point properties. Verification: `scripts/deep_diagnostic.py`
+> *A ligat.* — A binds. 1 step from the kernel: direct from K, not derivable from any other identity. These are the irreducible roots.
 
-| Tag | ID | Name | Formula | Meaning | Lineage |
-|-----|-----|------|---------|---------|---------|
-| `I-E1` | E1 | Logistic Self-Duality | c\* = σ(1/c\*) where σ(x) = 1/(1+e⁻ˣ); c\* ≈ 0.7822 | Coupling peak is the logistic-reciprocal fixed point | AXIOM-0 |
-| `I-E2` | E2 | Coupling Maximum | max(S+κ) = (1−c\*)/c\* = exp(−1/c\*) ≈ 0.278 | Coupling peak value: odds ratio = exponential at c\* | I-E1 |
-| `I-E3` | E3 | Log-Odds Reciprocal | ln(c\*/(1−c\*)) = 1/c\* | At coupling max, log-odds equals reciprocal | I-E1 |
-| `I-E4` | E4 | Integral Conservation | ∫₀¹ [h(c)+ln(c)] dc = −½ | Average S+κ is exactly −½ | AXIOM-0 |
-| `I-E5` | E5 | Curvature Decomposition | f″(c) = −g_F(c) − 1/c² | Fisher metric: 78.2% of curvature; log pole: 21.8% | I-E1, I-D1 |
-| `I-E6` | E6 | Gap Identity | ln 2 − max(S+κ) ≈ 0.415 | Structural cost gap ≈ 59.8% of ln 2 | I-E2 |
-| `I-E7` | E7 | Fisher-Geometric Scaling | Δ and Var(arcsin(√c)) co-vanish and co-rise | Heterogeneity gap tracks Fisher angle variance | AI-2 |
-| `I-E8` | E8 | Omega Hierarchy | ω_stable < ω* < ω_collapse < ω_trap (0.038 < 0.218 < 0.300 < 0.682) | Coupling peak in Watch regime | RG-S, RG-C, FP-ωt |
+**Classification**: The 44 structural identities are organized by **derivation distance from Axiom-0**:
+- **Level A** (7): 1 step — direct from kernel definitions, mutually independent
+- **Level B** (15): 2 steps — first derivations from A
+- **Level C** (11): 3 steps — combinations and specializations of B
+- **Level D** (11): 4 steps — convergences and cross-connections of C
 
----
+Verification: `scripts/deep_diagnostic.py`, `scripts/cross_domain_bridge.py`, `scripts/cross_domain_bridge_phase2.py`, `scripts/identity_verification.py`, `scripts/identity_deep_probes.py`
 
-### 1.11 Structural Identities — B-Series
+| Tag | Name | Formula | Meaning | Derivation from K | Legacy |
+|-----|------|---------|---------|-------------------|--------|
+| `I-A1` | Duality | F + ω = 1; Σwᵢ[sin²θᵢ+cos²θᵢ] = 1 | Duality identity in Fisher coordinates | Substitution: ω := 1−F | B1 |
+| `I-A2` | Integrity Bound | IC ≤ F; equality iff all cᵢ equal | Solvability condition for trace recovery | Jensen: ln concave → κ ≤ ln F → exp(κ) ≤ F | B2 |
+| `I-A3` | Fano-Fisher | h″(c) = −g_F(c) = −1/[c(1−c)] | Entropy curvature IS the Fisher metric | Differentiation: 2nd derivative of Bernoulli entropy | N5 |
+| `I-A4` | Fisher Flatness | g_F(θ) = 1 (flat manifold) | All structure from embedding, not curvature | Differentiation: Fisher metric of Bernoulli in θ = arcsin√c | D1 |
+| `I-A5` | κ as Log-Sine | κ = Σwᵢ ln(sin²θᵢ) = 2Σwᵢ ln\|sin θᵢ\| | Log-integrity is logarithmic sine on the sphere | Substitution: c = sin²θ into κ-definition | D3 |
+| `I-A6` | Rank-2 Closed Form | IC = √(F²−C²/4) for n=2 | Exact analytical solution for 2-channel | Algebra: specialize definitions to 2 channels | N3 |
+| `I-A7` | Integral Conservation | ∫₀¹ [h(c)+ln(c)] dc = −½ | Average S+κ is exactly −½ | Integration: direct on h(c)+ln(c) | E4 |
 
-> Cross-domain bridge identities. Verification: `scripts/cross_domain_bridge.py`
-
-| Tag | ID | Name | Formula | Meaning | Lineage |
-|-----|-----|------|---------|---------|---------|
-| `I-B1` | B1 | Pythagorean Duality | F + ω = 1; Σwᵢ[sin²θᵢ+cos²θᵢ] = 1 | Duality identity IS the Pythagorean theorem | AI-1 |
-| `I-B2` | B2 | Integrity Bound | IC ≤ F; equality iff all cᵢ equal | Solvability condition for trace recovery | AI-2 |
-| `I-B3` | B3 | Composition Law | IC₁₂ = √(IC₁·IC₂); F₁₂ = (F₁+F₂)/2 | IC geometric, F arithmetic | K-F, K-IC |
-| `I-B4` | B4 | Fisher Volume | Z = −Σwᵢ ln[cᵢ(1−cᵢ)] = Σwᵢ ln[4·g_F(cᵢ)] | Partition-function analog is log-Fisher-volume | I-D1, K-κ |
-| `I-B5` | B5 | Budget Conservation | Δκ = R·τ_R − (D_ω+D_C); \|Δκ\| ≤ tol_seam | Seam budget must reconcile | Def-11, FP-tol |
-| `I-B6` | B6 | Self-Dual Maximum | f(c*) = 2cos²θ*·ln(tan θ*) | Coupling peak in Fisher coordinates | I-E1, I-D2 |
-| `I-B7` | B7 | Cubic Trapping | Γ(ω_trap) = 1; ω_trap: x³+x−1=0 (Cardano) | Below c_trap budget cannot close without R > Γ | FP-p, FP-ωt, I-D5 |
-| `I-B8` | B8 | Curvature = Fisher + Pole | f″(c) = −1/[c(1−c)] − 1/c² | Coupling curvature decomposes cleanly | I-D1, I-E5 |
-| `I-B9` | B9 | Low-Rank Closures | 5 diagnostics → 4 effective dimensions (PCA) | Closure algebra is lower-dimensional | I-D8 |
-| `I-B10` | B10 | Geodesic Partition | {ε, c_trap, ½, c*, 1−ε} partition [0, π] in Fisher space | Structural constants partition the half-circle | SC-ε through SC-1ε |
-| `I-B11` | B11 | Cost Elasticity | ε_Γ = ω·Γ′/Γ = ω(3−2ω)/(1−ω); → 4 near pole | Effective critical exponent for budget blowup | FP-p |
-| `I-B12` | B12 | IC Democracy | CV of IC-drop ≈ 7×10⁻⁴ upon channel kill | Any channel kill drops IC by same amount | L-6, L-30 |
+**What Level A establishes**: The kernel's **constraints** (A1, A2), its **geometry** (A3, A4, A5), its **exact solution** at rank-2 (A6), and its **integral average** (A7). Every other identity descends from these 7 roots.
 
 ---
 
-### 1.12 Structural Identities — D-Series
+### 1.11 Structural Identities — Level B (Structure)
 
-> Deep geometric structure. Verification: `scripts/cross_domain_bridge_phase2.py`
+> *B format.* — B shapes. 2 steps from K: each requires one Level A identity + one additional operation. This is where outputs start talking to each other.
 
-| Tag | ID | Name | Formula | Meaning | Lineage |
-|-----|-----|------|---------|---------|---------|
-| `I-D1` | D1 | Fisher Flatness | g_F(θ) = 1 (flat manifold) | All structure from embedding, not curvature | AXIOM-0 |
-| `I-D2` | D2 | f in Fisher Coordinates | f(θ) = S(θ)+κ(θ) = 2cos²θ·ln(tan θ) | S and κ are projections of one function (< 10⁻¹⁶) | K-S, K-κ |
-| `I-D3` | D3 | κ as Log-Sine | κ = Σwᵢ ln(sin²θᵢ) = 2Σwᵢ ln\|sin θᵢ\| | Log-integrity is logarithmic sine on the sphere | K-κ |
-| `I-D4` | D4 | n=2 Determinancy | c₁,₂ = F ± √(F²−IC²); real iff IC ≤ F | Integrity bound IS the solvability condition | AI-2 |
-| `I-D5` | D5 | p=3 Cardano | ω_trap is root of x³+x−1=0; discriminant Δ=−31 < 0 | p=3 is the UNIQUE integer with Cardano structure | FP-p |
-| `I-D6` | D6 | Composition Invariance | Δ(n identical copies) = Δ(1 copy) exactly | Heterogeneity gap invariant under replication | I-B3 |
-| `I-D7` | D7 | Regime Partition | Collapse 63% / Watch 24% / Stable 12.5% | Stability is rare — 87.5% outside | RG-S through RG-C |
-| `I-D8` | D8 | Dimension Collapse | 8-channel kernel: ℝ⁸ → ℝ⁴ | Kernel halves dimensionality | I-B9 |
+| Tag | Name | Formula | Meaning | Derived from | Legacy |
+|-----|------|---------|---------|-------------|--------|
+| `I-B1` | Coupling Function | f(θ) = S(θ)+κ(θ) = 2cos²θ·ln(tan θ) | S and κ are projections of one function (< 10⁻¹⁶) | I-A4 + I-A5: write S+κ in flat Fisher coords | D2 |
+| `I-B2` | Solvability | c₁,₂ = F ± √(F²−IC²); real iff IC ≤ F | Integrity bound IS the solvability condition | I-A6: invert rank-2 formula | D4 |
+| `I-B3` | Log-Integrity Correction | κ = ln F − C²/(8F²) + O(C⁴) | Taylor: heterogeneity correction always negative | I-A6: Taylor-expand rank-2 IC | N8 |
+| `I-B4` | Jensen Entropy Bound | S ≤ h(F); equality iff C = 0 | Entropy companion to integrity bound | I-A3: h concave → Jensen | N10 |
+| `I-B5` | Curvature = Fisher + Pole | f″(c) = −1/[c(1−c)] − 1/c² | Coupling curvature decomposes cleanly | I-A3: h″ = −g_F, add (ln c)″ = −1/c² | B8 |
+| `I-B6` | Asymptotic IC-Curvature | IC² ≈ F² − β_n·C²; β₂=¼ (exact), β_∞≈0.30 | IC² deviation scales linearly with C² | I-A2 + I-A6: generalize rank-2 to asymptotic | N7 |
+| `I-B7` | Fisher-Entropy Integral | ∫₀¹ g_F(c)·S(c) dc = π²/3 = 2ζ(2) | Kernel geometry tied to Basel constant | I-A3 + I-A7: integration by parts (h″ = −g_F) | N1 |
+| `I-B8` | Coupling Centroid | ∫₀¹ (S+κ)·c dc = 0 | Coupling function has zero c-weighted centroid | I-A7: c-weighted moment of coupling integral | N2 |
+| `I-B9` | Gap Taylor Expansion | Δ ≈ σ²/(2F) = C²/(8F) | Leading-order heterogeneity gap approximation | I-A6: leading Taylor of gap F − √(F²−C²/4) | N15 |
+| `I-B10` | Equator Quintuple | At c=½: S=ln 2, S+κ=0, h′=0, g_F=4, θ=π/4 | Five properties converge simultaneously | I-A1 through I-A7: evaluate all at c = ½ | N4 |
+| `I-B11` | Regime Partition | Collapse 63% / Watch 24% / Stable 12.5% | Stability is rare — 87.5% outside | I-A1: ω = 1−F + frozen gates → volume computation | D7 |
+| `I-B12` | IC Democracy | CV of IC-drop ≈ 7×10⁻⁴ upon channel kill | Any channel kill drops IC by same amount | I-A2: differentiate IC → ∂IC/∂cᵢ equal | B12 |
+| `I-B13` | Fisher Volume | Z = −Σwᵢ ln[cᵢ(1−cᵢ)] = Σwᵢ ln[4·g_F(cᵢ)] | Partition-function analog is log-Fisher-volume | I-A4: g_F → log-Fisher-volume | B4 |
+| `I-B14` | Fisher-Geometric Scaling | Δ and Var(arcsin(√c)) co-vanish and co-rise | Heterogeneity gap tracks Fisher angle variance | I-A2 + I-A4: gap tracks Fisher angle variance | E7 |
+| `I-B15` | Low-Rank Closures | 5 diagnostics → 4 effective dimensions (PCA) | Closure algebra is lower-dimensional | I-A1 + I-A2 + I-A6: constraint-counting on closures | B9 |
+
+**What Level B establishes**: The **coupling function** (B1), **solvability** (B2), **perturbation theory** (B3), the **dual bound** (B4), **curvature decomposition** (B5), the **spectral integrals** (B7, B8), the **regime landscape** (B11), and the synthesis point at the **equator** (B10).
 
 ---
 
-### 1.13 Structural Identities — N-Series
+### 1.12 Structural Identities — Level C (Skeleton)
 
-> Integral, compositional, and geometric identities. Verification: `scripts/identity_verification.py` (N1–N10), `scripts/identity_deep_probes.py` (N11–N16)
+> *C invenit.* — C discovers. 3 steps from K: combinations of B identities that reveal the manifold's skeleton — its special points, composition rules, and complete moment theory.
 
-| Tag | ID | Name | Formula | Meaning | Lineage |
-|-----|-----|------|---------|---------|---------|
-| `I-N1` | N1 | Fisher-Entropy Integral | ∫₀¹ g_F(c)·S(c) dc = π²/3 = 2ζ(2) | Kernel geometry tied to Basel constant | I-D1, K-S |
-| `I-N2` | N2 | Coupling Centroid | ∫₀¹ (S+κ)·c dc = 0 | Coupling function has zero c-weighted centroid | I-D2 |
-| `I-N3` | N3 | Rank-2 Closed Form | IC = √(F²−C²/4) for n=2 | Exact analytical solution for 2-channel | I-D4 |
-| `I-N4` | N4 | Equator Quintuple | At c=½: S=ln 2, S+κ=0, h′=0, g_F=4, θ=π/4 | Five properties converge simultaneously | K-S, I-D1, I-D2 |
-| `I-N5` | N5 | Fano-Fisher Duality | h″(c) = −g_F(c) = −1/[c(1−c)] | Entropy curvature IS the Fisher metric | K-S, I-D1 |
-| `I-N6` | N6 | Triple Peak Identity | (1−c*)/c* = exp(−1/c*) = (S+κ)\|_{c*} | Three quantities converge at coupling peak | I-E2, I-E3 |
-| `I-N7` | N7 | Asymptotic IC-Curvature | IC² ≈ F² − β_n·C²; β₂=¼ (exact), β_∞≈0.30 | IC² deviation scales linearly with C² | AI-2, I-N3 |
-| `I-N8` | N8 | Log-Integrity Correction | κ = ln F − C²/(8F²) + O(C⁴) | Taylor: heterogeneity correction always negative | I-N3 |
-| `I-N9` | N9 | Budget Cost Crossover | ∃ ω_cross ≈ 0.58: Γ(ω) = E[D_C\|ω] | Below: curvature dominates; above: drift dominates | FP-p (empirical) |
-| `I-N10` | N10 | Jensen Entropy Bound | S ≤ h(F); equality iff C = 0 | Entropy companion to integrity bound | K-S, K-F |
-| `I-N11` | N11 | Moment Family | μ_n = [(n+1)H_{n+1}−(n+2)]/[(n+1)²(n+2)] | General closed form with harmonic numbers | I-E4 |
-| `I-N12` | N12 | Gap Composition | Δ₁₂ = (Δ₁+Δ₂)/2 + (√IC₁−√IC₂)²/2 | Hellinger-like correction; gap grows for unequal IC | I-D6, I-B3 |
-| `I-N13` | N13 | Entropy Moment Table | ∫₀¹ cⁿ·S dc = 1/(n+2)² + H_{n+1}/(n+1) − H_{n+2}/(n+2) | Rational closed form for entropy moments | I-N11 |
-| `I-N14` | N14 | Jensen Entropy-Fidelity Bound | S ≤ h(F) (formalized separately from N10) | Kernel sandwiched: IC ≤ F below, S ≤ h(F) above | I-N10 |
-| `I-N15` | N15 | Gap Taylor Expansion | Δ ≈ σ²/(2F) = C²/(8F) | Leading-order heterogeneity gap approximation | I-N8 |
-| `I-N16` | N16 | Reflection Formula | f(θ)+f(π/2−θ) = 2ln(tan θ)cos(2θ) | Equator θ=π/4 is double zero; bridges c* and c_trap | I-D2 |
+| Tag | Name | Formula | Meaning | Derived from | Legacy |
+|-----|------|---------|---------|-------------|--------|
+| `I-C1` | Logistic Self-Duality | c\* = σ(1/c\*) where σ(x) = 1/(1+e⁻ˣ); c\* ≈ 0.7822 | Coupling peak is the logistic-reciprocal fixed point | I-B1: optimize coupling f → logistic fixed point | E1 |
+| `I-C2` | Reflection Formula | f(θ)+f(π/2−θ) = 2ln(tan θ)cos(2θ) | Equator θ=π/4 is double zero; bridges c\* and c_trap | I-B1: reflection symmetry of coupling | N16 |
+| `I-C3` | Composition Law | IC₁₂ = √(IC₁·IC₂); F₁₂ = (F₁+F₂)/2 | IC geometric, F arithmetic | I-B2: compose paired kernel evaluations | B3 |
+| `I-C4` | Self-Dual Maximum | f(c\*) = 2cos²θ\*·ln(tan θ\*) | Coupling peak in Fisher coordinates | I-B1: evaluate coupling at peak | B6 |
+| `I-C5` | Cubic Trapping | Γ(ω_trap) = 1; ω_trap: x³+x−1=0 (Cardano) | Below c_trap budget cannot close without R > Γ | I-B11: budget threshold from regime structure | B7 |
+| `I-C6` | Cost Elasticity | ε_Γ = ω·Γ′/Γ = ω(3−2ω)/(1−ω); → 4 near pole | Effective critical exponent for budget blowup | I-B5: differentiate budget cost function | B11 |
+| `I-C7` | Sandwich Theorem | IC ≤ F ∧ S ≤ h(F); both exact iff C = 0 | Kernel sandwiched: integrity below, entropy above | I-B4 + I-A2: combine dual bounds | N14 |
+| `I-C8` | Dimension Collapse | 8-channel kernel: ℝ⁸ → ℝ⁴ | Kernel halves dimensionality | I-B12 + I-B6: constraint counting on 8 channels | D8 |
+| `I-C9` | Budget Cost Crossover | ∃ ω_cross ≈ 0.58: Γ(ω) = E[D_C\|ω] | Below: curvature dominates; above: drift dominates | I-B3 + I-C5: where Γ(ω) = E[D_C\|ω] | N9 |
+| `I-C10` | Moment Family | μ_n = [(n+1)H_{n+1}−(n+2)]/[(n+1)²(n+2)] | General closed form with harmonic numbers | I-B7 + I-B8: generalize integrals to all moments | N11 |
+| `I-C11` | Entropy Moment Table | ∫₀¹ cⁿ·S dc = 1/(n+2)² + H_{n+1}/(n+1) − H_{n+2}/(n+2) | Rational closed form for entropy moments | I-B7: specialize Fisher-entropy integral | N13 |
+
+**What Level C establishes**: The **critical point** c\* (C1), **reflection symmetry** (C2), the **composition algebra** (C3), the **budget threshold** (C5), and the **full spectral family** (C10, C11).
+
+---
+
+### 1.13 Structural Identities — Level D (Convergence)
+
+> *D componit.* — D composes. 4 steps from K: convergences and cross-connections where the system's special points, thresholds, and algebras reference each other.
+
+| Tag | Name | Formula | Meaning | Derived from | Legacy |
+|-----|------|---------|---------|-------------|--------|
+| `I-D1` | Coupling Maximum | max(S+κ) = (1−c\*)/c\* = exp(−1/c\*) ≈ 0.278 | Coupling peak value: odds ratio = exponential at c\* | I-C1: evaluate coupling at fixed point | E2 |
+| `I-D2` | Log-Odds Reciprocal | ln(c\*/(1−c\*)) = 1/c\* | At coupling max, log-odds equals reciprocal | I-C1: log-odds at fixed point | E3 |
+| `I-D3` | Triple Peak | (1−c\*)/c\* = exp(−1/c\*) = (S+κ)\|_{c\*} | Three quantities converge at coupling peak | I-C1 + I-D1 + I-D2: synthesis | N6 |
+| `I-D4` | Curvature Decomposition | f″(c) = −g_F(c) − 1/c²; 78.2% Fisher / 21.8% pole | Numerical decomposition at c\* | I-C1 + I-B5: evaluate curvature decomposition at c\* | E5 |
+| `I-D5` | Structural Gap | ln 2 − max(S+κ) ≈ 0.415; 59.8% of ln 2 | Gap between equator maximum and coupling peak | I-D1 + I-B10: gap between equator and peak | E6 |
+| `I-D6` | Omega Hierarchy | ω_stable < ω\* < ω_collapse < ω_trap (0.038 < 0.218 < 0.300 < 0.682) | Coupling peak in Watch regime; thresholds in strict order | I-C1 + I-C5 + I-B11: ordering of all thresholds | E8 |
+| `I-D7` | p=3 Cardano | ω_trap is root of x³+x−1=0; discriminant Δ=−31 < 0 | p=3 is the UNIQUE integer with Cardano structure | I-C5: analyze trapping equation → unique integer | D5 |
+| `I-D8` | Composition Invariance | Δ(n identical copies) = Δ(1 copy) exactly | Heterogeneity gap invariant under replication | I-C3: compose identical copies → gap unchanged | D6 |
+| `I-D9` | Gap Composition | Δ₁₂ = (Δ₁+Δ₂)/2 + (√IC₁−√IC₂)²/2 | Hellinger-like correction; gap grows for unequal IC | I-C3: compose UNequal copies → Hellinger correction | N12 |
+| `I-D10` | Budget Conservation | Δκ = R·τ_R − (D_ω+D_C); \|Δκ\| ≤ tol_seam | Seam budget must reconcile | I-C3 + I-C5: composition + threshold → seam algebra | B5 |
+| `I-D11` | Geodesic Partition | {ε, c_trap, ½, c\*, 1−ε} partition [0, π] in Fisher space | Structural constants partition the half-circle | I-C1 + I-C5 + I-B10: all constants in Fisher space | B10 |
+
+**What Level D establishes**: The **convergence phenomena** (D1–D5), the **complete threshold ordering** (D6), the **Cardano uniqueness** of p=3 (D7), the **Hellinger composition algebra** (D8, D9), and the **geodesic partition** of the manifold (D11).
 
 ---
 
 ### 1.14 Identity Connection Clusters
 
-The 44 identities (E: 8, B: 12, D: 8, N: 16) form a network with 6 computationally verified clusters.
+The 44 identities (A: 7, B: 15, C: 11, D: 11) form a network with 6 computationally verified clusters. Cluster members now reference the derivation-level tags.
 
 | Tag | Cluster | Members | Structural Insight | Lineage |
 |-----|---------|---------|-------------------|---------|
-| `CC-1` | Equator Web | E1, N4, N16, E8 | c=½ is quintuple fixed point; entropy-integrity cancellation | I-E1, I-N4, I-N16, I-E8 |
-| `CC-2` | Dual Bounding Pair | B2, N10 | IC ≤ F below, S ≤ h(F) above; both exact iff C=0 | I-B2, I-N10 |
-| `CC-3` | Perturbation Chain | N3 → N8 → B2 | Integrity bound proved from kernel's Taylor structure | I-N3, I-N8, I-B2 |
-| `CC-4` | Composition Algebra | D6, N12, D8 | Monoid structure with Hellinger-like gap correction | I-D6, I-N12, I-D8 |
-| `CC-5` | Fixed-Point Triangle | E2/E3, N6, N4 | Manifold skeleton: equator + c* + c_trap | I-E2, I-E3, I-N6, I-N4 |
-| `CC-6` | Spectral Family | E4, N1, N2, N11 | f = S+κ spectrally complete; ∫g_F·S dc = π²/3 | I-E4, I-N1, I-N2, I-N11 |
+| `CC-1` | Equator Web | I-C1, I-B10, I-C2, I-D6 | c=½ is quintuple fixed point; entropy-integrity cancellation | Levels B–D |
+| `CC-2` | Dual Bounding Pair | I-A2, I-B4 | IC ≤ F below, S ≤ h(F) above; both exact iff C=0 | Levels A–B |
+| `CC-3` | Perturbation Chain | I-A6 → I-B3 → I-A2 | Integrity bound proved from kernel's Taylor structure | Levels A–B |
+| `CC-4` | Composition Algebra | I-D8, I-D9, I-C8 | Monoid structure with Hellinger-like gap correction | Levels C–D |
+| `CC-5` | Fixed-Point Triangle | I-D1/I-D2, I-D3, I-B10 | Manifold skeleton: equator + c\* + c_trap | Levels B–D |
+| `CC-6` | Spectral Family | I-A7, I-B7, I-B8, I-C10 | f = S+κ spectrally complete; ∫g_F·S dc = π²/3 | Levels A–C |
 
 **Source**: `scripts/identity_connections.py`
+
+---
+
+### 1.15 Derivation Tree
+
+> *A ligat, B format, C invenit, D componit.* — A binds, B shapes, C discovers, D composes.
+
+The 7 + 15 + 11 + 11 = 44 identities form a tree of depth 4 from Axiom-0. Legacy IDs (E/B/D/N series) are retained in the Legacy column for backward compatibility.
+
+```
+AXIOM-0 → KERNEL K
+              │
+    ┌─────────┼──────────┬──────────┬──────────┬──────────┬────────────┐
+    ▼         ▼          ▼          ▼          ▼          ▼            ▼
+   A1        A2         A3         A4         A5         A6           A7
+ (duality) (bound)  (h″=-g_F)  (flat)    (κ sinθ)  (rank-2)     (∫=-½)
+    │         │         │       ╲  │          │          │            │
+    ▼         │         ▼        ╲ │          │          ▼            ▼
+  B11        │        B4         B1◄─────────┘         B2       B7, B8
+ (regime)    │       (S≤h)    (coupling)               │            │
+    │        │         │          │                     ▼            ▼
+    ▼        ▼         ▼          ├──────────┐         C3      C10, C11
+   C5    B6,B12    C7(◄A2)       ▼          ▼       (compose)  (moments)
+ (trap)    │      (sandwich)    C1         C2          │
+    │      ▼                 (fixed pt)  (reflect)     ├─────────┐
+    ▼      │                     │                     ▼         ▼
+   D7      │                  D1, D2                  D8        D9
+ (p=3)     │                     │                 (invariant) (Hellinger)
+           │                     ▼
+    ▲      │                   D3, D5
+    │      │                 (convergences)
+    │      │                     │
+    │      └─────────────────────▼
+    └──────────────────────────►D6, D11
+                              (ordering + geodesic partition)
+```
+
+| Level | Latin | Count | Role |
+|:-----:|:-----:|:-----:|------|
+| **A** | *ligat* | 7 | **Foundation**: constraints, geometry, exact solution, integral average |
+| **B** | *format* | 15 | **Structure**: outputs interconnect; coupling, perturbation, spectra, regimes |
+| **C** | *invenit* | 11 | **Skeleton**: critical point, reflection, composition, complete moments |
+| **D** | *componit* | 11 | **Convergence**: special points, thresholds, algebras cross-reference |
+
+**Legacy → Derivation Tag Cross-Reference** (for backward compatibility):
+
+| Legacy | → New | Legacy | → New | Legacy | → New | Legacy | → New |
+|--------|-------|--------|-------|--------|-------|--------|-------|
+| E1 | I-C1 | B1 | I-A1 | D1 | I-A4 | N1 | I-B7 |
+| E2 | I-D1 | B2 | I-A2 | D2 | I-B1 | N2 | I-B8 |
+| E3 | I-D2 | B3 | I-C3 | D3 | I-A5 | N3 | I-A6 |
+| E4 | I-A7 | B4 | I-B13 | D4 | I-B2 | N4 | I-B10 |
+| E5 | I-D4 | B5 | I-D10 | D5 | I-D7 | N5 | I-A3 |
+| E6 | I-D5 | B6 | I-C4 | D6 | I-D8 | N6 | I-D3 |
+| E7 | I-B14 | B7 | I-C5 | D7 | I-B11 | N7 | I-B6 |
+| E8 | I-D6 | B8 | I-B5 | D8 | I-C8 | N8 | I-B3 |
+| — | — | B9 | I-B15 | — | — | N9 | I-C9 |
+| — | — | B10 | I-D11 | — | — | N10 | I-B4 |
+| — | — | B11 | I-C6 | — | — | N11 | I-C10 |
+| — | — | B12 | I-B12 | — | — | N12 | I-D9 |
+| — | — | — | — | — | — | N13 | I-C11 |
+| — | — | — | — | — | — | N14 | I-C7 |
+| — | — | — | — | — | — | N15 | I-B9 |
+| — | — | — | — | — | — | N16 | I-C2 |
 
 ---
 
@@ -1208,18 +1289,18 @@ Major derivation chains showing how objects flow from Axiom-0:
 
 ```
 AXIOM-0
-├── K-F (Fidelity) ──→ K-ω (Drift) ──→ AI-1 (F+ω=1) ──→ I-B1 (Pythagorean)
+├── K-F (Fidelity) ──→ K-ω (Drift) ──→ AI-1 (F+ω=1) ──→ I-A1 (Duality)
 ├── K-κ (Log-integrity) ──→ K-IC (Integrity) ──→ AI-3 (IC=exp(κ))
-│   └── AI-2 (IC≤F) ──→ I-D4 (Solvability) ──→ I-N3 (Rank-2 closed form)
-│       └── I-N8 (Taylor correction) ──→ I-B2 (Integrity bound proof via perturbation)
+│   └── AI-2 (IC≤F) ──→ I-A2 (Integrity bound) ──→ I-A6 (Rank-2 closed form)
+│       └── I-B3 (Taylor correction) ──→ I-B2 (Solvability)
 │           └── CC-3 (Perturbation Chain cluster)
-├── K-S (Entropy) ──→ I-N10 (S≤h(F)) ──→ CC-2 (Dual Bounding, with I-B2)
+├── K-S (Entropy) ──→ I-B4 (S≤h(F)) ──→ CC-2 (Dual Bounding, with I-A2)
 ├── K-C (Curvature) ──→ SC-1 (S≈f(F,C)) ──→ 3 effective DOF
-├── I-D1 (Fisher flatness) ──→ I-D2 (f = 2cos²θ·ln(tanθ))
-│   └── I-E1 (c*) ──→ I-E2/E3 (coupling max) ──→ I-N6 (triple peak) ──→ CC-5
-├── FP-p (p=3) ──→ I-D5 (Cardano) ──→ FP-ωt ──→ FP-ct ──→ I-B7 (trapping)
-├── I-E4 (∫f dc=−½) ──→ I-N11 (moment family) ──→ I-N1 (Fisher-entropy=π²/3) ──→ CC-6
-└── I-B3 (composition) ──→ I-D6 (Δ invariance) ──→ I-N12 (gap composition) ──→ CC-4
+├── I-A4 (Fisher flatness) ──→ I-B1 (f = 2cos²θ·ln(tanθ))
+│   └── I-C1 (c*) ──→ I-D1/D2 (coupling max) ──→ I-D3 (triple peak) ──→ CC-5
+├── FP-p (p=3) ──→ I-D7 (Cardano) ──→ FP-ωt ──→ FP-ct ──→ I-C5 (trapping)
+├── I-A7 (∫f dc=−½) ──→ I-C10 (moment family) ──→ I-B7 (Fisher-entropy=π²/3) ──→ CC-6
+└── I-C3 (composition) ──→ I-D8 (Δ invariance) ──→ I-D9 (gap composition) ──→ CC-4
 ```
 
 ### 4.2 Cross-Tier Dependencies
@@ -1235,7 +1316,7 @@ Def-13               →   T0-classifyEp              →   T0-EpVerdict (RETURN
 FP-ε, FP-p, FP-tol  →   frozen_contract.py         →   All 20 domains
 RG-S/W/C/X           →   classify_regime()          →   Domain regime analysis
 L-6, L-30            →   IC sensitivity checks      →   T2-CC-4 (Geometric slaughter)
-I-B3                  →   composition analyzer       →   T2-PM-* (cross-scale)
+I-C3                  →   composition analyzer       →   T2-PM-* (cross-scale)
 K-F, K-κ             →   T0-OptKernel.compute()     →   T2-CN-1 (Consciousness gradient)
 K-IC, L-6            →   IC sensitivity              →   T2-CN-2 (DMN collapse signature)
 AI-1, AI-2           →   T0-valIdent                →   T2-ST-5 (Gradient universality)
@@ -1260,7 +1341,7 @@ Def-11               →   T0-SeamAccum               →   T2-ST-9 (Intrinsic f
 | Rank types | 3 |
 | Formal definitions | 14 |
 | Lemmas (core + extended) | 46 |
-| Structural identities (E+B+D+N) | 8 + 12 + 8 + 16 = 44 (38 canonical + 6 extended) |
+| Structural identities (A+B+C+D) | 7 + 15 + 11 + 11 = 44 |
 | Connection clusters | 6 |
 | **Tier-1 total** | **136** |
 | | |
