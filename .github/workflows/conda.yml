@@ -1,0 +1,69 @@
+# Conda package build and publish workflow
+#
+# Triggers:
+#   - On version tags (v*) — builds + uploads to Anaconda.org
+#   - On push to main — builds only (smoke test)
+#   - Manual dispatch
+#
+# Prerequisites:
+#   - Repository secret ANACONDA_TOKEN with an Anaconda.org API token
+#   - Create the token at: https://anaconda.org/settings/access
+#     with scope "Allow write access to the API site"
+
+name: Conda Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  conda-build:
+    name: Build conda package
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}  # login shell for conda activation
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history for setuptools-scm if ever adopted
+
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          python-version: "3.12"
+          channels: conda-forge,defaults
+          channel-priority: strict
+          auto-update-conda: true
+
+      - name: Install conda-build and anaconda-client
+        run: |
+          conda install -y conda-build conda-verify anaconda-client
+
+      - name: Build conda package
+        run: |
+          conda build conda.recipe --output-folder conda-bld/
+
+      - name: List built packages
+        run: |
+          find conda-bld/ -name "*.tar.bz2" -o -name "*.conda" | sort
+
+      - name: Run package tests
+        run: |
+          conda build conda.recipe --test
+
+      - name: Upload to Anaconda.org
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
+        run: |
+          # Upload all built packages
+          find conda-bld/ -name "*.tar.bz2" -o -name "*.conda" | while read pkg; do
+            anaconda -t "$ANACONDA_TOKEN" upload --force --user calebpruett927 "$pkg"
+          done
