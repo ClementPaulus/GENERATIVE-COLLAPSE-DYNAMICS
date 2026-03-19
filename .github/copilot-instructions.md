@@ -1,6 +1,6 @@
 # Copilot Instructions for GENERATIVE-COLLAPSE-DYNAMICS
 
-**UMCP v2.2.3** · **8,397 tests** · **20 domains** · **174 closure modules** · **46 lemmas** · **44 structural identities** · **46 dashboard pages**
+**UMCP v2.2.3** · **9,271 tests** · **20 domains** · **182 closure modules** · **46 lemmas** · **44 structural identities** · **46 dashboard pages**
 
 ## Foundational Principle — Read This First
 
@@ -437,18 +437,18 @@ closures/
 ├── astronomy/                # Stellar classification, HR diagram
 ├── nuclear_physics/          # Binding energy, decay chains, QGP/RHIC
 ├── quantum_mechanics/        # Wavefunction, entanglement, QDM, FQHE
-├── finance/                  # Portfolio continuity, market coherence
+├── finance/                  # Portfolio continuity, market coherence, market microstructure
 ├── atomic_physics/           # 118 elements, periodic kernel, cross-scale, Tier-1 proof
 ├── materials_science/        # Element database (118 elements, 18 fields)
-├── everyday_physics/         # Thermodynamics, optics, electromagnetism, wave phenomena
+├── everyday_physics/         # Thermodynamics, optics, electromagnetism, wave phenomena, fluid dynamics
 ├── evolution/                # 40 organisms, 10-channel brain kernel, 20 species comparative neuroscience
-├── dynamic_semiotics/        # 30 sign systems, 8-channel semiotic kernel (see SEMIOTIC_CONVERGENCE.md)
-├── consciousness_coherence/  # 20 systems, coherence kernel, 7 theorems (T-CC-1 through T-CC-7)
-├── continuity_theory/        # Continuity law closures
-├── awareness_cognition/      # 5+5 channel awareness-aptitude kernel, 10 theorems (T-AW-1 through T-AW-10)
+├── dynamic_semiotics/        # 30 sign systems, 8-channel semiotic kernel, media coherence
+├── consciousness_coherence/  # 20 systems, coherence kernel, 7 theorems, altered states (15 states, 6 theorems)
+├── continuity_theory/        # Continuity law closures, topological persistence (12 spaces, 6 theorems)
+├── awareness_cognition/      # 5+5 channel awareness-aptitude kernel, 10 theorems, attention mechanisms
 ├── standard_model/           # Subatomic kernel (31 particles), 27 proven theorems
-├── clinical_neuroscience/    # 10-channel cortical/structural/metabolic/systemic kernel
-└── spacetime_memory/         # 40 entities, 8-channel budget-surface kernel, 10 theorems (T-ST-1 through T-ST-10)
+├── clinical_neuroscience/    # 10-channel cortical kernel, neurotransmitter systems (15 entities, 6 theorems)
+└── spacetime_memory/         # 40 entities, budget-surface kernel, gravitational wave memory (12 entities, 6 theorems)
 ```
 
 **Standard Model closures** (`closures/standard_model/`):
@@ -559,7 +559,7 @@ All papers use RevTeX4-2 (`revtex4-2` document class) and share `Bibliography.bi
 
 ```bash
 pip install -e ".[all]"                     # Dev install (core + api + viz + dev tools)
-pytest                                       # 8,397 tests (pytest --collect-only | grep ":" | wc -l to verify)
+pytest                                       # 9,271 tests (pytest --collect-only | grep ":" | wc -l to verify)
 python scripts/update_integrity.py          # MUST run after changing any tracked file
 umcp validate .                             # Validate entire repo
 umcp validate casepacks/hello_world --strict # Validate casepack (strict = fail on warnings)
@@ -588,7 +588,7 @@ This script mirrors CI exactly and must exit 0 before committing. It runs 11 ste
 6. Repository health check — drift detection, version sync, freeze verification
 7. Update test count in documentation
 8. Regenerate SHA-256 integrity checksums (194 tracked files)
-9. Pytest bounds — collect tests and verify count within bounds (1000–7500)
+9. Pytest bounds — collect tests and verify count within bounds (1000–10000)
 10. `umcp validate .` — contract validation (must be CONFORMANT)
 11. Axiom-0 conformance — terminology, symbol capture, frozen params check
 
@@ -625,12 +625,12 @@ umcp validate <target>
 
 ## Test Patterns
 
-**8,397 test cases** across **125 test files** in `tests/` (124 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_254_*`). Single `tests/conftest.py` provides:
+**9,271 test cases** across **134 test files** in `tests/` (133 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_263_*`). Single `tests/conftest.py` provides:
 - Frozen `RepoPaths` dataclass (session-scoped) with all critical paths
 - `@lru_cache` helpers: `_read_file()`, `_parse_json()`, `_parse_yaml()`, `_compile_schema()`
 - Convention: `test_<subject>_<behavior>()` for functions; `TestCLI*` classes with `subprocess.run` for CLI integration
 - Additional coverage: `test_fleet_worker.py` (Worker, WorkerPool, WorkerConfig), `test_insights.py` (PatternDatabase, InsightEngine)
-- Parametrized tests expand the collected items to 8,397 (verify: `pytest --collect-only | grep "::" | wc -l`)
+- Parametrized tests expand the collected items to 9,271 (verify: `pytest --collect-only | grep "::" | wc -l`)
 
 ### Test Distribution by Range
 
@@ -672,9 +672,18 @@ umcp validate <target>
 | `test_252` | Clinical neuroscience, Trinity blast wave (Taylor-Sedov, 16 theorems) | 433 |
 | `test_253` | Spacetime memory theorems (T-ST-1 through T-ST-10) | 175 |
 | `test_254` | Long-Period Radio Transients (9 sources, 10 theorems T-LPT-1–T-LPT-10) | 131 |
+| `test_255` | Photonic confinement (CPM, 12 entities, 7 theorems T-PC-1–T-PC-7) | 176 |
+| `test_256` | Neurotransmitter systems (15 entities, 6 theorems T-NT-1–T-NT-6) | 103 |
+| `test_257` | Altered states of consciousness (15 entities, 6 theorems T-AS-1–T-AS-6) | 103 |
+| `test_258` | Gravitational wave memory (12 entities, 6 theorems T-GW-1–T-GW-6) | 82 |
+| `test_259` | Market microstructure (12 entities, 6 theorems T-MM-1–T-MM-6) | 82 |
+| `test_260` | Media coherence (12 entities, 6 theorems T-MC-1–T-MC-6) | 82 |
+| `test_261` | Topological persistence (12 entities, 6 theorems T-TP-1–T-TP-6) | 82 |
+| `test_262` | Attention mechanisms (12 entities, 6 theorems T-AM-1–T-AM-6) | 82 |
+| `test_263` | Fluid dynamics (12 entities, 6 theorems T-FD-1–T-FD-6) | 82 |
 | `closures/` | Closure-specific tests (kinematics phase) | 27 |
 | Infrastructure | Kernel, seam, frozen contract, extensions, uncertainty, calculator, coverage, etc. | 1,318 |
-| **TOTAL** | | **8,397** |
+| **TOTAL** | | **9,271** |
 
 ## Extension System
 

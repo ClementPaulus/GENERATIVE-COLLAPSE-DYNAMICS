@@ -21,12 +21,14 @@ Cross-references:
 from __future__ import annotations
 
 from closures.everyday_physics.electromagnetism import compute_electromagnetic_material
+from closures.everyday_physics.fluid_dynamics import compute_fd_kernel
 from closures.everyday_physics.optics import compute_optical_material
 from closures.everyday_physics.thermodynamics import compute_thermal_material
 from closures.everyday_physics.wave_phenomena import compute_wave_system
 
 __all__ = [
     "compute_electromagnetic_material",
+    "compute_fd_kernel",
     "compute_optical_material",
     "compute_thermal_material",
     "compute_wave_system",

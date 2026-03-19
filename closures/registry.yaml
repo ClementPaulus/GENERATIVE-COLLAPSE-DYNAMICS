@@ -1132,8 +1132,8 @@ extensions:
     finance:
       archetype: kernel-centric
       channels: 8
-      entities: 25
-      theorems: 10
+      entities: 37
+      theorems: 16
       tier1_bootstrap: true
       theorem_prefix: "TF"
     atomic_physics:
@@ -1153,8 +1153,8 @@ extensions:
     everyday_physics:
       archetype: multi-subsystem
       channels: 6
-      entities: 80
-      theorems: 17
+      entities: 92
+      theorems: 23
       tier1_bootstrap: true
       theorem_prefix: "EP"
     evolution:
@@ -1167,29 +1167,29 @@ extensions:
     dynamic_semiotics:
       archetype: kernel-centric
       channels: 8
-      entities: 30
-      theorems: 10
+      entities: 42
+      theorems: 16
       tier1_bootstrap: true
       theorem_prefix: "TS"
     consciousness_coherence:
       archetype: kernel-centric
       channels: 8
-      entities: 20
-      theorems: 10
+      entities: 35
+      theorems: 16
       tier1_bootstrap: true
       theorem_prefix: "TCC"
     continuity_theory:
       archetype: kernel-centric
       channels: 8
-      entities: 20
-      theorems: 12
+      entities: 32
+      theorems: 18
       tier1_bootstrap: true
       theorem_prefix: "CT"
     awareness_cognition:
       archetype: kernel-centric
       channels: 10
-      entities: 34
-      theorems: 10
+      entities: 46
+      theorems: 16
       tier1_bootstrap: false
       theorem_prefix: "TAW"
     standard_model:
@@ -1203,15 +1203,15 @@ extensions:
     clinical_neuroscience:
       archetype: kernel-centric
       channels: 10
-      entities: 35
-      theorems: 10
+      entities: 50
+      theorems: 16
       tier1_bootstrap: false
       theorem_prefix: "TCN"
     spacetime_memory:
       archetype: kernel-centric
       channels: 8
-      entities: 40
-      theorems: 10
+      entities: 52
+      theorems: 16
       tier1_bootstrap: false
       theorem_prefix: "TST"
       note: "Backward-compatible aliases retained for prove_theorem_TST* names"
