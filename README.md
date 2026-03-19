@@ -10,7 +10,7 @@
 [![Tests: 8,397](https://img.shields.io/badge/tests-8%2C397-brightgreen.svg)](tests/)
 [![Domains: 20](https://img.shields.io/badge/domains-20-blueviolet.svg)](closures/)
 [![Closures: 174](https://img.shields.io/badge/closures-174-informational.svg)](closures/)
-[![Theorems: 226](https://img.shields.io/badge/theorems-226_proven-ff69b4.svg)](closures/)
+[![Theorems: 241](https://img.shields.io/badge/theorems-241_proven-ff69b4.svg)](closures/)
 [![Identities: 44](https://img.shields.io/badge/identities-44_verified-9cf.svg)](scripts/)
 
 > **Core Axiom**: *"Collapse is generative; only what returns is real."*
@@ -131,19 +131,31 @@ Every claim, measurement, validation, and narrative in UMCP follows exactly **fi
 
 Tier-1 (44 structural identities, 46 lemmas, 241 proven theorems) → Tier-0 (8,397 tests, 174 closure modules, C++17 accelerator) → Tier-2 (20 domains from particle physics to consciousness). One-way dependency. No back-edges within a frozen run.
 
-![Tier Architecture](images/10_tier_architecture.png)
+<p align="center">
+  <img src="images/10_tier_architecture.png" alt="Three-Tier Architecture: Tier-1 (Kernel) → Tier-0 (Protocol) → Tier-2 (Domains)" width="88%">
+  <br>
+  <sub><b>Figure 1</b> — Three-Tier Stack: Immutable kernel invariants (Tier-1) flow through protocol machinery (Tier-0) into 20 domain closures (Tier-2). No back-edges.</sub>
+</p>
 
-### Integrity Bound: IC ≤ F — Zero Violations Across 6 Domains
+### Integrity Bound: IC ≤ F — Zero Violations Across 20 Domains
 
 The integrity bound holds universally from quarks to consciousness — verified across Standard Model particles, 118 periodic table elements, 40 organisms, 30 sign systems, and 20 consciousness states. Derived independently from Axiom-0. Zero violations across all domains.
 
-![Integrity Bound Proof](images/09_integrity_bound_proof.png)
+<p align="center">
+  <img src="images/09_integrity_bound_proof.png" alt="IC ≤ F integrity bound verified across six domains with zero violations" width="88%">
+  <br>
+  <sub><b>Figure 2</b> — Integrity bound IC ≤ F holds universally. Every point is computed from real closure data — Standard Model, periodic table, evolution, semiotics, consciousness, and awareness-cognition.</sub>
+</p>
 
 ### Validation Timelapse: Living Ledger History
 
 Every `umcp validate` run is recorded in the append-only ledger. Cumulative runs, kernel invariant evolution, and conformance rate over time. *"Nihil in memoria perit."*
 
-![Validation Timelapse](images/08_validation_timelapse.png)
+<p align="center">
+  <img src="images/08_validation_timelapse.png" alt="Validation timelapse showing append-only ledger history" width="88%">
+  <br>
+  <sub><b>Figure 3</b> — Ledger evolution over time: cumulative validations, kernel invariant trends, and conformance rate. Every run is append-only — history is never rewritten.</sub>
+</p>
 
 ---
 
@@ -996,49 +1008,81 @@ The framework is anchored by peer-reviewed Zenodo publications covering the core
 
 ## Diagrams & Proofs
 
-All diagrams are generated from **real computed kernel data** — every point comes from actual closure outputs, not illustrations. Regenerate with `python scripts/generate_diagrams.py`.
+All diagrams are generated from **real computed kernel data** — every point comes from actual closure outputs, not illustrations. Regenerate with:
+
+```bash
+python scripts/generate_diagrams.py    # Outputs 10 PNGs to images/
+```
 
 ### Kernel Geometry: F vs IC for 31 Standard Model Particles
 
-The fundamental relationship: IC ≤ F — the integrity bound. Geometric integrity never exceeds arithmetic integrity. Derived independently from Axiom-0; the classical AM-GM inequality emerges as the degenerate limit when kernel structure is removed. Quarks cluster near the diagonal (channels alive), while composites and bosons collapse toward IC ≈ 0.
+The fundamental relationship: IC ≤ F — the integrity bound. Geometric integrity never exceeds arithmetic integrity. Derived independently from Axiom-0; the classical inequality emerges as the degenerate limit when kernel structure is removed. Quarks cluster near the diagonal (channels alive), while composites and bosons collapse toward IC ≈ 0.
 
-![Kernel Geometry](images/01_kernel_geometry_f_vs_ic.png)
+<p align="center">
+  <img src="images/01_kernel_geometry_f_vs_ic.png" alt="F vs IC scatter plot for 31 Standard Model particles showing the integrity bound IC ≤ F" width="88%">
+  <br>
+  <sub><b>Figure 4</b> — Kernel geometry: Fidelity vs Integrity Composite for 31 SM particles. The IC ≤ F boundary (dashed) is never crossed.</sub>
+</p>
 
 ### Theorem T3: Confinement as IC Collapse
 
 14/14 hadrons fall below the minimum quark IC. The geometric mean collapses 98.1% at the quark→hadron boundary — confinement is a measurable cliff in the kernel.
 
-![Confinement Cliff](images/02_confinement_cliff.png)
+<p align="center">
+  <img src="images/02_confinement_cliff.png" alt="Confinement cliff: IC drops 98.1% at the quark-hadron boundary" width="88%">
+  <br>
+  <sub><b>Figure 5</b> — Confinement as IC collapse: quarks (high IC) → hadrons (IC ≈ ε). The dead color channel drives geometric slaughter.</sub>
+</p>
 
 ### Complementarity Cliff: Double-Slit Interference
 
 Wave and particle are *both channel-deficient extremes*. The kernel-optimal state (S4: weak measurement) has the highest IC because all 8 channels are alive. 7/7 theorems PROVEN, 67/67 subtests.
 
-![Complementarity Cliff](images/03_complementarity_cliff.png)
+<p align="center">
+  <img src="images/03_complementarity_cliff.png" alt="Double-slit complementarity cliff showing wave and particle as channel-deficient extremes" width="88%">
+  <br>
+  <sub><b>Figure 6</b> — Complementarity cliff: wave and particle are both extremes. The kernel-optimal state is partial measurement with all channels alive (>5× IC gap).</sub>
+</p>
 
 ### Theorems T1 & T2: Spin-Statistics and Generation Monotonicity
 
 Fermions carry more fidelity than bosons (split = 0.194). Heavier generations carry more kernel fidelity: Gen1 < Gen2 < Gen3 in both quarks and leptons.
 
-![Generation and Spin Statistics](images/04_generation_spin_statistics.png)
+<p align="center">
+  <img src="images/04_generation_spin_statistics.png" alt="Spin-statistics separation and generation monotonicity in SM particles" width="88%">
+  <br>
+  <sub><b>Figure 7</b> — Spin-statistics: ⟨F⟩_fermion > ⟨F⟩_boson. Generation monotonicity: Gen1(0.576) < Gen2(0.620) < Gen3(0.649).</sub>
+</p>
 
 ### Periodic Table of Kernel Fidelity: 118 Elements
 
 Every element in the periodic table mapped through the GCD kernel. Tier-1 proof: 10,162 tests, 0 failures — F + ω = 1, IC ≤ F, IC = exp(κ) verified exhaustively.
 
-![Periodic Table Fidelity](images/05_periodic_table_fidelity.png)
+<p align="center">
+  <img src="images/05_periodic_table_fidelity.png" alt="Periodic table heatmap showing kernel fidelity for all 118 elements" width="88%">
+  <br>
+  <sub><b>Figure 8</b> — Periodic kernel: fidelity F mapped across 118 elements. Tier-1 identities hold for every element (10,162 tests, 0 failures).</sub>
+</p>
 
 ### Regime Phase Diagram
 
 The four-regime classification with real Standard Model particles mapped to their drift values. Most particles live in COLLAPSE (ω ≥ 0.30) because the 8-channel trace exposes channel death.
 
-![Regime Phase Diagram](images/06_regime_phase_diagram.png)
+<p align="center">
+  <img src="images/06_regime_phase_diagram.png" alt="Regime phase diagram: Stable (12.5%), Watch (24.4%), Collapse (63.1%)" width="88%">
+  <br>
+  <sub><b>Figure 9</b> — Regime classification: Stable (12.5%) / Watch (24.4%) / Collapse (63.1%) of Fisher space. Stability is structurally rare.</sub>
+</p>
 
 ### Cross-Scale Universality: Matter Genesis Ladder and Heterogeneity Gap
 
 The matter genesis 6-act ladder traces fidelity from fundamental particles through nuclear binding to bulk matter. IC drops 98.8% at the confinement cliff (Act II→III). The heterogeneity gap distribution spans 5 domains (SM particles, 118 elements, evolution, consciousness, semiotics) — the same kernel structure governs quarks and sign systems.
 
-![Cross-Scale Universality](images/07_cross_scale_heterogeneity_gap.png)
+<p align="center">
+  <img src="images/07_cross_scale_heterogeneity_gap.png" alt="Cross-scale heterogeneity gap spanning 5 domains from particles to semiotics" width="88%">
+  <br>
+  <sub><b>Figure 10</b> — Cross-scale universality: the heterogeneity gap Δ = F − IC spans quarks, atoms, organisms, sign systems, and consciousness states. Same kernel, same identities.</sub>
+</p>
 
 ---
 
@@ -1067,7 +1111,7 @@ python scripts/identity_deep_probes.py      # N11-N16: moment families, composit
 | 5 | **4-dimensional closure algebra** — 5 diagnostics span 4 effective dimensions | Half the degrees of freedom are constrained by the kernel |
 | 6 | **Stability is rare** — Collapse 63% / Watch 24% / Stable 12.5% of Fisher space | Return from collapse to stability is the exception, not the norm |
 
-### Across 20 Domains and 226 Proven Theorems
+### Across 20 Domains and 241 Proven Theorems
 
 1. **Confinement is a cliff**: IC drops 98.1% at the quark→hadron boundary — confinement is visible as geometric-mean collapse in the kernel trace
 
