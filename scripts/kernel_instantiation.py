@@ -134,7 +134,7 @@ print(
     f"total={d.costs.total_debit:.6f} dominant={d.costs.dominant}"
 )
 print("  Sensitivity per channel:")
-for i, (ci, si) in enumerate(zip(c_diag, d.sensitivity)):
+for i, (ci, si) in enumerate(zip(c_diag, d.sensitivity, strict=True)):
     print(f"    ch[{i}] c={ci:.2f}  dIC/dc={si:.6f}")
 print(f"  Sensitivity ratio (max/min): {d.sensitivity_ratio:.1f}")
 print(f"  Pathological? {d.sensitivity_pathological}")
