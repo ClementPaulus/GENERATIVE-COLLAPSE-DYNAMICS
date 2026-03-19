@@ -39,7 +39,7 @@ class TheoremResult:
 # ── T-KN-1: Elastic Conservation Law ──────────────────────────────
 
 
-def prove_elastic_conservation() -> TheoremResult:
+def theorem_KN1_elastic_conservation() -> TheoremResult:
     """All elastic collisions conserve momentum AND energy."""
     from closures.kinematics.momentum_dynamics import compute_collision_1d
 
@@ -69,7 +69,7 @@ def prove_elastic_conservation() -> TheoremResult:
 # ── T-KN-2: Energy Additivity ─────────────────────────────────────
 
 
-def prove_energy_additivity() -> TheoremResult:
+def theorem_KN2_energy_additivity() -> TheoremResult:
     """E_mechanical = E_kinetic + E_potential to machine precision."""
     from closures.kinematics.energy_mechanics import compute_mechanical_energy
 
@@ -107,7 +107,7 @@ def prove_energy_additivity() -> TheoremResult:
 # ── T-KN-3: Work-Energy Theorem ───────────────────────────────────
 
 
-def prove_work_energy_theorem() -> TheoremResult:
+def theorem_KN3_work_energy_theorem() -> TheoremResult:
     """Work-energy theorem: valid when W_net = ΔKE, invalid otherwise."""
     from closures.kinematics.energy_mechanics import verify_work_energy_theorem
 
@@ -140,7 +140,7 @@ def prove_work_energy_theorem() -> TheoremResult:
 # ── T-KN-4: Energy Conservation Detection ─────────────────────────
 
 
-def prove_energy_conservation_detection() -> TheoremResult:
+def theorem_KN4_energy_conservation_detection() -> TheoremResult:
     """Conservation detector: constant series → conserved, decaying → not."""
     from closures.kinematics.energy_mechanics import verify_energy_conservation
 
@@ -184,7 +184,7 @@ def prove_energy_conservation_detection() -> TheoremResult:
 # ── T-KN-5: Oscillation Classification ────────────────────────────
 
 
-def prove_oscillation_classification() -> TheoremResult:
+def theorem_KN5_oscillation_classification() -> TheoremResult:
     """Sinusoidal → oscillatory; linear/constant → Non_Oscillatory."""
     from closures.kinematics.phase_space_return import detect_oscillation
 
@@ -238,7 +238,7 @@ def prove_oscillation_classification() -> TheoremResult:
 # ── T-KN-6: Stability Ordering ────────────────────────────────────
 
 
-def prove_stability_ordering() -> TheoremResult:
+def theorem_KN6_stability_ordering() -> TheoremResult:
     """Tighter trajectories have higher K_stability than wider ones."""
     from closures.kinematics.kinematic_stability import compute_kinematic_stability
 
@@ -296,7 +296,7 @@ def prove_stability_ordering() -> TheoremResult:
 # ── T-KN-7: Stability Trend Detection ─────────────────────────────
 
 
-def prove_stability_trend() -> TheoremResult:
+def theorem_KN7_stability_trend() -> TheoremResult:
     """Monotone K series correctly classified as Degrading/Improving/Stable."""
     from closures.kinematics.kinematic_stability import compute_stability_trend
 
@@ -333,7 +333,7 @@ def prove_stability_trend() -> TheoremResult:
 # ── T-KN-8: Motion Regime Classification ──────────────────────────
 
 
-def prove_motion_regime_classification() -> TheoremResult:
+def theorem_KN8_motion_regime_classification() -> TheoremResult:
     """Five regimes reachable via explicit parameter combinations."""
     from closures.kinematics.kinematic_stability import classify_motion_regime
 
@@ -373,7 +373,7 @@ def prove_motion_regime_classification() -> TheoremResult:
 # ── T-KN-9: Phase Space Geometry ──────────────────────────────────
 
 
-def prove_phase_space_geometry() -> TheoremResult:
+def theorem_KN9_phase_space_geometry() -> TheoremResult:
     """Phase trajectories have non-negative path length and enclosed area."""
     from closures.kinematics.phase_space_return import compute_phase_trajectory
 
@@ -427,7 +427,7 @@ def prove_phase_space_geometry() -> TheoremResult:
 # ── T-KN-10: Cross-Module Consistency Chain ───────────────────────
 
 
-def prove_cross_module_consistency() -> TheoremResult:
+def theorem_KN10_cross_module_consistency() -> TheoremResult:
     """Full chain: kinematics → energy → phase → stability is consistent."""
     from closures.kinematics.energy_mechanics import (
         compute_mechanical_energy,
@@ -533,17 +533,29 @@ def prove_cross_module_consistency() -> TheoremResult:
 # ── Public interface ──────────────────────────────────────────────
 
 ALL_THEOREMS = [
-    prove_elastic_conservation,
-    prove_energy_additivity,
-    prove_work_energy_theorem,
-    prove_energy_conservation_detection,
-    prove_oscillation_classification,
-    prove_stability_ordering,
-    prove_stability_trend,
-    prove_motion_regime_classification,
-    prove_phase_space_geometry,
-    prove_cross_module_consistency,
+    theorem_KN1_elastic_conservation,
+    theorem_KN2_energy_additivity,
+    theorem_KN3_work_energy_theorem,
+    theorem_KN4_energy_conservation_detection,
+    theorem_KN5_oscillation_classification,
+    theorem_KN6_stability_ordering,
+    theorem_KN7_stability_trend,
+    theorem_KN8_motion_regime_classification,
+    theorem_KN9_phase_space_geometry,
+    theorem_KN10_cross_module_consistency,
 ]
+
+# Backward-compatible aliases for external callers
+prove_elastic_conservation = theorem_KN1_elastic_conservation
+prove_energy_additivity = theorem_KN2_energy_additivity
+prove_work_energy_theorem = theorem_KN3_work_energy_theorem
+prove_energy_conservation_detection = theorem_KN4_energy_conservation_detection
+prove_oscillation_classification = theorem_KN5_oscillation_classification
+prove_stability_ordering = theorem_KN6_stability_ordering
+prove_stability_trend = theorem_KN7_stability_trend
+prove_motion_regime_classification = theorem_KN8_motion_regime_classification
+prove_phase_space_geometry = theorem_KN9_phase_space_geometry
+prove_cross_module_consistency = theorem_KN10_cross_module_consistency
 
 
 def run_all_theorems() -> list[TheoremResult]:

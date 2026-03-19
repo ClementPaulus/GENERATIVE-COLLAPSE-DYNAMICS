@@ -12,6 +12,7 @@ Violations checked:
   T003  Hardcoded frozen parameters (epsilon/tol not from frozen_contract)
   T004  Boolean verdicts (True/False where three-valued is required)
   T005  Prohibited terminology ("hyperparameter", "rederives", "recovers")
+  T006  Cross-domain import isolation (closures must not import other domains directly)
 
 Exit codes:
     0 = No violations found
@@ -193,6 +194,33 @@ T005_ALLOWLIST_FILES = T001_ALLOWLIST_FILES | {
     "paper/",
 }
 
+# T006: Cross-domain import isolation
+# Closure domains should connect through the kernel (hub-and-spoke), not
+# import directly from each other. Known existing cross-domain edges are
+# allowlisted below.
+T006_CROSS_DOMAIN_IMPORT = re.compile(r"^\s*(?:from|import)\s+closures\.(\w+)\b")
+
+T006_ALLOWLIST: set[tuple[str, str]] = {
+    # (importing_domain, imported_domain) — known existing edges
+    ("standard_model", "nuclear_physics"),
+    ("standard_model", "atomic_physics"),
+    ("materials_science", "atomic_physics"),
+    ("materials_science", "rcft"),
+    ("everyday_physics", "materials_science"),
+    ("everyday_physics", "quantum_mechanics"),
+    ("everyday_physics", "standard_model"),
+    ("everyday_physics", "atomic_physics"),
+    ("evolution", "rcft"),
+    ("continuity_theory", "consciousness_coherence"),
+    ("continuity_theory", "evolution"),
+    # Cross-domain theorem files referencing other domains for bridges
+    ("atomic_physics", "nuclear_physics"),
+    ("atomic_physics", "materials_science"),
+    ("atomic_physics", "standard_model"),
+    ("quantum_mechanics", "rcft"),
+    ("gcd", "rcft"),
+}
+
 
 @dataclass
 class Violation:
@@ -347,6 +375,31 @@ def check_file(filepath: Path, repo_root: Path) -> list[Violation]:
                         )
                     )
 
+        # T006: Cross-domain import isolation
+        # Only applies to files INSIDE domain subdirectories (closures/<domain>/*.py),
+        # not to top-level cross-domain bridge files (closures/scale_ladder.py etc.)
+        if rel_path.startswith("closures/") and rel_path.endswith(".py"):
+            parts = rel_path.split("/")
+            if len(parts) >= 3:  # closures/<domain>/<file>.py
+                importing_domain = parts[1]
+                m = T006_CROSS_DOMAIN_IMPORT.match(line)
+                if m:
+                    imported_domain = m.group(1)
+                    if (
+                        imported_domain != importing_domain
+                        and (importing_domain, imported_domain) not in T006_ALLOWLIST
+                    ):
+                        violations.append(
+                            Violation(
+                                code="T006",
+                                file=rel_path,
+                                line=line_num,
+                                text=line.strip(),
+                                message=f"Cross-domain import: {importing_domain} → {imported_domain}. "
+                                "Domains should connect through the kernel. Add to T006_ALLOWLIST if intentional.",
+                            )
+                        )
+
     return violations
 
 
@@ -372,6 +425,10 @@ def check_repo(root: Path, target: Path | None = None) -> ConformanceReport:
         "GENERATIVE-COLLAPSE-DYNAMICS",
     }
 
+    # Also skip any directory starting with ".venv" (e.g., .venv-1, .venv-2)
+    def _in_skip_dir(parts: tuple[str, ...]) -> bool:
+        return any(part in skip_dirs or part.startswith(".venv") for part in parts)
+
     for filepath in sorted(search_root.rglob("*")):
         if not filepath.is_file():
             continue
@@ -382,7 +439,7 @@ def check_repo(root: Path, target: Path | None = None) -> ConformanceReport:
             rel_parts = filepath.relative_to(search_root).parts
         except ValueError:
             continue
-        if any(part in skip_dirs for part in rel_parts):
+        if _in_skip_dir(rel_parts):
             continue
 
         report.files_checked += 1

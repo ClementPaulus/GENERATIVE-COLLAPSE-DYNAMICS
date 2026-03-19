@@ -264,11 +264,27 @@ def discover_and_execute(
             continue
 
         # Discover theorem functions
-        funcs = [
+        funcs_raw = [
             (fname, fobj)
             for fname, fobj in inspect.getmembers(mod)
             if _is_theorem_function(fname, fobj) and fobj.__module__ == mod.__name__
         ]
+
+        # Dedup: when aliases exist (e.g., prove_* = theorem_*), prefer
+        # the canonical theorem_* name over the backward-compatible alias.
+        seen_ids: dict[int, str] = {}
+        funcs: list[tuple[str, Any]] = []
+        for fname, fobj in sorted(funcs_raw, key=lambda x: x[0]):
+            fid = id(fobj)
+            if fid in seen_ids:
+                prev = seen_ids[fid]
+                # Keep whichever starts with "theorem_" (canonical)
+                if fname.startswith("theorem_") and not prev.startswith("theorem_"):
+                    funcs = [(fname, fobj) if n == prev else (n, o) for n, o in funcs]
+                    seen_ids[fid] = fname
+                continue
+            seen_ids[fid] = fname
+            funcs.append((fname, fobj))
 
         if verbose:
             print(f"  Found {len(funcs)} theorem functions")

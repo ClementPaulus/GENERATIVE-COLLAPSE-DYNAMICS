@@ -459,13 +459,108 @@ The field is required by `schemas/contract.schema.json` and `schemas/canon.ancho
 
 ---
 
+## Closure Authoring Guide
+
+> *Omnis clausura per spinam transit.* — Every closure passes through the spine.
+
+This section codifies the structural patterns observed across 20 domain closures. New domains should follow these conventions to maintain cross-domain consistency and machine-readable structure.
+
+### Domain Archetypes
+
+Every domain falls into one of three archetypes:
+
+| Archetype | Description | Example Domains | Typical File Count |
+|-----------|-------------|-----------------|:------------------:|
+| **kernel-centric** | Single entity catalog → trace vector → kernel → theorems | finance, evolution, dynamic_semiotics, clinical_neuroscience, spacetime_memory | 3–4 |
+| **multi-subsystem** | Multiple independent closure modules, each modeling a different subsystem | astronomy, quantum_mechanics, standard_model, materials_science | 7–17 |
+| **daemon** | Operational/runtime closures, no theorem proofs | security | varies |
+
+### Required Files
+
+Every kernel-centric domain must include at minimum:
+
+| File | Purpose |
+|------|---------|
+| `<domain>_kernel.py` | Entity catalog + trace vector construction + Tier-1 kernel computation |
+| `<domain>_theorems.py` | 10 theorem functions deriving domain-specific results from kernel invariants |
+| `__init__.py` | Module initialization |
+
+Multi-subsystem domains may have additional subsystem closure files, but should still have a consolidated theorem file.
+
+### Theorem Naming Convention
+
+All theorem functions must follow the pattern:
+
+```
+theorem_<PREFIX><N>_<descriptive_name>
+```
+
+Where:
+- `<PREFIX>` is the domain-specific tag (e.g., `EV`, `TF`, `MS`, `TCN`)
+- `<N>` is a sequential integer (1–10+)
+- `<descriptive_name>` is a snake_case description of what the theorem proves
+
+**Examples:**
+- `theorem_EV1_kernel_identities` (evolution)
+- `theorem_TF5_asset_class_hierarchy` (finance)
+- `theorem_MS4_crystal_heterogeneity` (materials science)
+
+**Anti-patterns** (avoid):
+- `prove_elastic_conservation` — missing prefix and number
+- `prove_theorem_TST1` — redundant `prove_` prefix
+
+The `scripts/theorem_registry.py` auto-discovers functions matching `theorem_*`. Non-standard names will not be registered.
+
+### The 10-Theorem Template
+
+15 of 20 domains converge to exactly 10 theorems. This is a structural attractor, not a requirement, but new domains should aim for 10 theorems covering these archetype slots:
+
+| Slot | Archetype | What It Proves | Frequency |
+|:----:|-----------|----------------|:---------:|
+| 1 | **Tier-1 Bootstrap** | F+ω=1, IC≤F, IC=exp(κ) hold for all entities | 77% |
+| 2 | **Ordering** | Entities rank by F, IC, or ω in domain-meaningful order | 77% |
+| 3 | **Regime Distribution** | Entity classification across Stable/Watch/Collapse | 62% |
+| 4 | **Geometric Slaughter** | One dead channel kills IC while F stays healthy | 39% |
+| 5 | **Scale/Hierarchy** | Cross-scale or cross-category monotonicity | 46% |
+| 6 | **Gap Structure** | Heterogeneity gap (Δ = F − IC) reveals domain physics | 46% |
+| 7 | **Monotonicity** | Some measurable quantity increases/decreases along a domain axis | 39% |
+| 8 | **Cross-Domain Bridge** | Connects to another domain's kernel results | 31% |
+| 9 | **Falsification Gate** | Specifies conditions under which the theorem fails | 31% |
+| 10 | **Domain-Specific Insight** | A result unique to the domain's physics/semantics | 100% |
+
+**Tier-1 Bootstrap Rule**: If a domain's first theorem is `theorem_<PREFIX>1_kernel_identities`, the theorem registry classifies it as having a Tier-1 bootstrap. This grounds the entire theorem sequence in verified kernel identities before domain-specific results are derived.
+
+### Channel Design
+
+- Standard channel count: **8** (used by 14 of 20 domains)
+- Extended channel count: **10** (awareness_cognition, clinical_neuroscience)
+- Minimal channel count: **3** (nuclear_physics — BE/A, temporal, valley)
+- Every channel must be a dimensionless value in [0, 1] after normalization
+- Equal weights (w_i = 1/n) unless domain physics dictates otherwise
+- Guard band ε = 10⁻⁸ from `frozen_contract.EPSILON`
+
+### Registration
+
+Every new domain must be:
+1. Listed in `closures/registry.yaml` under `extensions:<domain_name>`
+2. Added to `domain_metadata` section with archetype, channels, entities, theorems
+3. Referenced in `closures/registry.yaml` with contract, frozen_params, cross_references
+4. Discoverable by `scripts/theorem_registry.py` (standard theorem naming)
+5. Tested by a corresponding `tests/test_<NNN>_<domain>.py` file
+
+### Entropy Passivity Observation
+
+Across all 20 domains, Bernoulli field entropy S appears in only 1 of 13 theorem files (7.7%), despite being a Tier-1 kernel output. This is not an error — S is asymptotically determined by F and C (the statistical constraint S ≈ f(F, C)), making it a *computed* diagnostic rather than an independent degree of freedom. The effective degrees of freedom for theorem construction are **F, κ, C** (equivalently F, IC, C). New theorems should derive from these three quantities; S participates through the constraint, not directly.
+
+---
+
 ## Implementation Status (v2.2.3)
 
 - ✅ **Tier-1**: The kernel function defined, verified, and mathematically complete
   - 4 primitive equations (F, κ, S, C) + 2 derived values (ω = 1−F, IC = exp(κ)) — defining K: [0,1]ⁿ × Δⁿ → ℝ⁶
   - 3 effective degrees of freedom (F, κ, C) — rank invariant to input dimensionality (n = 4..64)
   - 3 algebraic identities + 1 statistical constraint — verified across 10,162 tests in 18 domains
-  - 46 lemmas, 38 structural identities, 5 structural constants (c*, c_trap, ε, p, tol_seam)
+  - 46 lemmas, 44 structural identities, 5 structural constants (c*, c_trap, ε, p, tol_seam)
   - Reserved symbols: F, ω, S, C, κ, IC, τ_R (all six outputs + τ_R are Tier-1)
   - Three-agent structural reading: Measuring (ω), Archive (F), Unknown (Γ(ω))
 
@@ -477,10 +572,11 @@ The field is required by `schemas/contract.schema.json` and `schemas/canon.ancho
   - Seam structure defined; closures implemented
   - ⚠️ Automated weld PASS/FAIL computation not yet integrated into CLI
 
-- ✅ **Tier-2**: 17 domain expansions active (511 entities, 42 theorems)
+- ✅ **Tier-2**: 20 domain expansions active (598+ entities, 225+ theorems)
   - GCD, RCFT, Kinematics, Finance, Security, Astronomy
   - Nuclear, Quantum, Weyl, Atomic Physics, Materials Science, Standard Model
-  - Everyday Physics, Evolution, Dynamic Semiotics, Consciousness Coherence, Continuity Theory
+  - Everyday Physics, Evolution, Dynamic Semiotics, Consciousness Coherence
+  - Continuity Theory, Awareness-Cognition, Clinical Neuroscience, Spacetime Memory
 
 ---
 

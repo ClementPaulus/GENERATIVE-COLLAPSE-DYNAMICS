@@ -289,8 +289,9 @@ Rank-1 ⊂ Rank-2 ⊂ Rank-3. Almost all real-world systems are rank-3.
 | `L-44` | L44 | Fractal Return Scaling | Return distances scale as power law in recursion depth | L-43 |
 | `L-45` | L45 | Seam Residual Algebra | Seam composition forms a monoid: associative with identity, verified to 5.55×10⁻¹⁷ | L-20, I-C8 |
 | `L-46` | L46 | Weld Closure Composition | Composed welds satisfy: PASS₁ ∧ PASS₂ ⇒ PASS₁₂ if residuals are within tolerance | Def-13, L-27 |
+| `L-47` | L47 | Geometric Slaughter (Cross-Domain) | One dead channel (cₖ → ε) kills IC while F stays healthy: IC/F → ε^(wₖ) · (IC_rest/F). Observed in 8/20 domains at phase boundaries (confinement, EWSB, cortical lesion). The drop is exactly IC_dead = ε^(1/n)·c₀^((n-1)/n) for uniform traces (cf. T-KS-1). | L-6, L-30, AI-2 |
 
-**Source**: [KERNEL_SPECIFICATION.md](KERNEL_SPECIFICATION.md) §4 (L1–L34), §4b (L35–L46)
+**Source**: [KERNEL_SPECIFICATION.md](KERNEL_SPECIFICATION.md) §4 (L1–L34), §4b (L35–L46), cross-domain (L47)
 
 ---
 

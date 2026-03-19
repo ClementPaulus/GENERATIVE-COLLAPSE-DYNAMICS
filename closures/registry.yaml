@@ -451,6 +451,26 @@ registry:
           T_mK: 10.0
           area_um2: 1.0
         reference: "DOI:10.1038/s41586-025-09891-2"
+      - name: "photonic_confinement"
+        path: "closures/quantum_mechanics/photonic_confinement.py"
+        description: >
+          Photonic Confinement Model (CPM) independent derivation:
+          7 theorems mapping Caputo (2026) Photonic-Conjugated Model
+          entities to GCD kernel invariants. 12 entities (1 unconfined,
+          5 leptons, 3 hadrons, 2 composites, 1 cosmological),
+          8-channel trace (confinement_degree, phase_commensurability,
+          toroidal_genus, generatrix_curvature, lattice_coherence,
+          mass_confinement_ratio, phase_memory_depth, cosmic_pi_scale).
+        contract: "QM.INTSTACK.v1"
+        inputs: ["confinement_degree", "phase_commensurability",
+                 "toroidal_genus", "generatrix_curvature",
+                 "lattice_coherence", "mass_confinement_ratio",
+                 "phase_memory_depth", "cosmic_pi_scale"]
+        outputs: ["F", "omega", "IC", "kappa", "regime",
+                  "heterogeneity_gap", "weakest_channel", "strongest_channel"]
+        frozen_params:
+          epsilon: 1.0e-8
+        reference: "DOI:10.5281/zenodo.17509488"
 
     nuclear_physics:
       - name: "nuclide_binding"
@@ -1022,3 +1042,176 @@ registry:
           - "closures/awareness_cognition/awareness_kernel.py"
           - "closures/evolution/brain_kernel.py"
           - "src/umcp/kernel_optimized.py"
+
+    awareness_cognition:
+      - name: "awareness_kernel"
+        path: "closures/awareness_cognition/awareness_kernel.py"
+        description: "Awareness-cognition kernel: 5+5 channel awareness-aptitude kernel across phylogeny, 10 theorems (T-AW-1 through T-AW-10)"
+        contract: "UMA.INTSTACK.v1"
+        inputs: ["organism_profiles"]
+        outputs: ["F", "omega", "S", "C", "kappa", "IC", "heterogeneity_gap", "regime"]
+        frozen_params:
+          epsilon: 1.0e-8
+          n_channels: 10
+        cross_references:
+          - "closures/evolution/brain_kernel.py"
+          - "closures/consciousness_coherence/coherence_kernel.py"
+          - "closures/clinical_neuroscience/neurocognitive_kernel.py"
+
+# ── Domain Structural Metadata ──────────────────────────────────────────────
+# Per-domain summary derived from structural pattern analysis.
+# Archetypes:
+#   kernel-centric  — single kernel entity catalog + theorem file
+#   multi-subsystem — multiple independent closure modules per domain
+#   daemon          — operational closures, no theorems
+# tier1_bootstrap: first theorem verifies kernel identities (F+ω=1, IC≤F, IC=exp(κ))
+# theorem_prefix: standard naming prefix for theorem functions
+# This section is informational and does not affect validation.
+
+extensions:
+  domain_metadata:
+    gcd:
+      archetype: multi-subsystem
+      channels: 8
+      entities: 30
+      theorems: 14
+      tier1_bootstrap: true
+      theorem_prefix: "T_URC"
+    rcft:
+      archetype: multi-subsystem
+      channels: 8
+      entities: 200
+      theorems: 10
+      tier1_bootstrap: true
+      theorem_prefix: "RC"
+    kinematics:
+      archetype: multi-subsystem
+      channels: 6
+      entities: 20
+      theorems: 10
+      tier1_bootstrap: false
+      theorem_prefix: "KIN"
+      note: "Backward-compatible aliases retained for prove_* names"
+    weyl:
+      archetype: multi-subsystem
+      channels: 6
+      entities: 20
+      theorems: 10
+      tier1_bootstrap: false
+      theorem_prefix: "WL"
+    security:
+      archetype: daemon
+      channels: 0
+      entities: 0
+      theorems: 0
+      tier1_bootstrap: false
+      theorem_prefix: null
+      note: "Operational closures — runtime guards, no theorem proofs"
+    astronomy:
+      archetype: multi-subsystem
+      channels: 8
+      entities: 40
+      theorems: 30
+      tier1_bootstrap: true
+      theorem_prefix: "AS"
+    nuclear_physics:
+      archetype: multi-subsystem
+      channels: 3
+      entities: 118
+      theorems: 10
+      tier1_bootstrap: true
+      theorem_prefix: "NP"
+    quantum_mechanics:
+      archetype: multi-subsystem
+      channels: 8
+      entities: 62
+      theorems: 35
+      tier1_bootstrap: true
+      theorem_prefix: "T_TERS/T_QDM/T_FQHE/T_PCM"
+      note: "Multiple theorem series from independent subsystem derivations"
+    finance:
+      archetype: kernel-centric
+      channels: 8
+      entities: 25
+      theorems: 10
+      tier1_bootstrap: true
+      theorem_prefix: "TF"
+    atomic_physics:
+      archetype: multi-subsystem
+      channels: 8
+      entities: 118
+      theorems: 13
+      tier1_bootstrap: true
+      theorem_prefix: "T"
+    materials_science:
+      archetype: multi-subsystem
+      channels: 8
+      entities: 118
+      theorems: 10
+      tier1_bootstrap: true
+      theorem_prefix: "MS"
+    everyday_physics:
+      archetype: multi-subsystem
+      channels: 6
+      entities: 80
+      theorems: 17
+      tier1_bootstrap: true
+      theorem_prefix: "EP"
+    evolution:
+      archetype: kernel-centric
+      channels: 8
+      entities: 40
+      theorems: 10
+      tier1_bootstrap: true
+      theorem_prefix: "EV"
+    dynamic_semiotics:
+      archetype: kernel-centric
+      channels: 8
+      entities: 30
+      theorems: 10
+      tier1_bootstrap: true
+      theorem_prefix: "TS"
+    consciousness_coherence:
+      archetype: kernel-centric
+      channels: 8
+      entities: 20
+      theorems: 10
+      tier1_bootstrap: true
+      theorem_prefix: "TCC"
+    continuity_theory:
+      archetype: kernel-centric
+      channels: 8
+      entities: 20
+      theorems: 12
+      tier1_bootstrap: true
+      theorem_prefix: "CT"
+    awareness_cognition:
+      archetype: kernel-centric
+      channels: 10
+      entities: 34
+      theorems: 10
+      tier1_bootstrap: false
+      theorem_prefix: "TAW"
+    standard_model:
+      archetype: multi-subsystem
+      channels: 8
+      entities: 31
+      theorems: 27
+      tier1_bootstrap: true
+      theorem_prefix: "T"
+      note: "27 theorems across 3 theorem files (formalism, extended, matter genesis)"
+    clinical_neuroscience:
+      archetype: kernel-centric
+      channels: 10
+      entities: 35
+      theorems: 10
+      tier1_bootstrap: false
+      theorem_prefix: "TCN"
+    spacetime_memory:
+      archetype: kernel-centric
+      channels: 8
+      entities: 40
+      theorems: 10
+      tier1_bootstrap: false
+      theorem_prefix: "TST"
+      note: "Backward-compatible aliases retained for prove_theorem_TST* names"

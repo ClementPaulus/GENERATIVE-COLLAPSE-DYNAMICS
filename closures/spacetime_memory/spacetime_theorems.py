@@ -128,7 +128,7 @@ def _category_results(results: list[SpacetimeKernelResult], category: str) -> li
 # ═══════════════════════════════════════════════════════════════════
 
 
-def prove_theorem_TST1() -> TheoremResult:
+def theorem_ST1_gravity_budget_gradient() -> TheoremResult:
     """T-ST-1: Gravity Is Budget Gradient.
 
     STATEMENT:
@@ -204,7 +204,7 @@ def prove_theorem_TST1() -> TheoremResult:
 # ═══════════════════════════════════════════════════════════════════
 
 
-def prove_theorem_TST2() -> TheoremResult:
+def theorem_ST2_always_attractive() -> TheoremResult:
     """T-ST-2: Always Attractive.
 
     STATEMENT:
@@ -265,7 +265,7 @@ def prove_theorem_TST2() -> TheoremResult:
 # ═══════════════════════════════════════════════════════════════════
 
 
-def prove_theorem_TST3() -> TheoremResult:
+def theorem_ST3_cubic_onset() -> TheoremResult:
     """T-ST-3: Cubic Onset (Weakest Force).
 
     STATEMENT:
@@ -331,7 +331,7 @@ def prove_theorem_TST3() -> TheoremResult:
 # ═══════════════════════════════════════════════════════════════════
 
 
-def prove_theorem_TST4() -> TheoremResult:
+def theorem_ST4_time_dilation() -> TheoremResult:
     """T-ST-4: Time Dilation Near Wells.
 
     STATEMENT:
@@ -391,7 +391,7 @@ def prove_theorem_TST4() -> TheoremResult:
 # ═══════════════════════════════════════════════════════════════════
 
 
-def prove_theorem_TST5() -> TheoremResult:
+def theorem_ST5_gradient_universality() -> TheoremResult:
     """T-ST-5: Gradient Universality.
 
     STATEMENT:
@@ -456,7 +456,7 @@ def prove_theorem_TST5() -> TheoremResult:
 # ═══════════════════════════════════════════════════════════════════
 
 
-def prove_theorem_TST6() -> TheoremResult:
+def theorem_ST6_memory_wells() -> TheoremResult:
     """T-ST-6: Memory Wells From Iteration.
 
     STATEMENT:
@@ -525,7 +525,7 @@ def prove_theorem_TST6() -> TheoremResult:
 # ═══════════════════════════════════════════════════════════════════
 
 
-def prove_theorem_TST7() -> TheoremResult:
+def theorem_ST7_lensing_heterogeneity() -> TheoremResult:
     """T-ST-7: Lensing From Heterogeneity.
 
     STATEMENT:
@@ -605,7 +605,7 @@ def prove_theorem_TST7() -> TheoremResult:
 # ═══════════════════════════════════════════════════════════════════
 
 
-def prove_theorem_TST8() -> TheoremResult:
+def theorem_ST8_arrow_of_time() -> TheoremResult:
     """T-ST-8: Arrow of Time From Asymmetry.
 
     STATEMENT:
@@ -669,7 +669,7 @@ def prove_theorem_TST8() -> TheoremResult:
 # ═══════════════════════════════════════════════════════════════════
 
 
-def prove_theorem_TST9() -> TheoremResult:
+def theorem_ST9_intrinsic_flatness() -> TheoremResult:
     """T-ST-9: Intrinsic Flatness (K = 0).
 
     STATEMENT:
@@ -765,7 +765,7 @@ def prove_theorem_TST9() -> TheoremResult:
 # ═══════════════════════════════════════════════════════════════════
 
 
-def prove_theorem_TST10() -> TheoremResult:
+def theorem_ST10_cross_scale_consistency() -> TheoremResult:
     """T-ST-10: Cross-Scale Consistency.
 
     STATEMENT:
@@ -861,17 +861,30 @@ def prove_theorem_TST10() -> TheoremResult:
 # ═══════════════════════════════════════════════════════════════════
 
 ALL_THEOREM_PROVERS = [
-    prove_theorem_TST1,
-    prove_theorem_TST2,
-    prove_theorem_TST3,
-    prove_theorem_TST4,
-    prove_theorem_TST5,
-    prove_theorem_TST6,
-    prove_theorem_TST7,
-    prove_theorem_TST8,
-    prove_theorem_TST9,
-    prove_theorem_TST10,
+    theorem_ST1_gravity_budget_gradient,
+    theorem_ST2_always_attractive,
+    theorem_ST3_cubic_onset,
+    theorem_ST4_time_dilation,
+    theorem_ST5_gradient_universality,
+    theorem_ST6_memory_wells,
+    theorem_ST7_lensing_heterogeneity,
+    theorem_ST8_arrow_of_time,
+    theorem_ST9_intrinsic_flatness,
+    theorem_ST10_cross_scale_consistency,
 ]
+
+
+# Backward-compatible aliases for external callers
+prove_theorem_TST1 = theorem_ST1_gravity_budget_gradient
+prove_theorem_TST2 = theorem_ST2_always_attractive
+prove_theorem_TST3 = theorem_ST3_cubic_onset
+prove_theorem_TST4 = theorem_ST4_time_dilation
+prove_theorem_TST5 = theorem_ST5_gradient_universality
+prove_theorem_TST6 = theorem_ST6_memory_wells
+prove_theorem_TST7 = theorem_ST7_lensing_heterogeneity
+prove_theorem_TST8 = theorem_ST8_arrow_of_time
+prove_theorem_TST9 = theorem_ST9_intrinsic_flatness
+prove_theorem_TST10 = theorem_ST10_cross_scale_consistency
 
 
 def prove_all_theorems() -> list[TheoremResult]:

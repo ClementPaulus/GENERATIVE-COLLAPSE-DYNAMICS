@@ -1095,15 +1095,40 @@ under consistent return domain policy.
 
 ---
 
-### ⚠️ Synthesis: Lemmas 35–46 and Cross-Domain Physics
+### Lemma 47: Geometric Slaughter (Cross-Domain) 📐
 
-Lemmas 35–46 extend the formal foundation to **empirical physics**:
+**Statement**: Let c ∈ [ε, 1−ε]ⁿ with weights w ∈ Δⁿ. If a single channel cₖ → ε while all other channels remain fixed:
+
+```
+IC → ε^(wₖ) · IC_rest     (exponential collapse)
+F  → F − wₖ·(cₖ − ε)     (linear reduction)
+IC/F → ε^(wₖ) · IC_rest / F_rest   (ratio collapses)
+```
+
+For uniform weights (wᵢ = 1/n) and uniform surviving channels (cᵢ = c₀ for i ≠ k):
+
+```
+IC_dead = ε^(1/n) · c₀^((n-1)/n)
+```
+
+**Proof**: Direct from L-6 (IC sensitivity) and L-30 (IC collapse cascade). IC = exp(κ) = exp(Σ wᵢ ln cᵢ). Setting cₖ = ε: IC = ε^(wₖ) · exp(Σᵢ≠ₖ wᵢ ln cᵢ) = ε^(wₖ) · IC_rest. For F = Σ wᵢcᵢ: F_new = F_old − wₖ(cₖ − ε). Since ε^(wₖ) ≪ 1 for any wₖ > 0, IC drops exponentially while F drops linearly. ∎
+
+**Cross-domain instances**: Confinement (quark→hadron: color channel → 0, IC/F drops 100×), EWSB (Higgs mechanism), cortical lesion (clinical neuroscience), sign-ground rupture (dynamic semiotics), awareness deficit (awareness-cognition). Observed at phase boundaries in 8 of 20 domains.
+
+**Computational verification**: `python scripts/orientation.py -s 3` (§3: geometric slaughter). Key receipt: IC/F drops from 1.00 to 0.11 with one dead channel in 8-channel uniform trace.
+
+---
+
+### ⚠️ Synthesis: Lemmas 35–47 and Cross-Domain Physics
+
+Lemmas 35–47 extend the formal foundation to **empirical physics**:
 
 1. **Quantum-Classical Boundary** (L35, L37, L38): Unitarity ↔ horizon transition at Δκ ≈ 0.1
 2. **Super-Exponential Dynamics** (L39, L40): Topological quantum computing convergence
 3. **Information Bounds** (L36, L41, L42): Conservation laws for generative flux and entropy-integrity
 4. **Multi-Scale Structure** (L43, L44): RCFT recursive memory and fractal return times
 5. **Algebraic Foundation** (L45, L46): Residual group structure and composition
+6. **Cross-Domain Pattern** (L47): Geometric slaughter — universal IC destruction at phase boundaries
 
 **Key Discovery**: The τ_R = D_C duality (Lemma 35) appears to be a **fundamental law of unitary dynamics**, empirically verified across atomic physics experiments with R² = 1.000.
 
