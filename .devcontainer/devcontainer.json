@@ -121,7 +121,9 @@
 				"files.associations": {
 					"*.yaml": "yaml",
 					"*.yml": "yaml",
-					"*.schema.json": "json"
+					"*.schema.json": "json",
+					"**/conda.recipe/meta.yaml": "plaintext",
+					"**/conda.recipe/*.yaml": "plaintext"
 				},
 
 				// ── Search & file exclusions ──
