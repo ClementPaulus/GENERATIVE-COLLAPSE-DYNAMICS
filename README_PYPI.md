@@ -204,9 +204,9 @@ src/umcp/               # Core validation engine
 ├── fleet/               # Distributed validation (scheduler, workers, queue)
 └── ...
 
-closures/                # 20 domain closure modules (193 total)
+closures/                # 20 domain closure modules (198 total)
 contracts/               # Versioned mathematical contracts (YAML)
-casepacks/               # 24 self-contained validation packages
+casepacks/               # 28 self-contained validation packages
 schemas/                 # JSON Schema Draft 2020-12 definitions
 ```
 
