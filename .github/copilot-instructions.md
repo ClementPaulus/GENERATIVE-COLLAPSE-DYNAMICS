@@ -410,6 +410,31 @@ src/umcp/
 │   └── models.py             # Shared dataclass models (Job, WorkerInfo, etc.)
 └── __init__.py               # (see top)
 
+src/umcp_c/                       # C99 Orchestration Core (Tier-0 Protocol Foundation)
+├── include/umcp_c/
+│   ├── types.h                   # Foundation types: regime, verdict, seam status, error codes
+│   ├── kernel.h                  # Kernel computation (F, ω, S, C, κ, IC) — single-pass fused loop
+│   ├── contract.h                # Frozen contract: all seam-derived parameters + cost closures
+│   ├── regime.h                  # Regime classification: four-gate criterion + Fisher partition
+│   ├── trace.h                   # Trace vector lifecycle: allocation, embedding, identity validation
+│   ├── ledger.h                  # Integrity ledger: append-only with O(1) running statistics
+│   ├── pipeline.h                # The spine in C: Contract → Canon → Closures → Ledger → Stance
+│   ├── seam.h                    # Seam chain accumulation — O(1) incremental (Lemma 20)
+│   └── sha256.h                  # SHA-256 (portable FIPS 180-4, no dependencies)
+├── src/
+│   ├── kernel.c                  # Kernel: homogeneous fast path (OPT-1) + heterogeneous
+│   ├── contract.c                # Frozen contract init, validation, Γ(ω), D_C, Δκ budget
+│   ├── regime.c                  # Gate precedence: CRITICAL→COLLAPSE→WATCH→STABLE
+│   ├── trace.c                   # pre_clip embedding, simplex weight validation
+│   ├── ledger.c                  # Append + build_entry + running stats + verdict aggregation
+│   ├── pipeline.c                # Five-stop spine orchestrator (145 lines)
+│   ├── seam.c                    # O(1) Δκ accumulation (Lemma 20)
+│   └── sha256.c                  # Full FIPS 180-4 (64-round transform, streaming API)
+├── tests/
+│   ├── test_kernel_c.c           # 166 assertions (kernel, seam, SHA-256)
+│   └── test_orchestration.c      # 160 assertions (types, contract, regime, trace, ledger, pipeline)
+└── CMakeLists.txt                # C99, static library + two test executables
+
 src/umcp_cpp/                     # [Optional] C++ accelerator (Tier-0 Protocol)
 ├── include/umcp/
 │   ├── kernel.hpp                # Kernel (F, ω, S, C, κ, IC) — ~50× speedup
@@ -417,13 +442,29 @@ src/umcp_cpp/                     # [Optional] C++ accelerator (Tier-0 Protocol)
 │   └── integrity.hpp             # SHA-256 (portable + OpenSSL) — ~5× speedup
 ├── bindings/py_umcp.cpp          # pybind11 zero-copy NumPy bridge → umcp_accel module
 ├── tests/test_kernel.cpp         # Catch2 tests (10K Tier-1 identity sweep)
-└── CMakeLists.txt                # C++17, pybind11, optional OpenSSL
+└── CMakeLists.txt                # C++17, pybind11, optional OpenSSL, links umcp_c_core
 ```
 
-**C++ Accelerator**: `src/umcp/accel.py` auto-detects the C++ extension (`umcp_accel`).
-If not built, all operations fall back to NumPy transparently. Same formulas, same frozen
-parameters — Tier-0 Protocol only (no Tier-1 symbols redefined). Build:
-`cd src/umcp_cpp && mkdir build && cd build && cmake .. && make`
+**Three-Layer Sandwich Architecture**: C (raw math + orchestration) → C++ (types, validation, pybind11) → Python (domain closures, high-level orchestration).
+
+**C99 Orchestration Core** (`src/umcp_c/`): The entire Tier-0 protocol formalized in portable C99 — frozen contract, regime gates, trace management, integrity ledger, and the full validation spine. No heap allocation in the hot path. Stable `extern "C"` ABI callable from any language. ~1,900 lines of C, 326 test assertions (166 kernel + 160 orchestration). The C layer reduces mechanical overhead and maximizes runtime performance for the synthesized protocol.
+
+**C++ Accelerator** (`src/umcp_cpp/`): Links against `umcp_c_core` via CMake `add_subdirectory()`. `src/umcp/accel.py` auto-detects the C++ extension (`umcp_accel`). If not built, all operations fall back to NumPy transparently. Same formulas, same frozen parameters — Tier-0 Protocol only (no Tier-1 symbols redefined).
+
+**Build the C stack**:
+```bash
+# C core only (standalone)
+cd src/umcp_c && mkdir build && cd build && cmake .. && make -j$(nproc)
+./test_umcp_c              # 166 kernel tests
+./test_umcp_orchestration  # 160 orchestration tests
+
+# Integrated (C + C++ + pybind11)
+cd src/umcp_cpp && mkdir build && cd build && cmake .. && make -j$(nproc)
+./umcp_c/test_umcp_c              # 166 C kernel tests
+./umcp_c/test_umcp_orchestration  # 160 C orchestration tests
+./test_umcp_kernel                # 434 C++ Catch2 assertions
+# Total: 760 assertions across the C/C++ stack
+```
 
 **Closure domains** (20 total, each in `closures/<domain>/`):
 
@@ -720,6 +761,9 @@ Extensions use `typing.Protocol` (`ExtensionProtocol` requiring `name`, `version
 | Thermodynamic diagnostic | `src/umcp/tau_r_star.py` (τ_R*, phase diagram, arrow of time) |
 | Epistemic cost tracking | `src/umcp/epistemic_weld.py` (Theorem T9: observation cost) |
 | Lessons-learned system | `src/umcp/insights.py` (PatternDatabase, InsightEngine) |
+| C orchestration core | `src/umcp_c/` (9 headers, 8 sources, 326 tests — the full spine in C99) |
+| C types & contract | `src/umcp_c/include/umcp_c/types.h`, `contract.h` (frozen params, cost closures) |
+| C pipeline (the spine) | `src/umcp_c/include/umcp_c/pipeline.h` + `src/umcp_c/src/pipeline.c` |
 | C++ accelerator wrapper | `src/umcp/accel.py` (auto-detects C++, falls back to NumPy) |
 | C++ kernel/seam/SHA-256 | `src/umcp_cpp/` (headers, pybind11 bindings, Catch2 tests) |
 | Accelerator benchmark | `scripts/benchmark_cpp.py` (correctness + performance) |

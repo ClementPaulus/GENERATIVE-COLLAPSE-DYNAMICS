@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
-project(umcp_accel VERSION 1.0.0 LANGUAGES CXX)
+project(umcp_accel VERSION 1.0.0 LANGUAGES C CXX)
 
 # ─── C++17 required ───────────────────────────────────────────────────
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # ─── Compiler optimizations ──────────────────────────────────────────
@@ -17,7 +19,11 @@ elseif(MSVC)
     add_compile_options(/O2 /W4)
 endif()
 
-# ─── Static library (core C++ implementation) ────────────────────────
+# ─── Pure C kernel core (three-layer sandwich: C → C++ → Python) ─────
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../umcp_c
+                 ${CMAKE_CURRENT_BINARY_DIR}/umcp_c)
+
+# ─── Static library (C++ wrapper over C core) ────────────────────────
 add_library(umcp_core STATIC
     src/kernel.cpp
     src/seam.cpp
@@ -26,6 +32,8 @@ add_library(umcp_core STATIC
 target_include_directories(umcp_core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+# Link the pure C core — C++ layer can delegate to C functions
+target_link_libraries(umcp_core PUBLIC umcp_c_core)
 
 # ─── Optional OpenSSL for SHA-256 ────────────────────────────────────
 find_package(OpenSSL QUIET)
@@ -89,9 +97,11 @@ endif()
 
 # ─── Summary ────────────────────────────────────────────────────────
 message(STATUS "")
-message(STATUS "UMCP C++ Accelerator Configuration:")
+message(STATUS "UMCP Accelerator Configuration (C → C++ → Python):")
+message(STATUS "  C Standard:       ${CMAKE_C_STANDARD}")
 message(STATUS "  C++ Standard:     ${CMAKE_CXX_STANDARD}")
 message(STATUS "  Build Type:       ${CMAKE_BUILD_TYPE}")
+message(STATUS "  Pure C Core:      ON (umcp_c_core)")
 message(STATUS "  Python Bindings:  ${UMCP_BUILD_PYTHON}")
 message(STATUS "  C++ Tests:        ${UMCP_BUILD_TESTS}")
 message(STATUS "  OpenSSL SHA-256:  ${OpenSSL_FOUND}")

@@ -4,6 +4,7 @@
 [![PyPI](https://img.shields.io/pypi/v/umcp)](https://pypi.org/project/umcp/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/umcp)](https://pypi.org/project/umcp/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+[![C99](https://img.shields.io/badge/C-99-blue.svg)](src/umcp_c/)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](src/umcp_cpp/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![UMCP v2.2.4](https://img.shields.io/badge/UMCP-v2.2.4-orange.svg)](pyproject.toml)
@@ -19,7 +20,7 @@
 
 This is not a simulation. It is a **metrological enforcement engine**: schema conformance, kernel identity verification, regime classification, and SHA-256 integrity checking — producing a three-valued `CONFORMANT` / `NONCONFORMANT` / `NON_EVALUABLE` verdict for every run.
 
-**Python + C++ integration**: The framework is written in Python with **20 domains**, **181 closure modules**, **252 proven theorems**, and **11,389 tests**. An optional C++17 accelerator (`src/umcp_cpp/`) provides 50–80× speedup for three hot paths — kernel computation, seam chain accumulation, and SHA-256 integrity — via a pybind11 zero-copy NumPy bridge. The Python wrapper (`umcp.accel`) auto-detects the compiled extension at import time; if unavailable, every call falls back transparently to the equivalent NumPy implementation. Same formulas, same frozen parameters, same results to machine precision — the C++ layer is Tier-0 Protocol only and redefines no Tier-1 symbols.
+**Three-layer C → C++ → Python architecture**: The framework is written in Python with **20 domains**, **181 closure modules**, **252 proven theorems**, and **11,389 tests**. A portable **C99 orchestration core** (`src/umcp_c/`) formalizes the entire Tier-0 protocol in ~1,900 lines of C — frozen contract, regime gates, trace management, integrity ledger, and the full validation spine — with no heap allocation in the hot path and a stable `extern "C"` ABI callable from any language. A **C++17 accelerator** (`src/umcp_cpp/`) links against the C core and exposes a pybind11 zero-copy NumPy bridge for 50–80× speedup on kernel computation, seam chains, and SHA-256 integrity. The Python wrapper (`umcp.accel`) auto-detects the compiled extension at import time; if unavailable, every call falls back transparently to NumPy. Same formulas, same frozen parameters, same results to machine precision — **760 C/C++ test assertions** verify this. The C layer reduces mechanical overhead and maximizes runtime performance now that the protocol is fully synthesized.
 
 ---
 
@@ -44,7 +45,7 @@ This is not a simulation. It is a **metrological enforcement engine**: schema co
 <li><a href="#cli-reference">CLI Reference</a>
   <ul>
   <li><a href="#startup--from-clone-to-running">Startup — From Clone to Running</a></li>
-  <li><a href="#c-accelerator--build--verify">C++ Accelerator — Build &amp; Verify</a></li>
+  <li><a href="#c-stack--build--verify">C Stack — Build &amp; Verify</a></li>
   <li><a href="#services--api--dashboard">Services — API &amp; Dashboard</a></li>
   <li><a href="#development-loop--edit-validate-commit">Development Loop — Edit, Validate, Commit</a></li>
   <li><a href="#reset--clean-slate">Reset &amp; Clean Slate</a></li>
@@ -266,14 +267,31 @@ src/umcp/
 ├── dashboard/                # Modular Streamlit dashboard
 └── api_umcp.py               # FastAPI REST extension (Pydantic models)
 
-src/umcp_cpp/                   # Optional C++ accelerator (Tier-0 Protocol)
+src/umcp_c/                       # C99 Orchestration Core (Tier-0 Protocol Foundation)
+├── include/umcp_c/
+│   ├── types.h               # Foundation types: regime, verdict, seam status, error codes
+│   ├── kernel.h              # Kernel computation (F, ω, S, C, κ, IC) — single-pass fused loop
+│   ├── contract.h            # Frozen contract: all seam-derived parameters + cost closures
+│   ├── regime.h              # Regime classification: four-gate criterion + Fisher partition
+│   ├── trace.h               # Trace vector lifecycle: allocation, embedding, identity validation
+│   ├── ledger.h              # Integrity ledger: append-only with O(1) running statistics
+│   ├── pipeline.h            # The spine in C: Contract → Canon → Closures → Ledger → Stance
+│   ├── seam.h                # Seam chain accumulation — O(1) incremental (Lemma 20)
+│   └── sha256.h              # SHA-256 (portable FIPS 180-4, no dependencies)
+├── src/                        # 8 source files (~1,900 lines total)
+├── tests/
+│   ├── test_kernel_c.c       # 166 assertions (kernel, seam, SHA-256)
+│   └── test_orchestration.c  # 160 assertions (types, contract, regime, trace, ledger, pipeline)
+└── CMakeLists.txt            # C99, static library + two test executables
+
+src/umcp_cpp/                     # C++ accelerator (links umcp_c_core)
 ├── include/umcp/
-│   ├── kernel.hpp            # Kernel computation (F, ω, S, C, κ, IC) — ~50× speedup
+│   ├── kernel.hpp            # Kernel (F, ω, S, C, κ, IC) — ~50× speedup
 │   ├── seam.hpp              # Seam chain accumulation — ~80× speedup
 │   └── integrity.hpp         # SHA-256 (portable + OpenSSL) — ~5× speedup
 ├── bindings/py_umcp.cpp      # pybind11 zero-copy NumPy bridge
-├── tests/test_kernel.cpp     # Catch2 tests (10K Tier-1 sweep)
-└── CMakeLists.txt            # C++17, pybind11, optional OpenSSL
+├── tests/test_kernel.cpp     # Catch2 tests (10K Tier-1 sweep, 434 assertions)
+└── CMakeLists.txt            # C++17, pybind11, optional OpenSSL, links umcp_c_core
 ```
 
 ### Contract Infrastructure
@@ -583,27 +601,38 @@ pip install -e ".[all]"
 
 **Requires**: Python ≥ 3.11
 
-### C++ Accelerator (Optional)
+### C99 Orchestration Core + C++ Accelerator (Optional)
 
-The C++ accelerator provides 50–80× speedup for kernel computation, seam chains,
-and SHA-256 integrity checks. It is **fully optional** — all functionality falls
-back to NumPy transparently.
+The C layer formalizes the **entire Tier-0 protocol** in portable C99 (~1,900 lines):
+frozen contract, regime gates, trace management, integrity ledger, and the full
+validation spine — with no heap allocation in the hot path and a stable `extern "C"`
+ABI callable from any language. The C++ accelerator links against it and provides
+50–80× speedup for kernel computation, seam chains, and SHA-256 integrity checks.
+Both layers are **fully optional** — all functionality falls back to NumPy transparently.
 
 ```bash
-# Build the accelerator
-cd src/umcp_cpp && mkdir build && cd build
+# Build C core standalone (no C++ needed)
+cd src/umcp_c && mkdir -p build && cd build
 cmake .. && make -j$(nproc)
+./test_umcp_c              # 166 kernel tests
+./test_umcp_orchestration  # 160 orchestration tests
+cd ../../..
 
-# Verify it works
+# Build integrated (C + C++ + Python bindings)
+cd src/umcp_cpp && mkdir -p build && cd build
+cmake .. && make -j$(nproc)   # Builds C core + C++ + pybind11
+./umcp_c/test_umcp_c && ./umcp_c/test_umcp_orchestration && ./test_umcp_kernel
+# 760 total assertions
+cd ../../..
+
+# Verify Python detection
 python -c "from umcp.accel import backend; print(backend())"  # 'cpp' or 'numpy'
-
-# Run benchmarks (works with either backend)
 python scripts/benchmark_cpp.py
 ```
 
 **Architecture**: `accel.py` auto-detects whether the C++ extension is available.
-No existing code changes are needed — import from `umcp.accel` instead of
-calling kernel functions directly for accelerated paths.
+No existing code changes needed — import from `umcp.accel` for accelerated paths.
+The C layer provides the canonical protocol implementation; C++ adds pybind11 bindings.
 
 ```python
 from umcp.accel import compute_kernel, compute_kernel_batch, SeamChain, hash_file
@@ -700,22 +729,30 @@ umcp validate .                            # Full repo validation → CONFORMANT
 pytest -v --tb=short                       # 11,389 tests
 ```
 
-### C++ Accelerator — Build & Verify
+### C Stack — Build & Verify
 
 ```bash
-# Build (requires CMake ≥ 3.16 and a C++17 compiler)
-cd src/umcp_cpp && mkdir -p build && cd build
+# ---- C99 orchestration core (standalone) ----
+cd src/umcp_c && mkdir -p build && cd build
 cmake .. && make -j$(nproc)
+./test_umcp_c              # 166 kernel assertions
+./test_umcp_orchestration  # 160 orchestration assertions
 cd ../../..                                # Return to repo root
 
-# Verify backend
+# ---- Integrated build (C + C++ + pybind11) ----
+cd src/umcp_cpp && mkdir -p build && cd build
+cmake .. && make -j$(nproc)
+./umcp_c/test_umcp_c              # 166 C kernel tests
+./umcp_c/test_umcp_orchestration  # 160 C orchestration tests
+./test_umcp_kernel                # 434 C++ Catch2 assertions
+# Total: 760 assertions across the C/C++ stack
+cd ../../..                                # Return to repo root
+
+# Verify Python backend detection
 python -c "from umcp.accel import backend; print(backend())"   # → 'cpp'
 
 # Run correctness + performance benchmark (30 checks)
 python scripts/benchmark_cpp.py
-
-# Run C++ unit tests (Catch2, built alongside the extension)
-cd src/umcp_cpp/build && ctest --output-on-failure && cd ../../..
 ```
 
 ### Services — API & Dashboard
@@ -756,9 +793,10 @@ python scripts/update_integrity.py
 # Re-validate the full repo (clears any stale state)
 umcp validate .
 
-# Rebuild the C++ extension from scratch
-rm -rf src/umcp_cpp/build
+# Rebuild the C stack from scratch
+rm -rf src/umcp_c/build src/umcp_cpp/build
 cd src/umcp_cpp && mkdir build && cd build && cmake .. && make -j$(nproc) && cd ../../..
+# Builds C core + C++ + pybind11; run tests: ./umcp_c/test_umcp_c && ./umcp_c/test_umcp_orchestration && ./test_umcp_kernel
 
 # Verify everything is green after a reset
 python scripts/pre_commit_protocol.py      # Full protocol: lint + test + validate

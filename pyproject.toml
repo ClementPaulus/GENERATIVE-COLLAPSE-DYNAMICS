@@ -266,7 +266,7 @@ exclude_lines = [
 [tool.ruff]
 line-length = 120
 target-version = "py311"
-exclude = ["archive"]
+exclude = ["archive", "build", "build_*", "src/umcp_c/build*", "src/umcp_cpp/build*"]
 
 [tool.ruff.lint]
 select = [

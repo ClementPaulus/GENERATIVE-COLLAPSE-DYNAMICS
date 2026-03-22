@@ -99,14 +99,19 @@ python scripts/pre_commit_protocol.py       # Full 11-step protocol, must exit 0
   Rank classification: Rank-1 (homogeneous, 1 DOF), Rank-2 (2-channel, 2 DOF),
   Rank-3 (general, 3 DOF). Rank is measured, not chosen. See KERNEL_SPECIFICATION.md §4c.
 - **Tier-0** (Protocol): `src/umcp/` — code implementing the kernel + embedding,
-  regime gates, seam calculus, validation, contracts. The code is Tier-0;
-  what it computes is Tier-1.
+  regime gates, seam calculus, validation, contracts. `src/umcp_c/` — the entire
+  Tier-0 protocol formalized in portable C99 (~1,900 lines, 326 test assertions):
+  frozen contract, regime gates, trace management, integrity ledger, and the full
+  validation spine. No heap allocation in the hot path. Stable `extern "C"` ABI.
+  The code is Tier-0; what it computes is Tier-1.
 - **Tier-2** (Expansion): `closures/` — 20 domain closures that choose which
   real-world quantities become channels. Validated through Tier-0 against Tier-1.
 
 Key files: `src/umcp/frozen_contract.py` (constants), `src/umcp/kernel_optimized.py`
 (kernel), `src/umcp/validator.py` (validation), `src/umcp/epistemic_weld.py`
 (epistemology), `src/umcp/seam_optimized.py` (seam budget).
+`src/umcp_c/include/umcp_c/pipeline.h` (the spine in C),
+`src/umcp_c/include/umcp_c/contract.h` (frozen contract in C).
 
 **Lookup any symbol, lemma, identity, theorem, or tag**: `CATALOGUE.md` — the
 master index of all ~620 formal objects organized by tier with full definitions
