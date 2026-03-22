@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RosettaTranslator from '../../components/RosettaTranslator.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Rosetta Translation — GCD">
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-kernel-100 mb-2">Rosetta Translation</h1>
+      <p class="text-kernel-400 max-w-3xl">
+        The five words map across 9 disciplinary lenses so different fields can read
+        each other's results in their own dialect without losing auditability.
+        The Rosetta is not a metaphor — it is a mechanical translation engine grounded
+        in the frozen Contract and reconciled through the Integrity Ledger.
+      </p>
+      <p class="text-kernel-500 italic text-sm mt-2">
+        Significatio stabilis manet dum dialectus mutatur — meaning stays stable while dialect changes.
+      </p>
+    </div>
+
+    <!-- Sub-page navigation -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+      <a href={`${base}rosetta/lexicon/`}
+         class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 hover:border-kernel-500 transition group">
+        <div class="text-lg mb-1 group-hover:scale-110 transition inline-block">📜</div>
+        <div class="text-kernel-200 font-bold text-sm">Latin Lexicon</div>
+        <div class="text-kernel-500 text-xs mt-1">13 foundational terms + pronunciation guide</div>
+      </a>
+      <a href={`${base}rosetta/peirce/`}
+         class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 hover:border-kernel-500 transition group">
+        <div class="text-lg mb-1 group-hover:scale-110 transition inline-block">🔗</div>
+        <div class="text-kernel-200 font-bold text-sm">Peirce Correspondence</div>
+        <div class="text-kernel-500 text-xs mt-1">Semiotic completion — the seam Peirce lacked</div>
+      </a>
+      <a href={`${base}rosetta/spine/`}
+         class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 hover:border-kernel-500 transition group">
+        <div class="text-lg mb-1 group-hover:scale-110 transition inline-block">🦴</div>
+        <div class="text-kernel-200 font-bold text-sm">Discourse Spine</div>
+        <div class="text-kernel-500 text-xs mt-1">Five mandatory stops — Contract to Stance</div>
+      </a>
+      <a href={`${base}rosetta/phenomena/`}
+         class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 hover:border-kernel-500 transition group">
+        <div class="text-lg mb-1 group-hover:scale-110 transition inline-block">⚡</div>
+        <div class="text-kernel-200 font-bold text-sm">Collapse Phenomena</div>
+        <div class="text-kernel-500 text-xs mt-1">16 Latin terms across 4 categories</div>
+      </a>
+      <a href={`${base}rosetta/vocabulary/`}
+         class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 hover:border-kernel-500 transition group">
+        <div class="text-lg mb-1 group-hover:scale-110 transition inline-block">📐</div>
+        <div class="text-kernel-200 font-bold text-sm">Vocabulary & Identities</div>
+        <div class="text-kernel-500 text-xs mt-1">Symbols, words, identities, frozen parameters</div>
+      </a>
+      <a href={`${base}rosetta/scenarios/`}
+         class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 hover:border-kernel-500 transition group">
+        <div class="text-lg mb-1 group-hover:scale-110 transition inline-block">🌐</div>
+        <div class="text-kernel-200 font-bold text-sm">Domain Scenarios</div>
+        <div class="text-kernel-500 text-xs mt-1">Cross-domain translations with live kernel</div>
+      </a>
+    </div>
+
+    <RosettaTranslator />
+  </div>
+</BaseLayout>

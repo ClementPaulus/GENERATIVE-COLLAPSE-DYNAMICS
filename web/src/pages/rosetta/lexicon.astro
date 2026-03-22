@@ -1,0 +1,139 @@
+---
+/**
+ * Lexicon Latinum — Complete Latin Vocabulary of GCD
+ *
+ * 13 foundational terms from MANIFESTUM_LATINUM.md §IV.E
+ * plus 16 collapse phenomena across 4 categories.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Lexicon Latinum — GCD">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-6">
+      <nav class="text-xs text-kernel-500 mb-3">
+        <a href={`${base}rosetta/`} class="hover:text-kernel-300 transition">Rosetta</a>
+        <span class="mx-1">›</span>
+        <span class="text-kernel-400">Lexicon Latinum</span>
+      </nav>
+      <h1 class="text-3xl font-bold text-kernel-100 mb-2">Lexicon Latinum</h1>
+      <p class="text-kernel-400 max-w-3xl">
+        These Latin terms are the <strong class="text-kernel-200">canonical names</strong> of GCD structures.
+        Each word carries its operational meaning in its morphology — use them as orientation
+        priors when the English is ambiguous. The morphology IS the constraint.
+      </p>
+      <p class="text-kernel-500 italic text-sm mt-2">
+        Continuitas non narratur: mensuratur. — Continuity is not narrated: it is measured.
+      </p>
+    </div>
+
+    <!-- Foundational Terms -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 mb-6" id="lexicon-section">
+      <h2 class="text-lg font-bold text-kernel-200 mb-4">Foundational Terms</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm" id="lexicon-table">
+          <thead>
+            <tr class="border-b border-kernel-600 text-kernel-400">
+              <th class="text-left p-2 font-medium">Latin</th>
+              <th class="text-left p-2 font-medium text-kernel-500">Symbol</th>
+              <th class="text-left p-2 font-medium">Literal</th>
+              <th class="text-left p-2 font-medium">Operational Seed</th>
+            </tr>
+          </thead>
+          <tbody id="lexicon-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Collapse Phenomena -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-2">Collapse Phenomena Lexicon</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        16 Latin terms naming the specific phenomena discovered across 146 experiments.
+        Grouped by where in the collapse-return cycle they occur.
+      </p>
+      <div class="space-y-6" id="phenomena-sections"></div>
+    </div>
+
+    <!-- Pronunciation Guide -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-4">
+      <h2 class="text-lg font-bold text-kernel-200 mb-3">Nota de Pronunciatione</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-kernel-400">
+        <div>
+          <h3 class="text-kernel-300 font-bold text-xs mb-2">Classical Latin Pronunciation</h3>
+          <ul class="space-y-1 text-xs">
+            <li><strong class="text-kernel-300">c</strong> — always hard: <em>casus</em> = "KAH-soos"</li>
+            <li><strong class="text-kernel-300">ae</strong> — as English "eye": <em>clausurae</em> = "klow-SOO-rye"</li>
+            <li><strong class="text-kernel-300">v</strong> — pronounced as "w": <em>via</em> = "WEE-ah"</li>
+            <li><strong class="text-kernel-300">-itas</strong> — fourth syllable stress: <em>fidelitas</em> = "fi-DEH-li-tahs"</li>
+            <li><strong class="text-kernel-300">-tio</strong> — "TEE-oh": <em>derivatio</em> = "deh-ri-WAH-tee-oh"</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-kernel-300 font-bold text-xs mb-2">Why Latin?</h3>
+          <p class="text-xs text-kernel-500">
+            Latin carries morphological constraints that English lacks. When you say
+            <em class="text-kernel-400">derivatio</em> (de- + rivus: diverting the stream), the word's
+            structure constrains its meaning more tightly than "drift" does.
+            The Latin formulation of Axiom-0 — <em class="text-kernel-300">Collapsus generativus est;
+            solum quod redit, reale est</em> — carries the axiom's morphological, syntactic,
+            and etymological layers simultaneously. This is not ornament. It is precision.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { LATIN_LEXICON, COLLAPSE_PHENOMENA, type LatinTerm, type LatinPhenomenon } from '../../lib/constants';
+
+  // Render foundational terms table
+  const tbody = document.getElementById('lexicon-body')!;
+  tbody.innerHTML = (LATIN_LEXICON as LatinTerm[]).map(term => {
+    const symbolClass = term.symbol === '—' ? 'text-kernel-600' : 'text-amber-400 font-mono';
+    return `
+      <tr class="border-b border-kernel-800 hover:bg-kernel-800/30 transition">
+        <td class="p-2 text-kernel-200 font-medium italic">${term.latin}</td>
+        <td class="p-2 ${symbolClass}">${term.symbol}</td>
+        <td class="p-2 text-kernel-400">${term.literal}</td>
+        <td class="p-2 text-kernel-500 text-xs">${term.operational}</td>
+      </tr>`;
+  }).join('');
+
+  // Render collapse phenomena grouped by category
+  const phenomena = COLLAPSE_PHENOMENA as LatinPhenomenon[];
+  const categories = [...new Set(phenomena.map(p => p.category))];
+
+  const categoryColors: Record<string, { border: string; badge: string }> = {
+    'Channel Collapse': { border: 'border-red-700/50', badge: 'bg-red-900/30 text-red-400' },
+    'Seam': { border: 'border-amber-700/50', badge: 'bg-amber-900/30 text-amber-400' },
+    'Structural States': { border: 'border-blue-700/50', badge: 'bg-blue-900/30 text-blue-400' },
+    'Scale Ladder': { border: 'border-green-700/50', badge: 'bg-green-900/30 text-green-400' },
+  };
+
+  const container = document.getElementById('phenomena-sections')!;
+  container.innerHTML = categories.map(cat => {
+    const items = phenomena.filter(p => p.category === cat);
+    const colors = categoryColors[cat] || { border: 'border-kernel-700', badge: 'bg-kernel-800 text-kernel-400' };
+    return `
+      <div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-xs px-2 py-0.5 rounded ${colors.badge}">${cat}</span>
+          <span class="text-kernel-600 text-xs">${items.length} terms</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          ${items.map(item => `
+            <div class="bg-kernel-800 rounded-lg p-3 border ${colors.border}">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-kernel-200 font-medium italic text-sm">${item.latin}</span>
+                <span class="text-kernel-500 text-xs">${item.english}</span>
+              </div>
+              <p class="text-kernel-500 text-xs">${item.operational}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+  }).join('');
+</script>

@@ -1,0 +1,412 @@
+---
+/**
+ * Vocabulary & Identities — The Complete Reference
+ *
+ * Interactive deep-dive into the 6 kernel symbols, 5 words,
+ * 3 algebraic identities, 5 frozen parameters, and 3 regime gates.
+ * Everything computable, everything verifiable.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Vocabulary & Identities — GCD">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-6">
+      <nav class="text-xs text-kernel-500 mb-3">
+        <a href={`${base}rosetta/`} class="hover:text-kernel-300 transition">Rosetta</a>
+        <span class="mx-1">›</span>
+        <span class="text-kernel-400">Vocabulary & Identities</span>
+      </nav>
+      <h1 class="text-3xl font-bold text-kernel-100 mb-2">Vocabulary & Identities</h1>
+      <p class="text-kernel-400 max-w-3xl">
+        The complete reference for GCD's formal vocabulary. Six symbols, five words,
+        three algebraic identities, five frozen parameters, and three regime gates.
+        Everything derives from a single axiom. Everything is verifiable by computation.
+      </p>
+      <p class="text-kernel-500 italic text-sm mt-2">
+        Algebra est cautio, non porta. — The algebra is a warranty, not a gate.
+      </p>
+    </div>
+
+    <!-- Section nav -->
+    <div class="flex flex-wrap gap-2 mb-6">
+      <button data-tab="symbols" class="tab-btn px-3 py-1.5 rounded text-xs font-medium bg-kernel-700 text-kernel-200">Kernel Symbols</button>
+      <button data-tab="words" class="tab-btn px-3 py-1.5 rounded text-xs font-medium bg-kernel-800 text-kernel-400">Five Words</button>
+      <button data-tab="identities" class="tab-btn px-3 py-1.5 rounded text-xs font-medium bg-kernel-800 text-kernel-400">Algebraic Identities</button>
+      <button data-tab="frozen" class="tab-btn px-3 py-1.5 rounded text-xs font-medium bg-kernel-800 text-kernel-400">Frozen Parameters</button>
+      <button data-tab="regimes" class="tab-btn px-3 py-1.5 rounded text-xs font-medium bg-kernel-800 text-kernel-400">Regime Gates</button>
+      <button data-tab="verify" class="tab-btn px-3 py-1.5 rounded text-xs font-medium bg-kernel-800 text-kernel-400">Live Verifier</button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="tab-symbols" class="tab-content"></div>
+    <div id="tab-words" class="tab-content hidden"></div>
+    <div id="tab-identities" class="tab-content hidden"></div>
+    <div id="tab-frozen" class="tab-content hidden"></div>
+    <div id="tab-regimes" class="tab-content hidden"></div>
+    <div id="tab-verify" class="tab-content hidden"></div>
+  </div>
+</BaseLayout>
+
+<script>
+  import {
+    KERNEL_SYMBOLS, FIVE_WORDS, REGIME_THRESHOLDS, REGIME_COLORS,
+    EPSILON, P_EXPONENT, ALPHA, LAMBDA, TOL_SEAM, C_STAR, OMEGA_TRAP, C_TRAP,
+  } from '../../lib/constants';
+  import { computeKernel, classifyRegime, verifyIdentities } from '../../lib/kernel';
+
+  // ── Tab switching ──
+  const tabs = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    const target = (tab as HTMLElement).dataset.tab!;
+    tabContents.forEach(tc => tc.classList.add('hidden'));
+    document.getElementById(`tab-${target}`)!.classList.remove('hidden');
+    tabs.forEach(t => { (t as HTMLElement).className = 'tab-btn px-3 py-1.5 rounded text-xs font-medium bg-kernel-800 text-kernel-400'; });
+    (tab as HTMLElement).className = 'tab-btn px-3 py-1.5 rounded text-xs font-medium bg-kernel-700 text-kernel-200';
+  }));
+
+  // ── 1. Kernel Symbols ──
+  const symbolEntries = Object.values(KERNEL_SYMBOLS);
+  document.getElementById('tab-symbols')!.innerHTML = `
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-1">Tier-1 Kernel Symbols</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        The kernel K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC). Four primitive equations (F, κ, S, C)
+        and two derived values (ω = 1−F, IC = exp(κ)), with 3 effective degrees of freedom.
+        These symbols are reserved and immutable — any redefinition is symbol capture.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        ${symbolEntries.map(s => `
+          <div class="bg-kernel-800 rounded-lg p-4 border border-kernel-700 hover:border-kernel-500 transition">
+            <div class="flex items-baseline gap-2 mb-2">
+              <span class="text-2xl font-bold text-kernel-100 font-mono">${s.symbol}</span>
+              <span class="text-sm text-kernel-300">${s.name}</span>
+            </div>
+            <div class="text-xs text-kernel-500 italic mb-2">${s.latin}</div>
+            <div class="bg-kernel-900 rounded px-3 py-2 text-sm font-mono text-amber-400 mb-2">${s.formula}</div>
+            <div class="text-xs text-kernel-500">Range: <span class="text-kernel-300">${s.range}</span></div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="mt-4 p-3 bg-kernel-800/50 rounded border border-kernel-700">
+        <div class="text-xs text-kernel-400">
+          <strong class="text-kernel-300">3 Effective DOF:</strong> Although 6 values are computed,
+          ω = 1−F (derived), IC = exp(κ) (derived), and S ≈ f(F,C) (asymptotically determined).
+          Only <span class="text-amber-400 font-mono">F</span>,
+          <span class="text-amber-400 font-mono">κ</span>, and
+          <span class="text-amber-400 font-mono">C</span> are independent.
+        </div>
+      </div>
+    </div>`;
+
+  // ── 2. Five Words ──
+  const words = FIVE_WORDS as Array<{word: string; latin: string; symbol: string; formula: string; operational: string; ledgerRole: string; morphology: string}>;
+  document.getElementById('tab-words')!.innerHTML = `
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-1">The Five-Word Vocabulary</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        These five plain-language words are the prose interface — the minimal lingua franca for narrating
+        any collapse-return cycle through the Canon. Each word has an operational meaning tied to the
+        frozen Contract and reconciled in the Integrity Ledger.
+      </p>
+      <div class="space-y-4">
+        ${words.map((w, i) => {
+          const colors = ['green', 'blue', 'amber', 'purple', 'cyan'];
+          const c = colors[i % 5];
+          return `
+            <div class="bg-kernel-800 rounded-lg p-4 border border-kernel-700">
+              <div class="flex items-center gap-3 mb-2">
+                <span class="text-xl font-bold text-${c}-400">${w.word}</span>
+                <span class="text-xs text-kernel-500 italic">${w.latin}</span>
+                <span class="font-mono text-sm text-kernel-300 ml-auto">${w.symbol}</span>
+              </div>
+              <div class="bg-kernel-900 rounded px-3 py-1.5 text-xs font-mono text-amber-400 mb-2">${w.formula}</div>
+              <p class="text-sm text-kernel-400 mb-2">${w.operational}</p>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div><span class="text-kernel-500">Ledger role:</span> <span class="text-kernel-300">${w.ledgerRole}</span></div>
+                <div><span class="text-kernel-500">Morphology:</span> <span class="text-kernel-300">${w.morphology}</span></div>
+              </div>
+            </div>`;
+        }).join('')}
+      </div>
+      <div class="mt-4 p-3 bg-kernel-800/50 rounded border border-kernel-700">
+        <div class="text-xs text-kernel-400">
+          <strong class="text-kernel-300">Conservation budget:</strong>
+          <span class="font-mono text-amber-400">Δκ = R·τ_R − (D_ω + D_C)</span>.
+          Debits (Drift + Roughness) must balance credits (Return). The budget is the <em>semantic warranty</em>
+          behind the prose — it explains <em>why</em> the ledger must reconcile.
+        </div>
+      </div>
+    </div>`;
+
+  // ── 3. Algebraic Identities ──
+  const identities = [
+    {
+      name: 'Duality Identity',
+      latin: 'Complementum Perfectum',
+      formula: 'F + ω = 1',
+      proof: 'F = Σ wᵢcᵢ, ω = 1 − F ⟹ F + ω = 1 exactly. Verified to residual 0.0e+00 across 10K random traces.',
+      meaning: 'Collapse and fidelity are complements. There is no third possibility — tertia via nulla. In Fisher coordinates, this is sin²θ + cos²θ = 1.',
+      verified: '0.0e+00',
+    },
+    {
+      name: 'Integrity Bound',
+      latin: 'Limbus Integritatis',
+      formula: 'IC ≤ F',
+      proof: 'IC = exp(Σ wᵢ ln cᵢ) is the weighted geometric mean. F = Σ wᵢcᵢ is the weighted arithmetic mean. GM ≤ AM, with equality iff all cᵢ equal. More fundamentally: IC ≤ F is the solvability condition — for n=2, c₁,₂ = F ± √(F²−IC²) requires IC ≤ F for real solutions.',
+      meaning: 'Integrity cannot exceed fidelity. One dead channel kills IC via geometric slaughter while F stays healthy. The gap Δ = F − IC is the heterogeneity gap measuring channel divergence.',
+      verified: '100% (all 20 domains)',
+    },
+    {
+      name: 'Log-Integrity Relation',
+      latin: 'Relatio Log-Integritatis',
+      formula: 'IC = exp(κ)',
+      proof: 'κ = Σ wᵢ ln(cᵢ,ε) ⟹ exp(κ) = exp(Σ wᵢ ln cᵢ) = Π cᵢ^wᵢ = IC. The logarithm converts the multiplicative coherence measure to an additive one.',
+      meaning: 'The link between multiplicative and additive coherence. κ is the log-space view of IC. This enables additive composition of seam budgets while preserving the multiplicative structure of integrity.',
+      verified: 'exact (by definition)',
+    },
+  ];
+
+  const statisticalConstraint = {
+    name: 'Entropy Constraint',
+    latin: 'Limbus Entropiae',
+    formula: 'S ≈ f(F, C)',
+    proof: 'As n → ∞, the central limit theorem constrains the Bernoulli field entropy to be asymptotically determined by F and C. Empirically: corr(C, S) → −1.',
+    meaning: 'This is NOT an identity — it is a statistical constraint that tightens with increasing channel count n. It reduces the effective DOF from 4 to 3 (F, κ, C).',
+    verified: 'corr → −1 as n → ∞',
+  };
+
+  document.getElementById('tab-identities')!.innerHTML = `
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-1">Algebraic Identities</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        Three identities that hold exactly by construction, plus one statistical constraint.
+        These reduce 6 kernel outputs to 3 effective degrees of freedom.
+      </p>
+      <div class="space-y-4 mb-6">
+        ${identities.map((id, i) => `
+          <div class="bg-kernel-800 rounded-lg p-5 border border-kernel-700">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="w-8 h-8 rounded-full bg-kernel-700 flex items-center justify-center text-sm font-bold text-kernel-200">${i + 1}</span>
+              <div>
+                <span class="font-bold text-kernel-100">${id.name}</span>
+                <span class="text-xs text-kernel-500 italic ml-2">${id.latin}</span>
+              </div>
+              <span class="ml-auto text-xs bg-green-900/50 text-green-400 px-2 py-0.5 rounded">verified: ${id.verified}</span>
+            </div>
+            <div class="bg-kernel-900 rounded px-4 py-3 text-center text-lg font-mono text-amber-400 mb-3">${id.formula}</div>
+            <details class="text-sm">
+              <summary class="text-kernel-300 cursor-pointer hover:text-kernel-100 transition">Proof sketch</summary>
+              <p class="text-kernel-400 mt-2 text-xs">${id.proof}</p>
+            </details>
+            <p class="text-xs text-kernel-500 mt-2">${id.meaning}</p>
+          </div>
+        `).join('')}
+      </div>
+      <div class="bg-kernel-800 rounded-lg p-5 border border-amber-700/30">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="w-8 h-8 rounded-full bg-amber-900/50 flex items-center justify-center text-sm font-bold text-amber-400">≈</span>
+          <div>
+            <span class="font-bold text-kernel-100">${statisticalConstraint.name}</span>
+            <span class="text-xs text-kernel-500 italic ml-2">${statisticalConstraint.latin}</span>
+          </div>
+          <span class="ml-auto text-xs bg-amber-900/50 text-amber-400 px-2 py-0.5 rounded">statistical</span>
+        </div>
+        <div class="bg-kernel-900 rounded px-4 py-3 text-center text-lg font-mono text-amber-400 mb-3">${statisticalConstraint.formula}</div>
+        <details class="text-sm">
+          <summary class="text-kernel-300 cursor-pointer hover:text-kernel-100 transition">Proof sketch</summary>
+          <p class="text-kernel-400 mt-2 text-xs">${statisticalConstraint.proof}</p>
+        </details>
+        <p class="text-xs text-kernel-500 mt-2">${statisticalConstraint.meaning}</p>
+      </div>
+    </div>`;
+
+  // ── 4. Frozen Parameters ──
+  const frozenParams = [
+    { name: 'ε (EPSILON)', value: `${EPSILON}`, source: 'Guard band', role: 'Pole at ω=1 does not affect measurements to machine precision. Prevents log(0) in κ computation.' },
+    { name: 'p (P_EXPONENT)', value: `${P_EXPONENT}`, source: 'Cardano root', role: 'Unique integer where ω_trap is a root of x³ + x − 1 = 0. Governs Γ(ω) = ω^p/(1−ω+ε).' },
+    { name: 'α (ALPHA)', value: `${ALPHA}`, source: 'Unit coupling', role: 'Curvature cost coefficient: D_C = α·C. Unit coupling — curvature debit equals curvature directly.' },
+    { name: 'λ (LAMBDA)', value: `${LAMBDA}`, source: 'Auxiliary', role: 'Auxiliary coefficient for extended diagnostics.' },
+    { name: 'tol_seam (TOL_SEAM)', value: `${TOL_SEAM}`, source: 'Seam closure', role: 'Width where IC ≤ F holds at 100% across all 20 domains. |s| ≤ tol_seam for seam PASS.' },
+    { name: 'c* (C_STAR)', value: `${C_STAR}`, source: 'Logistic fixed point', role: 'Self-dual fixed point of the logistic map. Maximizes S + κ per channel.' },
+    { name: 'ω_trap (OMEGA_TRAP)', value: `${OMEGA_TRAP}`, source: 'Cardano root', role: 'Drift trapping point: x³ + x − 1 = 0 where x = ω_trap. c_trap = 1 − ω_trap.' },
+    { name: 'c_trap (C_TRAP)', value: `${C_TRAP}`, source: 'From ω_trap', role: 'Channel-space trapping point. Location of the first weld (Γ drops below 1.0).' },
+  ];
+
+  document.getElementById('tab-frozen')!.innerHTML = `
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-1">Frozen Parameters</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        <em>Trans suturam congelatum</em> — frozen across the seam. These values are the unique constants
+        where seams close consistently across all 20 domains. They are discovered by the mathematics,
+        not chosen by convention. Never say "we chose" or "hyperparameter."
+      </p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-kernel-700">
+              <th class="text-left py-2 px-3 text-kernel-400 font-medium text-xs">Parameter</th>
+              <th class="text-right py-2 px-3 text-kernel-400 font-medium text-xs">Value</th>
+              <th class="text-left py-2 px-3 text-kernel-400 font-medium text-xs">Source</th>
+              <th class="text-left py-2 px-3 text-kernel-400 font-medium text-xs">Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${frozenParams.map(fp => `
+              <tr class="border-b border-kernel-800 hover:bg-kernel-800/50 transition">
+                <td class="py-2 px-3 font-mono text-kernel-200 text-xs">${fp.name}</td>
+                <td class="py-2 px-3 text-right font-mono text-amber-400 text-xs">${fp.value}</td>
+                <td class="py-2 px-3 text-kernel-400 text-xs">${fp.source}</td>
+                <td class="py-2 px-3 text-kernel-500 text-xs">${fp.role}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+
+  // ── 5. Regime Gates ──
+  const rt = REGIME_THRESHOLDS;
+  document.getElementById('tab-regimes')!.innerHTML = `
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-1">Regime Gates</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        The four-gate criterion translates continuous Tier-1 invariants into discrete regime labels.
+        Stable requires ALL four gates to pass simultaneously (conjunctive). Stability is rare — only 12.5% of Fisher space.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div class="bg-green-900/20 border border-green-700/50 rounded-lg p-4">
+          <div class="text-green-400 font-bold mb-2">Stable (12.5%)</div>
+          <ul class="text-xs text-kernel-400 space-y-1">
+            <li>ω &lt; ${rt.omega_stable_max}</li>
+            <li>F &gt; ${rt.F_stable_min}</li>
+            <li>S &lt; ${rt.S_stable_max}</li>
+            <li>C &lt; ${rt.C_stable_max}</li>
+          </ul>
+          <div class="text-xs text-kernel-600 mt-2">All four must hold (conjunctive)</div>
+        </div>
+        <div class="bg-amber-900/20 border border-amber-700/50 rounded-lg p-4">
+          <div class="text-amber-400 font-bold mb-2">Watch (24.4%)</div>
+          <ul class="text-xs text-kernel-400 space-y-1">
+            <li>${rt.omega_watch_min} ≤ ω &lt; ${rt.omega_watch_max}</li>
+            <li>OR: any Stable gate fails</li>
+          </ul>
+          <div class="text-xs text-kernel-600 mt-2">Intermediate — at least one gate open</div>
+        </div>
+        <div class="bg-red-900/20 border border-red-700/50 rounded-lg p-4">
+          <div class="text-red-400 font-bold mb-2">Collapse (63.1%)</div>
+          <ul class="text-xs text-kernel-400 space-y-1">
+            <li>ω ≥ ${rt.omega_collapse_min}</li>
+          </ul>
+          <div class="text-xs text-kernel-600 mt-2">Ruptura est fons constantiae</div>
+        </div>
+      </div>
+      <div class="bg-purple-900/20 border border-purple-700/50 rounded-lg p-4">
+        <div class="text-purple-400 font-bold mb-2">Critical (overlay)</div>
+        <div class="text-xs text-kernel-400">
+          IC &lt; ${rt.IC_critical_max} — severity overlay, not a regime. Accompanies any regime when integrity dangerously low.
+        </div>
+      </div>
+      <div class="mt-4 p-3 bg-kernel-800/50 rounded border border-kernel-700 text-xs text-kernel-400">
+        <strong class="text-kernel-300">Fisher space partition:</strong>
+        Collapse occupies 63.1%, Watch 24.4%, Stable only 12.5%.
+        Most of the manifold is NOT stable — return to stability is the exception, not the rule.
+        This is what makes the Return Axiom meaningful.
+      </div>
+    </div>`;
+
+  // ── 6. Live Verifier ──
+  document.getElementById('tab-verify')!.innerHTML = `
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-1">Live Identity Verifier</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        Enter channel values and verify all three algebraic identities in real time.
+        The kernel runs in your browser — same formulas, same frozen parameters.
+      </p>
+      <div class="mb-4">
+        <label class="text-xs text-kernel-400 block mb-1">
+          Channels (comma-separated, values in [0,1]):
+        </label>
+        <input id="channel-input" type="text" value="0.95, 0.80, 0.60, 0.40, 0.01"
+          class="w-full bg-kernel-800 border border-kernel-600 rounded px-3 py-2 text-sm font-mono text-kernel-200 focus:border-amber-500 focus:outline-none" />
+        <div class="text-xs text-kernel-600 mt-1">
+          Presets:
+          <button class="preset-btn text-amber-400 hover:text-amber-300 ml-1" data-vals="0.95,0.92,0.98,0.91,0.96,0.93,0.97,0.94">Perfect</button> ·
+          <button class="preset-btn text-amber-400 hover:text-amber-300" data-vals="0.95,0.95,0.95,0.95,0.95,0.95,0.95,0.001">Slaughter</button> ·
+          <button class="preset-btn text-amber-400 hover:text-amber-300" data-vals="0.50,0.50,0.50,0.50">Equator</button> ·
+          <button class="preset-btn text-amber-400 hover:text-amber-300" data-vals="0.10,0.05,0.02,0.15,0.08">Deep collapse</button>
+        </div>
+      </div>
+      <div id="verify-results"></div>
+    </div>`;
+
+  // Verification logic
+  function runVerification() {
+    const input = (document.getElementById('channel-input') as HTMLInputElement).value;
+    const channels = input.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n) && n >= 0 && n <= 1);
+    if (channels.length < 2) {
+      document.getElementById('verify-results')!.innerHTML = '<div class="text-red-400 text-sm">Need at least 2 valid channels in [0,1]</div>';
+      return;
+    }
+    const w = channels.map(() => 1 / channels.length);
+    const result = computeKernel(channels, w);
+    const regime = classifyRegime(result);
+    const checks = verifyIdentities(result);
+
+    const checkIcon = (ok: boolean) => ok
+      ? '<span class="text-green-400 font-bold">✓ PASS</span>'
+      : '<span class="text-red-400 font-bold">✗ FAIL</span>';
+
+    const regimeColor = regime.regime === 'STABLE' ? 'text-green-400' : regime.regime === 'WATCH' ? 'text-amber-400' : 'text-red-400';
+
+    document.getElementById('verify-results')!.innerHTML = `
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+        ${[
+          { label: 'F (Fidelity)', val: result.F.toFixed(8) },
+          { label: 'ω (Drift)', val: result.omega.toFixed(8) },
+          { label: 'S (Entropy)', val: result.S.toFixed(8) },
+          { label: 'C (Curvature)', val: result.C.toFixed(8) },
+          { label: 'κ (Log-integrity)', val: result.kappa.toFixed(8) },
+          { label: 'IC (Integrity)', val: result.IC.toFixed(8) },
+        ].map(m => `
+          <div class="bg-kernel-800 rounded p-2 text-center">
+            <div class="text-xs text-kernel-500">${m.label}</div>
+            <div class="font-mono text-sm text-kernel-200">${m.val}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="space-y-2 mb-4">
+        ${checks.map((ch: {name: string; passed: boolean; residual: number}) => `
+          <div class="flex items-center justify-between bg-kernel-800 rounded px-4 py-2 text-sm">
+            <span class="text-kernel-300">${ch.name}</span>
+            <div class="flex items-center gap-3">
+              <span class="font-mono text-xs text-kernel-500">residual: ${ch.residual.toExponential(2)}</span>
+              ${checkIcon(ch.passed)}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-kernel-800 rounded p-3 text-center">
+          <div class="text-xs text-kernel-500">Regime</div>
+          <div class="font-bold ${regimeColor}">${regime.regime}${regime.isCritical ? ' + CRITICAL' : ''}</div>
+        </div>
+        <div class="bg-kernel-800 rounded p-3 text-center">
+          <div class="text-xs text-kernel-500">Δ (Het. Gap)</div>
+          <div class="font-mono text-kernel-200">${result.delta.toFixed(8)}</div>
+        </div>
+      </div>`;
+  }
+
+  const channelInput = document.getElementById('channel-input')!;
+  channelInput.addEventListener('input', runVerification);
+  document.querySelectorAll('.preset-btn').forEach(btn =>
+    btn.addEventListener('click', () => {
+      (channelInput as HTMLInputElement).value = (btn as HTMLElement).dataset.vals!;
+      runVerification();
+    })
+  );
+  runVerification();
+</script>

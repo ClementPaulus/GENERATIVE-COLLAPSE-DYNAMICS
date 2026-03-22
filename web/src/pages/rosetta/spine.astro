@@ -1,0 +1,160 @@
+---
+/**
+ * Spina Grammatica — The Five-Stop Discourse Spine
+ *
+ * Every claim, narrative, validation, or discourse follows the spine.
+ * CONTRACT → CANON → CLOSURES → INTEGRITY LEDGER → STANCE
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Discourse Spine — GCD">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-6">
+      <nav class="text-xs text-kernel-500 mb-3">
+        <a href={`${base}rosetta/`} class="hover:text-kernel-300 transition">Rosetta</a>
+        <span class="mx-1">›</span>
+        <span class="text-kernel-400">Discourse Spine</span>
+      </nav>
+      <h1 class="text-3xl font-bold text-kernel-100 mb-2">Spina Grammatica</h1>
+      <p class="text-kernel-400 max-w-3xl">
+        Every claim passes through exactly five stops. This is both a validation pipeline
+        and a grammatical structure for how claims are told, checked, and connected.
+      </p>
+      <p class="text-kernel-500 italic text-sm mt-2">
+        Spina non negotiabilis est. — The spine is non-negotiable.
+      </p>
+    </div>
+
+    <!-- Spine visualization -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6 mb-6" id="spine-visual"></div>
+
+    <!-- Detailed stop cards -->
+    <div class="space-y-4 mb-6" id="spine-cards"></div>
+
+    <!-- Governance mechanisms -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-3">Governance as Punctuation</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        Two mechanisms punctuate the spine without being the spine itself.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-kernel-800 rounded-lg p-4 border border-kernel-700">
+          <h3 class="text-kernel-200 font-bold text-sm mb-2">Manifest <span class="text-kernel-600 text-xs italic">(Manifestum)</span></h3>
+          <p class="text-sm text-kernel-400 mb-2">
+            Provenance — binds artifacts to time, tools, checksums.
+            Every claim carries its receipt.
+          </p>
+          <div class="text-xs text-kernel-500">
+            <strong class="text-kernel-400">Contains:</strong> SHA-256 checksums, timestamps,
+            tool versions, data sources, contract reference. The manifest proves the claim
+            was produced by the declared process.
+          </div>
+        </div>
+        <div class="bg-kernel-800 rounded-lg p-4 border border-kernel-700">
+          <h3 class="text-kernel-200 font-bold text-sm mb-2">Weld <span class="text-kernel-600 text-xs italic">(Sutura)</span></h3>
+          <p class="text-sm text-kernel-400 mb-2">
+            Continuity across change — the only legitimate way to change policy.
+          </p>
+          <div class="text-xs text-kernel-500">
+            <strong class="text-kernel-400">Protocol:</strong> Names an anchor, runs pre/post tests,
+            enforces κ-continuity (residual ≤ tol). History is <em class="text-kernel-400">append-only
+            and welded, never rewritten</em>.
+          </div>
+          <div class="text-xs text-kernel-600 italic mt-2">
+            Historia numquam rescribitur; sutura tantum additur.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to use the spine -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-4">
+      <h2 class="text-lg font-bold text-kernel-200 mb-3">Using the Spine in Practice</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div>
+          <h3 class="text-kernel-300 font-bold text-xs mb-2">For Validation</h3>
+          <ol class="list-decimal list-inside space-y-1 text-kernel-400 text-xs">
+            <li><strong class="text-kernel-300">Freeze</strong> — declare contract, sources, normalization before computing</li>
+            <li><strong class="text-kernel-300">Compute</strong> — run kernel on embedded trace vector</li>
+            <li><strong class="text-kernel-300">Publish</strong> — thresholds and their order; no mid-episode edits</li>
+            <li><strong class="text-kernel-300">Reconcile</strong> — debit/credit budget Δκ = R·τ_R − (D_ω + D_C)</li>
+            <li><strong class="text-kernel-300">Read</strong> — derive regime from gates, emit three-valued verdict</li>
+          </ol>
+        </div>
+        <div>
+          <h3 class="text-kernel-300 font-bold text-xs mb-2">For Discourse</h3>
+          <ol class="list-decimal list-inside space-y-1 text-kernel-400 text-xs">
+            <li><strong class="text-kernel-300">Contract</strong> — state what rules constrain your claim</li>
+            <li><strong class="text-kernel-300">Canon</strong> — narrate using Drift, Fidelity, Roughness, Return, Integrity</li>
+            <li><strong class="text-kernel-300">Closures</strong> — name your thresholds; if they change, say so</li>
+            <li><strong class="text-kernel-300">Ledger</strong> — show the receipt: what was debited, credited, residual?</li>
+            <li><strong class="text-kernel-300">Stance</strong> — state the derived verdict — never assert, always derive</li>
+          </ol>
+        </div>
+      </div>
+      <div class="mt-4 p-3 bg-kernel-800/50 rounded text-xs text-kernel-500 text-center">
+        <em>Omnia per spinam transeunt.</em> — Everything passes through the spine.
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { DISCOURSE_SPINE, type SpineStop } from '../../lib/constants';
+
+  const stopColors = [
+    { bg: 'bg-blue-900/30', border: 'border-blue-700', accent: 'text-blue-300', icon: '📋' },
+    { bg: 'bg-amber-900/30', border: 'border-amber-700', accent: 'text-amber-300', icon: '📖' },
+    { bg: 'bg-purple-900/30', border: 'border-purple-700', accent: 'text-purple-300', icon: '🔒' },
+    { bg: 'bg-green-900/30', border: 'border-green-700', accent: 'text-green-300', icon: '⚖️' },
+    { bg: 'bg-red-900/30', border: 'border-red-700', accent: 'text-red-300', icon: '🏛️' },
+  ];
+
+  const stopDetails = [
+    'Define rules before evidence. Freeze data sources, normalization procedures, near-wall policy, and thresholds. The contract declares the rules of the sentence before it is written. Nothing computed before the contract is frozen has evidential standing.',
+    'Tell the story using the five words: Drift, Fidelity, Roughness, Return, Integrity. The canon is the narrative body — prose-first, auditable by construction. Authors write in ordinary language; the five words provide the vocabulary.',
+    'Publish thresholds and their order. No mid-episode edits. Version the closure sheet. Stance must change when thresholds are crossed — this is what makes the system falsifiable. Published grammar rules that bind the narrative.',
+    'Debit Drift (D_ω) and Roughness (D_C). Credit Return (R·τ_R). The account must reconcile: |residual| ≤ tol_seam. The conservation budget Δκ = R·τ_R − (D_ω + D_C) is the proof that the sentence is well-formed.',
+    'Read from declared gates: Stable / Watch / Collapse, with optional Critical overlay (IC < 0.30). The verdict is derived from the gates — never asserted by the agent. If two agents feed the same data through the same contract, they must arrive at the same stance.',
+  ];
+
+  // Horizontal spine visualization
+  const visual = document.getElementById('spine-visual')!;
+  visual.innerHTML = `
+    <div class="flex flex-col md:flex-row items-stretch gap-0">
+      ${(DISCOURSE_SPINE as SpineStop[]).map((stop, i) => {
+        const sc = stopColors[i];
+        const isLast = i === DISCOURSE_SPINE.length - 1;
+        return `
+          <div class="flex-1 flex flex-col items-center text-center">
+            <div class="${sc.bg} border ${sc.border} rounded-lg p-4 w-full h-full flex flex-col justify-center">
+              <div class="text-2xl mb-1">${sc.icon}</div>
+              <div class="${sc.accent} font-bold text-sm">${stop.stop}</div>
+              <div class="text-kernel-600 text-xs italic">${stop.latin}</div>
+              <div class="text-kernel-500 text-xs mt-1 font-medium">${stop.verb}</div>
+            </div>
+            ${!isLast ? '<div class="text-kernel-600 text-lg my-1 md:hidden">↓</div>' : ''}
+          </div>
+          ${!isLast ? '<div class="hidden md:flex items-center text-kernel-500 text-xl px-2 font-bold">→</div>' : ''}`;
+      }).join('')}
+    </div>`;
+
+  // Detailed cards
+  const cards = document.getElementById('spine-cards')!;
+  cards.innerHTML = (DISCOURSE_SPINE as SpineStop[]).map((stop, i) => {
+    const sc = stopColors[i];
+    return `
+      <div class="${sc.bg} border ${sc.border} rounded-lg p-4">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-xl">${sc.icon}</span>
+          <div>
+            <span class="${sc.accent} font-bold">${stop.stop}</span>
+            <span class="text-kernel-600 text-xs italic ml-2">${stop.latin} — ${stop.verb}</span>
+          </div>
+        </div>
+        <p class="text-sm text-kernel-400">${stopDetails[i]}</p>
+      </div>`;
+  }).join('');
+</script>

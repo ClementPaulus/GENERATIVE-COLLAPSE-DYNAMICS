@@ -1,0 +1,205 @@
+---
+/**
+ * Peirce Correspondence — Completing Unlimited Semiosis
+ *
+ * Maps Peirce's semiotic triad (Object → Sign → Interpretant) to GCD's
+ * kernel pipeline. Key finding: Axiom-0 provides the stopping condition
+ * (the seam) that Peirce's framework lacks — completing the program.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Peirce Correspondence — GCD">
+  <div class="max-w-5xl mx-auto">
+    <div class="mb-6">
+      <nav class="text-xs text-kernel-500 mb-3">
+        <a href={`${base}rosetta/`} class="hover:text-kernel-300 transition">Rosetta</a>
+        <span class="mx-1">›</span>
+        <span class="text-kernel-400">Peirce Correspondence</span>
+      </nav>
+      <h1 class="text-3xl font-bold text-kernel-100 mb-2">Peirce Correspondence</h1>
+      <p class="text-kernel-400 max-w-3xl">
+        Charles Sanders Peirce's triadic semiotics (Object → Sign → Interpretant) maps
+        structurally onto the GCD kernel pipeline. But GCD completes what Peirce left
+        open: the <strong class="text-kernel-200">seam</strong> provides a stopping condition
+        for unlimited semiosis. The return axiom determines when interpretation terminates.
+      </p>
+    </div>
+
+    <!-- Main correspondence table -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-4">Structural Mapping</h2>
+      <div class="overflow-x-auto" id="peirce-table-container"></div>
+    </div>
+
+    <!-- The missing piece -->
+    <div class="bg-gradient-to-r from-kernel-900 via-amber-950/20 to-kernel-900 border border-amber-700/50 rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-bold text-amber-300 mb-3">The Missing Piece</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-sm font-bold text-kernel-300 mb-2">Peirce's Problem</h3>
+          <p class="text-sm text-kernel-400">
+            Peirce recognized that signs generate interpretants which become signs for further
+            interpretants — an unbounded chain he called <em class="text-kernel-300">unlimited semiosis</em>.
+            He never solved the termination problem: when does interpretation stop?
+            Without a stopping condition, meaning remains indefinitely deferred.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-kernel-300 mb-2">Axiom-0's Completion</h3>
+          <p class="text-sm text-kernel-400">
+            <em class="text-kernel-300">"Only what returns is real."</em>
+            The seam (τ_R, tol_seam) provides the missing termination condition.
+            When the seam budget reconciles (|residual| ≤ 0.005), interpretation has
+            <em class="text-kernel-200">returned</em> — the sign chain closes. When it doesn't
+            (τ_R = ∞_rec), interpretation remains a <em class="text-kernel-300">gestus</em>:
+            an emission without receipt.
+          </p>
+        </div>
+      </div>
+      <div class="mt-4 p-3 bg-kernel-800/50 rounded text-xs text-kernel-500 text-center">
+        <em>Semeiosis terminatur cum sutura clauditur.</em> — Semiosis terminates when the seam closes.
+      </div>
+    </div>
+
+    <!-- Semiotic kernel findings -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-4 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-3">Semiotic Kernel — Key Findings</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        The 8-channel semiotic kernel profiles 30 sign systems. Each maps to:
+        referential precision, syntactic complexity, ground stability, interpretant depth,
+        compositional productivity, modality richness, temporal stability, context sensitivity.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="semiotic-findings"></div>
+    </div>
+
+    <!-- Triadic diagram -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-4">Triadic Structure</h2>
+      <div class="flex justify-center">
+        <div class="relative w-80 h-64">
+          <!-- Triangle vertices -->
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 text-center">
+            <div class="bg-cyan-900/50 border border-cyan-700 rounded-lg px-4 py-2">
+              <div class="text-cyan-300 font-bold text-sm">Object</div>
+              <div class="text-kernel-500 text-xs">x(t) — raw data</div>
+            </div>
+          </div>
+          <div class="absolute bottom-0 left-0 text-center">
+            <div class="bg-amber-900/50 border border-amber-700 rounded-lg px-4 py-2">
+              <div class="text-amber-300 font-bold text-sm">Sign</div>
+              <div class="text-kernel-500 text-xs">Ψ(t) — trace</div>
+            </div>
+          </div>
+          <div class="absolute bottom-0 right-0 text-center">
+            <div class="bg-purple-900/50 border border-purple-700 rounded-lg px-4 py-2">
+              <div class="text-purple-300 font-bold text-sm">Interpretant</div>
+              <div class="text-kernel-500 text-xs">(F,ω,S,C,κ,IC)</div>
+            </div>
+          </div>
+          <!-- Center: the seam -->
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div class="bg-green-900/60 border-2 border-green-500 rounded-full px-3 py-2 text-center">
+              <div class="text-green-300 font-bold text-xs">Seam</div>
+              <div class="text-kernel-500 text-[10px]">τ_R, tol</div>
+            </div>
+          </div>
+          <!-- Connecting lines (SVG) -->
+          <svg class="absolute inset-0 w-full h-full" viewBox="0 0 320 256" fill="none">
+            <line x1="160" y1="40" x2="60" y2="200" stroke="#475569" stroke-width="1" stroke-dasharray="4"/>
+            <line x1="160" y1="40" x2="260" y2="200" stroke="#475569" stroke-width="1" stroke-dasharray="4"/>
+            <line x1="60" y1="200" x2="260" y2="200" stroke="#475569" stroke-width="1" stroke-dasharray="4"/>
+          </svg>
+        </div>
+      </div>
+      <p class="text-center text-xs text-kernel-500 mt-4">
+        Peirce's triad mediates Object → Sign → Interpretant.
+        GCD adds the <span class="text-green-400">seam</span> at center — the return constraint that closes the cycle.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { PEIRCE_CORRESPONDENCE, type PeirceMapping } from '../../lib/constants';
+
+  // Render correspondence table
+  const container = document.getElementById('peirce-table-container')!;
+  container.innerHTML = `
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-kernel-600 text-kernel-400">
+          <th class="text-left p-2 font-medium">Peirce</th>
+          <th class="text-left p-2 font-medium">GCD Equivalent</th>
+          <th class="text-left p-2 font-medium">Role</th>
+          <th class="text-left p-2 font-medium text-kernel-500">Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${(PEIRCE_CORRESPONDENCE as PeirceMapping[]).map(m => {
+          const isMissing = m.peirce.includes('MISSING');
+          const rowClass = isMissing
+            ? 'bg-amber-950/30 border-b border-amber-800/50'
+            : 'border-b border-kernel-800 hover:bg-kernel-800/30 transition';
+          const peirceClass = isMissing ? 'text-amber-400 font-bold' : 'text-kernel-300';
+          return `
+            <tr class="${rowClass}">
+              <td class="p-2 ${peirceClass} text-sm">${m.peirce}</td>
+              <td class="p-2 text-kernel-200 font-mono text-xs">${m.gcd}</td>
+              <td class="p-2 text-kernel-400 text-xs">${m.role}</td>
+              <td class="p-2 text-kernel-500 text-xs">${m.note}</td>
+            </tr>`;
+        }).join('')}
+      </tbody>
+    </table>`;
+
+  // Semiotic kernel findings
+  const findings = [
+    {
+      title: 'Highest Coherence',
+      items: [
+        { system: 'Latin Lexicon', value: 'IC/F = 0.933', note: 'Morphological constraints → channel coherence' },
+        { system: 'Mathematical Notation', value: 'IC/F = 0.927', note: 'Formal systems minimize channel heterogeneity' },
+        { system: 'Music Notation', value: 'IC/F = 0.891', note: 'Pitch, duration, dynamics all cohere' },
+      ],
+      color: 'green',
+    },
+    {
+      title: 'Moderate Coherence',
+      items: [
+        { system: 'Natural Language (English)', value: 'IC/F = 0.712', note: 'Ambiguity creates heterogeneity gap' },
+        { system: 'ASL', value: 'IC/F = 0.680', note: 'Visual modality trades some channels' },
+        { system: 'Emoji', value: 'IC/F = 0.423', note: 'High ground drift, low compositional depth' },
+      ],
+      color: 'amber',
+    },
+    {
+      title: 'Low Coherence',
+      items: [
+        { system: 'Pirahã', value: 'IC/F = 0.234', note: 'Minimal recursion, no number words' },
+        { system: 'Morse Code', value: 'IC/F = 0.312', note: 'Binary encoding = extreme channel narrowing' },
+        { system: 'Smoke Signals', value: 'IC/F = 0.198', note: 'Low precision, high environmental noise' },
+      ],
+      color: 'red',
+    },
+  ];
+
+  const findingsContainer = document.getElementById('semiotic-findings')!;
+  findingsContainer.innerHTML = findings.map(group => `
+    <div class="bg-kernel-800 rounded-lg p-3 border border-kernel-700">
+      <div class="text-${group.color}-400 font-bold text-xs mb-2">${group.title}</div>
+      <div class="space-y-2">
+        ${group.items.map(item => `
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-kernel-300 text-xs">${item.system}</span>
+              <span class="font-mono text-${group.color}-400/80 text-xs">${item.value}</span>
+            </div>
+            <div class="text-kernel-600 text-[10px]">${item.note}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+</script>

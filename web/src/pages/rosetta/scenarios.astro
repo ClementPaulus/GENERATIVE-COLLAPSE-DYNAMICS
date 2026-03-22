@@ -1,0 +1,241 @@
+---
+/**
+ * Domain Scenarios — Cross-Domain Translation in Action
+ *
+ * Live kernel computation of 5 canonical scenarios, each read through
+ * all 9 Rosetta lenses. Demonstrates the Cognitive Equalizer: same
+ * data + same contract → same verdict, regardless of field.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Domain Scenarios — GCD">
+  <div class="max-w-6xl mx-auto">
+    <div class="mb-6">
+      <nav class="text-xs text-kernel-500 mb-3">
+        <a href={`${base}rosetta/`} class="hover:text-kernel-300 transition">Rosetta</a>
+        <span class="mx-1">›</span>
+        <span class="text-kernel-400">Domain Scenarios</span>
+      </nav>
+      <h1 class="text-3xl font-bold text-kernel-100 mb-2">Domain Scenarios</h1>
+      <p class="text-kernel-400 max-w-3xl">
+        Five cross-domain scenarios computed through the kernel and read through every Rosetta lens.
+        The numbers are identical — only the dialect changes. This is the Cognitive Equalizer in action.
+      </p>
+      <p class="text-kernel-500 italic text-sm mt-2">
+        Significatio stabilis manet dum dialectus mutatur. — Meaning stays stable while dialect changes.
+      </p>
+    </div>
+
+    <!-- Scenario selector -->
+    <div class="flex flex-wrap gap-2 mb-4" id="scenario-nav"></div>
+
+    <!-- Scenario detail -->
+    <div id="scenario-detail" class="space-y-6"></div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { ROSETTA_SCENARIOS, ROSETTA_LENSES } from '../../lib/constants';
+  import { computeKernel, classifyRegime, verifyIdentities, computeSeamBudget } from '../../lib/kernel';
+
+  const nav = document.getElementById('scenario-nav')!;
+  const detail = document.getElementById('scenario-detail')!;
+  let activeScenario = 0;
+
+  function regimeClass(regime: string) {
+    switch (regime) {
+      case 'STABLE': return { bg: 'bg-green-900/30', text: 'text-green-400', border: 'border-green-700/50' };
+      case 'WATCH': return { bg: 'bg-amber-900/30', text: 'text-amber-400', border: 'border-amber-700/50' };
+      case 'COLLAPSE': return { bg: 'bg-red-900/30', text: 'text-red-400', border: 'border-red-700/50' };
+      default: return { bg: 'bg-kernel-800', text: 'text-kernel-300', border: 'border-kernel-700' };
+    }
+  }
+
+  function renderNav() {
+    nav.innerHTML = ROSETTA_SCENARIOS.map((s, i) => `
+      <button data-idx="${i}" class="scenario-btn px-3 py-1.5 rounded text-xs font-medium transition
+        ${i === activeScenario ? 'bg-kernel-700 text-kernel-200' : 'bg-kernel-800 text-kernel-400 hover:text-kernel-300'}">
+        ${s.name}
+      </button>
+    `).join('');
+    nav.querySelectorAll('.scenario-btn').forEach(btn =>
+      btn.addEventListener('click', () => {
+        activeScenario = parseInt((btn as HTMLElement).dataset.idx!);
+        render();
+      })
+    );
+  }
+
+  function render() {
+    renderNav();
+    const scen = ROSETTA_SCENARIOS[activeScenario];
+    const w = scen.channels.map(() => 1 / scen.channels.length);
+    const result = computeKernel(scen.channels, w);
+    const regime = classifyRegime(result);
+    const checks = verifyIdentities(result);
+    const seam = computeSeamBudget(result);
+    const rc = regimeClass(regime.regime);
+    const allPassed = checks.every((c: {passed: boolean}) => c.passed);
+
+    detail.innerHTML = `
+      <!-- Scenario header -->
+      <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+        <div class="flex items-start justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-kernel-100">${scen.name}</h2>
+            <p class="text-sm text-kernel-400 mt-1">${scen.description}</p>
+          </div>
+          <div class="${rc.bg} ${rc.border} border rounded px-3 py-1.5">
+            <span class="${rc.text} font-bold text-sm">${regime.regime}${regime.isCritical ? ' + CRITICAL' : ''}</span>
+          </div>
+        </div>
+
+        <!-- Channel values -->
+        <div class="mb-4">
+          <h3 class="text-xs text-kernel-500 font-medium mb-2">TRACE VECTOR (${scen.channels.length} channels)</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            ${scen.channels.map((c, i) => {
+              const pct = c * 100;
+              const color = c > 0.7 ? 'bg-green-500' : c > 0.4 ? 'bg-amber-500' : 'bg-red-500';
+              return `
+                <div class="bg-kernel-800 rounded p-2">
+                  <div class="flex justify-between text-xs mb-1">
+                    <span class="text-kernel-500 truncate">${scen.channelNames[i]}</span>
+                    <span class="text-kernel-300 font-mono">${c.toFixed(2)}</span>
+                  </div>
+                  <div class="h-1.5 bg-kernel-700 rounded overflow-hidden">
+                    <div class="${color} h-full rounded" style="width: ${pct}%"></div>
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- Kernel output -->
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-2 mb-4">
+          ${[
+            { l: 'F', v: result.F.toFixed(4), c: 'text-green-400' },
+            { l: 'ω', v: result.omega.toFixed(4), c: result.omega >= 0.30 ? 'text-red-400' : 'text-amber-400' },
+            { l: 'S', v: result.S.toFixed(4), c: 'text-blue-400' },
+            { l: 'C', v: result.C.toFixed(4), c: 'text-purple-400' },
+            { l: 'κ', v: result.kappa.toFixed(4), c: 'text-cyan-400' },
+            { l: 'IC', v: result.IC.toFixed(4), c: result.IC < 0.30 ? 'text-red-400' : 'text-kernel-200' },
+          ].map(m => `
+            <div class="bg-kernel-800 rounded p-2 text-center">
+              <div class="text-xs text-kernel-500">${m.l}</div>
+              <div class="font-mono text-sm ${m.c}">${m.v}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Identity checks -->
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-xs text-kernel-500">Identities:</span>
+          ${checks.map((ch: {name: string; passed: boolean; residual: number}) =>
+            `<span class="text-xs ${ch.passed ? 'text-green-400' : 'text-red-400'} font-mono">${ch.name} ${ch.passed ? '✓' : '✗'}</span>`
+          ).join('<span class="text-kernel-700">·</span>')}
+          <span class="text-xs ml-2 ${allPassed ? 'text-green-400' : 'text-red-400'}">${allPassed ? 'ALL PASS' : 'IDENTITY FAIL'}</span>
+        </div>
+
+        <!-- Seam budget -->
+        <div class="bg-kernel-800 rounded p-3 text-xs">
+          <div class="flex gap-6">
+            <span class="text-kernel-500">Γ(ω): <span class="text-amber-400 font-mono">${seam.gamma.toFixed(6)}</span></span>
+            <span class="text-kernel-500">D_C: <span class="text-amber-400 font-mono">${seam.D_C.toFixed(6)}</span></span>
+            <span class="text-kernel-500">Δ: <span class="text-amber-400 font-mono">${result.delta.toFixed(6)}</span></span>
+            <span class="text-kernel-500">IC/F: <span class="text-amber-400 font-mono">${(result.F > 0 ? result.IC / result.F : 0).toFixed(4)}</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rosetta lens translations -->
+      <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+        <h2 class="text-lg font-bold text-kernel-200 mb-1">Through Every Lens</h2>
+        <p class="text-xs text-kernel-500 mb-4">
+          The same kernel result — same F, same ω, same IC — read through 9 Rosetta lenses.
+          Each lens translates the five words into its own dialect. The verdict is identical.
+        </p>
+        <div class="space-y-3">
+          ${ROSETTA_LENSES.map(lens => `
+            <details class="group">
+              <summary class="flex items-center gap-3 cursor-pointer bg-kernel-800 rounded-lg px-4 py-3 hover:bg-kernel-800/80 transition">
+                <span class="text-sm font-bold text-kernel-200">${lens.name}</span>
+                <span class="text-xs text-kernel-500 ml-auto group-open:hidden">expand ▸</span>
+                <span class="text-xs text-kernel-500 hidden group-open:inline">collapse ▾</span>
+              </summary>
+              <div class="bg-kernel-850 rounded-b-lg px-4 py-3 border-t border-kernel-700 ml-0">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <div class="text-green-400 font-medium mb-1">Drift (ω = ${result.omega.toFixed(4)})</div>
+                    <p class="text-kernel-400">${lens.drift}</p>
+                  </div>
+                  <div>
+                    <div class="text-blue-400 font-medium mb-1">Fidelity (F = ${result.F.toFixed(4)})</div>
+                    <p class="text-kernel-400">${lens.fidelity}</p>
+                  </div>
+                  <div>
+                    <div class="text-amber-400 font-medium mb-1">Roughness (C = ${result.C.toFixed(4)})</div>
+                    <p class="text-kernel-400">${lens.roughness}</p>
+                  </div>
+                  <div>
+                    <div class="text-purple-400 font-medium mb-1">Return (τ_R)</div>
+                    <p class="text-kernel-400">${lens.return_}</p>
+                  </div>
+                </div>
+                <div class="mt-2 pt-2 border-t border-kernel-700">
+                  <div class="text-cyan-400 font-medium text-xs mb-1">Integrity (IC = ${result.IC.toFixed(4)}, Δ = ${result.delta.toFixed(4)})</div>
+                  <p class="text-kernel-400 text-xs">${lens.integrity}</p>
+                </div>
+                <p class="text-kernel-500 text-xs mt-2 italic">${lens.description}</p>
+              </div>
+            </details>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Cross-domain comparison matrix -->
+      <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+        <h2 class="text-lg font-bold text-kernel-200 mb-1">The Equalizer Proof</h2>
+        <p class="text-xs text-kernel-500 mb-4">
+          Nine lenses, one computation, one verdict. The table below shows that every lens arrives at
+          the same regime classification and the same IC value. Only the vocabulary differs.
+          <em>Non agens mensurat, sed structura.</em>
+        </p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead>
+              <tr class="border-b border-kernel-700">
+                <th class="text-left py-2 px-2 text-kernel-400">Lens</th>
+                <th class="text-center py-2 px-2 text-kernel-400">F</th>
+                <th class="text-center py-2 px-2 text-kernel-400">ω</th>
+                <th class="text-center py-2 px-2 text-kernel-400">IC</th>
+                <th class="text-center py-2 px-2 text-kernel-400">Δ</th>
+                <th class="text-center py-2 px-2 text-kernel-400">Regime</th>
+                <th class="text-left py-2 px-2 text-kernel-400">"What drifted?"</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${ROSETTA_LENSES.map(lens => `
+                <tr class="border-b border-kernel-800">
+                  <td class="py-1.5 px-2 text-kernel-300 font-medium">${lens.name}</td>
+                  <td class="py-1.5 px-2 text-center font-mono text-kernel-400">${result.F.toFixed(3)}</td>
+                  <td class="py-1.5 px-2 text-center font-mono text-kernel-400">${result.omega.toFixed(3)}</td>
+                  <td class="py-1.5 px-2 text-center font-mono text-kernel-400">${result.IC.toFixed(3)}</td>
+                  <td class="py-1.5 px-2 text-center font-mono text-kernel-400">${result.delta.toFixed(3)}</td>
+                  <td class="py-1.5 px-2 text-center ${rc.text}">${regime.regime}</td>
+                  <td class="py-1.5 px-2 text-kernel-500 truncate max-w-[200px]">${lens.drift.split('—')[0].trim()}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-3 p-2 bg-kernel-800/50 rounded text-xs text-kernel-500 text-center">
+          All rows: identical F, ω, IC, Δ, Regime. The numbers don't change — only the reading.
+        </div>
+      </div>`;
+  }
+
+  render();
+</script>
