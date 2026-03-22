@@ -4,7 +4,7 @@ description: Modified gravity through the integrity bound.
 domain: weyl
 lens: Ontology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#1e3a5f"
 accentColor: "#60a5fa"
 icon: globe
@@ -65,8 +65,8 @@ icon: globe
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

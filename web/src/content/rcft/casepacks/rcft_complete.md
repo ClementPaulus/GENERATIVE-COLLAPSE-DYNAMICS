@@ -1,7 +1,7 @@
 ---
 title: rcft_complete
 description: "Casepack: rcft_complete"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # rcft_complete

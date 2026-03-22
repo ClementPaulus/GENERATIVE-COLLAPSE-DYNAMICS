@@ -1,7 +1,7 @@
 ---
 title: materials_science_elements
 description: "Casepack: materials_science_elements"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # materials_science_elements

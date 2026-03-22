@@ -1,7 +1,7 @@
 ---
 title: astronomy_complete
 description: "Casepack: astronomy_complete"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # astronomy_complete

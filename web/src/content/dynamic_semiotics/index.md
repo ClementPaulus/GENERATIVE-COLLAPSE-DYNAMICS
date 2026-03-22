@@ -4,7 +4,7 @@ description: 30 sign systems through the semiotic kernel.
 domain: dynamic_semiotics
 lens: Semiotics
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#831843"
 accentColor: "#f9a8d4"
 icon: message-circle
@@ -60,8 +60,8 @@ icon: message-circle
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

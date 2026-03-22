@@ -4,7 +4,7 @@ description: Fractal recursion through the kernel.
 domain: rcft
 lens: Ontology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#7c3aed"
 accentColor: "#a78bfa"
 icon: layers
@@ -70,8 +70,8 @@ icon: layers
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

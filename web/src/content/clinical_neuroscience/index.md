@@ -4,7 +4,7 @@ description: 10-channel cortical kernel and neurotransmitter systems.
 domain: clinical_neuroscience
 lens: Phenomenology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#701a75"
 accentColor: "#e879f9"
 icon: heart-pulse
@@ -89,8 +89,8 @@ icon: heart-pulse
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

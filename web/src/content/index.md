@@ -1,7 +1,7 @@
 ---
 title: GCD Kernel — Domain Network
 description: Autonomous domain sites powered by the Headless Contract Gateway
-layout: ../layouts/IndexLayout.astro
+pageType: index
 ---
 
 # GCD Kernel — Domain Network

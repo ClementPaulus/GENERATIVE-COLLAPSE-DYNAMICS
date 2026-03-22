@@ -4,7 +4,7 @@ description: The axiom. The kernel. The spine.
 domain: gcd
 lens: Epistemology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#0f172a"
 accentColor: "#f59e0b"
 icon: atom
@@ -67,8 +67,8 @@ icon: atom
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

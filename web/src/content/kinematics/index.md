@@ -4,7 +4,7 @@ description: Motion analysis through collapse invariants.
 domain: kinematics
 lens: Ontology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#0891b2"
 accentColor: "#22d3ee"
 icon: move
@@ -67,8 +67,8 @@ icon: move
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

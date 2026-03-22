@@ -4,7 +4,7 @@ description: 31 particles, 27 theorems in the subatomic kernel.
 domain: standard_model
 lens: Ontology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#991b1b"
 accentColor: "#fca5a5"
 icon: atom
@@ -64,8 +64,8 @@ icon: atom
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

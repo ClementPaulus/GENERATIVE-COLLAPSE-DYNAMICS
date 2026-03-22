@@ -1,7 +1,7 @@
 ---
 title: gcd_complete
 description: "Casepack: gcd_complete"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # gcd_complete

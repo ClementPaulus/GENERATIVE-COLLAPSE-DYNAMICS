@@ -4,7 +4,7 @@ description: Thermodynamics, optics, fluids through collapse.
 domain: everyday_physics
 lens: Phenomenology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#0e7490"
 accentColor: "#67e8f9"
 icon: sun
@@ -95,8 +95,8 @@ icon: sun
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

@@ -4,7 +4,7 @@ description: Gravitational wave memory and temporal topology.
 domain: spacetime_memory
 lens: Ontology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#0f172a"
 accentColor: "#94a3b8"
 icon: orbit
@@ -87,8 +87,8 @@ icon: orbit
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

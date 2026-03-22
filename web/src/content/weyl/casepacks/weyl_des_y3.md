@@ -1,7 +1,7 @@
 ---
 title: weyl_des_y3
 description: "Casepack: weyl_des_y3"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # weyl_des_y3

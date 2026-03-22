@@ -165,7 +165,7 @@ def build_site(
         "domain": domain,
         "lens": lens,
         "regime": data.latest_snapshot.regime if data.latest_snapshot else "UNKNOWN",
-        "layout": "../../layouts/DomainLayout.astro",
+        "pageType": "domain",
         "primaryColor": config.primary_color,
         "accentColor": config.accent_color,
         "icon": config.icon,
@@ -183,7 +183,7 @@ def build_site(
         cp_fm = {
             "title": cp.name,
             "description": cp.description or f"Casepack: {cp.name}",
-            "layout": "../../../layouts/CasepackLayout.astro",
+            "pageType": "casepack",
         }
         _write_frontmatter(
             output_dir / "casepacks" / f"{cp.name}.md",
@@ -234,7 +234,7 @@ def build_all_sites(
         {
             "title": "GCD Kernel — Domain Network",
             "description": "Autonomous domain sites powered by the Headless Contract Gateway",
-            "layout": "../layouts/IndexLayout.astro",
+            "pageType": "index",
         },
         index_body,
     )

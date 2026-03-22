@@ -4,7 +4,7 @@ description: Awareness-aptitude kernel across phylogeny.
 domain: awareness_cognition
 lens: Phenomenology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#4c1d95"
 accentColor: "#a78bfa"
 icon: eye
@@ -87,8 +87,8 @@ icon: eye
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

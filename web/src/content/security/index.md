@@ -4,7 +4,7 @@ description: Input validation and cryptographic integrity.
 domain: security
 lens: Policy
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#dc2626"
 accentColor: "#f87171"
 icon: shield
@@ -91,8 +91,8 @@ icon: shield
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

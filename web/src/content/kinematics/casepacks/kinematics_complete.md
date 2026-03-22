@@ -1,7 +1,7 @@
 ---
 title: kinematics_complete
 description: "Casepack: kinematics_complete"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # kinematics_complete

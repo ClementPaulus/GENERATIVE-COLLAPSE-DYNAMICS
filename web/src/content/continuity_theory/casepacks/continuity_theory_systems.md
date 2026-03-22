@@ -1,7 +1,7 @@
 ---
 title: continuity_theory_systems
 description: "Casepack: continuity_theory_systems"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # continuity_theory_systems

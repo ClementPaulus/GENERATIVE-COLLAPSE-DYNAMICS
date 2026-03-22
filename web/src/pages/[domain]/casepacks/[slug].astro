@@ -1,0 +1,32 @@
+---
+/**
+ * Dynamic route for casepack detail pages.
+ * Renders each casepack's generated markdown with CasepackLayout.
+ *
+ * Route: /<domain>/casepacks/<slug>/
+ */
+import { getCollection, render } from 'astro:content';
+import CasepackLayout from '../../../layouts/CasepackLayout.astro';
+
+export async function getStaticPaths() {
+  const casepacks = await getCollection('casepacks');
+  return casepacks.map((entry) => {
+    // Entry id from glob is like "finance/casepacks/finance_continuity"
+    const parts = entry.id.split('/');
+    const domain = parts[0];
+    // slug is everything after "casepacks/"
+    const slug = parts.slice(2).join('/');
+    return {
+      params: { domain, slug },
+      props: { entry, domain },
+    };
+  });
+}
+
+const { entry, domain } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<CasepackLayout frontmatter={{ ...entry.data, domain }}>
+  <Content />
+</CasepackLayout>

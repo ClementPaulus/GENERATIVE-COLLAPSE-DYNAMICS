@@ -4,7 +4,7 @@ description: Topological persistence and organizational resilience.
 domain: continuity_theory
 lens: History
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#0c4a6e"
 accentColor: "#38bdf8"
 icon: link
@@ -68,8 +68,8 @@ icon: link
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

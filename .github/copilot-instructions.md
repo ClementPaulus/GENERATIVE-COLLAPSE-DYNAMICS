@@ -1,6 +1,6 @@
 # Copilot Instructions for GENERATIVE-COLLAPSE-DYNAMICS
 
-**UMCP v2.2.5** · **11,389 tests** · **20 domains** · **181 closure modules** · **47 lemmas** · **44 structural identities** · **46 dashboard pages**
+**UMCP v2.2.5** · **11,489 tests** · **20 domains** · **181 closure modules** · **47 lemmas** · **44 structural identities** · **46 dashboard pages**
 
 ## Foundational Principle — Read This First
 
@@ -530,7 +530,7 @@ closures/
 - `casepacks/*/manifest.json` — 25 casepack manifests referencing contract, closures, expected outputs
 - `schemas/*.schema.json` — 17 JSON Schema Draft 2020-12 files validating all artifacts
 - `canon/*.yaml` — 21 canonical anchor files (domain-specific reference points)
-- `integrity/sha256.txt` — SHA-256 checksums for 215 tracked files
+- `integrity/sha256.txt` — SHA-256 checksums for 221 tracked files
 - `ledger/return_log.csv` — append-only validation log
 
 ## Standard Model Formalism (27 Theorems)
@@ -600,11 +600,11 @@ All papers use RevTeX4-2 (`revtex4-2` document class) and share `Bibliography.bi
 
 ```bash
 pip install -e ".[all]"                     # Dev install (core + api + viz + dev tools)
-pytest                                       # 11,389 tests (pytest --collect-only | grep ":" | wc -l to verify)
+pytest                                       # 11,489 tests (pytest --collect-only | grep ":" | wc -l to verify)
 python scripts/update_integrity.py          # MUST run after changing any tracked file
 umcp validate .                             # Validate entire repo
 umcp validate casepacks/hello_world --strict # Validate casepack (strict = fail on warnings)
-umcp integrity                              # Verify SHA-256 checksums (215 tracked files)
+umcp integrity                              # Verify SHA-256 checksums (221 tracked files)
 ```
 
 **⚠️ `python scripts/update_integrity.py` is mandatory** after modifying any `src/umcp/*.py`, `contracts/*.yaml`, `closures/**`, `schemas/**`, or `scripts/*.py` file. It regenerates SHA256 checksums in `integrity/sha256.txt`. CI will fail on mismatch.
@@ -628,7 +628,7 @@ This script mirrors CI exactly and must exit 0 before committing. It runs 11 ste
 5. `git add -A` — stage all changes
 6. Repository health check — drift detection, version sync, freeze verification
 7. Update test count in documentation
-8. Regenerate SHA-256 integrity checksums (215 tracked files)
+8. Regenerate SHA-256 integrity checksums (221 tracked files)
 9. Pytest bounds — collect tests and verify count within bounds (1000–12000)
 10. `umcp validate .` — contract validation (must be CONFORMANT)
 11. Axiom-0 conformance — terminology, symbol capture, frozen params check
@@ -666,12 +666,12 @@ umcp validate <target>
 
 ## Test Patterns
 
-**11,389 test cases** across **165 test files** in `tests/` (164 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_293_*`). Single `tests/conftest.py` provides:
+**11,489 test cases** across **166 test files** in `tests/` (165 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_293_*`). Single `tests/conftest.py` provides:
 - Frozen `RepoPaths` dataclass (session-scoped) with all critical paths
 - `@lru_cache` helpers: `_read_file()`, `_parse_json()`, `_parse_yaml()`, `_compile_schema()`
 - Convention: `test_<subject>_<behavior>()` for functions; `TestCLI*` classes with `subprocess.run` for CLI integration
 - Additional coverage: `test_fleet_worker.py` (Worker, WorkerPool, WorkerConfig), `test_insights.py` (PatternDatabase, InsightEngine)
-- Parametrized tests expand the collected items to 11,389 (verify: `pytest --collect-only | grep "::" | wc -l`)
+- Parametrized tests expand the collected items to 11,489 (verify: `pytest --collect-only | grep "::" | wc -l`)
 
 ### Test Distribution by Range
 
@@ -744,7 +744,7 @@ umcp validate <target>
 | `test_293` | Emergent structural insights (T-SI-1 through T-SI-6) | 47 |
 | `closures/` | Closure-specific tests (kinematics phase) | 27 |
 | Infrastructure | Kernel, seam, frozen contract, extensions, uncertainty, calculator, coverage, etc. | 1,895 |
-| **TOTAL** | | **11,389** |
+| **TOTAL** | | **11,489** |
 
 ## Extension System
 

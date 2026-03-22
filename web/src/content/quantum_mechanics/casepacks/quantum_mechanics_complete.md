@@ -1,7 +1,7 @@
 ---
 title: quantum_mechanics_complete
 description: "Casepack: quantum_mechanics_complete"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # quantum_mechanics_complete

@@ -1,7 +1,7 @@
 ---
 title: evolution_kernel
 description: "Casepack: evolution_kernel"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # evolution_kernel

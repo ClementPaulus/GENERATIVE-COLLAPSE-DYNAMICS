@@ -4,7 +4,7 @@ description: Element database and material coherence.
 domain: materials_science
 lens: Ontology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#78350f"
 accentColor: "#d97706"
 icon: box
@@ -111,8 +111,8 @@ icon: box
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

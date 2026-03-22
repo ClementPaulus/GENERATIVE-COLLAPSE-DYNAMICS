@@ -1,7 +1,7 @@
 ---
 title: spacetime_memory_entities
 description: "Casepack: spacetime_memory_entities"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # spacetime_memory_entities

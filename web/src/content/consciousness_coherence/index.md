@@ -4,7 +4,7 @@ description: 20 systems, coherence kernel, 7 theorems.
 domain: consciousness_coherence
 lens: Phenomenology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#581c87"
 accentColor: "#c084fc"
 icon: brain
@@ -75,8 +75,8 @@ icon: brain
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

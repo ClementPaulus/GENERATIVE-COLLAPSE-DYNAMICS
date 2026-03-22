@@ -4,7 +4,7 @@ description: Wavefunction coherence and entanglement.
 domain: quantum_mechanics
 lens: Ontology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#4338ca"
 accentColor: "#a78bfa"
 icon: activity
@@ -73,8 +73,8 @@ icon: activity
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

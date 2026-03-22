@@ -4,7 +4,7 @@ description: Binding energy, decay chains, QGP transitions.
 domain: nuclear_physics
 lens: Ontology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#b91c1c"
 accentColor: "#fca5a5"
 icon: zap
@@ -63,8 +63,8 @@ icon: zap
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

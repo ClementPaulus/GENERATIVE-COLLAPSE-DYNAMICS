@@ -1,7 +1,7 @@
 ---
 title: awareness_cognition_kernel
 description: "Casepack: awareness_cognition_kernel"
-layout: ../../../layouts/CasepackLayout.astro
+pageType: casepack
 ---
 
 # awareness_cognition_kernel

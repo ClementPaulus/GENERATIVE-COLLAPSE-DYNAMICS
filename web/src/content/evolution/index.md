@@ -4,7 +4,7 @@ description: 40 organisms, 10-channel brain kernel.
 domain: evolution
 lens: Ontology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#166534"
 accentColor: "#86efac"
 icon: dna
@@ -73,8 +73,8 @@ icon: dna
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine

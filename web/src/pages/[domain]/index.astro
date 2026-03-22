@@ -1,0 +1,29 @@
+---
+/**
+ * Dynamic route for individual domain pages.
+ * Renders each domain's generated markdown with DomainLayout.
+ *
+ * Route: /<domain>/  (e.g. /finance/, /standard_model/, /gcd/)
+ */
+import { getCollection, render } from 'astro:content';
+import DomainLayout from '../../layouts/DomainLayout.astro';
+
+export async function getStaticPaths() {
+  const domains = await getCollection('domains');
+  return domains.map((entry) => {
+    // Entry id from glob loader is like "gcd/index" — extract the domain slug
+    const slug = entry.id.replace(/\/index$/, '').replace(/^index$/, '');
+    return {
+      params: { domain: slug || entry.data.domain },
+      props: { entry },
+    };
+  });
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<DomainLayout frontmatter={entry.data}>
+  <Content />
+</DomainLayout>

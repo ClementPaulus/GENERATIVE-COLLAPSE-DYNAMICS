@@ -4,7 +4,7 @@ description: Stellar classification through the kernel.
 domain: astronomy
 lens: Ontology
 regime: STABLE
-layout: ../../layouts/DomainLayout.astro
+pageType: domain
 primaryColor: "#1e1b4b"
 accentColor: "#818cf8"
 icon: telescope
@@ -70,8 +70,8 @@ icon: telescope
 
 ## Validation Ledger Summary
 
-- **Total entries**: 9625
-- **CONFORMANT**: 9625
+- **Total entries**: 9669
+- **CONFORMANT**: 9669
 - **Conformance rate**: 100.0%
 
 ## The Spine
