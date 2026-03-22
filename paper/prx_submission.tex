@@ -3,22 +3,22 @@
 %  Computational Discovery of Cross-Scale Invariants
 %  Spanning 61 Orders of Magnitude
 %
-%  Target: Nature (Article format)
-%  Word limit: ~3,000 words main text + Methods
+%  Target: Physical Review X
+%  Format: RevTeX4-2, prx, twocolumn
 %  Figures: 4
 %  References: ~50
 %
 %  Compile: pdflatex → bibtex → pdflatex → pdflatex
 % ============================================================
 
-\documentclass[11pt]{article}
-
-% ── layout (Nature: single column, double-spaced, line numbers) ──
-\usepackage[margin=2.5cm]{geometry}
-\usepackage{setspace}
-\doublespacing
-\usepackage{lineno}
-\linenumbers
+\documentclass[
+  aps,
+  prx,
+  twocolumn,
+  superscriptaddress,
+  nofootinbib,
+  floatfix
+]{revtex4-2}
 
 % ── packages ──────────────────────────────────────────────────
 \usepackage[utf8]{inputenc}
@@ -31,7 +31,6 @@
 \usepackage{xfrac}
 \usepackage{enumitem}
 \usepackage{array}
-\usepackage{authblk}
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 % ── colour palette ────────────────────────────────────────────
@@ -40,9 +39,6 @@
 \definecolor{TierOneGold}{HTML}{B8860B}
 \definecolor{CliffRed}{HTML}{CC3333}
 \definecolor{HealGreen}{HTML}{2E8B57}
-
-% ── bibliography (Nature: numbered, citation order) ───────────
-\usepackage[numbers,sort&compress]{natbib}
 
 % ── hyperlinks ────────────────────────────────────────────────
 \usepackage[
@@ -79,13 +75,15 @@
 % ============================================================
 % TITLE
 % ============================================================
-\title{A single algebraic diagnostic detects structurally identical
-phase transitions from quarks to the cosmic horizon}
+\title{Cross-Scale Integrity Diagnostics: Algebraic Invariants\\
+and Universal Phase-Transition Signatures Spanning\\
+61~Orders of Magnitude}
 
-\author{Cl\'{e}ment Paulus\thanks{Correspondence: clementpaulus9@gmail.com}}
-\affil{Independent Researcher}
+\author{Cl\'{e}ment Paulus}
+\email{clementpaulus9@gmail.com}
+\affiliation{Independent Researcher}
 
-\date{}
+\date{\today}
 
 % ============================================================
 % ABSTRACT
@@ -94,34 +92,34 @@ phase transitions from quarks to the cosmic horizon}
 The ratio of geometric to arithmetic coherence ($\IC/F$), computed
 from a single algebraic kernel applied to normalised physical
 measurements, exhibits structurally identical phase-transition
-signatures across systems spanning 61~orders of
-magnitude---from quark confinement ($10^{-15}$\,m) to
-dark-energy--dominated cosmology ($10^{26}$\,m). At the quark--hadron
-boundary, $\IC/F$ collapses $23\times$ as colour confinement drives a
-single measurement channel to zero; atomic structure subsequently
-restores coherence $35\times$ through emergent degrees of freedom;
-dark energy reproduces the identical collapse mechanism at
-$10^{26}$\,m scales. The heterogeneity gap $\Delta = F - \IC$ spikes
-at every phase boundary tested, providing a single-number diagnostic
-for structural fragility independent of the underlying dynamics.
+signatures across systems spanning 61~orders of magnitude---from
+quark confinement ($10^{-15}$\,m) to dark-energy--dominated cosmology
+($10^{26}$\,m). At the quark--hadron boundary, $\IC/F$ collapses
+$23\times$ as colour confinement drives a single measurement channel
+to zero; atomic structure subsequently restores coherence
+$35\times$ through emergent degrees of freedom; dark energy
+reproduces the identical collapse mechanism at $10^{26}$\,m scales.
+The heterogeneity gap $\Delta = F - \IC$ spikes at every phase
+boundary tested, providing a single-number diagnostic for structural
+fragility independent of the underlying dynamics.
 
 These patterns emerge from a six-output kernel function
-$K\!:\![0,1]^n \times \Delta^n \to (F, \omega, S, C,
-\kappa, \IC)$, derived from a single admissibility axiom, that maps
-any bounded measurement vector to fidelity~$F$ (weighted arithmetic
-mean), log-integrity~$\kappa$ (weighted log-mean), and composite
+$K\!:\![0,1]^n \times \Delta^n \to (F, \omega, S, C, \kappa, \IC)$,
+derived from a single admissibility axiom, that maps any bounded
+measurement vector to fidelity~$F$ (weighted arithmetic mean),
+log-integrity~$\kappa$ (weighted log-mean), and composite
 integrity~$\IC = \exp(\kappa)$ (weighted geometric mean), among
 other quantities. Three algebraic identities---$F + \omega \equiv 1$
 (duality), $\IC \leq F$ (integrity bound), and
 $\IC = \exp(\kappa)$ (log-integrity relation)---guarantee the
-diagnostic's structural reliability across all domains. The integrity
-bound $\IC \leq F$ instantiates the classical weighted inequality of
-arithmetic and geometric means; the contribution is not the bound
-itself but its systematic application as a scale-independent
-phase-transition diagnostic across 20~scientific domains. Exhaustive
-computational verification---11{,}342~automated proofs across
-406~physical objects---confirms all three identities to machine
-precision ($<\!10^{-15}$) with zero violations.
+diagnostic's structural reliability across all domains.
+The integrity bound $\IC \leq F$ instantiates the classical weighted
+inequality of arithmetic and geometric means; the contribution is
+not the bound itself but its systematic application as a
+scale-independent phase-transition diagnostic across 20~scientific
+domains. Exhaustive computational verification---11{,}342~automated
+proofs across 406~physical objects---confirms all three identities
+to machine precision ($<\!10^{-15}$) with zero violations.
 \end{abstract}
 
 \maketitle
@@ -372,33 +370,33 @@ fidelity preserved as multiplicative coherence. The confinement cliff
 (fundamental $\to$ composite) and atomic recovery (composite $\to$
 atoms) are visible as factor-of-23 and factor-of-35 discontinuities.}
 \label{tab:scales}
+\begin{ruledtabular}
 \begin{tabular}{lrcccl}
-\toprule
 \textbf{Scale} & $N$ & $\langle F\rangle$ & $\langle\IC\rangle$
   & IC/F & \textbf{Character} \\
-\midrule
+\colrule
 Fundamental   &  17 & 0.558 & 0.326 & 0.506 & Half coherent \\
 Composite     &  14 & 0.444 & 0.011 & 0.022 & \textcolor{CliffRed}{Geom.\ slaughter} \\
 Atoms (8-ch)  & 118 & 0.416 & 0.334 & 0.784 & \textcolor{HealGreen}{High coherence} \\
 Cross-scale   & 118 & 0.516 & 0.384 & 0.737 & Nuclear noise \\
 Everyday      &  84 & 0.380 & 0.195 & 0.437 & Mixed coherence \\
 Cosmological  &   6 & 0.597 & 0.105 & 0.174 & Dark energy loss \\
-\bottomrule
 \end{tabular}
+\end{ruledtabular}
 \end{table}
 
 % ── Table: Domain coverage ────────────────────────────────────
-\begin{table}[!htbp]
+\begin{table*}[!htbp]
 \caption{\textbf{Domain coverage.} The 20~scientific domains
 across which all three identities hold with zero violations.
 Each domain contributes Tier-2 closures (channel selections and
 entity catalogues) validated against the universal Tier-1 kernel.}
 \label{tab:domains}
+\begin{ruledtabular}
 \begin{tabular}{llll}
-\toprule
 \textbf{Domain} & \textbf{Key objects}
 & \textbf{Domain} & \textbf{Key objects} \\
-\midrule
+\colrule
 Standard Model & 31 particles &
   Consciousness & 20 systems, altered states \\
 Atomic physics & 118 elements, 8-ch kernel &
@@ -419,9 +417,9 @@ Everyday physics & Thermo, optics, fluids &
   RCFT & Recursive collapse field \\
 Kinematics & Phase space, motion &
   Evolution & 40 organisms \\
-\bottomrule
 \end{tabular}
-\end{table}
+\end{ruledtabular}
+\end{table*}
 
 % ============================================================
 % APPLICATIONS
@@ -650,11 +648,11 @@ confinement, helium inertness, and dark energy decoherence.}
 \label{fig:slaughter}
 \end{figure}
 
-\begin{figure}[!htbp]
+\begin{figure*}[!tb]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    width=\columnwidth,
+    width=0.8\textwidth,
     height=5.5cm,
     xlabel={Atomic number $Z$},
     ylabel={IC/F},
@@ -693,13 +691,13 @@ of inertness as a \emph{structural} property. The d-block peak
 (Ni at $\IC/F = 0.957$) reflects maximum channel balance.
 Period~1 (H, He) remains near-hadron coherence levels.}
 \label{fig:periodic}
-\end{figure}
+\end{figure*}
 
-\begin{figure}[!htbp]
+\begin{figure*}[!tb]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    width=\columnwidth,
+    width=0.8\textwidth,
     height=5.5cm,
     xlabel={Scale (log$_{10}$ metres)},
     ylabel={IC/F},
@@ -744,7 +742,7 @@ minimum at the hadron scale and recovery at the atomic scale---is the
 central cross-scale phenomenon. The same kernel with identical frozen
 parameters produces all data points. Dashed line guides the eye.}
 \label{fig:crossscale}
-\end{figure}
+\end{figure*}
 
 % ============================================================
 % DISCUSSION
@@ -1060,16 +1058,16 @@ paulus2025physicscoherence, paulus2026umcpcasepack}.
 % ============================================================
 % ACKNOWLEDGEMENTS
 % ============================================================
-\section*{Acknowledgements}
+\begin{acknowledgments}
 This work was conducted independently without institutional
 affiliation or external funding. The author thanks the open-source
 scientific computing community for the tools that made this
 research possible.
+\end{acknowledgments}
 
 % ============================================================
 % REFERENCES
 % ============================================================
-\bibliographystyle{unsrt}
 \bibliography{Bibliography}
 
 \end{document}
