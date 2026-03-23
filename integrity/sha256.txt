@@ -5,7 +5,7 @@
 # Format: <checksum> <relative_path>
 #
 
-ca59c567cd64a1aeceddb067b392c63ff057daeb0f27c6fcff56d81d88df8a32  closures/astronomy/__init__.py
+21153aa6b26b92c9e01269b2c509181656ae0d9301b402dfbcddba6de94d246d  closures/astronomy/__init__.py
 691be9ec48d358dc67c0c348b2f4f54a3bf520f0421a1ba57722d8957d74e13d  closures/astronomy/astronomy_theorems.py
 3a4ee0be5b098864330b8a32471ccf6ae3a7cecfe477d7fa974ecdcffb28dcfe  closures/astronomy/binary_star_systems.py
 4f8a366c5861a49311d50a29d3466515f58e9e5e08a4e5bf03583c3648721f60  closures/astronomy/cosmology.py
