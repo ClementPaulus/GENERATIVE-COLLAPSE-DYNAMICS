@@ -14,6 +14,10 @@
 [![Theorems: 252](https://img.shields.io/badge/theorems-252_proven-ff69b4.svg)](closures/)
 [![Identities: 44](https://img.shields.io/badge/identities-44_verified-9cf.svg)](scripts/)
 
+### [**Try the Interactive Web Calculator →**](https://calebpruett927.github.io/GENERATIVE-COLLAPSE-DYNAMICS/calculator)
+
+Explore the GCD kernel live in your browser — no installation required. Compute Tier-1 invariants, verify algebraic identities, visualize regime phase diagrams, compose systems, run orientation proofs, and analyze 29 cross-domain entities from subatomic particles to cosmological memory.
+
 > **Core Axiom**: *"Collapse is generative; only what returns is real."*
 
 **Universal Measurement Contract Protocol (UMCP)** is a contract-first validation framework that verifies reproducible computational workflows against mathematical contracts. It implements **Generative Collapse Dynamics (GCD)** and **Recursive Collapse Field Theory (RCFT)** — a unified measurement theory where every claim must demonstrate return through collapse under frozen evaluation rules.
@@ -35,7 +39,7 @@ This is not a simulation. It is a **metrological enforcement engine**: schema co
   <li><a href="#the-three-tier-stack">The Three-Tier Stack</a></li>
   </ul>
 </li>
-<li><a href="#interactive-dashboard">Interactive Dashboard</a></li>
+<li><a href="#interactive-web-calculator">Interactive Web Calculator</a></li>
 <li><a href="#architecture">Architecture</a></li>
 <li><a href="#closure-domains">Closure Domains (20 Domains)</a></li>
 <li><a href="#the-kernel">The Kernel</a></li>
@@ -160,66 +164,32 @@ Every `umcp validate` run is recorded in the append-only ledger. Cumulative runs
 
 ---
 
-## Interactive Dashboard
+## Interactive Web Calculator
 
-**46 pages · 20 science domains · Real-time kernel exploration**
+**[Open the Calculator →](https://calebpruett927.github.io/GENERATIVE-COLLAPSE-DYNAMICS/calculator)** · No installation required · Runs entirely in your browser
 
-UMCP ships with a full-featured **Streamlit dashboard** for interactive exploration of every domain, kernel metric, and validation result. No coding required — launch it with one command and explore everything from subatomic particles to neuroscience through the GCD kernel.
+The GCD kernel is available as a **live web calculator** at [calebpruett927.github.io/GENERATIVE-COLLAPSE-DYNAMICS](https://calebpruett927.github.io/GENERATIVE-COLLAPSE-DYNAMICS/). Every computation runs client-side in TypeScript — zero server calls, zero dependencies.
 
-### Quick Launch
+### Calculator Modes
 
-```bash
-# Install with visualization dependencies
-pip install -e ".[all]"
+| Mode | What It Does |
+|------|--------------|
+| **Structure Explorer** | Adjust channel sliders and preset systems, see Tier-1 invariants (F, ω, S, C, κ, IC), regime classification, identity verification, and radar/entropy/Γ charts — all in real time |
+| **Composition** | Input two trace vectors, compose them via the GCD algebra (F arithmetic, IC geometric, Hellinger gap correction), compare with dual radar charts |
+| **Batch Analysis** | Select from 29 cross-domain entities (Standard Model, atomic, nuclear, astronomy, finance, consciousness, evolution, semiotics, spacetime memory, QM), compute kernel for all at once, see regime distribution |
+| **τ_R\* Surface** | Canvas 2D heatmap of the τ_R\* diagnostic over the (ω, C) plane with regime boundary lines and mouse tooltips |
+| **Orientation Proofs** | 9 computational receipts matching `scripts/orientation.py` ground truth — duality, integrity bound, geometric slaughter, first weld, confinement cliff, scale inversion, equator convergence, seam associativity — plus fixed point analysis and regime partition statistics |
 
-# Launch the dashboard (opens at http://localhost:8501)
-umcp-dashboard
-```
+### Also Available: Streamlit Dashboard (46 pages)
 
-That's it. The dashboard auto-detects all casepacks, contracts, closures, and ledger data.
-
-### What's Inside
-
-| Category | Pages | Highlights |
-|----------|-------|------------|
-| **Core** | Overview, Domain Overview, Health, Ledger, Metrics | System-wide health monitoring, conformance tracking, kernel metric trends |
-| **Science Domains** | Cosmology, Astronomy, Nuclear, Quantum, Atomic Physics, Standard Model, Materials Science, Finance, RCFT, Security, Everyday Physics, Dynamic Semiotics | Interactive closure exploration for all 20 domains with live kernel computation |
-| **Evolution & Cognition** | Evolution Kernel, Brain Kernel, Awareness Manifold, Cognitive Traversal | 40-organism evolution kernel, 10-channel brain analysis, compositional traversal |
-| **Analysis** | Regime, Time Series, Comparison, Formula Builder, Precision | Regime phase diagrams, cross-domain comparison, custom formula evaluation |
-| **Exploration** | Canon Explorer, Geometry, Rosetta Translation (9 lenses), Orientation, Physics, Kinematics | Cross-domain Rosetta translation (incl. Semiotics lens), three-layer geometry visualization |
-| **Tools** | Casepacks, Contracts, Closures, Live Runner, Batch Validation, Test Templates | Run validations directly from the browser, inspect casepack structure |
-| **Diagnostics** | τ_R* Diagnostic, Epistemic Classification, Insights Engine | Thermodynamic phase diagrams, epistemic cost tracking, pattern discovery |
-| **Manage** | Exports, Bookmarks, Notifications, API Integration | Export results, bookmark pages, connect to the REST API |
-
-### Features
-
-- **Categorized sidebar navigation** with expandable sections and quick-action buttons
-- **Live validation** — run `umcp validate` on any casepack directly from the browser
-- **Regime visualization** — interactive phase space plots with Stable / Watch / Collapse classification
-- **Kernel computation** — compute F, ω, S, C, κ, IC on custom trace vectors in real time
-- **Cross-domain comparison** — compare kernel outputs across all 20 domains
-- **Auto-refresh mode** — continuously monitor validation status
-- **Responsive layout** with compact mode for data-dense views
-
-### Alternative Launch Methods
+For developers working with the repository, UMCP also includes a full **Streamlit dashboard** with 46 pages covering all 20 domains, validation, and diagnostics:
 
 ```bash
-# Direct Streamlit invocation (headless mode for servers)
-streamlit run src/umcp/dashboard/__init__.py --server.port 8501 --server.headless true
-
-# Via helper scripts
-bash scripts/start_dashboard.sh            # Start in background
-bash scripts/stop_dashboard.sh             # Stop background instance
+pip install -e ".[all]"     # Install with visualization dependencies
+umcp-dashboard              # Launch at http://localhost:8501
 ```
 
-### REST API (Companion)
-
-The dashboard pairs with an optional FastAPI REST server for programmatic access:
-
-```bash
-umcp-api                                   # Starts at http://localhost:8000
-# Interactive docs at http://localhost:8000/docs
-```
+The dashboard includes science domain pages, regime phase diagrams, cross-domain comparison, Rosetta translation (9 lenses), batch validation, canon exploration, and more. See `src/umcp/dashboard/` for details.
 
 ---
 
@@ -679,7 +649,7 @@ umcp integrity                  # Verify SHA-256 checksums
 umcp-dashboard                             # Start interactive dashboard on :8501
 ```
 
-See the <strong><a href="#interactive-dashboard">Interactive Dashboard</a></strong> section above for full details, features, and all 46 pages.
+See the <strong><a href="#interactive-web-calculator">Interactive Web Calculator</a></strong> section above, or run <code>umcp-dashboard</code> locally for the full 46-page Streamlit dashboard.
 
 ### Use the kernel in Python
 
@@ -761,7 +731,7 @@ python scripts/benchmark_cpp.py
 # FastAPI REST server (http://localhost:8000)
 umcp-api                                   # Or: uvicorn umcp.api_umcp:app --reload --port 8000
 
-# Streamlit dashboard (http://localhost:8501) — see Interactive Dashboard section for details
+# Streamlit dashboard (http://localhost:8501) — see Interactive Web Calculator section for details
 umcp-dashboard                             # 46 pages, 20 domains, real-time kernel exploration
 ```
 
