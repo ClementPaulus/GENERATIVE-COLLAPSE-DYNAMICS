@@ -162,20 +162,30 @@ def bench_seam() -> None:
     for K in [10, 100, 1000, 5000]:
         chain = SeamChain(alpha=0.05, K_max=K + 100)
 
-        kappas = np.cumsum(rng.normal(0, 0.001, K + 1))
+        # Generate well-behaved seam data: small κ steps with budget that
+        # approximately matches the ledger (residuals stay bounded).
+        kappas = np.cumsum(rng.normal(0, 0.0001, K + 1))
 
         def _run_seam(K: int = K, kappas: np.ndarray = kappas) -> SeamChain:
             c = SeamChain(alpha=0.05, K_max=K + 100)
             for k in range(K):
+                dk = kappas[k + 1] - kappas[k]
+                # Set budget components so residual stays small
+                D_omega = float(abs(rng.normal(0, 0.001)))
+                D_C = float(abs(rng.normal(0, 0.001)))
+                # R·τ_R ≈ dk + D_omega + D_C (budget ≈ ledger)
+                budget_target = dk + D_omega + D_C
+                tau_R = float(max(1.0, abs(budget_target) / 0.01))
+                R = budget_target / tau_R if tau_R > 0 else 0.01
                 c.add_seam(
                     t0=k,
                     t1=k + 1,
                     kappa_t0=kappas[k],
                     kappa_t1=kappas[k + 1],
-                    tau_R=float(rng.uniform(1, 10)),
-                    R=0.01,
-                    D_omega=float(rng.uniform(0, 0.005)),
-                    D_C=float(rng.uniform(0, 0.002)),
+                    tau_R=tau_R,
+                    R=R,
+                    D_omega=D_omega,
+                    D_C=D_C,
                 )
             return c
 
