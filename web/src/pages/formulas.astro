@@ -1,17 +1,137 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FormulaBuilder from '../components/FormulaBuilder.astro';
+const sections = ['about', 'builder', 'expressions', 'reference'];
 ---
 
-<BaseLayout title="Formula Builder — GCD">
+<BaseLayout title="Formula Builder — GCD" description="Build, evaluate, and sweep kernel expressions with live results.">
   <div class="max-w-5xl mx-auto">
-    <div class="mb-6">
+
+    <!-- ═══════════ HERO ═══════════ -->
+    <div class="mb-8">
       <h1 class="text-3xl font-bold text-kernel-100 mb-2">Formula Builder</h1>
-      <p class="text-kernel-400">
-        Build and evaluate kernel expressions with live results.
-        Bind variables to sliders and sweep expressions over ranges.
+      <p class="text-kernel-400 text-lg italic">Algebra est cautio, non porta. — The algebra is a warranty, not a gate.</p>
+      <p class="text-kernel-500 text-sm mt-2 max-w-3xl">
+        Build arbitrary kernel expressions, bind variables to sliders, evaluate in
+        real time, and sweep over parameter ranges. All standard mathematical functions
+        plus the full kernel vocabulary are available. Computation runs client-side.
       </p>
     </div>
-    <FormulaBuilder />
+
+    <!-- ═══════════ NAV ═══════════ -->
+    <nav class="mb-8 flex flex-wrap gap-2">
+      {sections.map(s => (
+        <a href={`#${s}`} class="px-3 py-1.5 rounded-full text-xs font-medium
+          bg-kernel-800/60 text-kernel-400 hover:text-kernel-200 hover:bg-kernel-700/60
+          border border-kernel-700/40 transition no-underline">
+          {s.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+        </a>
+      ))}
+    </nav>
+
+    <!-- ═══════════ §1: ABOUT ═══════════ -->
+    <section id="about" class="mb-10">
+      <h2 class="text-xl font-bold text-kernel-100 mb-4">How It Works</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+          <h3 class="text-sm font-bold text-kernel-200 mb-2">Variable Bindings</h3>
+          <p class="text-xs text-kernel-400">
+            Each kernel invariant (F, &omega;, S, C, &kappa;, IC) is bound to a slider.
+            Adjust any slider and all expressions re-evaluate immediately. Values
+            are clamped to their natural domains.
+          </p>
+        </div>
+        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+          <h3 class="text-sm font-bold text-kernel-200 mb-2">Expression Engine</h3>
+          <p class="text-xs text-kernel-400">
+            Type any mathematical expression using the kernel symbols. The evaluator
+            supports standard functions (exp, log, sqrt, abs, sin, cos, etc.) and
+            arithmetic operations. Expressions are parsed safely — no arbitrary code execution.
+          </p>
+        </div>
+        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+          <h3 class="text-sm font-bold text-kernel-200 mb-2">Parameter Sweep</h3>
+          <p class="text-xs text-kernel-400">
+            Sweep any variable over a range and visualize how the expression changes.
+            Useful for finding critical points, phase transitions, and regime boundaries
+            where kernel behavior changes qualitatively.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ §2: BUILDER ═══════════ -->
+    <section id="builder" class="mb-10">
+      <h2 class="text-xl font-bold text-kernel-100 mb-4">Interactive Formula Builder</h2>
+      <FormulaBuilder />
+    </section>
+
+    <!-- ═══════════ §3: EXAMPLE EXPRESSIONS ═══════════ -->
+    <section id="expressions" class="mb-10">
+      <h2 class="text-xl font-bold text-kernel-100 mb-4">Example Expressions</h2>
+      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div class="bg-kernel-800/50 rounded p-3">
+            <code class="text-amber-400">F + omega</code>
+            <span class="text-kernel-500 block mt-1">Duality identity &mdash; always equals 1</span>
+          </div>
+          <div class="bg-kernel-800/50 rounded p-3">
+            <code class="text-amber-400">F - IC</code>
+            <span class="text-kernel-500 block mt-1">Heterogeneity gap &Delta; &mdash; always &ge; 0</span>
+          </div>
+          <div class="bg-kernel-800/50 rounded p-3">
+            <code class="text-amber-400">exp(kappa) - IC</code>
+            <span class="text-kernel-500 block mt-1">Log-integrity residual &mdash; should be ~0</span>
+          </div>
+          <div class="bg-kernel-800/50 rounded p-3">
+            <code class="text-amber-400">IC / F</code>
+            <span class="text-kernel-500 block mt-1">Coherence ratio &mdash; 1.0 = homogeneous, low = geometric slaughter</span>
+          </div>
+          <div class="bg-kernel-800/50 rounded p-3">
+            <code class="text-amber-400">S + kappa</code>
+            <span class="text-kernel-500 block mt-1">Entropy-integrity sum &mdash; zero at equator (c = &frac12;)</span>
+          </div>
+          <div class="bg-kernel-800/50 rounded p-3">
+            <code class="text-amber-400">omega**3 / (1 - omega + 1e-8)</code>
+            <span class="text-kernel-500 block mt-1">&Gamma;(&omega;) &mdash; drift cost with Cardano exponent p = 3</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ §4: REFERENCE ═══════════ -->
+    <section id="reference" class="mb-10">
+      <h2 class="text-xl font-bold text-kernel-100 mb-4">Variable Reference</h2>
+      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead>
+              <tr class="text-kernel-500 border-b border-kernel-700">
+                <th class="text-left p-2">Variable</th>
+                <th class="text-left p-2">Symbol</th>
+                <th class="text-left p-2">Range</th>
+                <th class="text-left p-2">Description</th>
+              </tr>
+            </thead>
+            <tbody class="text-kernel-400">
+              <tr class="border-b border-kernel-800"><td class="p-2 font-mono text-green-400">F</td><td class="p-2">F</td><td class="p-2">[0, 1]</td><td class="p-2">Fidelity &mdash; what survives collapse</td></tr>
+              <tr class="border-b border-kernel-800"><td class="p-2 font-mono text-red-400">omega</td><td class="p-2">&omega;</td><td class="p-2">[0, 1]</td><td class="p-2">Drift &mdash; what is lost (1 &minus; F)</td></tr>
+              <tr class="border-b border-kernel-800"><td class="p-2 font-mono text-amber-400">S</td><td class="p-2">S</td><td class="p-2">&ge; 0</td><td class="p-2">Bernoulli field entropy</td></tr>
+              <tr class="border-b border-kernel-800"><td class="p-2 font-mono text-purple-400">C</td><td class="p-2">C</td><td class="p-2">[0, 1]</td><td class="p-2">Curvature &mdash; coupling to DOF</td></tr>
+              <tr class="border-b border-kernel-800"><td class="p-2 font-mono text-cyan-400">kappa</td><td class="p-2">&kappa;</td><td class="p-2">&le; 0</td><td class="p-2">Log-integrity</td></tr>
+              <tr><td class="p-2 font-mono text-blue-400">IC</td><td class="p-2">IC</td><td class="p-2">(0, 1]</td><td class="p-2">Integrity composite &mdash; exp(&kappa;)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-kernel-600 mt-3 text-center italic">
+          All variables are computed from the trace vector c &isin; [0,1]&#8319; with weights w &isin; &Delta;&#8319;.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="text-center text-kernel-600 text-xs italic pb-8">
+      Generatio per lexicon. — Generate through the vocabulary.
+    </div>
   </div>
 </BaseLayout>

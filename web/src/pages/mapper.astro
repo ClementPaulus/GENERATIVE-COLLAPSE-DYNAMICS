@@ -1,18 +1,144 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PhysicalMapper from '../components/PhysicalMapper.astro';
+const sections = ['about', 'mapper', 'scales', 'methodology'];
+const scales = [
+  { name: 'Subatomic', color: 'text-red-400', border: 'border-red-800/40', bg: 'bg-red-900/20', entities: 'Quarks, leptons, bosons, hadrons', channels: 'mass_log, spin, charge, color, weak_isospin, lepton_num, baryon_num, generation' },
+  { name: 'Nuclear', color: 'text-orange-400', border: 'border-orange-800/40', bg: 'bg-orange-900/20', entities: 'Nuclei, isotopes, decay chains, QGP', channels: 'BE/A, magic_proximity, neutron_excess, shell_filling' },
+  { name: 'Atomic', color: 'text-amber-400', border: 'border-amber-800/40', bg: 'bg-amber-900/20', entities: '118 elements, electron configs', channels: 'ionization_energy, electronegativity, density, melting_pt, boiling_pt, atomic_radius' },
+  { name: 'Material', color: 'text-green-400', border: 'border-green-800/40', bg: 'bg-green-900/20', entities: 'Crystals, alloys, polymers', channels: '18-field element database incl. bulk properties' },
+  { name: 'Biological', color: 'text-cyan-400', border: 'border-cyan-800/40', bg: 'bg-cyan-900/20', entities: 'Organisms, neural systems, brain regions', channels: '10-channel brain kernel, neural correlates' },
+  { name: 'Cosmological', color: 'text-blue-400', border: 'border-blue-800/40', bg: 'bg-blue-900/20', entities: 'Stars, galaxies, spacetime structures', channels: 'Stellar classification, HR diagram, gravitational memory' },
+];
 ---
 
-<BaseLayout title="Physical Signature Mapper — GCD">
+<BaseLayout title="Physical Signature Mapper — GCD" description="Map kernel invariants to real-world physical entities across all scales.">
   <div class="max-w-6xl mx-auto">
-    <div class="mb-6">
+
+    <!-- ═══════════ HERO ═══════════ -->
+    <div class="mb-8">
       <h1 class="text-3xl font-bold text-kernel-100 mb-2">Physical Signature Mapper</h1>
-      <p class="text-kernel-400">
-        Map kernel invariants to real-world physical entities. Identify known matter by its
-        kernel signature, interpret what each invariant means physically, predict properties
-        of unknown compositions, and explore all reference entities across scales.
+      <p class="text-kernel-400 text-lg italic">Quid supersit post collapsum? — What survives collapse?</p>
+      <p class="text-kernel-500 text-sm mt-2 max-w-3xl">
+        Every physical entity has a kernel signature &mdash; the six invariants (F, &omega;, S, C, &kappa;, IC)
+        computed from its measurable properties mapped to a trace vector. This tool identifies
+        known matter by its signature, interprets what each invariant means physically, predicts
+        properties of unknown compositions, and lets you explore reference entities across every scale.
       </p>
     </div>
-    <PhysicalMapper />
+
+    <!-- ═══════════ NAV ═══════════ -->
+    <nav class="mb-8 flex flex-wrap gap-2">
+      {sections.map(s => (
+        <a href={`#${s}`} class="px-3 py-1.5 rounded-full text-xs font-medium
+          bg-kernel-800/60 text-kernel-400 hover:text-kernel-200 hover:bg-kernel-700/60
+          border border-kernel-700/40 transition no-underline">
+          {s.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
+        </a>
+      ))}
+    </nav>
+
+    <!-- ═══════════ §1: ABOUT ═══════════ -->
+    <section id="about" class="mb-10">
+      <h2 class="text-xl font-bold text-kernel-100 mb-4">How Physical Mapping Works</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+          <h3 class="text-sm font-bold text-kernel-200 mb-2">Trace Construction (Tier-2)</h3>
+          <p class="text-xs text-kernel-400">
+            Each domain closure selects which <strong>measurable properties</strong> become channels c&#7522;
+            in the trace vector. A quark has 8 channels (mass, spin, charge, color, &hellip;).
+            An atom has 12 (nuclear + electronic + bulk). Channel selection IS the Tier-2 contribution.
+          </p>
+        </div>
+        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+          <h3 class="text-sm font-bold text-kernel-200 mb-2">Kernel Computation (Tier-1)</h3>
+          <p class="text-xs text-kernel-400">
+            The kernel K: [0,1]&#8319; &times; &Delta;&#8319; &rarr; (F, &omega;, S, C, &kappa;, IC)
+            is domain-independent. The same function that analyzes quarks also analyzes
+            neurons, poems, and financial portfolios. Only the channels differ.
+          </p>
+        </div>
+        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+          <h3 class="text-sm font-bold text-kernel-200 mb-2">Signature Matching</h3>
+          <p class="text-xs text-kernel-400">
+            Given a kernel signature, the mapper searches reference entities across scales
+            to find matches. A signature with IC/F &lt; 0.04 and high &Delta; suggests
+            confinement (geometric slaughter from a dead channel). A signature with IC/F &gt; 0.95
+            suggests coherent structure.
+          </p>
+        </div>
+        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+          <h3 class="text-sm font-bold text-kernel-200 mb-2">Cross-Scale Universality</h3>
+          <p class="text-xs text-kernel-400">
+            The same kernel detects confinement in quarks (IC drops 98% at the hadron boundary),
+            shell closure in atoms (magic numbers), and phase transitions in materials &mdash;
+            all as instances of geometric slaughter at structural boundaries.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ §2: MAPPER ═══════════ -->
+    <section id="mapper" class="mb-10">
+      <h2 class="text-xl font-bold text-kernel-100 mb-4">Interactive Mapper</h2>
+      <PhysicalMapper />
+    </section>
+
+    <!-- ═══════════ §3: SCALES ═══════════ -->
+    <section id="scales" class="mb-10">
+      <h2 class="text-xl font-bold text-kernel-100 mb-4">Scale Coverage</h2>
+      <p class="text-sm text-kernel-400 mb-4">
+        The mapper spans 6 scales &mdash; from quarks to cosmological structures.
+        Each scale has its own channel vocabulary (Tier-2) but shares the same kernel (Tier-1).
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {scales.map(s => (
+          <div class={`${s.bg} border ${s.border} rounded-lg p-4`}>
+            <h3 class={`text-sm font-bold ${s.color} mb-2`}>{s.name}</h3>
+            <p class="text-xs text-kernel-400 mb-2">{s.entities}</p>
+            <p class="text-[10px] text-kernel-600 font-mono">{s.channels}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ═══════════ §4: METHODOLOGY ═══════════ -->
+    <section id="methodology" class="mb-10">
+      <h2 class="text-xl font-bold text-kernel-100 mb-4">Methodology</h2>
+      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-kernel-400">
+          <div>
+            <h3 class="text-sm font-bold text-kernel-200 mb-2">Embedding</h3>
+            <p>
+              Raw physical data &rarr; normalized trace vector c &isin; [0,1]&#8319; via pre_clip
+              policy (frozen). Min-max normalization with domain bounds [0, 1]. Guard band
+              &epsilon; = 10&#8315;&#8312; prevents logarithmic poles.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-kernel-200 mb-2">Regime Detection</h3>
+            <p>
+              Four-gate criterion: Stable requires &omega; &lt; 0.038 AND F &gt; 0.90 AND S &lt; 0.15
+              AND C &lt; 0.14 (conjunctive). Watch is intermediate. Collapse: &omega; &ge; 0.30.
+              Critical: IC &lt; 0.30 (severity overlay).
+            </p>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-kernel-200 mb-2">Key Diagnostic</h3>
+            <p>
+              The heterogeneity gap &Delta; = F &minus; IC is the central diagnostic.
+              Small &Delta; means all channels contribute equally. Large &Delta; means
+              one or more channels are near dead &mdash; the signature of confinement,
+              phase boundaries, and structural transitions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="text-center text-kernel-600 text-xs italic pb-8">
+      Non agens mensurat, sed structura. — Not the agent measures, but the structure.
+    </div>
   </div>
 </BaseLayout>
