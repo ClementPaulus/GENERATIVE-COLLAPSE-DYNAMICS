@@ -745,6 +745,21 @@ registry:
           - "closures/atomic_physics/zeeman_stark.py"
           - "closures/rcft/universality_class.py"
           - "closures/materials_science/phase_transition.py"
+      - name: "magnetic_cross_system"
+        path: "closures/materials_science/magnetic_cross_system.py"
+        description: "Magnetic cross-system kernel: 35 entities × 3 systems (Material, Quincke, QDM), 6 theorems (T-MCS-1–6)"
+        contract: "MATL.INTSTACK.v1"
+        inputs: ["material_symbol", "quincke_config", "qdm_phase"]
+        outputs: ["F", "omega", "S", "C", "kappa", "IC", "regime", "gap"]
+        frozen_params:
+          epsilon: 1.0e-8
+          n_entities: 35
+          n_systems: 3
+          n_theorems: 6
+        cross_references:
+          - "closures/materials_science/magnetic_properties.py"
+          - "closures/rcft/quincke_rollers.py"
+          - "closures/quantum_mechanics/quantum_dimer_model.py"
       - name: "bcs_superconductivity"
         path: "closures/materials_science/bcs_superconductivity.py"
         description: "BCS superconductivity: McMillan T_c, BCS gap, coherence/penetration lengths, GL parameter κ"

@@ -205,6 +205,7 @@ T006_ALLOWLIST: set[tuple[str, str]] = {
     ("standard_model", "nuclear_physics"),
     ("standard_model", "atomic_physics"),
     ("materials_science", "atomic_physics"),
+    ("materials_science", "quantum_mechanics"),
     ("materials_science", "rcft"),
     ("everyday_physics", "materials_science"),
     ("everyday_physics", "quantum_mechanics"),

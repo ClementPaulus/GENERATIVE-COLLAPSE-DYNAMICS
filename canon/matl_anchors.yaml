@@ -561,3 +561,12 @@ lessons_learned:
 
     '
   implication: Elastic anomalies locate hidden phase transitions
+- id: LL-MT-09
+  domain: Magnetic Cross-System
+  pattern: Curvature C tracks heterogeneity gap Δ across all three magnetic systems (r > 0.7)
+  lesson: 'Channel spread (curvature C) correlates strongly with integrity loss (Δ = F − IC) regardless of whether the
+    magnetism originates from atomic exchange (materials), electro-hydrodynamic torque (Quincke), or topological order (QDM).
+    The cognitive equalizer produces universal structure from domain-specific channels.
+
+    '
+  implication: C is a universal proxy for channel heterogeneity across magnetic domains
