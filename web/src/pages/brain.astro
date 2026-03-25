@@ -497,10 +497,91 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       §2  KERNEL ATLAS — ALL 35 STRUCTURES
+       §1b  KERNEL PLAYGROUND — Interactive Channel Sliders
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="kernel-playground">
+    <h2 class="text-2xl font-bold text-amber-400 mb-4">Kernel Playground</h2>
+    <p class="text-kernel-400 text-sm mb-4">
+      Drag the sliders to set 8 channel values. The kernel K: [0,1]⁸ × Δ⁸ → (F, ω, S, C, κ, IC) computes live.
+      Load any brain region as a starting point, then experiment.
+    </p>
+
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+      <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Sliders -->
+        <div class="flex-1 space-y-3">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-kernel-500 font-bold uppercase tracking-wider">Channel Values</span>
+            <div class="flex gap-2">
+              <select id="playground-preset" class="text-xs bg-kernel-800 border border-kernel-600 text-kernel-300 rounded px-2 py-1">
+                <option value="">Load region…</option>
+              </select>
+              <button id="playground-reset" class="text-[10px] text-kernel-500 border border-kernel-700 rounded px-2 py-0.5 hover:text-kernel-300 transition">Reset</button>
+            </div>
+          </div>
+          <div id="playground-sliders" class="space-y-2"></div>
+        </div>
+
+        <!-- Results -->
+        <div class="w-full lg:w-72 space-y-3">
+          <span class="text-xs text-kernel-500 font-bold uppercase tracking-wider">Kernel Output</span>
+          <div class="grid grid-cols-3 gap-2 mt-2">
+            <div class="bg-kernel-950 rounded p-2 text-center">
+              <div class="text-[10px] text-kernel-500">F</div>
+              <div id="pg-F" class="text-lg font-mono text-kernel-100">—</div>
+            </div>
+            <div class="bg-kernel-950 rounded p-2 text-center">
+              <div class="text-[10px] text-kernel-500">ω</div>
+              <div id="pg-omega" class="text-lg font-mono text-kernel-100">—</div>
+            </div>
+            <div class="bg-kernel-950 rounded p-2 text-center">
+              <div class="text-[10px] text-kernel-500">IC</div>
+              <div id="pg-IC" class="text-lg font-mono text-kernel-100">—</div>
+            </div>
+            <div class="bg-kernel-950 rounded p-2 text-center">
+              <div class="text-[10px] text-kernel-500">Δ</div>
+              <div id="pg-delta" class="text-lg font-mono text-kernel-100">—</div>
+            </div>
+            <div class="bg-kernel-950 rounded p-2 text-center">
+              <div class="text-[10px] text-kernel-500">S</div>
+              <div id="pg-S" class="text-lg font-mono text-kernel-100">—</div>
+            </div>
+            <div class="bg-kernel-950 rounded p-2 text-center">
+              <div class="text-[10px] text-kernel-500">C</div>
+              <div id="pg-C" class="text-lg font-mono text-kernel-100">—</div>
+            </div>
+          </div>
+          <div id="pg-regime" class="text-center py-1.5 rounded text-xs font-bold border border-kernel-700 text-kernel-500">—</div>
+
+          <!-- Live identity checks -->
+          <div class="space-y-1 mt-2">
+            <div class="text-[10px] text-kernel-500 font-bold uppercase tracking-wider">Tier-1 Identity Checks</div>
+            <div class="flex items-center gap-2">
+              <span id="pg-check-duality" class="w-3 h-3 rounded-full bg-kernel-700"></span>
+              <span class="text-[10px] text-kernel-400">F + ω = 1 (duality)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="pg-check-bound" class="w-3 h-3 rounded-full bg-kernel-700"></span>
+              <span class="text-[10px] text-kernel-400">IC ≤ F (integrity bound)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="pg-check-logint" class="w-3 h-3 rounded-full bg-kernel-700"></span>
+              <span class="text-[10px] text-kernel-400">IC = exp(κ) (log-integrity)</span>
+            </div>
+          </div>
+
+          <!-- Insight -->
+          <div id="pg-insight" class="text-[10px] text-kernel-500 border-t border-kernel-800 pt-2 mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       §2  KERNEL ATLAS — ALL 52 STRUCTURES
        ═══════════════════════════════════════════════════════════════ -->
   <section id="kernel-atlas">
-    <h2 class="text-2xl font-bold text-amber-400 mb-4">§2 — Kernel Atlas: All 35 Structures</h2>
+    <h2 class="text-2xl font-bold text-amber-400 mb-4">§2 — Kernel Atlas: All 52 Structures</h2>
     <p class="text-kernel-400 text-sm mb-4">
       Every structure measured through K: [0,1]⁸ × Δ⁸ → (F, ω, S, C, κ, IC).
       Sort by any column. Hover for channel breakdown.
@@ -1190,7 +1271,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
        §8  THEOREMS
        ═══════════════════════════════════════════════════════════════ -->
   <section id="theorems">
-    <h2 class="text-2xl font-bold text-amber-400 mb-4">§8 — Brain Atlas Theorems (6/6 Proven)</h2>
+    <h2 class="text-2xl font-bold text-amber-400 mb-4">§8 — Brain Atlas Theorems (10/10 Proven)</h2>
     <div class="space-y-3" id="theorem-cards"></div>
   </section>
 
@@ -1577,6 +1658,108 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     regionDetail.classList.add('hidden');
   });
 
+  // ── §1b: Kernel Playground ───────────────────────────────────────
+
+  const pgSliders = document.getElementById('playground-sliders')!;
+  const pgPreset = document.getElementById('playground-preset') as HTMLSelectElement;
+  const pgReset = document.getElementById('playground-reset')!;
+  const channelValues: number[] = [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5];
+
+  // Populate preset dropdown
+  ENTITIES.forEach(e => {
+    const opt = document.createElement('option');
+    opt.value = e.name;
+    opt.textContent = e.displayName;
+    pgPreset.appendChild(opt);
+  });
+
+  // Build sliders
+  const channelLabels = ['vol_frac', 'seg_acc', 'mm_contrast', 'str_het', 'bilat_sym', 'clin_sens', 'conn_deg', 'res_dep'];
+  pgSliders.innerHTML = channelLabels.map((label, i) => `
+    <div class="flex items-center gap-2">
+      <span class="text-[9px] text-kernel-500 w-20 truncate">${label}</span>
+      <input type="range" min="0" max="100" value="50" data-ch="${i}"
+        class="flex-1 h-1.5 accent-amber-500 bg-kernel-700 rounded-full cursor-pointer" />
+      <span class="text-[9px] font-mono text-kernel-400 w-8 text-right" id="pg-val-${i}">0.50</span>
+    </div>
+  `).join('');
+
+  function updatePlayground() {
+    const weights = new Array(8).fill(1 / 8);
+    const result = computeKernel(channelValues, weights);
+    const regime = classifyRegime(result.omega, result.F, result.S, result.C);
+
+    document.getElementById('pg-F')!.textContent = result.F.toFixed(3);
+    document.getElementById('pg-omega')!.textContent = result.omega.toFixed(3);
+    document.getElementById('pg-IC')!.textContent = result.IC.toFixed(3);
+    document.getElementById('pg-delta')!.textContent = (result.F - result.IC).toFixed(3);
+    document.getElementById('pg-S')!.textContent = result.S.toFixed(3);
+    document.getElementById('pg-C')!.textContent = result.C.toFixed(3);
+
+    const regEl = document.getElementById('pg-regime')!;
+    const regClasses: Record<string, string> = {
+      STABLE: 'bg-green-900/40 text-green-400 border border-green-700',
+      WATCH: 'bg-amber-900/40 text-amber-400 border border-amber-700',
+      COLLAPSE: 'bg-red-900/40 text-red-400 border border-red-700',
+    };
+    regEl.className = `text-center py-1.5 rounded text-xs font-bold ${regClasses[regime.regime] || 'border border-kernel-700 text-kernel-500'}`;
+    regEl.textContent = regime.regime + (regime.isCritical ? ' (Critical)' : '');
+
+    // Identity checks
+    const dualOk = Math.abs(result.F + result.omega - 1.0) < 1e-10;
+    const boundOk = result.IC <= result.F + 1e-10;
+    const logOk = Math.abs(result.IC - Math.exp(result.kappa)) < 1e-8;
+    document.getElementById('pg-check-duality')!.className = `w-3 h-3 rounded-full ${dualOk ? 'bg-green-500' : 'bg-red-500'}`;
+    document.getElementById('pg-check-bound')!.className = `w-3 h-3 rounded-full ${boundOk ? 'bg-green-500' : 'bg-red-500'}`;
+    document.getElementById('pg-check-logint')!.className = `w-3 h-3 rounded-full ${logOk ? 'bg-green-500' : 'bg-red-500'}`;
+
+    // Insight
+    const delta = result.F - result.IC;
+    const minCh = Math.min(...channelValues);
+    const minIdx = channelValues.indexOf(minCh);
+    let insight = '';
+    if (delta > 0.3) insight = `⚠ Geometric slaughter: ${channelLabels[minIdx]} = ${minCh.toFixed(2)} is dragging IC to ${result.IC.toFixed(3)} while F = ${result.F.toFixed(3)}.`;
+    else if (delta < 0.02) insight = '✓ Channels are well-balanced — IC ≈ F (near rank-1 homogeneous).';
+    else insight = `Δ = ${delta.toFixed(3)}: heterogeneity gap is moderate. Weakest channel: ${channelLabels[minIdx]}.`;
+    document.getElementById('pg-insight')!.textContent = insight;
+  }
+
+  pgSliders.querySelectorAll('input[type="range"]').forEach(input => {
+    input.addEventListener('input', (ev) => {
+      const el = ev.target as HTMLInputElement;
+      const idx = parseInt(el.dataset.ch!);
+      channelValues[idx] = parseInt(el.value) / 100;
+      document.getElementById(`pg-val-${idx}`)!.textContent = channelValues[idx].toFixed(2);
+      updatePlayground();
+    });
+  });
+
+  pgPreset.addEventListener('change', () => {
+    const ent = ENTITIES.find(e => e.name === pgPreset.value);
+    if (!ent) return;
+    ent.channels.forEach((v, i) => {
+      channelValues[i] = v;
+      const slider = pgSliders.querySelector(`input[data-ch="${i}"]`) as HTMLInputElement;
+      slider.value = String(Math.round(v * 100));
+      document.getElementById(`pg-val-${i}`)!.textContent = v.toFixed(2);
+    });
+    updatePlayground();
+  });
+
+  pgReset.addEventListener('click', () => {
+    channelValues.fill(0.5);
+    pgSliders.querySelectorAll('input[type="range"]').forEach(input => {
+      (input as HTMLInputElement).value = '50';
+    });
+    channelLabels.forEach((_, i) => {
+      document.getElementById(`pg-val-${i}`)!.textContent = '0.50';
+    });
+    pgPreset.value = '';
+    updatePlayground();
+  });
+
+  updatePlayground();
+
   // ── §2: Kernel Atlas Table ──────────────────────────────────────
 
   const tbody = document.getElementById('atlas-tbody')!;
@@ -1827,7 +2010,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   const theorems = [
     {
       id: 'T-BA-1', title: 'Thalamus Dominance',
-      desc: 'Thalamus has the highest F (0.782) among all 35 structures.',
+      desc: 'Thalamus has the highest F (0.782) among all 52 structures.',
       evidence: 'Its unique combination of 13 nuclei/hemisphere (highest structural_heterogeneity = 0.92), central relay function (connectivity = 0.95), and balanced channel profile produces the most coherent kernel invariants.',
       verify: () => {
         const thal = allResults.find(r => r.entity.name === 'thalamus')!;
@@ -1894,6 +2077,60 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         const hiGap = hiRes.reduce((s, r) => s + r.delta, 0) / hiRes.length;
         const loGap = loRes.reduce((s, r) => s + r.delta, 0) / loRes.length;
         return { passed: hiGap > loGap && hiRes.length >= 3 && loRes.length >= 3, hiGap, loGap, nHi: hiRes.length, nLo: loRes.length };
+      }
+    },
+    {
+      id: 'T-BA-7', title: 'Hub-Fidelity Theorem',
+      desc: 'High-connectivity regions (connectivity_degree > 0.70) have higher mean F than low-connectivity regions.',
+      evidence: 'Central relay hubs (thalamus, hippocampus, cingulate) maintain balanced channel profiles — high connectivity correlates with high fidelity.',
+      verify: () => {
+        const hiConn = allResults.filter(r => ENTITIES.find(e => e.name === r.entity.name)!.channels[6] > 0.70);
+        const loConn = allResults.filter(r => ENTITIES.find(e => e.name === r.entity.name)!.channels[6] <= 0.70);
+        const hiF = hiConn.reduce((s, r) => s + r.F, 0) / hiConn.length;
+        const loF = loConn.reduce((s, r) => s + r.F, 0) / loConn.length;
+        return { passed: hiF > loF, hiF: hiF.toFixed(3), loF: loF.toFixed(3), nHi: hiConn.length, nLo: loConn.length };
+      }
+    },
+    {
+      id: 'T-BA-8', title: 'Midline Symmetry-Gap Theorem',
+      desc: 'Structures with low bilateral_symmetry (<0.50) have higher heterogeneity gap than symmetric structures.',
+      evidence: 'Midline/commissural structures (corpus callosum, fornix, pineal) have asymmetric channel profiles — low bilateral symmetry contributes to geometric slaughter.',
+      verify: () => {
+        const loSym = allResults.filter(r => ENTITIES.find(e => e.name === r.entity.name)!.channels[4] < 0.50);
+        const hiSym = allResults.filter(r => ENTITIES.find(e => e.name === r.entity.name)!.channels[4] >= 0.50);
+        const loGap = loSym.reduce((s, r) => s + r.delta, 0) / loSym.length;
+        const hiGap = hiSym.reduce((s, r) => s + r.delta, 0) / hiSym.length;
+        return { passed: loGap > hiGap, loSymGap: loGap.toFixed(3), hiSymGap: hiGap.toFixed(3), nLo: loSym.length };
+      }
+    },
+    {
+      id: 'T-BA-9', title: 'Specialized Geometric Slaughter',
+      desc: 'Specialized category has the highest mean Δ across all 7 categories.',
+      evidence: 'Small specialized structures (area postrema, SCN, pineal) have extreme channel disparity — tiny volume fraction and low bilateral symmetry kill IC while F stays moderate.',
+      verify: () => {
+        const catGaps: Record<string, number> = {};
+        categories.forEach(cat => {
+          const catR = allResults.filter(r => r.entity.category === cat);
+          catGaps[cat] = catR.reduce((s, r) => s + r.delta, 0) / catR.length;
+        });
+        const specGap = catGaps['specialized'];
+        const passed = Object.values(catGaps).every(v => specGap >= v - 0.001);
+        return { passed, specGap: specGap.toFixed(3), allGaps: Object.fromEntries(Object.entries(catGaps).map(([k, v]) => [k, v.toFixed(3)])) };
+      }
+    },
+    {
+      id: 'T-BA-10', title: 'Cortical Coherence Theorem',
+      desc: 'Cortical regions have the lowest mean Δ — most balanced channel profiles.',
+      evidence: 'Large cortical areas have high volumetric fraction, high bilateral symmetry, and moderate values across all channels — minimizing the heterogeneity gap.',
+      verify: () => {
+        const catGaps: Record<string, number> = {};
+        categories.forEach(cat => {
+          const catR = allResults.filter(r => r.entity.category === cat);
+          catGaps[cat] = catR.reduce((s, r) => s + r.delta, 0) / catR.length;
+        });
+        const cortGap = catGaps['cortical'];
+        const passed = Object.values(catGaps).every(v => cortGap <= v + 0.001);
+        return { passed, cortGap: cortGap.toFixed(3), allGaps: Object.fromEntries(Object.entries(catGaps).map(([k, v]) => [k, v.toFixed(3)])) };
       }
     },
   ];

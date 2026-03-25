@@ -1,7 +1,7 @@
 """Tests for brain atlas closure (clinical-neuroscience domain).
 
-Validates 35 brain anatomical structures, 8-channel trace construction,
-Tier-1 kernel identities, 6 theorems (T-BA-1 through T-BA-6), and
+Validates 52 brain anatomical structures, 8-channel trace construction,
+Tier-1 kernel identities, 10 theorems (T-BA-1 through T-BA-10), and
 3 systems (atlas comparison, segmentation protocols, clinical diagnostics).
 
 Data sourced from HoliAtlas (Manjón et al. 2026, Sci Rep 16:9457)
@@ -34,6 +34,10 @@ from closures.clinical_neuroscience.brain_atlas_closure import (
     verify_t_ba_4,
     verify_t_ba_5,
     verify_t_ba_6,
+    verify_t_ba_7,
+    verify_t_ba_8,
+    verify_t_ba_9,
+    verify_t_ba_10,
 )
 
 
@@ -147,6 +151,18 @@ class TestTheorems:
 
     def test_t_ba_6(self, all_results):
         assert verify_t_ba_6(all_results)["passed"]
+
+    def test_t_ba_7(self, all_results):
+        assert verify_t_ba_7(all_results)["passed"]
+
+    def test_t_ba_8(self, all_results):
+        assert verify_t_ba_8(all_results)["passed"]
+
+    def test_t_ba_9(self, all_results):
+        assert verify_t_ba_9(all_results)["passed"]
+
+    def test_t_ba_10(self, all_results):
+        assert verify_t_ba_10(all_results)["passed"]
 
     def test_all_theorems_pass(self):
         for t in verify_all_theorems():
