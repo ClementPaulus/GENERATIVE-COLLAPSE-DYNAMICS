@@ -1,0 +1,1019 @@
+---
+/**
+ * Black Hole Simulation — GCD Gravitational Analogs
+ *
+ * Maps GCD kernel invariants to black hole physics:
+ *   Event horizon  = ω → 1 pole (Γ → ∞)
+ *   Gravity        = dΓ/dω (gradient of drift cost)
+ *   Mass           = accumulated |κ| (well depth)
+ *   Tidal force    = d²Γ/dω² (curvature of cost surface)
+ *   Lensing        = deflection from heterogeneity gap Δ
+ *   Time dilation  = descent/ascent cost asymmetry
+ *
+ * All quantities computed client-side from the frozen kernel.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Black Hole Simulation — GCD">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-kernel-100 mb-2">
+        Black Hole Simulation
+      </h1>
+      <p class="text-kernel-400 max-w-3xl">
+        A black hole in GCD is the <strong class="text-red-400">Γ(ω→1) pole</strong> — the point where drift cost diverges
+        and return becomes impossible. The event horizon is not imported from general relativity; it is
+        <em>derived independently</em> as the structural boundary where τ_R = ∞_rec.
+      </p>
+      <p class="text-kernel-500 italic text-sm mt-2">
+        Collapsus generativus est; solum quod redit, reale est. — At the horizon, nothing returns.
+      </p>
+    </div>
+
+    <!-- GR↔GCD Translation Table -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-5 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-3">GR ↔ GCD Translation</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead>
+            <tr class="border-b border-kernel-700 text-kernel-400">
+              <th class="pr-4 py-2">GR Concept</th>
+              <th class="pr-4 py-2">GCD Analog</th>
+              <th class="py-2">Formula</th>
+            </tr>
+          </thead>
+          <tbody class="text-kernel-300 font-mono text-xs">
+            <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Event Horizon</td><td class="pr-4 py-2">ω → 1 pole</td><td class="py-2">Γ(ω) = ω³/(1−ω+ε) → ∞</td></tr>
+            <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Gravitational Field</td><td class="pr-4 py-2">dΓ/dω</td><td class="py-2">Gradient of drift cost</td></tr>
+            <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Mass</td><td class="pr-4 py-2">|κ| well depth</td><td class="py-2">Accumulated log-integrity</td></tr>
+            <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Tidal Force</td><td class="pr-4 py-2">d²Γ/dω²</td><td class="py-2">Cost curvature (spaghettification)</td></tr>
+            <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Gravitational Lensing</td><td class="pr-4 py-2">Δ = F − IC</td><td class="py-2">Heterogeneity gap deflects trajectories</td></tr>
+            <tr><td class="pr-4 py-2 text-kernel-400 font-sans">Time Dilation</td><td class="pr-4 py-2">Ascent/descent asymmetry</td><td class="py-2">Cost(ascent) / Cost(descent) → ∞ near horizon</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Infall Simulator -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-2">Gravitational Infall</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        Drag ω toward 1.0 to "fall into" the black hole. Watch cost, tidal force, and
+        escape ratio diverge at the event horizon. The three regime boundaries are marked.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-4 mb-4">
+        <div class="flex-1 min-w-[200px]">
+          <label class="text-xs text-kernel-400 block mb-1">ω (Radial Position → Horizon)</label>
+          <input id="infall-omega" type="range" min="0" max="0.995" step="0.001" value="0.10" class="w-full accent-red-500" />
+          <div class="flex justify-between text-[10px] text-kernel-600 mt-1">
+            <span>Safe (ω=0)</span>
+            <span class="text-green-500">Stable</span>
+            <span class="text-amber-500">Watch</span>
+            <span class="text-red-500">Collapse</span>
+            <span>Horizon (ω=1)</span>
+          </div>
+        </div>
+        <div class="text-right min-w-[120px]">
+          <div class="text-2xl font-mono font-bold" id="infall-omega-val">0.100</div>
+          <div class="text-xs text-kernel-500" id="infall-regime">STABLE</div>
+        </div>
+      </div>
+
+      <!-- Infall metrics -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" id="infall-metrics"></div>
+
+      <!-- Infall canvas: Γ(ω) with your position -->
+      <div class="relative">
+        <canvas id="infall-canvas" class="cursor-crosshair" style="max-width: 720px; height: 300px; width: 100%;"></canvas>
+        <div id="infall-tooltip" class="hidden absolute text-xs font-mono bg-kernel-800/95 border border-kernel-600 text-kernel-200 px-2 py-1 rounded shadow-lg pointer-events-none z-10 whitespace-nowrap"></div>
+      </div>
+    </div>
+
+    <!-- Budget Surface Heatmap -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-2">Budget Surface</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        The full cost landscape over (ω, C). Height = Γ(ω) + α·C.
+        Entity positions are marked — objects deeper in the potential well have higher ω.
+        The dark ridge at ω → 1 is the event horizon.
+      </p>
+      <div class="flex flex-col md:flex-row gap-4 items-start">
+        <div class="relative">
+          <canvas id="surface-canvas" style="width: 400px; height: 400px;"></canvas>
+          <div id="surface-tooltip" class="hidden absolute text-xs font-mono bg-kernel-800/95 border border-kernel-600 text-kernel-200 px-2 py-1 rounded shadow-lg pointer-events-none z-10 whitespace-nowrap"></div>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-sm font-bold text-kernel-300 mb-2">Entity Positions</h3>
+          <div id="entity-legend" class="space-y-1 text-xs"></div>
+          <div class="mt-4 pt-3 border-t border-kernel-700">
+            <h3 class="text-sm font-bold text-kernel-300 mb-2">Color Scale</h3>
+            <div class="flex items-center gap-2">
+              <div class="h-3 flex-1 rounded" style="background: linear-gradient(to right, #0f172a, #1e3a5f, #065f46, #854d0e, #7f1d1d, #ef4444)"></div>
+            </div>
+            <div class="flex justify-between text-[10px] text-kernel-600 mt-1">
+              <span>Low cost</span>
+              <span>High cost (horizon)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Entity Comparison -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-2">Entity Kernel Comparison</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        Each spacetime entity through the GCD kernel. The trace vector becomes six invariants;
+        the invariants determine the regime. The heterogeneity gap Δ = F − IC is the lensing diagnostic.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="entity-cards"></div>
+    </div>
+
+    <!-- Arrow of Time -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-2">Arrow of Time</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        Descent cost vs ascent cost as a function of depth. Near the horizon, escape cost
+        diverges relative to infall cost — this IS time dilation in GCD. The asymmetry ratio
+        grows without bound as ω → 1.
+      </p>
+      <div class="relative">
+        <canvas id="arrow-canvas" style="max-width: 720px; height: 280px; width: 100%;"></canvas>
+      </div>
+    </div>
+
+    <!-- Tidal Force -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-2">Tidal Force (d²Γ/dω²)</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        The second derivative of Γ(ω) measures the rate of change of the gravitational field —
+        the "spaghettification" diagnostic. Tidal force is small far from the horizon and
+        catastrophic near it.
+      </p>
+      <div class="relative">
+        <canvas id="tidal-canvas" style="max-width: 720px; height: 260px; width: 100%;"></canvas>
+      </div>
+    </div>
+
+    <!-- Gravitational Lensing Visualization -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-2">Gravitational Lensing</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        The heterogeneity gap Δ = F − IC determines lensing morphology. Small Δ → Einstein ring.
+        Large Δ → weak distortion. The deflection angle θ = 4|κ|/(Δ+ε) mirrors Einstein's formula.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="relative">
+          <canvas id="lensing-canvas" style="width: 100%; height: 320px;"></canvas>
+        </div>
+        <div id="lensing-info" class="space-y-3 text-xs"></div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { computeKernel, classifyRegime, gammaOmega } from '../lib/kernel';
+  import { EPSILON, P_EXPONENT, ALPHA, OMEGA_TRAP, C_TRAP } from '../lib/constants';
+  import {
+    budgetSurfaceHeight, dGamma, d2Gamma, wellDepth,
+    deflectionAngle, classifyLensing, descentCost, ascentCost,
+    arrowAsymmetry, BLACK_HOLE_ENTITIES,
+    type SpacetimeEntity,
+  } from '../lib/spacetime';
+
+  /* ─── Helpers ───────────────────────────────────────────────────── */
+
+  function fmtV(v: number): string {
+    if (!isFinite(v)) return '∞';
+    const a = Math.abs(v);
+    if (a >= 10000) return v.toExponential(2);
+    if (a >= 100) return v.toFixed(1);
+    if (a < 0.001 && a > 0) return v.toExponential(2);
+    return v.toFixed(4);
+  }
+
+  function regimeColor(regime: string): string {
+    if (regime === 'STABLE') return '#34d399';
+    if (regime === 'WATCH') return '#fbbf24';
+    return '#ef4444';
+  }
+
+  function regimeBg(regime: string): string {
+    if (regime === 'STABLE') return 'bg-green-900/40 border-green-700 text-green-400';
+    if (regime === 'WATCH') return 'bg-amber-900/40 border-amber-700 text-amber-400';
+    return 'bg-red-900/40 border-red-700 text-red-400';
+  }
+
+  function setupCanvas(id: string, cssW: number, cssH: number): [HTMLCanvasElement, CanvasRenderingContext2D, number] {
+    const canvas = document.getElementById(id) as HTMLCanvasElement;
+    const container = canvas.parentElement!;
+    const w = Math.min(container.clientWidth, cssW);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(cssH * dpr);
+    canvas.style.width = w + 'px';
+    canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d')!;
+    ctx.scale(dpr, dpr);
+    return [canvas, ctx, w];
+  }
+
+  /* ─── Entity Kernel Data ──────────────────────────────────────── */
+
+  const entityData = BLACK_HOLE_ENTITIES.map(e => {
+    const kr = computeKernel(e.c, e.w);
+    const rg = classifyRegime(kr);
+    return { entity: e, kernel: kr, regime: rg.regime, isCritical: rg.isCritical };
+  });
+
+  /* ─── 1. Infall Simulator ─────────────────────────────────────── */
+
+  function renderInfall() {
+    const slider = document.getElementById('infall-omega') as HTMLInputElement;
+    const omega = parseFloat(slider.value);
+    const F = 1 - omega;
+    const gamma = gammaOmega(omega);
+    const dg = dGamma(omega);
+    const d2g = d2Gamma(omega);
+    const wd = wellDepth(Math.log(Math.max(F, EPSILON)));
+    const escapeRatio = arrowAsymmetry(0.01, omega);
+
+    // Regime
+    let regime: string;
+    if (omega < 0.038) regime = 'STABLE';
+    else if (omega < 0.30) regime = 'WATCH';
+    else regime = 'COLLAPSE';
+
+    document.getElementById('infall-omega-val')!.textContent = omega.toFixed(3);
+    const regimeEl = document.getElementById('infall-regime')!;
+    regimeEl.textContent = regime + (omega > 0.95 ? ' — NEAR HORIZON' : '');
+    regimeEl.style.color = regimeColor(regime);
+
+    // Metrics
+    const metricsHtml = [
+      { label: 'Γ(ω) — Drift Cost', value: fmtV(gamma), color: '#ef4444' },
+      { label: 'dΓ/dω — Gravity', value: fmtV(dg), color: '#f97316' },
+      { label: 'd²Γ/dω² — Tidal', value: fmtV(d2g), color: '#a855f7' },
+      { label: 'Escape Ratio', value: fmtV(escapeRatio) + '×', color: '#60a5fa' },
+    ].map(m => `
+      <div class="bg-kernel-800 border border-kernel-700 rounded p-3">
+        <div class="text-[10px] text-kernel-500 mb-1">${m.label}</div>
+        <div class="text-lg font-mono font-bold" style="color:${m.color}">${m.value}</div>
+      </div>
+    `).join('');
+    document.getElementById('infall-metrics')!.innerHTML = metricsHtml;
+
+    // Canvas: Γ(ω) with position marker
+    const [canvas, ctx, cssW] = setupCanvas('infall-canvas', 720, 300);
+    const cssH = 300;
+    const m = { top: 24, right: 20, bottom: 48, left: 64 };
+    const plotW = cssW - m.left - m.right;
+    const plotH = cssH - m.top - m.bottom;
+
+    ctx.fillStyle = '#06060c';
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    const yMax = 12;
+    const mapX = (w: number) => m.left + (w / 1.0) * plotW;
+    const mapY = (g: number) => m.top + (1 - Math.min(g, yMax) / yMax) * plotH;
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i <= 10; i++) {
+      const x = m.left + (i / 10) * plotW;
+      ctx.beginPath(); ctx.moveTo(x, m.top); ctx.lineTo(x, m.top + plotH); ctx.stroke();
+    }
+    for (let i = 0; i <= 6; i++) {
+      const y = m.top + (i / 6) * plotH;
+      ctx.beginPath(); ctx.moveTo(m.left, y); ctx.lineTo(m.left + plotW, y); ctx.stroke();
+    }
+
+    // Axes
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(m.left, m.top); ctx.lineTo(m.left, m.top + plotH);
+    ctx.lineTo(m.left + plotW, m.top + plotH); ctx.stroke();
+
+    // Labels
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '11px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    for (let i = 0; i <= 10; i += 2) {
+      ctx.fillText((i / 10).toFixed(1), mapX(i / 10), m.top + plotH + 18);
+    }
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 6; i++) {
+      const val = yMax - (i / 6) * yMax;
+      ctx.fillText(val.toFixed(0), m.left - 7, m.top + (i / 6) * plotH + 4);
+    }
+
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '12px ui-sans-serif, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('ω (Radial Position → Horizon)', m.left + plotW / 2, cssH - 4);
+    ctx.save(); ctx.translate(14, m.top + plotH / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Γ(ω)', 0, 0); ctx.restore();
+
+    // Clip
+    ctx.save();
+    ctx.beginPath(); ctx.rect(m.left, m.top, plotW, plotH); ctx.clip();
+
+    // Regime shading
+    // Stable zone
+    ctx.fillStyle = 'rgba(52,211,153,0.06)';
+    ctx.fillRect(mapX(0), m.top, mapX(0.038) - mapX(0), plotH);
+    // Watch zone
+    ctx.fillStyle = 'rgba(251,191,36,0.04)';
+    ctx.fillRect(mapX(0.038), m.top, mapX(0.30) - mapX(0.038), plotH);
+    // Collapse zone
+    ctx.fillStyle = 'rgba(239,68,68,0.04)';
+    ctx.fillRect(mapX(0.30), m.top, mapX(1.0) - mapX(0.30), plotH);
+
+    // Gradient fill under curve
+    const grad = ctx.createLinearGradient(0, m.top, 0, m.top + plotH);
+    grad.addColorStop(0, 'rgba(239,68,68,0.15)');
+    grad.addColorStop(1, 'rgba(239,68,68,0.01)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(mapX(0), mapY(0));
+    for (let i = 0; i < 500; i++) {
+      const w = (i / 499) * 0.999;
+      ctx.lineTo(mapX(w), mapY(gammaOmega(w)));
+    }
+    ctx.lineTo(mapX(0.999), mapY(0));
+    ctx.closePath(); ctx.fill();
+
+    // Main curve
+    ctx.strokeStyle = '#ef4444';
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = 'rgba(239,68,68,0.5)';
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    for (let i = 0; i < 500; i++) {
+      const w = (i / 499) * 0.999;
+      const g = gammaOmega(w);
+      i === 0 ? ctx.moveTo(mapX(w), mapY(g)) : ctx.lineTo(mapX(w), mapY(g));
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Regime boundaries
+    ctx.setLineDash([4, 3]);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(52,211,153,0.6)';
+    ctx.beginPath(); ctx.moveTo(mapX(0.038), m.top); ctx.lineTo(mapX(0.038), m.top + plotH); ctx.stroke();
+    ctx.strokeStyle = 'rgba(251,191,36,0.5)';
+    ctx.beginPath(); ctx.moveTo(mapX(0.30), m.top); ctx.lineTo(mapX(0.30), m.top + plotH); ctx.stroke();
+    ctx.strokeStyle = 'rgba(168,85,247,0.5)';
+    ctx.beginPath(); ctx.moveTo(mapX(OMEGA_TRAP), m.top); ctx.lineTo(mapX(OMEGA_TRAP), m.top + plotH); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Labels for regime lines
+    ctx.font = '9px ui-monospace, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = 'rgba(52,211,153,0.7)';
+    ctx.fillText('Stable', mapX(0.038) + 2, m.top + 12);
+    ctx.fillStyle = 'rgba(251,191,36,0.7)';
+    ctx.fillText('Watch', mapX(0.30) + 2, m.top + 12);
+    ctx.fillStyle = 'rgba(168,85,247,0.7)';
+    ctx.fillText('ω_trap', mapX(OMEGA_TRAP) + 2, m.top + 24);
+
+    // Entity dots on curve
+    for (const ed of entityData) {
+      const ew = ed.kernel.omega;
+      const eg = gammaOmega(ew);
+      if (ew < 1 && eg < yMax) {
+        ctx.beginPath();
+        ctx.arc(mapX(ew), mapY(eg), 4, 0, Math.PI * 2);
+        ctx.fillStyle = regimeColor(ed.regime);
+        ctx.fill();
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    }
+
+    // Your position marker
+    const yg = gammaOmega(omega);
+    const px = mapX(omega);
+    const py = mapY(yg);
+
+    // Vertical line
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(px, m.top); ctx.lineTo(px, m.top + plotH); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Position dot
+    ctx.beginPath();
+    ctx.arc(px, py, 7, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.shadowColor = 'rgba(255,255,255,0.6)';
+    ctx.shadowBlur = 10;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = regimeColor(regime);
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Label
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px ui-monospace, monospace';
+    ctx.textAlign = omega > 0.8 ? 'right' : 'left';
+    ctx.fillText(`YOU: ω=${omega.toFixed(3)}  Γ=${fmtV(yg)}`, px + (omega > 0.8 ? -12 : 12), py - 12);
+
+    ctx.restore();
+
+    // Tooltip handling
+    const tooltip = document.getElementById('infall-tooltip')!;
+    canvas.onmousemove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const dpr = window.devicePixelRatio || 1;
+      const cx = mx, cy = my;
+
+      if (cx >= m.left && cx <= m.left + plotW && cy >= m.top && cy <= m.top + plotH) {
+        const omH = ((cx - m.left) / plotW) * 1.0;
+        const gH = gammaOmega(omH);
+        tooltip.className = 'absolute text-xs font-mono bg-kernel-800/95 border border-kernel-600 text-kernel-200 px-2 py-1 rounded shadow-lg pointer-events-none z-10 whitespace-nowrap';
+        tooltip.textContent = `ω=${omH.toFixed(3)}  Γ=${fmtV(gH)}  dΓ=${fmtV(dGamma(omH))}`;
+        tooltip.style.left = mx + 12 + 'px';
+        tooltip.style.top = my - 10 + 'px';
+      } else {
+        tooltip.className = 'hidden';
+      }
+    };
+    canvas.onmouseleave = () => { tooltip.className = 'hidden'; };
+  }
+
+  /* ─── 2. Budget Surface Heatmap ───────────────────────────────── */
+
+  function renderSurface() {
+    const [canvas, ctx, cssW] = setupCanvas('surface-canvas', 400, 400);
+    const cssH = 400;
+    const m = { top: 30, right: 10, bottom: 40, left: 50 };
+    const plotW = cssW - m.left - m.right;
+    const plotH = cssH - m.top - m.bottom;
+
+    ctx.fillStyle = '#06060c';
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    // Heatmap
+    const res = 200;
+    const cellW = plotW / res;
+    const cellH = plotH / res;
+
+    // Find max for normalization (capped for visual clarity)
+    const maxCost = 5.0;
+
+    for (let i = 0; i < res; i++) {
+      for (let j = 0; j < res; j++) {
+        const om = (i / res) * 0.999;
+        const cv = (j / res) * 1.0;
+        const cost = budgetSurfaceHeight(om, cv);
+        const t = Math.min(cost / maxCost, 1.0);
+
+        // Color: deep blue → teal → yellow → red
+        let r: number, g: number, b: number;
+        if (t < 0.25) {
+          const s = t / 0.25;
+          r = Math.floor(15 + s * 20); g = Math.floor(23 + s * 40); b = Math.floor(42 + s * 55);
+        } else if (t < 0.5) {
+          const s = (t - 0.25) / 0.25;
+          r = Math.floor(35 * (1 - s)); g = Math.floor(63 + s * 32); b = Math.floor(97 * (1 - s) + s * 70);
+        } else if (t < 0.75) {
+          const s = (t - 0.5) / 0.25;
+          r = Math.floor(s * 133 + 10); g = Math.floor(95 * (1 - s) + s * 77); b = Math.floor(70 * (1 - s) + s * 14);
+        } else {
+          const s = (t - 0.75) / 0.25;
+          r = Math.floor(143 + s * 96); g = Math.floor(77 * (1 - s) + s * 29); b = Math.floor(14 * (1 - s));
+        }
+
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+        ctx.fillRect(
+          m.left + i * cellW,
+          m.top + plotH - (j + 1) * cellH,
+          cellW + 0.5,
+          cellH + 0.5,
+        );
+      }
+    }
+
+    // Axes
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(m.left, m.top); ctx.lineTo(m.left, m.top + plotH);
+    ctx.lineTo(m.left + plotW, m.top + plotH); ctx.stroke();
+
+    // Labels
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '10px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    for (let i = 0; i <= 5; i++) {
+      ctx.fillText((i / 5).toFixed(1), m.left + (i / 5) * plotW, m.top + plotH + 16);
+    }
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 5; i++) {
+      ctx.fillText((i / 5).toFixed(1), m.left - 5, m.top + plotH - (i / 5) * plotH + 4);
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '12px ui-sans-serif, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('ω (Drift)', m.left + plotW / 2, cssH - 4);
+    ctx.save(); ctx.translate(14, m.top + plotH / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('C (Curvature)', 0, 0); ctx.restore();
+
+    // Regime boundary lines on surface
+    const mapSX = (om: number) => m.left + (om / 1.0) * plotW;
+    ctx.setLineDash([4, 3]);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(52,211,153,0.5)';
+    ctx.beginPath(); ctx.moveTo(mapSX(0.038), m.top); ctx.lineTo(mapSX(0.038), m.top + plotH); ctx.stroke();
+    ctx.strokeStyle = 'rgba(251,191,36,0.4)';
+    ctx.beginPath(); ctx.moveTo(mapSX(0.30), m.top); ctx.lineTo(mapSX(0.30), m.top + plotH); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Entity markers
+    const mapSY = (cv: number) => m.top + plotH - (cv / 1.0) * plotH;
+
+    const colors = ['#ef4444', '#f97316', '#a855f7', '#34d399', '#60a5fa', '#ec4899'];
+    const legendEl = document.getElementById('entity-legend')!;
+    let legendHtml = '';
+
+    entityData.forEach((ed, i) => {
+      const ex = mapSX(ed.kernel.omega);
+      const ey = mapSY(ed.kernel.C);
+      const color = colors[i % colors.length];
+
+      // Dot with border
+      ctx.beginPath();
+      ctx.arc(ex, ey, 5, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Label
+      ctx.fillStyle = color;
+      ctx.font = 'bold 9px ui-monospace, monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText(ed.entity.symbol, ex + 8, ey + 3);
+
+      legendHtml += `
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-3 h-3 rounded-full flex-shrink-0" style="background:${color}"></span>
+          <span class="text-kernel-300 font-mono">${ed.entity.symbol}</span>
+          <span class="text-kernel-500">${ed.entity.name}</span>
+          <span class="text-kernel-600 ml-auto">${ed.regime}</span>
+        </div>`;
+    });
+    legendEl.innerHTML = legendHtml;
+  }
+
+  /* ─── 3. Entity Cards ─────────────────────────────────────────── */
+
+  function renderEntityCards() {
+    const container = document.getElementById('entity-cards')!;
+    let html = '';
+
+    for (const ed of entityData) {
+      const kr = ed.kernel;
+      const wd = wellDepth(kr.kappa);
+      const defl = deflectionAngle(kr.delta, wd);
+      const lensing = classifyLensing(kr.delta);
+      const lensingLabels: Record<string, string> = {
+        perfect_ring: 'Einstein Ring',
+        thick_arc: 'Strong Arc',
+        thin_arc: 'Weak Arc',
+        distorted: 'Distortion',
+      };
+
+      html += `
+        <div class="bg-kernel-800 border border-kernel-700 rounded-lg p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xl">${ed.entity.symbol}</span>
+            <div>
+              <div class="text-sm font-bold text-kernel-200">${ed.entity.name}</div>
+              <div class="text-[10px] ${regimeBg(ed.regime)} px-2 py-0.5 rounded inline-block border">
+                ${ed.regime}${ed.isCritical ? ' · CRITICAL' : ''}
+              </div>
+            </div>
+          </div>
+          <div class="text-[10px] text-kernel-500 mb-3">${ed.entity.description}</div>
+          <!-- Invariants bar chart -->
+          <div class="space-y-1">
+            ${[
+              { label: 'F', value: kr.F, color: '#34d399' },
+              { label: 'ω', value: kr.omega, color: '#ef4444' },
+              { label: 'IC', value: kr.IC, color: '#60a5fa' },
+              { label: 'Δ', value: kr.delta, color: '#fbbf24' },
+              { label: 'S', value: kr.S, color: '#a855f7' },
+              { label: 'C', value: kr.C, color: '#f97316' },
+            ].map(inv => `
+              <div class="flex items-center gap-1">
+                <span class="text-[10px] text-kernel-500 w-4 text-right font-mono">${inv.label}</span>
+                <div class="flex-1 bg-kernel-900 rounded h-2.5">
+                  <div class="h-full rounded" style="width:${Math.min(inv.value, 1) * 100}%;background:${inv.color};opacity:0.7"></div>
+                </div>
+                <span class="text-[10px] font-mono text-kernel-400 w-10 text-right">${inv.value.toFixed(3)}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="mt-2 pt-2 border-t border-kernel-700 grid grid-cols-3 gap-1 text-[10px] text-center">
+            <div><span class="text-kernel-500">Well</span><br/><span class="font-mono text-kernel-300">${wd.toFixed(2)}</span></div>
+            <div><span class="text-kernel-500">Defl</span><br/><span class="font-mono text-kernel-300">${fmtV(defl)}°</span></div>
+            <div><span class="text-kernel-500">Lens</span><br/><span class="font-mono text-kernel-300">${lensingLabels[lensing]}</span></div>
+          </div>
+          <div class="mt-1 text-[9px] text-kernel-600 font-mono">GR: ${ed.entity.grAnalog}</div>
+        </div>`;
+    }
+    container.innerHTML = html;
+  }
+
+  /* ─── 4. Arrow of Time Chart ──────────────────────────────────── */
+
+  function renderArrowChart() {
+    const [canvas, ctx, cssW] = setupCanvas('arrow-canvas', 720, 280);
+    const cssH = 280;
+    const m = { top: 24, right: 20, bottom: 48, left: 64 };
+    const plotW = cssW - m.left - m.right;
+    const plotH = cssH - m.top - m.bottom;
+
+    ctx.fillStyle = '#06060c';
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    // Compute descent/ascent ratio across ω
+    const steps = 300;
+    const data: [number, number, number][] = []; // [omega, descent, ascentRatio]
+    let maxRatio = 0;
+    for (let i = 1; i < steps; i++) {
+      const om = (i / steps) * 0.95;
+      const dc = descentCost(0.01, om);
+      const ratio = arrowAsymmetry(0.01, om);
+      data.push([om, dc, ratio]);
+      if (ratio < 100) maxRatio = Math.max(maxRatio, ratio);
+    }
+    const yCap = Math.min(maxRatio, 30);
+
+    const mapX = (w: number) => m.left + (w / 1.0) * plotW;
+    const mapY = (r: number) => m.top + (1 - Math.min(r, yCap) / yCap) * plotH;
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i <= 10; i++) {
+      const x = m.left + (i / 10) * plotW;
+      ctx.beginPath(); ctx.moveTo(x, m.top); ctx.lineTo(x, m.top + plotH); ctx.stroke();
+    }
+
+    // Axes
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(m.left, m.top); ctx.lineTo(m.left, m.top + plotH);
+    ctx.lineTo(m.left + plotW, m.top + plotH); ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '10px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    for (let i = 0; i <= 10; i += 2) ctx.fillText((i / 10).toFixed(1), mapX(i / 10), m.top + plotH + 16);
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 5; i++) {
+      const val = yCap - (i / 5) * yCap;
+      ctx.fillText(val.toFixed(0), m.left - 5, m.top + (i / 5) * plotH + 4);
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '11px ui-sans-serif, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('ω', m.left + plotW / 2, cssH - 6);
+    ctx.save(); ctx.translate(14, m.top + plotH / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Ascent/Descent Ratio', 0, 0); ctx.restore();
+
+    // Clip
+    ctx.save();
+    ctx.beginPath(); ctx.rect(m.left, m.top, plotW, plotH); ctx.clip();
+
+    // Symmetry line at ratio = 1
+    ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(m.left, mapY(1)); ctx.lineTo(m.left + plotW, mapY(1)); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Fill under curve
+    const grad = ctx.createLinearGradient(0, m.top, 0, m.top + plotH);
+    grad.addColorStop(0, 'rgba(96,165,250,0.15)');
+    grad.addColorStop(1, 'rgba(96,165,250,0.01)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(mapX(data[0][0]), mapY(1));
+    for (const [om, , ratio] of data) ctx.lineTo(mapX(om), mapY(ratio));
+    ctx.lineTo(mapX(data[data.length - 1][0]), mapY(1));
+    ctx.closePath(); ctx.fill();
+
+    // Ratio curve
+    ctx.strokeStyle = '#60a5fa';
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = 'rgba(96,165,250,0.4)';
+    ctx.shadowBlur = 5;
+    ctx.beginPath();
+    for (let i = 0; i < data.length; i++) {
+      const px = mapX(data[i][0]);
+      const py = mapY(data[i][2]);
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Annotations
+    ctx.font = '9px ui-monospace, monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.textAlign = 'left';
+    ctx.fillText('Ratio = 1: symmetric (no time dilation)', m.left + 5, mapY(1) - 5);
+    ctx.fillStyle = 'rgba(96,165,250,0.7)';
+    ctx.fillText('Ratio → ∞: escape impossible', m.left + plotW * 0.6, m.top + 16);
+
+    ctx.restore();
+  }
+
+  /* ─── 5. Tidal Force Chart ────────────────────────────────────── */
+
+  function renderTidalChart() {
+    const [canvas, ctx, cssW] = setupCanvas('tidal-canvas', 720, 260);
+    const cssH = 260;
+    const m = { top: 24, right: 20, bottom: 48, left: 64 };
+    const plotW = cssW - m.left - m.right;
+    const plotH = cssH - m.top - m.bottom;
+
+    ctx.fillStyle = '#06060c';
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    // Compute tidal force
+    const data: [number, number][] = [];
+    let maxT = 0;
+    for (let i = 0; i < 400; i++) {
+      const om = (i / 399) * 0.98;
+      const t = d2Gamma(om);
+      data.push([om, t]);
+      if (t < 500) maxT = Math.max(maxT, t);
+    }
+    const yCap = Math.min(maxT, 200);
+
+    const mapX = (w: number) => m.left + (w / 1.0) * plotW;
+    const mapY = (v: number) => m.top + (1 - Math.min(v, yCap) / yCap) * plotH;
+
+    // Grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i <= 10; i++) {
+      const x = m.left + (i / 10) * plotW;
+      ctx.beginPath(); ctx.moveTo(x, m.top); ctx.lineTo(x, m.top + plotH); ctx.stroke();
+    }
+
+    // Axes
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(m.left, m.top); ctx.lineTo(m.left, m.top + plotH);
+    ctx.lineTo(m.left + plotW, m.top + plotH); ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '10px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    for (let i = 0; i <= 10; i += 2) ctx.fillText((i / 10).toFixed(1), mapX(i / 10), m.top + plotH + 16);
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 4; i++) {
+      const val = yCap - (i / 4) * yCap;
+      ctx.fillText(val.toFixed(0), m.left - 5, m.top + (i / 4) * plotH + 4);
+    }
+
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '11px ui-sans-serif, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('ω', m.left + plotW / 2, cssH - 6);
+    ctx.save(); ctx.translate(14, m.top + plotH / 2); ctx.rotate(-Math.PI / 2);
+    ctx.fillText('d²Γ/dω² (Tidal Force)', 0, 0); ctx.restore();
+
+    // Clip
+    ctx.save();
+    ctx.beginPath(); ctx.rect(m.left, m.top, plotW, plotH); ctx.clip();
+
+    // Fill
+    const grad = ctx.createLinearGradient(0, m.top, 0, m.top + plotH);
+    grad.addColorStop(0, 'rgba(168,85,247,0.15)');
+    grad.addColorStop(1, 'rgba(168,85,247,0.01)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(mapX(data[0][0]), mapY(0));
+    for (const [om, t] of data) ctx.lineTo(mapX(om), mapY(t));
+    ctx.lineTo(mapX(data[data.length - 1][0]), mapY(0));
+    ctx.closePath(); ctx.fill();
+
+    // Curve
+    ctx.strokeStyle = '#a855f7';
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = 'rgba(168,85,247,0.4)';
+    ctx.shadowBlur = 5;
+    ctx.beginPath();
+    for (let i = 0; i < data.length; i++) {
+      const px = mapX(data[i][0]);
+      const py = mapY(data[i][1]);
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Spaghettification zone label
+    ctx.font = 'bold 10px ui-sans-serif, system-ui, sans-serif';
+    ctx.fillStyle = 'rgba(168,85,247,0.6)';
+    ctx.textAlign = 'right';
+    ctx.fillText('Spaghettification zone →', m.left + plotW - 10, m.top + 18);
+
+    ctx.restore();
+  }
+
+  /* ─── 6. Gravitational Lensing ────────────────────────────────── */
+
+  function renderLensing() {
+    const [canvas, ctx, cssW] = setupCanvas('lensing-canvas', 360, 320);
+    const cssH = 320;
+    const cx = cssW / 2;
+    const cy = cssH / 2;
+
+    ctx.fillStyle = '#06060c';
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    // Draw Einstein ring visualization for each entity
+    // Concentric rings — ring radius proportional to 1/Δ (stronger lensing = bigger ring)
+    const maxR = Math.min(cssW, cssH) * 0.42;
+
+    // Background stars (just decoration)
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    for (let i = 0; i < 80; i++) {
+      const sx = Math.random() * cssW;
+      const sy = Math.random() * cssH;
+      ctx.beginPath();
+      ctx.arc(sx, sy, Math.random() * 1.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // BH shadow
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.4);
+    grad.addColorStop(0, 'rgba(0,0,0,1)');
+    grad.addColorStop(0.7, 'rgba(0,0,0,0.9)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, cssW, cssH);
+
+    // Event horizon circle
+    ctx.beginPath();
+    ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+    ctx.fillStyle = '#000';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(239,68,68,0.5)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Photon sphere
+    ctx.beginPath();
+    ctx.arc(cx, cy, 27, 0, Math.PI * 2);
+    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = 'rgba(251,191,36,0.4)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Lensing arcs for each entity
+    const colors = ['#ef4444', '#f97316', '#a855f7', '#34d399', '#60a5fa', '#ec4899'];
+    entityData.forEach((ed, i) => {
+      const delta = ed.kernel.delta;
+      if (delta < EPSILON) return;
+
+      const wd = wellDepth(ed.kernel.kappa);
+      const defl = deflectionAngle(delta, wd);
+      const morphology = classifyLensing(delta);
+
+      // Ring radius inversely proportional to delta
+      const ringR = Math.min(maxR * 0.9, 30 + (1 / (delta + 0.05)) * 15);
+
+      const color = colors[i % colors.length];
+
+      if (morphology === 'perfect_ring') {
+        // Full ring
+        ctx.beginPath();
+        ctx.arc(cx, cy, ringR, 0, Math.PI * 2);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = 0.7;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      } else if (morphology === 'thick_arc') {
+        // Arc ~ 270°
+        const startAngle = -Math.PI * 0.75 + i * 0.4;
+        ctx.beginPath();
+        ctx.arc(cx, cy, ringR, startAngle, startAngle + Math.PI * 1.5);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.globalAlpha = 0.6;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      } else if (morphology === 'thin_arc') {
+        // Arc ~ 120°
+        const startAngle = -Math.PI * 0.3 + i * 0.6;
+        ctx.beginPath();
+        ctx.arc(cx, cy, ringR, startAngle, startAngle + Math.PI * 0.67);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = 0.5;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      } else {
+        // Distorted — small scattered dots
+        for (let j = 0; j < 5; j++) {
+          const angle = (j / 5) * Math.PI * 2 + i * 0.8;
+          const jitter = (Math.random() - 0.5) * 15;
+          ctx.beginPath();
+          ctx.arc(cx + Math.cos(angle) * (ringR + jitter), cy + Math.sin(angle) * (ringR + jitter), 2, 0, Math.PI * 2);
+          ctx.fillStyle = color;
+          ctx.globalAlpha = 0.4;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      }
+    });
+
+    // Center label
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = 'bold 9px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('BH', cx, cy + 3);
+
+    // Lensing info panel
+    const infoEl = document.getElementById('lensing-info')!;
+    const lensingLabels: Record<string, string> = {
+      perfect_ring: 'Einstein Ring — nearly perfect symmetry',
+      thick_arc: 'Strong Arc — 270° lensing arc',
+      thin_arc: 'Thin Arc — partial deflection',
+      distorted: 'Weak Distortion — scattered images',
+    };
+
+    let infoHtml = '<h3 class="text-sm font-bold text-kernel-300 mb-2">Lensing by Entity</h3>';
+    entityData.forEach((ed, i) => {
+      const delta = ed.kernel.delta;
+      const wd = wellDepth(ed.kernel.kappa);
+      const defl = deflectionAngle(delta, wd);
+      const morphology = classifyLensing(delta);
+      const color = colors[i % colors.length];
+
+      infoHtml += `
+        <div class="bg-kernel-800 border border-kernel-700 rounded p-2">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="inline-block w-2 h-2 rounded-full" style="background:${color}"></span>
+            <span class="text-kernel-300 font-bold">${ed.entity.name}</span>
+          </div>
+          <div class="text-kernel-500 grid grid-cols-3 gap-x-2 font-mono text-[10px]">
+            <span>Δ = ${delta.toFixed(4)}</span>
+            <span>|κ| = ${wd.toFixed(2)}</span>
+            <span>θ = ${fmtV(defl)}°</span>
+          </div>
+          <div class="text-kernel-400 text-[10px] mt-1">${lensingLabels[morphology]}</div>
+        </div>`;
+    });
+    infoEl.innerHTML = infoHtml;
+  }
+
+  /* ─── Initial Render + Event Binding ──────────────────────────── */
+
+  const infallSlider = document.getElementById('infall-omega') as HTMLInputElement;
+  infallSlider.addEventListener('input', renderInfall);
+
+  renderInfall();
+  renderSurface();
+  renderEntityCards();
+  renderArrowChart();
+  renderTidalChart();
+  renderLensing();
+
+  // Re-render on resize
+  let resizeTimer: number;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      renderInfall();
+      renderSurface();
+      renderArrowChart();
+      renderTidalChart();
+      renderLensing();
+    }, 200);
+  });
+</script>
