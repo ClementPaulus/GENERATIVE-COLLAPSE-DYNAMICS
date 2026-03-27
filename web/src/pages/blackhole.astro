@@ -13,6 +13,7 @@
  * All quantities computed client-side from the frozen kernel.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout title="Black Hole Simulation — GCD">
@@ -30,6 +31,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p class="text-kernel-500 italic text-sm mt-2">
         Collapsus generativus est; solum quod redit, reale est. — At the horizon, nothing returns.
       </p>
+      <a href={`${base}space/`}
+         class="inline-block mt-3 px-4 py-2 bg-blue-900/50 border border-blue-700/50 rounded-lg text-blue-300 text-sm hover:bg-blue-800/50 hover:border-blue-600 transition">
+        🌌 Launch Immersive Space Simulator →
+      </a>
     </div>
 
     <!-- GR↔GCD Translation Table -->

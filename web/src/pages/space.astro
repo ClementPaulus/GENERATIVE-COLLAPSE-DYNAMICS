@@ -1,0 +1,407 @@
+---
+/**
+ * Space Simulator — Immersive ESA-style Black Hole Environment
+ *
+ * Full-viewport WebGL space simulation with:
+ *   - Gravitational lensing of background starfield
+ *   - Accretion disk with Doppler beaming and turbulence
+ *   - Relativistic jets
+ *   - Photon ring and event horizon shadow
+ *   - Orbital camera with smooth controls
+ *   - Real-time GCD kernel HUD
+ *
+ * Tier-0 Protocol: no Tier-1 symbol is redefined.
+ */
+const base = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ESA-style immersive 3D black hole space simulator powered by GCD kernel physics — gravitational lensing, accretion disk, photon ring, and real-time kernel readouts." />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <title>Space Simulator — GCD Kernel</title>
+
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace; }
+
+      #sim-canvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        cursor: grab;
+      }
+      #sim-canvas:active { cursor: grabbing; }
+
+      /* ── HUD Overlay ── */
+      .hud {
+        position: fixed;
+        z-index: 10;
+        pointer-events: none;
+        color: #8cf;
+        font-size: 12px;
+        line-height: 1.6;
+        text-shadow: 0 0 8px rgba(100,180,255,0.4), 0 1px 2px rgba(0,0,0,0.8);
+      }
+
+      .hud-panel {
+        background: rgba(0, 10, 30, 0.65);
+        border: 1px solid rgba(100, 180, 255, 0.2);
+        border-radius: 8px;
+        padding: 12px 16px;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+
+      #hud-left {
+        top: 16px;
+        left: 16px;
+      }
+
+      #hud-right {
+        top: 16px;
+        right: 16px;
+        text-align: right;
+      }
+
+      #hud-bottom {
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .hud-title {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: rgba(100, 180, 255, 0.5);
+        margin-bottom: 4px;
+      }
+
+      .hud-value {
+        font-size: 18px;
+        color: #bdf;
+        font-weight: 600;
+      }
+
+      .hud-label {
+        color: rgba(100, 180, 255, 0.6);
+        font-size: 11px;
+      }
+
+      .hud-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .regime-stable { color: #6ee7b7; }
+      .regime-watch { color: #fcd34d; }
+      .regime-collapse { color: #fca5a5; }
+
+      /* ── Controls Overlay ── */
+      #controls-overlay {
+        position: fixed;
+        z-index: 20;
+        bottom: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 10, 30, 0.8);
+        border: 1px solid rgba(100, 180, 255, 0.15);
+        border-radius: 8px;
+        padding: 16px 24px;
+        color: rgba(100, 180, 255, 0.7);
+        font-size: 12px;
+        text-align: center;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        transition: opacity 0.8s ease;
+        pointer-events: auto;
+      }
+      #controls-overlay.hidden { opacity: 0; pointer-events: none; }
+
+      .controls-title {
+        font-size: 14px;
+        color: #8cf;
+        margin-bottom: 8px;
+        letter-spacing: 1px;
+      }
+
+      .controls-grid {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 4px 16px;
+        text-align: left;
+      }
+
+      .controls-key {
+        text-align: right;
+        color: #bdf;
+        font-weight: 600;
+      }
+
+      /* ── Top bar ── */
+      #top-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 15;
+        height: 40px;
+        background: rgba(0, 5, 15, 0.7);
+        border-bottom: 1px solid rgba(100,180,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+
+      #top-bar a {
+        color: rgba(100, 180, 255, 0.6);
+        text-decoration: none;
+        font-size: 12px;
+        transition: color 0.2s;
+      }
+      #top-bar a:hover { color: #bdf; }
+
+      .top-title {
+        color: #8cf;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 1px;
+      }
+
+      /* ── Crosshair ── */
+      #crosshair {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        z-index: 10;
+        pointer-events: none;
+        opacity: 0.25;
+      }
+      #crosshair::before, #crosshair::after {
+        content: '';
+        position: absolute;
+        background: rgba(100, 180, 255, 0.5);
+      }
+      #crosshair::before {
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        transform: translateY(-50%);
+      }
+      #crosshair::after {
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 1px;
+        transform: translateX(-50%);
+      }
+
+      /* ── Regime indicator bar ── */
+      #regime-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        z-index: 10;
+        transition: background-color 0.5s;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 640px) {
+        .hud { font-size: 10px; }
+        .hud-value { font-size: 14px; }
+        .hud-panel { padding: 8px 10px; }
+        #controls-overlay { padding: 10px 14px; font-size: 11px; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top navigation bar -->
+    <div id="top-bar">
+      <a href={base}>← GCD·Kernel</a>
+      <span class="top-title">SPACE SIMULATOR</span>
+      <a href={`${base}blackhole/`}>Black Hole →</a>
+    </div>
+
+    <!-- Main WebGL canvas -->
+    <canvas id="sim-canvas"></canvas>
+
+    <!-- Crosshair reticle -->
+    <div id="crosshair"></div>
+
+    <!-- HUD: Left panel — Kernel invariants -->
+    <div id="hud-left" class="hud">
+      <div class="hud-panel">
+        <div class="hud-title">GCD Kernel</div>
+        <div>
+          <span class="hud-label">F&nbsp;&nbsp;</span>
+          <span id="hud-F" class="hud-value">—</span>
+        </div>
+        <div>
+          <span class="hud-label">ω&nbsp;&nbsp;</span>
+          <span id="hud-omega" class="hud-value">—</span>
+        </div>
+        <div>
+          <span class="hud-label">IC </span>
+          <span id="hud-IC" class="hud-value">—</span>
+        </div>
+        <div>
+          <span class="hud-label">κ&nbsp;&nbsp;</span>
+          <span id="hud-kappa" class="hud-value">—</span>
+        </div>
+        <div>
+          <span class="hud-label">S&nbsp;&nbsp;</span>
+          <span id="hud-S" class="hud-value">—</span>
+        </div>
+        <div>
+          <span class="hud-label">Δ&nbsp;&nbsp;</span>
+          <span id="hud-delta" class="hud-value">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUD: Right panel — Physics readouts -->
+    <div id="hud-right" class="hud">
+      <div class="hud-panel">
+        <div class="hud-title">Physics</div>
+        <div>
+          <span class="hud-label">Γ(ω)&nbsp;&nbsp;</span>
+          <span id="hud-gamma" class="hud-value">—</span>
+        </div>
+        <div>
+          <span class="hud-label">z&nbsp;&nbsp;</span>
+          <span id="hud-redshift" class="hud-value">—</span>
+        </div>
+        <div>
+          <span class="hud-label">v_esc&nbsp;&nbsp;</span>
+          <span id="hud-vesc" class="hud-value">—</span>
+        </div>
+        <div>
+          <span class="hud-label">T_H&nbsp;&nbsp;</span>
+          <span id="hud-hawking" class="hud-value">—</span>
+        </div>
+        <div>
+          <span class="hud-label">dist&nbsp;&nbsp;</span>
+          <span id="hud-dist" class="hud-value">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUD: Bottom bar — Regime + status -->
+    <div id="hud-bottom" class="hud">
+      <div class="hud-panel" style="padding: 6px 20px;">
+        <span class="hud-label">REGIME:&nbsp;</span>
+        <span id="hud-regime" class="hud-value" style="font-size: 14px;">—</span>
+        <span style="margin: 0 12px; opacity: 0.3;">|</span>
+        <span class="hud-label">Drag to orbit&nbsp;&nbsp;·&nbsp;&nbsp;Scroll to zoom&nbsp;&nbsp;·&nbsp;&nbsp;Dbl-click to reset</span>
+      </div>
+    </div>
+
+    <!-- Regime color bar at bottom edge -->
+    <div id="regime-bar"></div>
+
+    <!-- Controls guide (fades away) -->
+    <div id="controls-overlay">
+      <div class="controls-title">⊕ Controls</div>
+      <div class="controls-grid">
+        <span class="controls-key">Mouse drag</span><span>Orbit camera</span>
+        <span class="controls-key">Scroll wheel</span><span>Zoom in/out</span>
+        <span class="controls-key">Touch drag</span><span>Orbit (mobile)</span>
+        <span class="controls-key">Pinch</span><span>Zoom (mobile)</span>
+        <span class="controls-key">Double-click</span><span>Reset view</span>
+      </div>
+      <div style="margin-top: 8px; font-size: 10px; opacity: 0.5;">Click anywhere to dismiss</div>
+    </div>
+
+    <script>
+      import { initSpaceSim } from '../lib/webgl-space-sim';
+      import type { HUDData } from '../lib/webgl-space-sim';
+
+      // ── Init WebGL space simulator ──
+      const canvas = document.getElementById('sim-canvas') as HTMLCanvasElement;
+
+      // HUD element refs
+      const elF = document.getElementById('hud-F')!;
+      const elOmega = document.getElementById('hud-omega')!;
+      const elIC = document.getElementById('hud-IC')!;
+      const elKappa = document.getElementById('hud-kappa')!;
+      const elS = document.getElementById('hud-S')!;
+      const elDelta = document.getElementById('hud-delta')!;
+      const elGamma = document.getElementById('hud-gamma')!;
+      const elRedshift = document.getElementById('hud-redshift')!;
+      const elVesc = document.getElementById('hud-vesc')!;
+      const elHawking = document.getElementById('hud-hawking')!;
+      const elDist = document.getElementById('hud-dist')!;
+      const elRegime = document.getElementById('hud-regime')!;
+      const regimeBar = document.getElementById('regime-bar')!;
+
+      // Throttle HUD updates to ~15fps for performance
+      let lastHUDUpdate = 0;
+
+      function updateHUD(data: HUDData) {
+        const now = performance.now();
+        if (now - lastHUDUpdate < 66) return; // ~15fps
+        lastHUDUpdate = now;
+
+        elF.textContent = data.F.toFixed(4);
+        elOmega.textContent = data.omega.toFixed(4);
+        elIC.textContent = data.IC.toFixed(4);
+        elKappa.textContent = data.kappa.toFixed(4);
+        elS.textContent = data.S.toFixed(4);
+        elDelta.textContent = data.delta.toFixed(4);
+        elGamma.textContent = data.gamma.toFixed(3);
+        elRedshift.textContent = data.redshift.toFixed(4);
+        elVesc.textContent = data.escapeV.toFixed(4) + ' c';
+        elHawking.textContent = data.hawkingT.toFixed(6);
+        elDist.textContent = data.distance.toFixed(1) + ' r_s';
+
+        // Regime coloring
+        const regime = data.regime.split(' ')[0];
+        elRegime.textContent = data.regime;
+        elRegime.className = 'hud-value regime-' + regime.toLowerCase();
+
+        const regimeColors: Record<string, string> = {
+          STABLE: '#059669',
+          WATCH: '#d97706',
+          COLLAPSE: '#dc2626',
+        };
+        regimeBar.style.backgroundColor = regimeColors[regime] || '#333';
+      }
+
+      const sim = initSpaceSim(canvas, updateHUD);
+
+      // ── Controls overlay auto-dismiss ──
+      const controlsOverlay = document.getElementById('controls-overlay')!;
+      let controlsTimer = setTimeout(() => controlsOverlay.classList.add('hidden'), 6000);
+      canvas.addEventListener('mousedown', () => {
+        clearTimeout(controlsTimer);
+        controlsOverlay.classList.add('hidden');
+      });
+      canvas.addEventListener('touchstart', () => {
+        clearTimeout(controlsTimer);
+        controlsOverlay.classList.add('hidden');
+      });
+      controlsOverlay.addEventListener('click', () => {
+        clearTimeout(controlsTimer);
+        controlsOverlay.classList.add('hidden');
+      });
+    </script>
+  </body>
+</html>
