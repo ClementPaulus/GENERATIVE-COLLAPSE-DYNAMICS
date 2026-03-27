@@ -50,9 +50,37 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Mass</td><td class="pr-4 py-2">|κ| well depth</td><td class="py-2">Accumulated log-integrity</td></tr>
             <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Tidal Force</td><td class="pr-4 py-2">d²Γ/dω²</td><td class="py-2">Cost curvature (spaghettification)</td></tr>
             <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Gravitational Lensing</td><td class="pr-4 py-2">Δ = F − IC</td><td class="py-2">Heterogeneity gap deflects trajectories</td></tr>
-            <tr><td class="pr-4 py-2 text-kernel-400 font-sans">Time Dilation</td><td class="pr-4 py-2">Ascent/descent asymmetry</td><td class="py-2">Cost(ascent) / Cost(descent) → ∞ near horizon</td></tr>
+            <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Time Dilation</td><td class="pr-4 py-2">Ascent/descent asymmetry</td><td class="py-2">Cost(ascent) / Cost(descent) → ∞ near horizon</td></tr>
+            <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Hawking Temperature</td><td class="pr-4 py-2">T_H = 1/(8π|κ|)</td><td class="py-2">Inverse well depth — shallow wells radiate hotter</td></tr>
+            <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">Gravitational Redshift</td><td class="pr-4 py-2">z = Γ/(1+Γ)</td><td class="py-2">Photon energy loss escaping the well</td></tr>
+            <tr class="border-b border-kernel-800"><td class="pr-4 py-2 text-kernel-400 font-sans">ISCO</td><td class="pr-4 py-2">ω ≈ 0.50</td><td class="py-2">Innermost stable circular orbit — tidal destabilization</td></tr>
+            <tr><td class="pr-4 py-2 text-kernel-400 font-sans">Photon Sphere</td><td class="pr-4 py-2">ω ≈ 0.65</td><td class="py-2">Unstable circular photon orbits</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- 3D Gravity Well (WebGL) -->
+    <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6 mb-6">
+      <h2 class="text-lg font-bold text-kernel-200 mb-2">3D Gravity Well</h2>
+      <p class="text-xs text-kernel-500 mb-4">
+        The budget surface Γ(ω) rendered as a 3D funnel. The event horizon (ω → 1) plunges
+        to the center — where cost diverges and τ_R = ∞_rec. The bright band is the accretion
+        disk. Orbiting particles spiral inward following Kepler-like trajectories.
+        <strong class="text-kernel-400">Drag to rotate · Scroll to zoom · Double-click to reset</strong>
+      </p>
+      <div class="relative">
+        <canvas id="gl-canvas" class="w-full rounded" style="height: 520px; cursor: grab;"></canvas>
+        <div class="absolute top-3 left-3 flex flex-col gap-1">
+          <div class="text-[10px] text-kernel-500 bg-kernel-900/85 px-2 py-1 rounded border border-kernel-800">
+            <span class="text-teal-400">●</span> Stable &nbsp;
+            <span class="text-amber-400">●</span> Watch &nbsp;
+            <span class="text-red-400">●</span> Collapse
+          </div>
+        </div>
+        <div class="absolute bottom-3 right-3 text-[10px] text-kernel-600 bg-kernel-900/85 px-2 py-1 rounded border border-kernel-800">
+          WebGL · 64×96 mesh · 180 particles · 300 stars
+        </div>
       </div>
     </div>
 
@@ -167,7 +195,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </p>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="relative">
-          <canvas id="lensing-canvas" style="width: 100%; height: 320px;"></canvas>
+          <canvas id="lensing-canvas" style="width: 100%; height: 420px;"></canvas>
         </div>
         <div id="lensing-info" class="space-y-3 text-xs"></div>
       </div>
@@ -182,8 +210,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     budgetSurfaceHeight, dGamma, d2Gamma, wellDepth,
     deflectionAngle, classifyLensing, descentCost, ascentCost,
     arrowAsymmetry, BLACK_HOLE_ENTITIES,
+    hawkingTemperature, gravitationalRedshift, escapeVelocity,
     type SpacetimeEntity,
   } from '../lib/spacetime';
+  import { initBlackHole3D } from '../lib/webgl-blackhole';
 
   /* ─── Helpers ───────────────────────────────────────────────────── */
 
@@ -342,8 +372,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.moveTo(mapX(0), mapY(0));
-    for (let i = 0; i < 500; i++) {
-      const w = (i / 499) * 0.999;
+    for (let i = 0; i < 800; i++) {
+      const w = (i / 799) * 0.999;
       ctx.lineTo(mapX(w), mapY(gammaOmega(w)));
     }
     ctx.lineTo(mapX(0.999), mapY(0));
@@ -355,8 +385,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     ctx.shadowColor = 'rgba(239,68,68,0.5)';
     ctx.shadowBlur = 6;
     ctx.beginPath();
-    for (let i = 0; i < 500; i++) {
-      const w = (i / 499) * 0.999;
+    for (let i = 0; i < 800; i++) {
+      const w = (i / 799) * 0.999;
       const g = gammaOmega(w);
       i === 0 ? ctx.moveTo(mapX(w), mapY(g)) : ctx.lineTo(mapX(w), mapY(g));
     }
@@ -467,7 +497,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     ctx.fillRect(0, 0, cssW, cssH);
 
     // Heatmap
-    const res = 200;
+    const res = 400;
     const cellW = plotW / res;
     const cellH = plotH / res;
 
@@ -634,6 +664,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <div><span class="text-kernel-500">Defl</span><br/><span class="font-mono text-kernel-300">${fmtV(defl)}°</span></div>
             <div><span class="text-kernel-500">Lens</span><br/><span class="font-mono text-kernel-300">${lensingLabels[lensing]}</span></div>
           </div>
+          <div class="mt-1 pt-1 border-t border-kernel-700 grid grid-cols-3 gap-1 text-[10px] text-center">
+            <div><span class="text-kernel-500">T_H</span><br/><span class="font-mono text-kernel-300">${fmtV(hawkingTemperature(kr.kappa))}</span></div>
+            <div><span class="text-kernel-500">z</span><br/><span class="font-mono text-kernel-300">${gravitationalRedshift(kr.omega).toFixed(4)}</span></div>
+            <div><span class="text-kernel-500">v_esc</span><br/><span class="font-mono text-kernel-300">${escapeVelocity(kr.omega).toFixed(3)}c</span></div>
+          </div>
           <div class="mt-1 text-[9px] text-kernel-600 font-mono">GR: ${ed.entity.grAnalog}</div>
         </div>`;
     }
@@ -653,7 +688,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     ctx.fillRect(0, 0, cssW, cssH);
 
     // Compute descent/ascent ratio across ω
-    const steps = 300;
+    const steps = 500;
     const data: [number, number, number][] = []; // [omega, descent, ascentRatio]
     let maxRatio = 0;
     for (let i = 1; i < steps; i++) {
@@ -761,8 +796,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     // Compute tidal force
     const data: [number, number][] = [];
     let maxT = 0;
-    for (let i = 0; i < 400; i++) {
-      const om = (i / 399) * 0.98;
+    for (let i = 0; i < 600; i++) {
+      const om = (i / 599) * 0.98;
       const t = d2Gamma(om);
       data.push([om, t]);
       if (t < 500) maxT = Math.max(maxT, t);
@@ -845,50 +880,92 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* ─── 6. Gravitational Lensing ────────────────────────────────── */
 
   function renderLensing() {
-    const [canvas, ctx, cssW] = setupCanvas('lensing-canvas', 360, 320);
-    const cssH = 320;
+    const [canvas, ctx, cssW] = setupCanvas('lensing-canvas', 420, 420);
+    const cssH = 420;
     const cx = cssW / 2;
     const cy = cssH / 2;
 
     ctx.fillStyle = '#06060c';
     ctx.fillRect(0, 0, cssW, cssH);
 
-    // Draw Einstein ring visualization for each entity
-    // Concentric rings — ring radius proportional to 1/Δ (stronger lensing = bigger ring)
     const maxR = Math.min(cssW, cssH) * 0.42;
 
-    // Background stars (just decoration)
-    ctx.fillStyle = 'rgba(255,255,255,0.15)';
-    for (let i = 0; i < 80; i++) {
+    // Background stars (dense field)
+    for (let i = 0; i < 200; i++) {
       const sx = Math.random() * cssW;
       const sy = Math.random() * cssH;
+      const dist = Math.sqrt((sx - cx) ** 2 + (sy - cy) ** 2);
+      // Stars near center are dimmer (BH shadow)
+      const brightness = dist < maxR * 0.3 ? 0.02 : (0.1 + Math.random() * 0.25);
+      ctx.fillStyle = `rgba(255,255,255,${brightness})`;
       ctx.beginPath();
-      ctx.arc(sx, sy, Math.random() * 1.2, 0, Math.PI * 2);
+      ctx.arc(sx, sy, Math.random() * 1.3, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // BH shadow
-    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.4);
-    grad.addColorStop(0, 'rgba(0,0,0,1)');
-    grad.addColorStop(0.7, 'rgba(0,0,0,0.9)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, cssW, cssH);
+    // Gravitational lensing distortion — background grid warped by BH
+    ctx.strokeStyle = 'rgba(100,140,255,0.06)';
+    ctx.lineWidth = 0.5;
+    const gridSize = 20;
+    for (let gx = 0; gx < cssW; gx += gridSize) {
+      ctx.beginPath();
+      for (let gy = 0; gy <= cssH; gy += 2) {
+        const dx = gx - cx, dy = gy - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const deflect = dist > 10 ? maxR * 15 / (dist * dist) : 0;
+        const angle = Math.atan2(dy, dx);
+        const nx = gx + Math.cos(angle + Math.PI / 2) * deflect;
+        const ny = gy + Math.sin(angle + Math.PI / 2) * deflect;
+        gy === 0 ? ctx.moveTo(nx, ny) : ctx.lineTo(nx, ny);
+      }
+      ctx.stroke();
+    }
+    for (let gy = 0; gy < cssH; gy += gridSize) {
+      ctx.beginPath();
+      for (let gx = 0; gx <= cssW; gx += 2) {
+        const dx = gx - cx, dy = gy - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const deflect = dist > 10 ? maxR * 15 / (dist * dist) : 0;
+        const angle = Math.atan2(dy, dx);
+        const nx = gx + Math.cos(angle + Math.PI / 2) * deflect;
+        const ny = gy + Math.sin(angle + Math.PI / 2) * deflect;
+        gx === 0 ? ctx.moveTo(nx, ny) : ctx.lineTo(nx, ny);
+      }
+      ctx.stroke();
+    }
+
+    // BH shadow — deep radial gradient
+    const shadowGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.5);
+    shadowGrad.addColorStop(0, 'rgba(0,0,0,1)');
+    shadowGrad.addColorStop(0.6, 'rgba(0,0,0,0.95)');
+    shadowGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = shadowGrad;
+    ctx.fillRect(cx - maxR * 0.5, cy - maxR * 0.5, maxR, maxR);
+
+    // Photon sphere glow
+    const psGrad = ctx.createRadialGradient(cx, cy, 24, cx, cy, 34);
+    psGrad.addColorStop(0, 'rgba(255,200,80,0.0)');
+    psGrad.addColorStop(0.4, 'rgba(255,180,60,0.15)');
+    psGrad.addColorStop(1, 'rgba(255,150,40,0.0)');
+    ctx.fillStyle = psGrad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 34, 0, Math.PI * 2);
+    ctx.fill();
 
     // Event horizon circle
     ctx.beginPath();
-    ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 16, 0, Math.PI * 2);
     ctx.fillStyle = '#000';
     ctx.fill();
-    ctx.strokeStyle = 'rgba(239,68,68,0.5)';
+    ctx.strokeStyle = 'rgba(239,68,68,0.6)';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Photon sphere
+    // Photon sphere ring
     ctx.beginPath();
     ctx.arc(cx, cy, 27, 0, Math.PI * 2);
     ctx.setLineDash([3, 3]);
-    ctx.strokeStyle = 'rgba(251,191,36,0.4)';
+    ctx.strokeStyle = 'rgba(255,200,80,0.5)';
     ctx.lineWidth = 1;
     ctx.stroke();
     ctx.setLineDash([]);
@@ -1003,6 +1080,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   renderArrowChart();
   renderTidalChart();
   renderLensing();
+
+  // Init WebGL 3D gravity well
+  const glCanvas = document.getElementById('gl-canvas') as HTMLCanvasElement;
+  let gl3d: { destroy: () => void } | null = null;
+  if (glCanvas) {
+    gl3d = initBlackHole3D(glCanvas);
+  }
 
   // Re-render on resize
   let resizeTimer: number;

@@ -14,6 +14,7 @@
  */
 
 import { EPSILON, P_EXPONENT, ALPHA } from './constants';
+import { gammaOmega } from './kernel';
 
 /* ─── Budget Surface ────────────────────────────────────────────── */
 
@@ -163,6 +164,50 @@ export function arrowAsymmetry(
   return ascentCost(omStart, omEnd) / dc;
 }
 
+/* ─── Additional Physics Functions ──────────────────────────────── */
+
+/**
+ * Hawking temperature analog: T_H ∝ 1/|κ|
+ * In GCD: smaller well depth → higher temperature.
+ * Normalized: T = 1/(8π·|κ|). Returns 0 for κ near zero.
+ */
+export function hawkingTemperature(kappa: number): number {
+  const wd = Math.abs(kappa);
+  if (wd < EPSILON) return 0;
+  return 1.0 / (8 * Math.PI * wd);
+}
+
+/**
+ * Gravitational redshift: z = Γ(ω) / (1 + Γ(ω))
+ * Light escaping from depth ω is redshifted. z → 1 at the horizon.
+ */
+export function gravitationalRedshift(omega: number): number {
+  const gamma = gammaOmega(omega);
+  return gamma / (1 + gamma);
+}
+
+/**
+ * Escape velocity analog: v_esc = √(2Γ/(1+Γ))
+ * Approaches 1 (c) at the horizon. Below ISCO, escape is impossible.
+ */
+export function escapeVelocity(omega: number): number {
+  const gamma = gammaOmega(omega);
+  return Math.sqrt(2 * gamma / (1 + gamma));
+}
+
+/**
+ * ISCO (Innermost Stable Circular Orbit) analog in GCD.
+ * The ω value where tidal forces destabilize orbits.
+ * In Schwarzschild: r_ISCO = 6M = 3r_s → ω_ISCO ≈ 0.50
+ */
+export const OMEGA_ISCO = 0.50;
+
+/**
+ * Photon sphere ω: where circular photon orbits exist.
+ * In Schwarzschild: r_ps = 3M = 1.5r_s → ω_ps ≈ 0.65
+ */
+export const OMEGA_PHOTON_SPHERE = 0.65;
+
 /* ─── Black Hole Entities ───────────────────────────────────────── */
 
 export interface SpacetimeEntity {
@@ -226,5 +271,29 @@ export const BLACK_HOLE_ENTITIES: SpacetimeEntity[] = [
     w: Array(8).fill(0.125),
     description: 'Causal loop at the stretched horizon. Most channels near floor, but c[6]=0.90 — the circulation channel persists even at the boundary.',
     grAnalog: 'Stretched horizon / membrane paradigm',
+  },
+  {
+    name: 'Kerr Black Hole',
+    symbol: 'KBH',
+    c: [0.95, 0.85, 0.95, 0.90, 0.70, 0.12, 0.98, 0.80],
+    w: Array(8).fill(0.125),
+    description: 'Rotating BH (a* ≈ 0.998). Frame-dragging creates the ergosphere. Angular momentum channel elevated; information channel still collapses.',
+    grAnalog: 'Kerr solution (rotating, uncharged)',
+  },
+  {
+    name: 'Sagittarius A*',
+    symbol: 'SgrA*',
+    c: [0.992, 0.20, 0.985, 0.995, 0.80, 0.03, 0.99, 0.15],
+    w: Array(8).fill(0.125),
+    description: '4.15 × 10⁶ M☉ supermassive BH at Milky Way center. Extreme mass but nearly all information lost. Deep well, very low IC.',
+    grAnalog: 'Supermassive BH (EHT 2022 shadow image)',
+  },
+  {
+    name: 'ISCO Boundary',
+    symbol: 'ISCO',
+    c: [0.50, 0.45, 0.48, 0.42, 0.40, 0.35, 0.70, 0.50],
+    w: Array(8).fill(0.125),
+    description: 'Innermost Stable Circular Orbit. The boundary between stable orbits and plunging trajectories. Matter crossing ISCO spirals into the horizon.',
+    grAnalog: 'r = 6M (Schwarzschild) / r = M (extremal Kerr)',
   },
 ];
