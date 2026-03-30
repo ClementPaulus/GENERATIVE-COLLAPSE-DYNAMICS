@@ -12,6 +12,7 @@ Modules:
     generative_flux.py             — Generative flux computation
     kernel_structural_theorems.py  — 7 structural theorems (T-KS-1 through T-KS-7)
     momentum_flux.py               — Momentum flux and conservation
+    reflexive_closure.py           — 5 reflexive theorems (T-RF-1 through T-RF-5)
     universal_regime_calibration.py — Cross-domain regime calibration
 
 Axiom-0 derivation:
