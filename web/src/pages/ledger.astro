@@ -34,7 +34,7 @@ const sections = ['purpose', 'domains', 'viewer', 'budget', 'identities', 'compa
     <section id="purpose" class="mb-10">
       <h2 class="text-xl font-bold text-kernel-100 mb-4">What the Ledger Does</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-red-400 mb-2">Debit Side</h3>
           <ul class="text-xs text-kernel-400 space-y-2">
             <li class="flex items-start gap-2">
@@ -47,7 +47,7 @@ const sections = ['purpose', 'domains', 'viewer', 'budget', 'identities', 'compa
             </li>
           </ul>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-emerald-400 mb-2">Credit Side</h3>
           <ul class="text-xs text-kernel-400 space-y-2">
             <li class="flex items-start gap-2">
@@ -59,7 +59,7 @@ const sections = ['purpose', 'domains', 'viewer', 'budget', 'identities', 'compa
             Δκ = R·τ<sub>R</sub> − (D<sub>ω</sub> + D<sub>C</sub>)
           </div>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-amber-400 mb-2">Reconciliation</h3>
           <ul class="text-xs text-kernel-400 space-y-2">
             <li class="flex items-start gap-2">
@@ -162,7 +162,7 @@ const sections = ['purpose', 'domains', 'viewer', 'budget', 'identities', 'compa
       </p>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Budget inputs -->
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-5 space-y-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5 space-y-4">
           <div class="text-sm font-bold text-kernel-300 mb-2">Budget Parameters</div>
           <div>
             <label class="text-xs text-kernel-500 block mb-1">ω (Drift) — drives D<sub>ω</sub> = Γ(ω) = ω³/(1 − ω + ε)</label>
@@ -198,7 +198,7 @@ const sections = ['purpose', 'domains', 'viewer', 'budget', 'identities', 'compa
           </div>
         </div>
         <!-- Budget result -->
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-5">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
           <div class="text-sm font-bold text-kernel-300 mb-3">Reconciliation Result</div>
           <div id="sim-result" class="space-y-3">
             <!-- filled by script -->
@@ -214,7 +214,7 @@ const sections = ['purpose', 'domains', 'viewer', 'budget', 'identities', 'compa
         Enter a trace vector to verify all three algebraic identities in real-time.
         These identities must hold for <em>any</em> valid trace — they are provable from Axiom-0.
       </p>
-      <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-5">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <div class="mb-4">
           <label class="text-xs text-kernel-500 block mb-1">Trace vector (comma-separated values in [0, 1])</label>
           <input id="id-trace" type="text" value="0.95, 0.80, 0.60, 0.90, 0.75, 0.85"
@@ -234,7 +234,7 @@ const sections = ['purpose', 'domains', 'viewer', 'budget', 'identities', 'compa
         Select two domains to compare their kernel metrics side by side. The heterogeneity gap (Δ = F − IC)
         reveals where each domain's channels diverge — and what it costs multiplicative coherence.
       </p>
-      <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-5">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div>
             <label class="text-xs text-kernel-500 block mb-1">Domain A</label>
@@ -256,7 +256,7 @@ const sections = ['purpose', 'domains', 'viewer', 'budget', 'identities', 'compa
     <!-- ═══════════ §7: THE SPINE ═══════════ -->
     <section id="spine" class="mb-10">
       <h2 class="text-xl font-bold text-kernel-100 mb-4">The Ledger in the Spine</h2>
-      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <div class="flex flex-wrap justify-center gap-2 text-xs font-mono mb-4">
           <span class="px-3 py-1.5 bg-kernel-800 border border-kernel-700 rounded text-kernel-400">Contract</span>
           <span class="text-kernel-600">&rarr;</span>
@@ -623,22 +623,22 @@ const sections = ['purpose', 'domains', 'viewer', 'budget', 'identities', 'compa
 
     const el = document.getElementById('agg-stats')!;
     el.innerHTML = `
-      <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4 text-center">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4 text-center">
         <div class="text-xs text-kernel-500 mb-1">Mean F</div>
         <div class="text-xl font-mono text-kernel-100">${mean(Fs).toFixed(4)}</div>
         <div class="text-xs text-kernel-600">[${min(Fs).toFixed(3)} – ${max(Fs).toFixed(3)}]</div>
       </div>
-      <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4 text-center">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4 text-center">
         <div class="text-xs text-kernel-500 mb-1">Mean IC</div>
         <div class="text-xl font-mono text-kernel-100">${mean(ICs).toFixed(4)}</div>
         <div class="text-xs text-kernel-600">[${min(ICs).toFixed(3)} – ${max(ICs).toFixed(3)}]</div>
       </div>
-      <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4 text-center">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4 text-center">
         <div class="text-xs text-kernel-500 mb-1">Mean Gap Δ</div>
         <div class="text-xl font-mono text-amber-400">${mean(deltas).toFixed(4)}</div>
         <div class="text-xs text-kernel-600">Max: ${max(deltas).toFixed(4)}</div>
       </div>
-      <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4 text-center">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4 text-center">
         <div class="text-xs text-kernel-500 mb-1">Regime Distribution</div>
         <div class="text-xs mt-1 space-y-1">
           <div class="text-green-400">Stable: ${regimes.STABLE} / ${allDomains.length}</div>

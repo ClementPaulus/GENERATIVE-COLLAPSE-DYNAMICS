@@ -79,7 +79,7 @@ const sections = ['identities', 'tool', 'modes', 'methodology'];
     <section id="modes" class="mb-10">
       <h2 class="text-xl font-bold text-kernel-100 mb-4">Five Verification Modes</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">1. Random Trials</h3>
           <p class="text-xs text-kernel-400">
             Generate thousands of random trace vectors and verify all three identities
@@ -87,7 +87,7 @@ const sections = ['identities', 'tool', 'modes', 'methodology'];
             and pass/fail statistics.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">2. Manual Trace</h3>
           <p class="text-xs text-kernel-400">
             Enter channel values directly and see per-gate conformance in real time.
@@ -95,7 +95,7 @@ const sections = ['identities', 'tool', 'modes', 'methodology'];
             failed and what would need to change.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">3. Preset Explorer</h3>
           <p class="text-xs text-kernel-400">
             Six structural presets (equator, near-zero, near-one, mixed, dead-channel,
@@ -103,7 +103,7 @@ const sections = ['identities', 'tool', 'modes', 'methodology'];
             identities with known-good data.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">4. Seam Budget</h3>
           <p class="text-xs text-kernel-400">
             Interactive seam accounting: compute &Gamma;(&omega;), D_C (curvature debit),
@@ -111,7 +111,7 @@ const sections = ['identities', 'tool', 'modes', 'methodology'];
             &Delta;&kappa; = R&middot;&tau;_R &minus; (D_&omega; + D_C) closes within tolerance.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">5. Composition</h3>
           <p class="text-xs text-kernel-400">
             Compose two independent traces and verify the composition algebra:
@@ -119,7 +119,7 @@ const sections = ['identities', 'tool', 'modes', 'methodology'];
             F composes arithmetically (F&#8321;&#8322; = (F&#8321;+F&#8322;)/2).
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-1">Why Five Modes?</h3>
           <p class="text-xs text-kernel-400">
             Each mode tests a different aspect of kernel correctness:
@@ -134,7 +134,7 @@ const sections = ['identities', 'tool', 'modes', 'methodology'];
     <!-- ═══════════ §4: METHODOLOGY ═══════════ -->
     <section id="methodology" class="mb-10">
       <h2 class="text-xl font-bold text-kernel-100 mb-4">Verification Methodology</h2>
-      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-kernel-400">
           <div>
             <h3 class="text-sm font-bold text-kernel-300 mb-2">Precision Standard</h3>

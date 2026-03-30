@@ -1,7 +1,7 @@
 ---
 /**
  * Base HTML layout for all GCD domain sites.
- * Renders the navigation, domain header, and page content.
+ * Clean, professional design with grouped navigation.
  */
 export interface Props {
   title: string;
@@ -23,7 +23,54 @@ const {
 const base = import.meta.env.BASE_URL;
 const siteUrl = 'https://calebpruett927.github.io/GENERATIVE-COLLAPSE-DYNAMICS';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
-const fullTitle = `${title} — GCD Kernel`;
+const fullTitle = `${title} — GCD`;
+
+/* ── Nav groups ──────────────────────────────────── */
+const navGroups = [
+  {
+    label: 'Explore',
+    items: [
+      { name: 'Calculator', href: `${base}calculator/` },
+      { name: 'Regime Diagram', href: `${base}regime/` },
+      { name: 'Precision', href: `${base}precision/` },
+      { name: 'Formulas', href: `${base}formulas/` },
+      { name: 'Mapper', href: `${base}mapper/` },
+      { name: 'Seam Budget', href: `${base}seam-budget/` },
+      { name: 'τ_R* Diagnostic', href: `${base}diagnostics/` },
+      { name: 'Scale Ladder', href: `${base}scale-ladder/` },
+    ],
+  },
+  {
+    label: 'Theory',
+    items: [
+      { name: 'Mathematics', href: `${base}mathematics/` },
+      { name: 'Geometry', href: `${base}geometry/` },
+      { name: 'Identities', href: `${base}identities/` },
+      { name: 'Grammar', href: `${base}grammar/` },
+      { name: 'Epistemology', href: `${base}epistemology/` },
+      { name: 'Philosophy', href: `${base}philosophy/` },
+      { name: 'Orientation', href: `${base}orientation/` },
+    ],
+  },
+  {
+    label: 'Reference',
+    items: [
+      { name: 'Rosetta', href: `${base}rosetta/` },
+      { name: 'Ledger', href: `${base}ledger/` },
+      { name: 'Index', href: `${base}reference/` },
+      { name: 'Continuity', href: `${base}continuity/` },
+      { name: 'Papers', href: `${base}papers/` },
+    ],
+  },
+  {
+    label: 'Visualize',
+    items: [
+      { name: 'Black Hole', href: `${base}blackhole/` },
+      { name: 'Space Sim', href: `${base}space/` },
+      { name: 'Brain', href: `${base}brain/` },
+    ],
+  },
+];
 ---
 
 <!doctype html>
@@ -36,12 +83,17 @@ const fullTitle = `${title} — GCD Kernel`;
     <link rel="canonical" href={canonicalUrl} />
     <title>{fullTitle}</title>
 
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
     <!-- Open Graph -->
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:site_name" content="GCD Kernel" />
+    <meta property="og:site_name" content="GCD" />
     {ogImage && <meta property="og:image" content={ogImage} />}
 
     <!-- Twitter Card -->
@@ -53,9 +105,9 @@ const fullTitle = `${title} — GCD Kernel`;
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "GCD Kernel",
+      "name": "Generative Collapse Dynamics",
       "url": siteUrl,
-      "description": "Generative Collapse Dynamics — a single-axiom mathematical framework for measuring what survives collapse and what returns.",
+      "description": "A single-axiom mathematical framework for measuring what survives collapse and what returns.",
       "publisher": {
         "@type": "Organization",
         "name": "GCD / UMCP"
@@ -67,86 +119,177 @@ const fullTitle = `${title} — GCD Kernel`;
         --color-primary: var(--primaryColor);
         --color-accent: var(--accentColor);
       }
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+      /* Dropdown navigation */
+      .nav-group { position: relative; }
+      .nav-group .nav-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        min-width: 200px;
+        padding-top: 0.5rem;
+        z-index: 50;
+      }
+      .nav-group:hover .nav-dropdown,
+      .nav-group:focus-within .nav-dropdown { display: block; }
+      .nav-dropdown-inner {
+        background: rgb(15 23 42 / 0.98);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgb(51 65 85 / 0.6);
+        border-radius: 0.75rem;
+        padding: 0.5rem 0;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      }
+      /* Mobile nav */
+      #mobile-menu { display: none; }
+      #mobile-menu.open { display: block; }
+      @media (max-width: 768px) {
+        .desktop-nav { display: none !important; }
+        .mobile-toggle { display: flex !important; }
+      }
+      @media (min-width: 769px) {
+        .mobile-toggle { display: none !important; }
+        #mobile-menu { display: none !important; }
+      }
     </style>
   </head>
-  <body class="bg-kernel-950 text-kernel-100 min-h-screen">
+  <body class="bg-kernel-950 text-kernel-100 min-h-screen antialiased">
     <!-- Skip to content (accessibility) -->
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-amber-500 focus:text-kernel-950 focus:px-4 focus:py-2 focus:rounded focus:text-sm focus:font-bold">
       Skip to main content
     </a>
 
     <!-- Navigation -->
-    <nav class="border-b border-kernel-800 px-6 py-3" aria-label="Main navigation">
-      <div class="max-w-6xl mx-auto flex items-center justify-between flex-wrap gap-2">
-        <a href={base} class="text-lg font-bold tracking-tight" aria-label="GCD Kernel home">
-          GCD<span class="text-kernel-400" aria-hidden="true">·</span>Kernel
+    <nav class="sticky top-0 z-40 border-b border-kernel-800/60 bg-kernel-950/80 backdrop-blur-xl" aria-label="Main navigation">
+      <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <!-- Logo -->
+        <a href={base} class="flex items-center gap-2 group" aria-label="GCD home">
+          <span class="text-xl font-bold tracking-tight text-kernel-100 group-hover:text-amber-400 transition-colors">GCD</span>
+          <span class="hidden sm:inline text-xs text-kernel-500 font-light tracking-wide">Generative Collapse Dynamics</span>
         </a>
-        <div class="flex items-center gap-1 text-sm text-kernel-400 flex-wrap" role="list">
-          <!-- Primary nav -->
-          <a href={base} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Domains</a>
-          <span class="text-kernel-700" aria-hidden="true">|</span>
-          <!-- Tools -->
-          <a href={`${base}calculator/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Calculator</a>
-          <a href={`${base}regime/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Regime</a>
-          <a href={`${base}diagnostics/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem" aria-label="Tau R star diagnostic">τ_R*</a>
-          <a href={`${base}precision/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Precision</a>
-          <a href={`${base}mapper/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Mapper</a>
-          <a href={`${base}blackhole/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Black Hole</a>
-          <a href={`${base}space/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Space Sim</a>
-          <span class="text-kernel-700" aria-hidden="true">|</span>
-          <!-- Reference -->
-          <a href={`${base}mathematics/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Mathematics</a>
-          <a href={`${base}formulas/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Formulas</a>
-          <a href={`${base}geometry/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Geometry</a>
-          <a href={`${base}rosetta/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Rosetta</a>
-          <a href={`${base}ledger/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Ledger</a>
-          <a href={`${base}continuity/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Continuity</a>
-          <a href={`${base}brain/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Brain</a>
-          <span class="text-kernel-700" aria-hidden="true">|</span>
-          <!-- Corpus -->
-          <a href={`${base}grammar/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Grammar</a>
-          <a href={`${base}epistemology/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Episteme</a>
-          <a href={`${base}philosophy/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Philosophy</a>
-          <span class="text-kernel-700" aria-hidden="true">|</span>
-          <a href={`${base}about/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">About</a>
-          <a href={`${base}papers/`} class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1" role="listitem">Papers</a>
-          <span class="text-kernel-700" aria-hidden="true">|</span>
+
+        <!-- Desktop Navigation -->
+        <div class="desktop-nav flex items-center gap-1">
+          <a href={base} class="text-sm text-kernel-400 hover:text-kernel-100 transition-colors px-3 py-2 rounded-lg hover:bg-kernel-800/50">Domains</a>
+
+          {navGroups.map(group => (
+            <div class="nav-group">
+              <button class="text-sm text-kernel-400 hover:text-kernel-100 transition-colors px-3 py-2 rounded-lg hover:bg-kernel-800/50 flex items-center gap-1 cursor-pointer">
+                {group.label}
+                <svg class="w-3 h-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="nav-dropdown">
+                <div class="nav-dropdown-inner">
+                  {group.items.map(item => (
+                    <a href={item.href} class="block px-4 py-2 text-sm text-kernel-400 hover:text-kernel-100 hover:bg-kernel-800/50 transition-colors">
+                      {item.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          <a href={`${base}about/`} class="text-sm text-kernel-400 hover:text-kernel-100 transition-colors px-3 py-2 rounded-lg hover:bg-kernel-800/50">About</a>
+
+          <div class="w-px h-5 bg-kernel-800 mx-1"></div>
+
           <a
             href="https://github.com/calebpruett927/GENERATIVE-COLLAPSE-DYNAMICS"
-            class="hover:text-kernel-100 focus:text-kernel-100 focus:outline-none focus:ring-1 focus:ring-amber-500 focus:ring-offset-1 focus:ring-offset-kernel-950 rounded transition px-2 py-1"
+            class="text-sm text-kernel-400 hover:text-kernel-100 transition-colors px-3 py-2 rounded-lg hover:bg-kernel-800/50"
             target="_blank"
             rel="noopener"
-            role="listitem"
-            aria-label="View source on GitHub (opens in new tab)"
+            aria-label="GitHub (opens in new tab)"
           >
-            GitHub
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
           </a>
+        </div>
+
+        <!-- Mobile toggle -->
+        <button class="mobile-toggle items-center justify-center w-10 h-10 rounded-lg text-kernel-400 hover:text-kernel-100 hover:bg-kernel-800/50 transition" id="mobile-nav-toggle" aria-label="Toggle navigation menu">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+
+      <!-- Mobile menu -->
+      <div id="mobile-menu" class="border-t border-kernel-800/60 bg-kernel-950/98 backdrop-blur-xl px-6 py-4">
+        <a href={base} class="block py-2.5 text-sm text-kernel-300 hover:text-kernel-100 font-medium">Domains</a>
+        {navGroups.map(group => (
+          <div class="py-2">
+            <div class="text-[10px] uppercase tracking-widest text-kernel-600 font-medium mb-1">{group.label}</div>
+            {group.items.map(item => (
+              <a href={item.href} class="block py-1.5 pl-3 text-sm text-kernel-400 hover:text-kernel-100 transition-colors">{item.name}</a>
+            ))}
+          </div>
+        ))}
+        <div class="pt-2 border-t border-kernel-800/40 mt-2">
+          <a href={`${base}about/`} class="block py-2.5 text-sm text-kernel-300 hover:text-kernel-100 font-medium">About</a>
+          <a href="https://github.com/calebpruett927/GENERATIVE-COLLAPSE-DYNAMICS" target="_blank" rel="noopener" class="block py-2.5 text-sm text-kernel-400 hover:text-kernel-100">GitHub</a>
         </div>
       </div>
     </nav>
 
     <!-- Main content -->
-    <main id="main-content" class="max-w-6xl mx-auto px-6 py-10" role="main">
+    <main id="main-content" class="max-w-7xl mx-auto px-6 py-12" role="main">
       <slot />
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-kernel-800 px-6 py-6 mt-20" role="contentinfo">
-      <div class="max-w-6xl mx-auto text-center text-xs text-kernel-500">
-        <p><em>Collapsus generativus est; solum quod redit, reale est.</em></p>
-        <p class="mt-1">
-          Headless Contract Gateway · UMCP v2.3.0 ·
-          <a
-            href="https://github.com/calebpruett927/GENERATIVE-COLLAPSE-DYNAMICS"
-            class="underline hover:text-kernel-300 focus:text-kernel-300 focus:outline-none focus:ring-1 focus:ring-amber-500 rounded"
-            target="_blank"
-            rel="noopener"
-            aria-label="View source code on GitHub (opens in new tab)"
-          >
-            Source
-          </a>
-        </p>
+    <footer class="border-t border-kernel-800/40 mt-32" role="contentinfo">
+      <div class="max-w-7xl mx-auto px-6 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+          <!-- Brand -->
+          <div class="md:col-span-1">
+            <div class="text-lg font-bold text-kernel-100 mb-3">GCD</div>
+            <p class="text-sm text-kernel-500 leading-relaxed">A single-axiom mathematical framework for measuring what survives collapse and what returns.</p>
+          </div>
+          <!-- Explore -->
+          <div>
+            <div class="text-xs uppercase tracking-widest text-kernel-600 font-medium mb-4">Explore</div>
+            <div class="space-y-2">
+              <a href={`${base}calculator/`} class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">Calculator</a>
+              <a href={`${base}regime/`} class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">Regime Diagram</a>
+              <a href={`${base}precision/`} class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">Precision</a>
+              <a href={`${base}mapper/`} class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">Mapper</a>
+            </div>
+          </div>
+          <!-- Theory -->
+          <div>
+            <div class="text-xs uppercase tracking-widest text-kernel-600 font-medium mb-4">Theory</div>
+            <div class="space-y-2">
+              <a href={`${base}mathematics/`} class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">Mathematics</a>
+              <a href={`${base}geometry/`} class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">Geometry</a>
+              <a href={`${base}grammar/`} class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">Grammar</a>
+              <a href={`${base}papers/`} class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">Papers</a>
+            </div>
+          </div>
+          <!-- Project -->
+          <div>
+            <div class="text-xs uppercase tracking-widest text-kernel-600 font-medium mb-4">Project</div>
+            <div class="space-y-2">
+              <a href={`${base}about/`} class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">About</a>
+              <a href={`${base}rosetta/`} class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">Rosetta</a>
+              <a href="https://github.com/calebpruett927/GENERATIVE-COLLAPSE-DYNAMICS" target="_blank" rel="noopener" class="block text-sm text-kernel-400 hover:text-kernel-200 transition-colors">GitHub</a>
+            </div>
+          </div>
+        </div>
+        <!-- Bottom bar -->
+        <div class="border-t border-kernel-800/40 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p class="text-xs text-kernel-600 italic">Collapsus generativus est; solum quod redit, reale est.</p>
+          <p class="text-xs text-kernel-600">UMCP v2.3.0</p>
+        </div>
       </div>
     </footer>
+
+    <script>
+      // Mobile menu toggle
+      const toggle = document.getElementById('mobile-nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+      toggle?.addEventListener('click', () => menu?.classList.toggle('open'));
+    </script>
   </body>
 </html>

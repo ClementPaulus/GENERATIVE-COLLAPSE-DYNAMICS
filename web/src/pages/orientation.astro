@@ -88,7 +88,7 @@ const sections = [
       </p>
     </div>
 
-    <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4 mb-8">
+    <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4 mb-8">
       <h3 class="text-sm font-bold text-kernel-300 mb-2">Run Locally</h3>
       <pre class="text-xs text-kernel-400 font-mono bg-kernel-950 rounded p-3 overflow-x-auto">python scripts/orientation.py          # Full orientation — 10 sections, ~10 seconds
 python scripts/orientation.py -s 3     # Single section (e.g., §3: geometric slaughter)
@@ -97,7 +97,7 @@ python scripts/orientation_checkpoint.py --verify  # Verify understanding (must 
 
     <div class="space-y-6">
       {sections.map(s => (
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg overflow-hidden">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl overflow-hidden">
           <div class="flex items-start gap-4 p-5">
             <div class="flex-shrink-0 w-10 h-10 rounded-full bg-kernel-800 flex items-center justify-center
                         text-amber-400 font-bold text-lg">
@@ -118,7 +118,7 @@ python scripts/orientation_checkpoint.py --verify  # Verify understanding (must 
     </div>
 
     <!-- Orientation Receipts Summary -->
-    <div class="mt-10 bg-kernel-900 border border-kernel-800 rounded-lg p-6">
+    <div class="mt-10 bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-6">
       <h2 class="text-xl font-bold text-kernel-100 mb-4">Computational Ground Truth</h2>
       <p class="text-sm text-kernel-400 mb-4">
         These numbers are compressed derivation chains. They constrain what can be said about the system.

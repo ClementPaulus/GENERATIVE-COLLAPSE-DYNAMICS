@@ -54,7 +54,7 @@ const subpages = [
     <section id="about" class="mb-10">
       <h2 class="text-xl font-bold text-kernel-100 mb-4">How Translation Works</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">Structural Stability</h3>
           <p class="text-xs text-kernel-400">
             Each word has an <strong>operational meaning</strong> tied to the frozen Contract
@@ -63,7 +63,7 @@ const subpages = [
             still defines <em>how much</em> drift is measured (&omega; = 1 &minus; F).
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">Integrity Is Never Asserted</h3>
           <p class="text-xs text-kernel-400">
             The fifth word &mdash; Integrity &mdash; is not translated per lens because it is
@@ -71,7 +71,7 @@ const subpages = [
             gives unitless multiplicative comparability across seams, regardless of dialect.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">Prose Interface</h3>
           <p class="text-xs text-kernel-400">
             Authors describe using the five words; the ledger, budget, and gates supply the
@@ -79,7 +79,7 @@ const subpages = [
             composition in I without forcing any field's jargon on another.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">Four Steps to Use</h3>
           <p class="text-xs text-kernel-400">
             1. Bind to Contract &mdash; name the invariants constraining your claim.
@@ -105,7 +105,7 @@ const subpages = [
         phase transition; in policy it is a regime shift; in semiotics it is sign drift.
         The numbers are identical &mdash; the prose changes.
       </p>
-      <div class="overflow-x-auto bg-kernel-900 border border-kernel-800 rounded-xl p-4">
+      <div class="overflow-x-auto bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
         <table class="w-full text-xs">
           <thead>
             <tr class="text-kernel-500 border-b border-kernel-700">
@@ -140,7 +140,7 @@ const subpages = [
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {subpages.map(p => (
           <a href={`${base}rosetta/${p.slug}`}
-             class="bg-kernel-900 border border-kernel-800 rounded-lg p-4 hover:border-kernel-600
+             class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4 hover:border-kernel-600
                     transition group no-underline block">
             <h3 class="text-sm font-bold text-kernel-200 group-hover:text-kernel-100 mb-1">{p.title}</h3>
             <p class="text-xs text-kernel-500">{p.desc}</p>

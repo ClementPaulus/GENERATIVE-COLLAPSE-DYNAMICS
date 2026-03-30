@@ -7,21 +7,21 @@ const base = import.meta.env.BASE_URL;
   <div class="max-w-5xl mx-auto">
 
     <!-- ═══ Hero ═══ -->
-    <div class="text-center mb-16 relative">
-      <div class="absolute inset-0 -z-10 opacity-20" id="hero-particles"></div>
-      <p class="text-xs uppercase tracking-[0.3em] text-kernel-500 mb-4">Axiom-0</p>
-      <h1 class="text-4xl md:text-5xl font-bold text-kernel-100 mb-5 leading-tight">
+    <div class="text-center py-20 md:py-28 relative">
+      <div class="absolute inset-0 -z-10 opacity-15" id="hero-particles"></div>
+      <p class="text-xs uppercase tracking-[0.3em] text-kernel-500 mb-6">Axiom-0</p>
+      <h1 class="text-4xl md:text-6xl font-bold text-kernel-100 mb-6 leading-[1.1] tracking-tight">
         Collapse is generative.<br/>
         <span class="text-amber-400">Only what returns is real.</span>
       </h1>
-      <p class="text-sm text-kernel-500 italic mb-8">
+      <p class="text-sm text-kernel-600 italic font-mono mb-10">
         Collapsus generativus est; solum quod redit, reale est.
       </p>
       <div class="inline-flex gap-3">
-        <a href="#kernel-section" class="bg-amber-600 hover:bg-amber-500 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition">
+        <a href="#kernel-section" class="bg-amber-500 hover:bg-amber-400 text-kernel-950 px-6 py-3 rounded-lg text-sm font-semibold transition shadow-lg shadow-amber-500/20">
           Explore the Kernel &darr;
         </a>
-        <a href={`${base}calculator/`} class="border border-kernel-600 hover:border-kernel-400 text-kernel-300 hover:text-kernel-100 px-5 py-2.5 rounded-lg text-sm font-bold transition">
+        <a href={`${base}calculator/`} class="bg-kernel-800/80 hover:bg-kernel-700 border border-kernel-700/50 text-kernel-200 px-6 py-3 rounded-lg text-sm font-medium transition">
           Try the Calculator &rarr;
         </a>
       </div>
@@ -29,7 +29,8 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ What is GCD? ═══ -->
     <section class="mb-16">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-6 border-b border-kernel-800 pb-2">What is GCD?</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">The Framework</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-6">What is GCD?</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="space-y-4 text-kernel-300">
           <p>
@@ -46,7 +47,7 @@ const base = import.meta.env.BASE_URL;
             mathematics, not chosen by convention.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
           <h3 class="text-sm font-bold text-kernel-400 uppercase tracking-wider mb-4">At a Glance</h3>
           <div class="grid grid-cols-2 gap-3">
             {[
@@ -69,7 +70,8 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ The Kernel — Interactive ═══ -->
     <section class="mb-16" id="kernel-section">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-2 border-b border-kernel-800 pb-2">The Kernel</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Six Invariants, Three DOF</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-2">The Kernel</h2>
       <p class="text-kernel-400 text-sm mb-2">
         The kernel function <span class="font-mono text-kernel-300">K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC)</span> maps
         any trace vector to six invariants — but only <strong class="text-kernel-200">3 effective degrees of freedom</strong>.
@@ -127,7 +129,7 @@ const base = import.meta.env.BASE_URL;
       </div>
 
       <!-- Relationship diagram -->
-      <div class="mt-6 bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+      <div class="mt-6 bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <h3 class="text-sm font-bold text-kernel-400 uppercase tracking-wider mb-3">How the Six Invariants Relate</h3>
         <p class="text-xs text-kernel-500 mb-4">
           4 are <span class="text-amber-400 font-medium">primitive</span> (computed directly), 2 are <span class="text-blue-400 font-medium">derived</span> (follow algebraically).
@@ -143,7 +145,8 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ The Spine — Interactive ═══ -->
     <section class="mb-16">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-2 border-b border-kernel-800 pb-2">The Spine</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Every Claim Follows This Path</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-2">The Spine</h2>
       <p class="text-kernel-300 mb-6">
         Every claim, validation, and discourse follows a fixed five-stop spine.
         <span class="text-kernel-500">Click each stop to see what happens there.</span>
@@ -166,7 +169,8 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ Three Regimes — Interactive ═══ -->
     <section class="mb-16">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-2 border-b border-kernel-800 pb-2">Three Regimes</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Derived from Gates, Never Asserted</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-2">Three Regimes</h2>
       <p class="text-kernel-300 mb-4">
         Regime classification is <em>derived</em> from gates on (ω, F, S, C) — never asserted.
         <span class="text-kernel-500">Click to explore each regime.</span>
@@ -208,7 +212,7 @@ const base = import.meta.env.BASE_URL;
       </div>
 
       <!-- Fisher space bar -->
-      <div class="mt-4 bg-kernel-900 border border-kernel-800 rounded-xl p-4">
+      <div class="mt-4 bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
         <p class="text-xs text-kernel-500 mb-2">Fisher Space Partition</p>
         <div class="h-6 rounded-full overflow-hidden flex">
           <div class="bg-green-600 flex items-center justify-center text-[10px] text-white font-bold" style="width:12.5%">12.5%</div>
@@ -224,7 +228,8 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ Five Words ═══ -->
     <section class="mb-16">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-2 border-b border-kernel-800 pb-2">The Five Words</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Minimal Prose Vocabulary</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-2">The Five Words</h2>
       <p class="text-kernel-300 mb-4">
         The minimal prose vocabulary for telling the story of any collapse-return cycle.
         <span class="text-kernel-500">Click a word to see its ledger role and operational definition.</span>
@@ -243,7 +248,8 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ Architecture — Interactive ═══ -->
     <section class="mb-16">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-2 border-b border-kernel-800 pb-2">Three-Tier Architecture</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Immutable Dependency Structure</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-2">Three-Tier Architecture</h2>
       <p class="text-kernel-300 mb-6">
         Every symbol, function, and artifact belongs to exactly one tier. <span class="text-kernel-500">Click to understand each layer.</span>
       </p>
@@ -258,7 +264,7 @@ const base = import.meta.env.BASE_URL;
         <div id="tier-detail-body" class="text-sm text-kernel-300 space-y-3"></div>
       </div>
       <!-- Dependency arrow -->
-      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-4 text-center">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4 text-center">
         <p class="text-xs text-kernel-500 mb-2">One-Way Dependency (No Back-Edges)</p>
         <div class="flex items-center justify-center gap-2 text-kernel-400 font-mono text-sm">
           <span class="px-3 py-1 bg-kernel-800 rounded text-amber-400">Tier-1</span>
@@ -273,14 +279,15 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ Test Count — Compounding Structure ═══ -->
     <section class="mb-16" id="tests-section">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-2 border-b border-kernel-800 pb-2">16,355 Tests</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Compounding Parametrized Sweeps</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-2">16,355 Tests</h2>
       <p class="text-kernel-300 mb-6">
         Not 16,355 separate assertions — <strong class="text-kernel-100">compounding parametrized sweeps</strong> across 20 domains.
         <span class="text-kernel-500">~800 base test functions expand 18× through domain × entity × configuration parametrization.</span>
       </p>
 
       <!-- How compounding works -->
-      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5 mb-6">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5 mb-6">
         <h3 class="text-sm font-bold text-kernel-400 uppercase tracking-wider mb-4">How Test Compounding Works</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div class="text-center p-4 bg-kernel-950 rounded-lg">
@@ -327,7 +334,7 @@ const base = import.meta.env.BASE_URL;
       </div>
 
       <!-- Domain breakdown -->
-      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <h3 class="text-sm font-bold text-kernel-400 uppercase tracking-wider mb-4">Test Distribution by Domain</h3>
         <p class="text-kernel-500 text-xs mb-4">Click a tier to see its test domains.</p>
         <div class="flex gap-2 mb-4" id="test-tier-tabs">
@@ -350,7 +357,8 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ 44 Structural Identities ═══ -->
     <section class="mb-16" id="identities-section">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-2 border-b border-kernel-800 pb-2">44 Structural Identities</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Verified to Machine Precision</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-2">44 Structural Identities</h2>
       <p class="text-kernel-300 mb-6">
         All derived from Axiom-0 and verified to <strong class="text-amber-400">machine precision</strong>.
         They fall into four series. <span class="text-kernel-500">Click a series to see its identities and what they prove.</span>
@@ -373,7 +381,7 @@ const base = import.meta.env.BASE_URL;
       </div>
 
       <!-- Connection Clusters -->
-      <div class="mt-6 bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+      <div class="mt-6 bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <h3 class="text-sm font-bold text-kernel-400 uppercase tracking-wider mb-4">6 Connection Clusters</h3>
         <p class="text-xs text-kernel-500 mb-4">The 44 identities form a connected network. These clusters reveal the deep structure.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="cluster-grid">
@@ -391,7 +399,8 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ Three Languages ═══ -->
     <section class="mb-16" id="languages-section">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-2 border-b border-kernel-800 pb-2">Three Languages, One Kernel</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Same Formulas, Three Implementations</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-2">Three Languages, One Kernel</h2>
       <p class="text-kernel-300 mb-6">
         The same kernel function <span class="font-mono text-kernel-400">K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC)</span> is implemented in three languages —
         each serving a distinct architectural role. <span class="text-kernel-500">Click to explore each layer.</span>
@@ -447,7 +456,7 @@ const base = import.meta.env.BASE_URL;
       </div>
 
       <!-- Sandwich diagram -->
-      <div class="mt-6 bg-kernel-900 border border-kernel-800 rounded-xl p-5 text-center">
+      <div class="mt-6 bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5 text-center">
         <p class="text-xs text-kernel-500 mb-3 uppercase tracking-wider font-medium">Three-Layer Sandwich Architecture</p>
         <div class="inline-flex flex-col gap-0 items-center">
           <div class="w-72 px-4 py-3 bg-emerald-900/30 border border-emerald-700 rounded-t-xl">
@@ -469,7 +478,8 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ 47 Lemmas ═══ -->
     <section class="mb-16" id="lemmas-section">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-2 border-b border-kernel-800 pb-2">47 Lemmas</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Formal Foundation</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-2">47 Lemmas</h2>
       <p class="text-kernel-300 mb-6">
         The formal foundation beneath the kernel. Each lemma proves a property used by the implementation —
         tagged as <span class="font-mono text-amber-400">OPT-*</span> in the code.
@@ -491,7 +501,7 @@ const base = import.meta.env.BASE_URL;
       </div>
 
       <!-- Code connection -->
-      <div class="mt-6 bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+      <div class="mt-6 bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <h3 class="text-sm font-bold text-kernel-400 uppercase tracking-wider mb-3">Lemmas in Code</h3>
         <p class="text-xs text-kernel-500 mb-3">Every optimization in the kernel references its proving lemma via OPT-* tags:</p>
         <div class="bg-kernel-950 rounded-lg p-4 font-mono text-xs space-y-1.5">
@@ -507,7 +517,8 @@ const base = import.meta.env.BASE_URL;
 
     <!-- ═══ Quick links ═══ -->
     <section class="mb-12">
-      <h2 class="text-2xl font-bold text-kernel-100 mb-4 border-b border-kernel-800 pb-2">Explore</h2>
+      <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Jump To</p>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-4">Explore</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
           { name: 'Calculator', href: `${base}calculator/`, desc: 'Compute kernel live', icon: '⊕' },
@@ -523,7 +534,7 @@ const base = import.meta.env.BASE_URL;
           { name: 'Space Sim', href: `${base}space/`, desc: 'Immersive 3D black hole', icon: '🌌' },
         ].map(link => (
           <a href={link.href}
-             class="bg-kernel-900 border border-kernel-800 rounded-xl p-4 hover:border-kernel-600 hover:bg-kernel-900/80 transition group">
+             class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4 hover:border-kernel-600 hover:bg-kernel-800/60 transition group">
             <div class="text-xl mb-1">{link.icon}</div>
             <div class="text-sm font-bold text-kernel-100 group-hover:text-amber-400 transition">{link.name}</div>
             <div class="text-xs text-kernel-500">{link.desc}</div>
@@ -532,11 +543,6 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <!-- ═══ Footer ═══ -->
-    <div class="text-center text-kernel-600 text-xs pb-8">
-      <p>UMCP v2.3.0 · MIT License</p>
-      <p class="mt-1 italic">Continuitas non narratur: mensuratur.</p>
-    </div>
   </div>
 </BaseLayout>
 
@@ -1050,7 +1056,7 @@ const base = import.meta.env.BASE_URL;
     wordsGrid.innerHTML = '';
     fiveWords.forEach((w, i) => {
       const btn = document.createElement('button');
-      btn.className = 'word-card bg-kernel-900 border border-kernel-800 hover:border-kernel-600 rounded-xl p-3 text-center cursor-pointer transition group';
+      btn.className = 'word-card bg-kernel-900/50 border border-kernel-800/40 hover:border-kernel-600 rounded-xl p-3 text-center cursor-pointer transition group';
       btn.dataset.index = String(i);
       btn.innerHTML = `
         <div class="text-lg font-bold text-kernel-100">${w.word}</div>

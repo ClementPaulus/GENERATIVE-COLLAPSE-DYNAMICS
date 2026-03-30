@@ -45,21 +45,21 @@ const sections = [
         S is asymptotically determined by F and C.
       </p>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">4 Primitive Equations</h3>
           <p class="text-xs text-kernel-400">
             F (fidelity), &kappa; (log-integrity), S (entropy), and C (curvature) are computed
             directly from the trace vector. They form the irreducible core of the kernel.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">2 Derived Values</h3>
           <p class="text-xs text-kernel-400">
             &omega;&nbsp;=&nbsp;1&nbsp;&minus;&nbsp;F (drift) and IC&nbsp;=&nbsp;exp(&kappa;) (integrity composite)
             are derived algebraically. They participate in the immutable identities.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">3 Effective DOF</h3>
           <p class="text-xs text-kernel-400">
             The statistical constraint S&nbsp;&asymp;&nbsp;f(F,&nbsp;C) reduces 6 outputs
@@ -76,7 +76,7 @@ const sections = [
       <p class="text-xs text-kernel-500 mb-4 italic">Tier-1 &mdash; immutable by construction. The mathematical function and its provable properties.</p>
       <div class="space-y-3">
         <!-- F -->
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="flex items-start gap-4">
             <span class="text-green-400 font-mono font-bold text-lg w-10 shrink-0">F</span>
             <div class="flex-1">
@@ -92,7 +92,7 @@ const sections = [
           </div>
         </div>
         <!-- kappa -->
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="flex items-start gap-4">
             <span class="text-cyan-400 font-mono font-bold text-lg w-10 shrink-0">&kappa;</span>
             <div class="flex-1">
@@ -108,7 +108,7 @@ const sections = [
           </div>
         </div>
         <!-- S -->
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="flex items-start gap-4">
             <span class="text-amber-400 font-mono font-bold text-lg w-10 shrink-0">S</span>
             <div class="flex-1">
@@ -124,7 +124,7 @@ const sections = [
           </div>
         </div>
         <!-- C -->
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="flex items-start gap-4">
             <span class="text-purple-400 font-mono font-bold text-lg w-10 shrink-0">C</span>
             <div class="flex-1">
@@ -140,7 +140,7 @@ const sections = [
           </div>
         </div>
         <!-- omega -->
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4 border-l-2 border-l-red-700">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4 border-l-2 border-l-red-700">
           <div class="flex items-start gap-4">
             <span class="text-red-400 font-mono font-bold text-lg w-10 shrink-0">&omega;</span>
             <div class="flex-1">
@@ -155,7 +155,7 @@ const sections = [
           </div>
         </div>
         <!-- IC -->
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4 border-l-2 border-l-blue-700">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4 border-l-2 border-l-blue-700">
           <div class="flex items-start gap-4">
             <span class="text-blue-400 font-mono font-bold text-lg w-10 shrink-0">IC</span>
             <div class="flex-1">
@@ -262,7 +262,7 @@ const sections = [
         Seam-derived, not prescribed. The unique values where seams close consistently across all 20 domains.
         <span class="text-kernel-600">Trans suturam congelatum</span> &mdash; same rules both sides.
       </p>
-      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <div class="overflow-x-auto">
           <table class="w-full text-xs">
             <thead>
@@ -336,7 +336,7 @@ const sections = [
         The budget must reconcile &mdash; residual &le; tol.
       </p>
       <div class="space-y-3">
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">&Gamma;(&omega;) &mdash; Drift Cost</h3>
           <div class="bg-kernel-950 rounded p-2 my-2 font-mono text-sm text-red-300 overflow-x-auto text-center">
             &Gamma;(&omega;) = &omega;<sup>p</sup> / (1 &minus; &omega; + &varepsilon;)
@@ -346,21 +346,21 @@ const sections = [
             At &omega;<sub>trap</sub>&nbsp;=&nbsp;0.6823, &Gamma;&nbsp;=&nbsp;1 exactly &mdash; single-step escape becomes impossible.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">D<sub>C</sub> &mdash; Curvature Cost</h3>
           <div class="bg-kernel-950 rounded p-2 my-2 font-mono text-sm text-purple-300 overflow-x-auto text-center">
             D<sub>C</sub> = &alpha; &middot; C
           </div>
           <p class="text-xs text-kernel-400">Linear curvature penalty. &alpha;&nbsp;=&nbsp;1.0 (unit coupling).</p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">&Delta;&kappa; &mdash; Conservation Budget</h3>
           <div class="bg-kernel-950 rounded p-2 my-2 font-mono text-sm text-cyan-300 overflow-x-auto text-center">
             &Delta;&kappa;<sub>budget</sub> = R &middot; &tau;<sub>R</sub> &minus; (D<sub>&omega;</sub> + D<sub>C</sub>)
           </div>
           <p class="text-xs text-kernel-400">Credit (return) minus debits (drift + roughness). The ledger must reconcile.</p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">Seam Residual</h3>
           <div class="bg-kernel-950 rounded p-2 my-2 font-mono text-sm text-yellow-300 overflow-x-auto text-center">
             s = &Delta;&kappa;<sub>budget</sub> &minus; &Delta;&kappa;<sub>ledger</sub> &nbsp;&nbsp;|&nbsp;&nbsp; |s| &le; tol<sub>seam</sub> for PASS
@@ -371,7 +371,7 @@ const sections = [
             Forms a monoid &mdash; associative with identity, error&nbsp;5.55&times;10<sup>&minus;17</sup>.
           </p>
         </div>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-lg p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <h3 class="text-sm font-bold text-kernel-200 mb-2">Cost Elasticity</h3>
           <div class="bg-kernel-950 rounded p-2 my-2 font-mono text-sm text-orange-300 overflow-x-auto text-center">
             &varepsilon;<sub>&Gamma;</sub> = &omega;(3 &minus; 2&omega;) / (1 &minus; &omega;)
@@ -447,43 +447,43 @@ const sections = [
           <span class="text-xs bg-kernel-800 px-2 py-0.5 rounded">Level A</span> Foundation &mdash; 1 step from kernel
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-A1</span>
             <span class="text-kernel-300 font-bold ml-2">Duality</span>
             <div class="font-mono text-green-300 mt-1">F + &omega; = 1</div>
             <p class="text-kernel-500 mt-1">sin&sup2;&theta; + cos&sup2;&theta; = 1 in Fisher coordinates</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-A2</span>
             <span class="text-kernel-300 font-bold ml-2">Integrity Bound</span>
             <div class="font-mono text-cyan-300 mt-1">IC &le; F &nbsp;(equality iff all c<sub>i</sub> equal)</div>
             <p class="text-kernel-500 mt-1">Jensen: ln concave &rArr; &kappa; &le; ln F</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-A3</span>
             <span class="text-kernel-300 font-bold ml-2">Fano-Fisher</span>
             <div class="font-mono text-purple-300 mt-1">h''(c) = &minus;g<sub>F</sub>(c) = &minus;1/[c(1&minus;c)]</div>
             <p class="text-kernel-500 mt-1">Entropy curvature IS the Fisher metric</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-A4</span>
             <span class="text-kernel-300 font-bold ml-2">Fisher Flatness</span>
             <div class="font-mono text-blue-300 mt-1">g<sub>F</sub>(&theta;) = 1 (flat manifold)</div>
             <p class="text-kernel-500 mt-1">All structure from embedding, not intrinsic curvature</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-A5</span>
             <span class="text-kernel-300 font-bold ml-2">&kappa; as Log-Sine</span>
             <div class="font-mono text-cyan-300 mt-1">&kappa; = 2&Sigma; w<sub>i</sub> ln|sin &theta;<sub>i</sub>|</div>
             <p class="text-kernel-500 mt-1">Log-integrity is logarithmic sine on the sphere</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-A6</span>
             <span class="text-kernel-300 font-bold ml-2">Rank-2 Closed Form</span>
             <div class="font-mono text-amber-300 mt-1">IC = &radic;(F&sup2; &minus; C&sup2;/4)</div>
             <p class="text-kernel-500 mt-1">Exact analytical solution for 2-channel systems</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-A7</span>
             <span class="text-kernel-300 font-bold ml-2">Integral Conservation</span>
             <div class="font-mono text-green-300 mt-1">&int;<sub>0</sub><sup>1</sup> [h(c) + ln(c)] dc = &minus;&frac12;</div>
@@ -498,49 +498,49 @@ const sections = [
           <span class="text-xs bg-kernel-800 px-2 py-0.5 rounded">Level B</span> Structure &mdash; 2 steps from kernel
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-B1</span>
             <span class="text-kernel-300 font-bold ml-2">Coupling Function</span>
             <div class="font-mono text-amber-300 mt-1">f(&theta;) = 2cos&sup2;&theta; &middot; ln(tan &theta;)</div>
             <p class="text-kernel-500 mt-1">S and &kappa; are projections of ONE function (verified &lt; 10<sup>&minus;16</sup>)</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-B2</span>
             <span class="text-kernel-300 font-bold ml-2">Solvability</span>
             <div class="font-mono text-cyan-300 mt-1">c<sub>1,2</sub> = F &plusmn; &radic;(F&sup2; &minus; IC&sup2;)</div>
             <p class="text-kernel-500 mt-1">Integrity bound IS the solvability condition</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-B3</span>
             <span class="text-kernel-300 font-bold ml-2">Log-Integrity Correction</span>
             <div class="font-mono text-green-300 mt-1">&kappa; = ln F &minus; C&sup2;/(8F&sup2;) + O(C&#x2074;)</div>
             <p class="text-kernel-500 mt-1">Taylor: heterogeneity correction always negative</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-B4</span>
             <span class="text-kernel-300 font-bold ml-2">Jensen Entropy Bound</span>
             <div class="font-mono text-amber-300 mt-1">S &le; h(F) &nbsp;(equality iff C = 0)</div>
             <p class="text-kernel-500 mt-1">Entropy companion to integrity bound</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-B7</span>
             <span class="text-kernel-300 font-bold ml-2">Fisher-Entropy Integral</span>
             <div class="font-mono text-purple-300 mt-1">&int;<sub>0</sub><sup>1</sup> g<sub>F</sub>(c)&middot;S(c) dc = &pi;&sup2;/3 = 2&zeta;(2)</div>
             <p class="text-kernel-500 mt-1">Kernel geometry tied to the Basel constant</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-B9</span>
             <span class="text-kernel-300 font-bold ml-2">Gap Taylor Expansion</span>
             <div class="font-mono text-yellow-300 mt-1">&Delta; &asymp; &sigma;&sup2;/(2F) = C&sup2;/(8F)</div>
             <p class="text-kernel-500 mt-1">Leading-order heterogeneity gap approximation</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-B10</span>
             <span class="text-kernel-300 font-bold ml-2">Equator Quintuple</span>
             <div class="font-mono text-green-300 mt-1">c = &frac12;: S = ln 2, S+&kappa; = 0, h' = 0, g<sub>F</sub> = 4, &theta; = &pi;/4</div>
             <p class="text-kernel-500 mt-1">Five properties converge simultaneously at the equator</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-B11</span>
             <span class="text-kernel-300 font-bold ml-2">Regime Partition</span>
             <div class="font-mono text-red-300 mt-1">Collapse 63% / Watch 24% / Stable 12.5%</div>
@@ -555,37 +555,37 @@ const sections = [
           <span class="text-xs bg-kernel-800 px-2 py-0.5 rounded">Level C</span> Skeleton &mdash; 3 steps from kernel
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-C1</span>
             <span class="text-kernel-300 font-bold ml-2">Logistic Self-Duality</span>
             <div class="font-mono text-cyan-300 mt-1">c* = &sigma;(1/c*) &nbsp;|&nbsp; c* &asymp; 0.7822</div>
             <p class="text-kernel-500 mt-1">Coupling peak is the logistic-reciprocal fixed point</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-C2</span>
             <span class="text-kernel-300 font-bold ml-2">Reflection Formula</span>
             <div class="font-mono text-amber-300 mt-1">f(&theta;) + f(&pi;/2&minus;&theta;) = 2ln(tan&theta;)cos(2&theta;)</div>
             <p class="text-kernel-500 mt-1">Equator &theta;=&pi;/4 is double zero; bridges c* and c<sub>trap</sub></p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-C3</span>
             <span class="text-kernel-300 font-bold ml-2">Composition Law</span>
             <div class="font-mono text-green-300 mt-1">IC<sub>12</sub> = &radic;(IC<sub>1</sub>&middot;IC<sub>2</sub>) &nbsp;|&nbsp; F<sub>12</sub> = (F<sub>1</sub>+F<sub>2</sub>)/2</div>
             <p class="text-kernel-500 mt-1">IC geometric, F arithmetic</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-C5</span>
             <span class="text-kernel-300 font-bold ml-2">Cubic Trapping</span>
             <div class="font-mono text-red-300 mt-1">&Gamma;(&omega;<sub>trap</sub>) = 1 &nbsp;|&nbsp; x&sup3; + x &minus; 1 = 0</div>
             <p class="text-kernel-500 mt-1">Below c<sub>trap</sub>, budget cannot close without R &gt; &Gamma;</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-C7</span>
             <span class="text-kernel-300 font-bold ml-2">Sandwich Theorem</span>
             <div class="font-mono text-blue-300 mt-1">IC &le; F &wedge; S &le; h(F) &nbsp;(both exact iff C = 0)</div>
             <p class="text-kernel-500 mt-1">Kernel sandwiched: integrity below, entropy above</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-C8</span>
             <span class="text-kernel-300 font-bold ml-2">Dimension Collapse</span>
             <div class="font-mono text-purple-300 mt-1">8 channels &rarr; 4 dimensions (PCA)</div>
@@ -600,37 +600,37 @@ const sections = [
           <span class="text-xs bg-kernel-800 px-2 py-0.5 rounded">Level D</span> Convergence &mdash; 4 steps from kernel
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-D1</span>
             <span class="text-kernel-300 font-bold ml-2">Coupling Maximum</span>
             <div class="font-mono text-amber-300 mt-1">max(S+&kappa;) = (1&minus;c*)/c* &asymp; 0.278</div>
             <p class="text-kernel-500 mt-1">Odds ratio equals exponential at c*</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-D7</span>
             <span class="text-kernel-300 font-bold ml-2">p=3 Cardano</span>
             <div class="font-mono text-red-300 mt-1">x&sup3; + x &minus; 1 = 0 &nbsp;|&nbsp; &Delta; = &minus;31 &lt; 0</div>
             <p class="text-kernel-500 mt-1">p = 3 is the UNIQUE integer with Cardano structure</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-D8</span>
             <span class="text-kernel-300 font-bold ml-2">Composition Invariance</span>
             <div class="font-mono text-green-300 mt-1">&Delta;(n copies) = &Delta;(1 copy) exactly</div>
             <p class="text-kernel-500 mt-1">Heterogeneity gap invariant under replication</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-D9</span>
             <span class="text-kernel-300 font-bold ml-2">Gap Composition</span>
             <div class="font-mono text-yellow-300 mt-1">&Delta;<sub>12</sub> = (&Delta;<sub>1</sub>+&Delta;<sub>2</sub>)/2 + (&radic;IC<sub>1</sub>&minus;&radic;IC<sub>2</sub>)&sup2;/2</div>
             <p class="text-kernel-500 mt-1">Hellinger-like correction; gap grows for unequal IC</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-D6</span>
             <span class="text-kernel-300 font-bold ml-2">Omega Hierarchy</span>
             <div class="font-mono text-blue-300 mt-1">&omega;<sub>stable</sub> &lt; &omega;* &lt; &omega;<sub>collapse</sub> &lt; &omega;<sub>trap</sub></div>
             <p class="text-kernel-500 mt-1">0.038 &lt; 0.218 &lt; 0.300 &lt; 0.682 strict ordering</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-D11</span>
             <span class="text-kernel-300 font-bold ml-2">Geodesic Partition</span>
             <div class="font-mono text-purple-300 mt-1">{'{'}c<sub>trap</sub>, &frac12;, c*, 1&minus;&varepsilon;{'}'} partition [0, &pi;]</div>
@@ -645,37 +645,37 @@ const sections = [
           <span class="text-xs bg-kernel-800 px-2 py-0.5 rounded">Level E</span> Discovery &mdash; 5 steps from kernel
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-E1</span>
             <span class="text-kernel-300 font-bold ml-2">Cost Cross-Product</span>
             <div class="font-mono text-red-300 mt-1">&Gamma;(&omega;)&middot;&Gamma;(1&minus;&omega;) = [&omega;(1&minus;&omega;)]<sup>p&minus;1</sup></div>
             <p class="text-kernel-500 mt-1">Cost function reflection law; p=3: product = square</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-E2</span>
             <span class="text-kernel-300 font-bold ml-2">Trapping Echo</span>
             <div class="font-mono text-amber-300 mt-1">(S+&kappa;)(1&minus;c*) = &minus;1 exactly</div>
             <p class="text-kernel-500 mt-1">Coupling at reflected fixed point = exactly &minus;1 (integer resonance)</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-E3</span>
             <span class="text-kernel-300 font-bold ml-2">Departure Half</span>
             <div class="font-mono text-cyan-300 mt-1">1 &minus; IC/F = Var(c)/(2F&sup2;) with &beta; = &frac12;</div>
             <p class="text-kernel-500 mt-1">Fractional IC deficit has coefficient exactly &frac12;</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-E6</span>
             <span class="text-kernel-300 font-bold ml-2">Log-Variance Gap</span>
             <div class="font-mono text-green-300 mt-1">&Delta; &asymp; IC &middot; Var(ln c) / 2</div>
             <p class="text-kernel-500 mt-1">Alternative gap formula &mdash; 1.45&times; more accurate than Taylor</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-E8</span>
             <span class="text-kernel-300 font-bold ml-2">Algebraic Signature</span>
             <div class="font-mono text-blue-300 mt-1">F,&omega;,S,&kappa;: arithmetic &nbsp;|&nbsp; IC: geometric &nbsp;|&nbsp; C,&Delta;: none</div>
             <p class="text-kernel-500 mt-1">Complete composition classification of all 7 kernel outputs</p>
           </div>
-          <div class="bg-kernel-900 border border-kernel-800 rounded p-3">
+          <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3">
             <span class="font-mono text-kernel-600">I-E9</span>
             <span class="text-kernel-300 font-bold ml-2">Sensitivity Divergence</span>
             <div class="font-mono text-red-300 mt-1">&part;&kappa;/&part;c<sub>i</sub> = w<sub>i</sub>/c<sub>i</sub> &rarr; &infin; as c<sub>i</sub> &rarr; 0</div>
@@ -689,7 +689,7 @@ const sections = [
     <section id="composition" class="mb-10">
       <h2 class="text-xl font-bold text-kernel-100 mb-4">Composition Laws</h2>
       <p class="text-xs text-kernel-500 mb-4 italic">How kernel outputs compose when subsystems are combined. IC geometric, F arithmetic, C does not compose.</p>
-      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <div class="overflow-x-auto">
           <table class="w-full text-xs">
             <thead>
@@ -757,7 +757,7 @@ const sections = [
         <div>
           <h3 class="text-sm font-bold text-kernel-300 mb-3">Geodesic Partition <span class="text-kernel-600 font-normal">(I-D11)</span></h3>
           <div class="space-y-2">
-            <div class="bg-kernel-900 border border-kernel-800 rounded p-3 text-xs">
+            <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3 text-xs">
               <div class="flex items-center justify-between">
                 <span class="text-kernel-300 font-bold">&varepsilon; = 10<sup>&minus;8</sup></span>
                 <span class="text-kernel-600">&theta;/&pi; &asymp; 0</span>
@@ -785,7 +785,7 @@ const sections = [
               </div>
               <p class="text-kernel-500 mt-1">Self-dual &mdash; maximizes S + &kappa; per channel</p>
             </div>
-            <div class="bg-kernel-900 border border-kernel-800 rounded p-3 text-xs">
+            <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3 text-xs">
               <div class="flex items-center justify-between">
                 <span class="text-kernel-300 font-bold">c &asymp; 1</span>
                 <span class="text-kernel-600">&theta;/&pi; &asymp; 0.5</span>
@@ -798,27 +798,27 @@ const sections = [
         <div>
           <h3 class="text-sm font-bold text-kernel-300 mb-3">Fisher Metric Results</h3>
           <div class="space-y-2">
-            <div class="bg-kernel-900 border border-kernel-800 rounded p-3 text-xs">
+            <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3 text-xs">
               <span class="text-kernel-300 font-bold">g<sub>F</sub>(c)</span>
               <div class="font-mono text-purple-300 mt-1">g<sub>F</sub>(c) = 1 / [c(1 &minus; c)]</div>
               <p class="text-kernel-500 mt-1">Fisher metric in c-parameterization</p>
             </div>
-            <div class="bg-kernel-900 border border-kernel-800 rounded p-3 text-xs">
+            <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3 text-xs">
               <span class="text-kernel-300 font-bold">g<sub>F</sub>(&theta;)</span>
               <div class="font-mono text-blue-300 mt-1">g<sub>F</sub>(&theta;) = 1 (flat!)</div>
               <p class="text-kernel-500 mt-1">Manifold is flat in Fisher coordinates &mdash; all structure from embedding</p>
             </div>
-            <div class="bg-kernel-900 border border-kernel-800 rounded p-3 text-xs">
+            <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3 text-xs">
               <span class="text-kernel-300 font-bold">Fano-Fisher</span>
               <div class="font-mono text-green-300 mt-1">h''(c) = &minus;g<sub>F</sub>(c)</div>
               <p class="text-kernel-500 mt-1">Entropy curvature IS the Fisher metric (I-A3)</p>
             </div>
-            <div class="bg-kernel-900 border border-kernel-800 rounded p-3 text-xs">
+            <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3 text-xs">
               <span class="text-kernel-300 font-bold">&int; g<sub>F</sub>&middot;S</span>
               <div class="font-mono text-amber-300 mt-1">&int;<sub>0</sub><sup>1</sup> g<sub>F</sub>(c) &middot; S(c) dc = &pi;&sup2;/3</div>
               <p class="text-kernel-500 mt-1">= 2&zeta;(2) &mdash; the Basel constant (I-B7)</p>
             </div>
-            <div class="bg-kernel-900 border border-kernel-800 rounded p-3 text-xs">
+            <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-lg p-3 text-xs">
               <span class="text-kernel-300 font-bold">Rank Classification</span>
               <div class="font-mono text-cyan-300 mt-1 space-y-0.5">
                 <p>Rank-1: all c<sub>i</sub>=c<sub>0</sub> &rarr; IC=F, C=0 (1 DOF)</p>
@@ -849,7 +849,7 @@ const sections = [
       <!-- Core Identities -->
       <div class="mb-4">
         <h3 class="text-sm font-bold text-kernel-300 mb-2">Core Identities</h3>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
             <div class="bg-kernel-800/50 rounded p-3">
               <code class="text-green-400">F + omega</code>
@@ -874,7 +874,7 @@ const sections = [
       <!-- Coherence & Gap -->
       <div class="mb-4">
         <h3 class="text-sm font-bold text-kernel-300 mb-2">Coherence &amp; Gap Analysis</h3>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
             <div class="bg-kernel-800/50 rounded p-3">
               <code class="text-cyan-400">IC / F</code>
@@ -899,7 +899,7 @@ const sections = [
       <!-- Entropy & Coupling -->
       <div class="mb-4">
         <h3 class="text-sm font-bold text-kernel-300 mb-2">Entropy &amp; Coupling</h3>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
             <div class="bg-kernel-800/50 rounded p-3">
               <code class="text-amber-400">S + kappa</code>
@@ -924,7 +924,7 @@ const sections = [
       <!-- Drift Cost & Budget -->
       <div class="mb-4">
         <h3 class="text-sm font-bold text-kernel-300 mb-2">Drift Cost &amp; Seam Budget</h3>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
             <div class="bg-kernel-800/50 rounded p-3">
               <code class="text-red-400">omega**3 / (1 - omega + 1e-8)</code>
@@ -949,7 +949,7 @@ const sections = [
       <!-- Fisher Geometry -->
       <div class="mb-4">
         <h3 class="text-sm font-bold text-kernel-300 mb-2">Fisher Geometry</h3>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
             <div class="bg-kernel-800/50 rounded p-3">
               <code class="text-purple-400">1 / (F * (1 - F))</code>
@@ -974,7 +974,7 @@ const sections = [
       <!-- Regime Detection -->
       <div class="mb-4">
         <h3 class="text-sm font-bold text-kernel-300 mb-2">Regime Detection</h3>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
             <div class="bg-kernel-800/50 rounded p-3">
               <code class="text-blue-400">omega &lt; 0.038</code>
@@ -999,7 +999,7 @@ const sections = [
       <!-- Key Lemmas -->
       <div class="mb-4">
         <h3 class="text-sm font-bold text-kernel-300 mb-2">Key Lemma Expressions</h3>
-        <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-4">
+        <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
             <div class="bg-kernel-800/50 rounded p-3">
               <code class="text-yellow-400">IC * (1/F)</code>
@@ -1025,7 +1025,7 @@ const sections = [
     <!-- ═══════════ §12: REFERENCE ═══════════ -->
     <section id="reference" class="mb-10">
       <h2 class="text-xl font-bold text-kernel-100 mb-4">Variable Reference</h2>
-      <div class="bg-kernel-900 border border-kernel-800 rounded-xl p-5">
+      <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
         <div class="overflow-x-auto">
           <table class="w-full text-xs">
             <thead>
