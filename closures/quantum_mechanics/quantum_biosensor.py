@@ -79,7 +79,7 @@ for _p in [str(_WORKSPACE / "src"), str(_WORKSPACE)]:
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from umcp.frozen_contract import EPSILON  # noqa: E402
+from umcp.frozen_contract import ALPHA, EPSILON, P_EXPONENT, TOL_SEAM  # noqa: E402
 from umcp.kernel_optimized import compute_kernel_outputs  # noqa: E402
 
 # ── Frozen normalization constants (seam-derived, not chosen) ───────────────
@@ -1069,7 +1069,7 @@ def full_analysis_report() -> None:
 
     # STOP 1: CONTRACT
     print("\n── STOP 1 │ CONTRACT ────────────────────────────────────────────")
-    print(f"  ε = {EPSILON:.0e}  |  tol_seam = 0.005  |  p = 3  |  α = 1.0")
+    print(f"  ε = {EPSILON:.0e}  |  tol_seam = {TOL_SEAM}  |  p = {P_EXPONENT}  |  α = {ALPHA}")
     print("  Channels: 8 (coherence_time, readout, sensitivity, resolution,")
     print("              biocompat, target_specificity, noise_rejection, scale)")
     print("  Platforms: 12  |  Weights: uniform (1/8 each)")
