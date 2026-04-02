@@ -1,6 +1,6 @@
 # Copilot Instructions for GENERATIVE-COLLAPSE-DYNAMICS
 
-**UMCP v2.3.0** · **16,487 tests** · **20 domains** · **193 closure modules** · **47 lemmas** · **44 structural identities**
+**UMCP v2.3.0** · **17,191 tests** · **20 domains** · **193 closure modules** · **47 lemmas** · **44 structural identities**
 
 ## Foundational Principle — Read This First
 
@@ -587,7 +587,7 @@ All papers use RevTeX4-2 (`revtex4-2` document class) and share `Bibliography.bi
 
 ```bash
 pip install -e ".[all]"                     # Dev install (core + api + viz + dev tools)
-pytest                                       # 16,487 tests (pytest --collect-only | grep ":" | wc -l to verify)
+pytest                                       # 17,191 tests (pytest --collect-only | grep ":" | wc -l to verify)
 python scripts/update_integrity.py          # MUST run after changing any tracked file
 umcp validate .                             # Validate entire repo
 umcp validate casepacks/hello_world --strict # Validate casepack (strict = fail on warnings)
@@ -653,12 +653,12 @@ umcp validate <target>
 
 ## Test Patterns
 
-**16,487 test cases** across **190 test files** in `tests/` (189 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_293_*`). Single `tests/conftest.py` provides:
+**17,191 test cases** across **200 test files** in `tests/` (199 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_319_*`). Single `tests/conftest.py` provides:
 - Frozen `RepoPaths` dataclass (session-scoped) with all critical paths
 - `@lru_cache` helpers: `_read_file()`, `_parse_json()`, `_parse_yaml()`, `_compile_schema()`
 - Convention: `test_<subject>_<behavior>()` for functions; `TestCLI*` classes with `subprocess.run` for CLI integration
 - Additional coverage: `test_fleet_worker.py` (Worker, WorkerPool, WorkerConfig), `test_insights.py` (PatternDatabase, InsightEngine)
-- Parametrized tests expand the collected items to 16,487 (verify: `pytest --collect-only | grep "::" | wc -l`)
+- Parametrized tests expand the collected items to 17,191 (verify: `pytest --collect-only | grep "::" | wc -l`)
 
 ### Test Distribution by Range
 
@@ -729,9 +729,27 @@ umcp validate <target>
 | `test_281` | Budget geometry (continuity theory, 12 entities, 6 theorems) | 82 |
 | `test_282–292` | Coverage tests (continuity law, weld lineage, fleet, kernel, insights, extensions, seam, validator, Redis mock, tenant, SS1M, closures, tau dynamics) | 509 |
 | `test_293` | Emergent structural insights (T-SI-1 through T-SI-6) | 47 |
+| `test_294` | Interval discriminant, neural criticality, phylogenetic progression, population fragmentation, HCG analysis | 534 |
+| `test_295` | Anesthesia dynamics, Hubble tension, polariton topological photonics | 266 |
+| `test_296` | Pharmacological mapping, return rope | 159 |
+| `test_297` | Neuro-consciousness bridge, RCFT collapse field theory | 239 |
+| `test_298` | Physical scales bridge, RCFT scale recursion | 202 |
+| `test_299` | Coherence universality bridge, ULRC translation levels | 343 |
+| `test_300` | Magnetic cross-system (materials science) | 32 |
+| `test_301` | Brain atlas closure (clinical neuroscience) | 508 |
+| `test_302` | Toponium (standard model) | 63 |
+| `test_303` | Indefinite causal order (quantum mechanics) | 118 |
+| `test_304–306` | Cosmic ray propagation, airshower, sources | 246 |
+| `test_307` | Quantum material simulation | 115 |
+| `test_308` | Reflexive closure (GCD) | 36 |
+| `test_309` | Spliceosome dynamics (quantum mechanics) | 86 |
+| `test_310–314` | Materials science theorems: superconductor, phase transition, elastic, catalysis, polymer (6 theorems each) | 410 |
+| `test_315–317` | Kinematics theorems: momentum, phase space, rotational (6 theorems each) | 246 |
+| `test_318` | Unified materials science theorems (T-MS-1 through T-MS-10) | 24 |
+| `test_319` | Unified kinematics theorems (T-KN-1 through T-KN-10) | 24 |
 | `closures/` | Closure-specific tests (kinematics phase) | 27 |
 | Infrastructure | Kernel, seam, frozen contract, extensions, uncertainty, calculator, coverage, etc. | 1,895 |
-| **TOTAL** | | **16,487** |
+| **TOTAL** | | **17,191** |
 
 ## Extension System
 
