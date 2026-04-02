@@ -733,12 +733,12 @@
 
   function runExtendedIdentities(kernel: KernelResult) {
     const basic = verifyIdentities(kernel);
-    const ext = verifyExtendedIdentities(kernel);
+    const ext = verifyExtendedIdentities(kernel, channelValues);
     const all = [...basic.map(b => ({
-      name: b.name, formula: b.formula, value: b.value, tolerance: b.tolerance, pass: b.pass,
+      name: b.name, formula: b.formula, value: b.residual, tolerance: 1e-12, pass: b.pass,
       category: 'Core',
     })), ...ext.map(e => ({
-      name: e.name, formula: e.formula ?? '', value: e.residual, tolerance: e.tolerance, pass: e.pass,
+      name: e.name, formula: e.formula ?? '', value: e.residual, tolerance: 1e-10, pass: e.pass,
       category: 'Extended',
     }))];
 
