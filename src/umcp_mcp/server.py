@@ -491,8 +491,4 @@ def main() -> None:
     """Run the UMCP MCP server."""
     import sys
 
-    transport = "stdio"
-    if "--sse" in sys.argv:
-        transport = "sse"
-
-    mcp.run(transport=transport)
+    mcp.run(transport="sse" if "--sse" in sys.argv else "stdio")
