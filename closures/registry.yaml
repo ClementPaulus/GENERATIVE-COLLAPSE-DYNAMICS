@@ -1074,6 +1074,43 @@ registry:
           - "closures/dynamic_semiotics/semiotic_kernel.py"
           - "closures/dynamic_semiotics/computational_semiotics.py"
           - "canon/semiotics_anchors.yaml"
+      - name: "malbolge_vm"
+        path: "closures/dynamic_semiotics/malbolge_vm.py"
+        description: "Complete Malbolge virtual machine: ternary (base-3) arithmetic, 59049-cell memory, xlat1 cipher (derangement, cycle structure [2,4,5,6,9,68]), crazy tritwise operation, 8 instructions. Faithful implementation following reference interpreter conventions."
+        contract: "UMA.INTSTACK.v1"
+        inputs: ["malbolge_program_source"]
+        outputs: ["execution_trace", "output_string", "vm_state_history"]
+        frozen_params:
+          epsilon: 1.0e-8
+          memory_size: 59049
+          max_trit: 10
+          xlat1_length: 94
+        cross_references:
+          - "closures/dynamic_semiotics/malbolge_kernel.py"
+          - "closures/dynamic_semiotics/malbolge_dynamics.py"
+      - name: "malbolge_dynamics"
+        path: "closures/dynamic_semiotics/malbolge_dynamics.py"
+        description: "Malbolge execution trajectory analysis through GCD kernel. Runs programs in the VM, extracts 8 dynamic channels per step (instruction_clarity, cipher_preservation, accumulator_stability, control_linearity, pointer_proximity, output_density, memory_preservation, execution_phase), computes kernel at each step. 6 theorems (T-MD-1 through T-MD-6) on ternary closure, cipher derangement, halt correctness, output validation, memory fill attractor, trajectory collapse dominance."
+        contract: "UMA.INTSTACK.v1"
+        inputs: ["malbolge_program_source", "input_data"]
+        outputs: ["F", "omega", "S", "C", "kappa", "IC", "regime", "trajectory"]
+        channels:
+          - "instruction_clarity"
+          - "cipher_preservation"
+          - "accumulator_stability"
+          - "control_linearity"
+          - "pointer_proximity"
+          - "output_density"
+          - "memory_preservation"
+          - "execution_phase"
+        frozen_params:
+          epsilon: 1.0e-8
+          n_channels: 8
+          window_size: 10
+        cross_references:
+          - "closures/dynamic_semiotics/malbolge_vm.py"
+          - "closures/dynamic_semiotics/malbolge_kernel.py"
+          - "canon/semiotics_anchors.yaml"
 
     continuity_theory:
       - name: "butzbach_embedding"

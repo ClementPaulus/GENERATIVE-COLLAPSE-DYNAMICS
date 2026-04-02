@@ -1,6 +1,6 @@
 # Copilot Instructions for GENERATIVE-COLLAPSE-DYNAMICS
 
-**UMCP v2.3.0** · **18,018 tests** · **20 domains** · **218 closure modules** · **47 lemmas** · **44 structural identities**
+**UMCP v2.3.0** · **18,108 tests** · **20 domains** · **220 closure modules** · **47 lemmas** · **44 structural identities**
 
 ## Foundational Principle — Read This First
 
@@ -470,7 +470,7 @@ closures/
 ├── materials_science/        # Element database (118 elements, 18 fields)
 ├── everyday_physics/         # Thermodynamics, optics, electromagnetism, wave phenomena, fluid dynamics
 ├── evolution/                # 40 organisms, 10-channel brain kernel, 20 species comparative neuroscience
-├── dynamic_semiotics/        # 30 sign systems, 8-channel semiotic kernel, media coherence, computational semiotics, Malbolge kernel (12 esoteric languages, 6 theorems)
+├── dynamic_semiotics/        # 30 sign systems, 8-channel semiotic kernel, media coherence, computational semiotics, Malbolge kernel (12 esoteric languages, 6 theorems), Malbolge VM + dynamics (6 theorems)
 ├── consciousness_coherence/  # 20 systems, coherence kernel, 7 theorems, altered states (15 states, 6 theorems), neural correlates
 ├── continuity_theory/        # Continuity law closures, topological persistence (12 spaces, 6 theorems), organizational resilience, budget geometry (12 entities, 6 theorems)
 ├── awareness_cognition/      # 5+5 channel awareness-aptitude kernel, 10 theorems, attention mechanisms
@@ -587,7 +587,7 @@ All papers use RevTeX4-2 (`revtex4-2` document class) and share `Bibliography.bi
 
 ```bash
 pip install -e ".[all]"                     # Dev install (core + api + viz + dev tools)
-pytest                                       # 18,018 tests (pytest --collect-only | grep ":" | wc -l to verify)
+pytest                                       # 18,108 tests (pytest --collect-only | grep ":" | wc -l to verify)
 python scripts/update_integrity.py          # MUST run after changing any tracked file
 umcp validate .                             # Validate entire repo
 umcp validate casepacks/hello_world --strict # Validate casepack (strict = fail on warnings)
@@ -653,12 +653,12 @@ umcp validate <target>
 
 ## Test Patterns
 
-**18,018 test cases** across **207 test files** in `tests/` (206 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_324_*`). Single `tests/conftest.py` provides:
+**18,108 test cases** across **208 test files** in `tests/` (207 top-level `test_*.py` + 1 in `tests/closures/` + `conftest.py`), numbered by tier and domain (`test_000_*` through `test_325_*`). Single `tests/conftest.py` provides:
 - Frozen `RepoPaths` dataclass (session-scoped) with all critical paths
 - `@lru_cache` helpers: `_read_file()`, `_parse_json()`, `_parse_yaml()`, `_compile_schema()`
 - Convention: `test_<subject>_<behavior>()` for functions; `TestCLI*` classes with `subprocess.run` for CLI integration
 - Additional coverage: `test_fleet_worker.py` (Worker, WorkerPool, WorkerConfig), `test_insights.py` (PatternDatabase, InsightEngine)
-- Parametrized tests expand the collected items to 18,018 (verify: `pytest --collect-only | grep "::" | wc -l`)
+- Parametrized tests expand the collected items to 18,108 (verify: `pytest --collect-only | grep "::" | wc -l`)
 
 ### Test Distribution by Range
 
@@ -752,9 +752,10 @@ umcp validate <target>
 | `test_322` | Attack surface kernel (12 entities, 6 theorems T-ATK-1–T-ATK-6) | 82 |
 | `test_323` | MCP server (kernel, regime, seam, identities, orientation, batch) | 44 |
 | `test_324` | Malbolge kernel (12 esoteric languages, 6 theorems T-MB-1–T-MB-6) | 160 |
+| `test_325` | Malbolge dynamics (VM, trajectory, 6 theorems T-MD-1–T-MD-6) | 90 |
 | `closures/` | Closure-specific tests (kinematics phase) | 27 |
 | Infrastructure | Kernel, seam, frozen contract, extensions, uncertainty, calculator, coverage, etc. | 1,939 |
-| **TOTAL** | | **18,018** |
+| **TOTAL** | | **18,108** |
 
 ## Extension System
 
