@@ -11,16 +11,19 @@ import math
 import numpy as np
 import pytest
 
-from umcp_mcp.server import (
-    check_identities,
-    classify_regime_tool,
-    compute_costs,
-    compute_kernel,
-    compute_kernel_batch,
-    frozen_parameters,
-    orientation_receipts,
-    validate_seam,
-)
+try:
+    from umcp_mcp.server import (
+        check_identities,
+        classify_regime_tool,
+        compute_costs,
+        compute_kernel,
+        compute_kernel_batch,
+        frozen_parameters,
+        orientation_receipts,
+        validate_seam,
+    )
+except ImportError:
+    pytest.skip("mcp package not installed", allow_module_level=True)
 
 # ---------------------------------------------------------------------------
 # compute_kernel

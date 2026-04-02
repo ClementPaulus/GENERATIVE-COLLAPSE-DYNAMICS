@@ -18,7 +18,11 @@ from __future__ import annotations
 from typing import Any
 
 import numpy as np
-from mcp.server.fastmcp import FastMCP
+
+try:
+    from mcp.server.fastmcp import FastMCP
+except ModuleNotFoundError:  # optional dependency
+    FastMCP = None  # type: ignore[assignment, misc]
 
 from umcp.frozen_contract import (
     ALPHA,
@@ -37,6 +41,10 @@ from umcp.kernel_optimized import KernelOutputs, OptimizedKernelComputer
 # ---------------------------------------------------------------------------
 # Server
 # ---------------------------------------------------------------------------
+
+if FastMCP is None:
+    msg = "The 'mcp' package is required: pip install 'mcp[cli]>=1.0.0'"
+    raise ImportError(msg)
 
 mcp = FastMCP(
     "umcp",
