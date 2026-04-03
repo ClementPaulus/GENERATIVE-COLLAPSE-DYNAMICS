@@ -1,15 +1,17 @@
 /**
- * WebGL Immersive Space Simulator -- ESA-style Black Hole Environment
+ * WebGL Immersive Space Simulator — Ray-Traced Kerr Black Hole
  *
- * Full-screen 3D space simulation with:
- *   - Schwarzschild-like black hole (event horizon shadow)
- *   - Gravitational lensing distortion of background starfield
- *   - Accretion disk with Doppler beaming
- *   - Photon ring glow
+ * Full-screen ray-marching through curved Kerr spacetime:
+ *   - Geodesic integration (Schwarzschild + frame-dragging correction)
+ *   - Accretion disk with Novikov-Thorne temperature, Doppler beaming, gravitational redshift
+ *   - Multiple disk images (light bending shows far side of disk over shadow)
+ *   - Photon ring structure at shadow boundary
+ *   - Procedural starfield with gravitational lensing
+ *   - Particle overlay (relativistic jets, infalling matter, tidal streams)
  *   - Orbital camera with mouse look + scroll zoom
- *   - Real-time HUD with GCD kernel readouts (Γ, ω, regime, redshift, v_esc)
+ *   - Real-time HUD with GCD kernel readouts
  *
- * All physics derived from GCD kernel -- Tier-0 Protocol.
+ * All physics derived from GCD kernel — Tier-0 Protocol.
  * No Tier-1 symbol is redefined.
  */
 
@@ -24,7 +26,7 @@ import {
 import { EPSILON, P_EXPONENT } from './constants';
 
 /* ===================================================================
-   S1  LINEAR ALGEBRA (column-major 4*4)
+   S1  LINEAR ALGEBRA (column-major 4×4)
    =================================================================== */
 
 type Mat4 = Float32Array;
@@ -101,37 +103,42 @@ function lookAt(eye: Vec3, target: Vec3, up: Vec3): Mat4 {
 }
 
 /* ===================================================================
-   S2  SHADERS
+   S2  SHADERS — Ray-Traced Kerr Black Hole
    =================================================================== */
 
-// -- Full-screen quad for space background + gravitational lensing --
-const BG_VERT = `
+const RT_VERT = `
 attribute vec2 aPos;
-varying vec2 vUV;
 void main() {
-  vUV = aPos * 0.5 + 0.5;
   gl_Position = vec4(aPos, 0.0, 1.0);
 }
 `;
 
-const BG_FRAG = `
+const RT_FRAG = `
 precision highp float;
-varying vec2 vUV;
-uniform vec2 uBHScreen;      // black hole center in screen [0,1]
-uniform float uBHRadius;     // angular radius of event horizon
-uniform float uLensStrength;  // gravitational lensing magnitude
-uniform float uTime;
-uniform float uSpinStar;     // dimensionless spin parameter a*
-uniform float uGWStrain;     // gravitational wave strain
 
-// Pseudo-random hash for star generation
+uniform vec2  uResolution;
+uniform float uTime;
+uniform float uSpinStar;
+uniform vec3  uCamPos;
+uniform vec3  uCamRight;
+uniform vec3  uCamUp;
+uniform vec3  uCamFwd;
+uniform float uFovTan;
+uniform float uGWStrain;
+
+#define PI     3.14159265359
+#define RS     1.0
+#define M_BH   (RS * 0.5)
+#define STEPS  200
+#define FAR    80.0
+
+// ── Hash & noise ──
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
   p += dot(p, p + 45.32);
   return fract(p.x * p.y);
 }
 
-// 2D simplex-like noise for nebula
 float noise(vec2 p) {
   vec2 i = floor(p);
   vec2 f = fract(p);
@@ -143,307 +150,263 @@ float noise(vec2 p) {
   return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
 }
 
-// Fractal Brownian Motion for nebula clouds
 float fbm(vec2 p) {
-  float v = 0.0;
-  float a = 0.5;
-  for (int i = 0; i < 4; i++) {
+  float v = 0.0, a = 0.5;
+  for (int i = 0; i < 5; i++) {
     v += a * noise(p);
     p *= 2.1;
-    a *= 0.5;
+    a *= 0.48;
   }
   return v;
 }
 
-// Procedural starfield -- 5 layers for depth
-vec3 starfield(vec2 uv) {
+// ── Direction to equirectangular UV ──
+vec2 dirToUV(vec3 d) {
+  float lon = atan(d.z, d.x);
+  float lat = asin(clamp(d.y, -1.0, 1.0));
+  return vec2(lon / (2.0 * PI) + 0.5, lat / PI + 0.5);
+}
+
+// ── Procedural starfield from 3D direction ──
+vec3 starfield(vec3 dir) {
+  vec2 eq = dirToUV(dir);
   vec3 col = vec3(0.0);
-  // 5 layers at different scales and densities
+
   for (int layer = 0; layer < 5; layer++) {
-    float scale = 60.0 + float(layer) * 90.0;
-    float threshold = 0.965 + float(layer) * 0.005;
-    vec2 id = floor(uv * scale);
-    vec2 f = fract(uv * scale) - 0.5;
+    float scale = 80.0 + float(layer) * 120.0;
+    float threshold = 0.968 + float(layer) * 0.004;
+    vec2 id = floor(eq * scale);
+    vec2 f  = fract(eq * scale) - 0.5;
     float h = hash(id + float(layer) * 100.0);
     if (h > threshold) {
       float brightness = (h - threshold) / (1.0 - threshold);
       float r = length(f);
-      // Point-spread function with diffraction spikes for bright stars
-      float star = smoothstep(0.12, 0.0, r) * brightness;
-      if (layer < 2 && brightness > 0.6) {
-        // Diffraction spikes on brightest stars (4-point)
+      float star = smoothstep(0.08, 0.0, r) * brightness;
+      if (layer < 2 && brightness > 0.5) {
         float spike = max(
-          exp(-abs(f.x) * 30.0) * exp(-abs(f.y) * 200.0),
-          exp(-abs(f.y) * 30.0) * exp(-abs(f.x) * 200.0)
-        ) * brightness * 0.4;
+          exp(-abs(f.x) * 40.0) * exp(-abs(f.y) * 250.0),
+          exp(-abs(f.y) * 40.0) * exp(-abs(f.x) * 250.0)
+        ) * brightness * 0.3;
         star += spike;
       }
-      // Star color temperature: blue-white to orange-red
       float temp = hash(id * 2.0 + 7.0);
       vec3 starCol = temp < 0.3
-        ? mix(vec3(0.5, 0.6, 1.0), vec3(0.7, 0.8, 1.0), temp / 0.3)   // O/B blue
+        ? mix(vec3(0.5, 0.65, 1.0), vec3(0.7, 0.85, 1.0), temp / 0.3)
         : temp < 0.6
-          ? mix(vec3(0.9, 0.95, 1.0), vec3(1.0, 1.0, 0.9), (temp - 0.3) / 0.3) // A/F white
+          ? mix(vec3(0.9, 0.95, 1.0), vec3(1.0, 1.0, 0.9), (temp - 0.3) / 0.3)
           : temp < 0.8
-            ? mix(vec3(1.0, 0.95, 0.7), vec3(1.0, 0.85, 0.5), (temp - 0.6) / 0.2)  // G/K yellow
-            : vec3(1.0, 0.6, 0.3);  // M red
-      // Twinkling
-      float twinkle = 0.7 + 0.3 * sin(uTime * (1.0 + h * 3.0) + h * 100.0);
+            ? mix(vec3(1.0, 0.95, 0.7), vec3(1.0, 0.85, 0.5), (temp - 0.6) / 0.2)
+            : vec3(1.0, 0.6, 0.3);
+      float twinkle = 0.8 + 0.2 * sin(uTime * (1.0 + h * 2.0) + h * 100.0);
       col += starCol * star * twinkle;
     }
   }
-  // Deep nebula layer (fBm-based)
-  float neb = fbm(uv * 6.0 + vec2(uTime * 0.003, 0.0));
-  float neb2 = fbm(uv * 10.0 - vec2(0.0, uTime * 0.005));
-  col += vec3(0.12, 0.03, 0.18) * neb * 0.08;
-  col += vec3(0.02, 0.08, 0.15) * neb2 * 0.05;
+
+  float neb  = fbm(eq * 8.0  + vec2(uTime * 0.002, 0.0));
+  float neb2 = fbm(eq * 12.0 - vec2(0.0, uTime * 0.003));
+  col += vec3(0.12, 0.03, 0.18) * neb  * 0.06;
+  col += vec3(0.02, 0.08, 0.15) * neb2 * 0.04;
+
+  float band = exp(-dir.y * dir.y * 8.0) * 0.025;
+  col += vec3(0.15, 0.12, 0.10) * band;
+
   return col;
 }
 
+// ── Kerr ISCO (prograde, simulation coords) ──
+float kerrISCO(float a) {
+  float a2 = a * a;
+  float z1 = 1.0 + pow(max(1.0 - a2, 1e-6), 1.0/3.0)
+            * (pow(1.0 + a, 1.0/3.0) + pow(max(1.0 - a, 1e-4), 1.0/3.0));
+  float z2 = sqrt(3.0 * a2 + z1 * z1);
+  return (3.0 + z2 - sqrt(max((3.0 - z1) * (3.0 + z1 + 2.0 * z2), 0.0))) * M_BH;
+}
+
+// ── Blackbody color ──
+vec3 blackbody(float T) {
+  vec3 c;
+  c.r = smoothstep(0.0,  0.33, T);
+  c.g = smoothstep(0.15, 0.55, T) * (1.0 - smoothstep(1.2, 2.5, T) * 0.3);
+  c.b = smoothstep(0.35, 0.85, T);
+  c += vec3(0.15) * smoothstep(1.0, 2.0, T);
+  return c;
+}
+
+// ── ACES filmic tone mapping ──
+vec3 ACESFilm(vec3 x) {
+  float a = 2.51, b = 0.03, c = 2.43, d = 0.59, e = 0.14;
+  return clamp((x * (a * x + b)) / (x * (c * x + d) + e), 0.0, 1.0);
+}
+
 void main() {
-  vec2 uv = vUV;
-  vec2 centered = uv - uBHScreen;
-  float dist = length(centered);
-  vec2 dir = centered / max(dist, 0.001);
+  // ─ 1. Camera ray ─
+  vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution) / uResolution.y;
+  vec3 rd = normalize(uCamRight * uv.x + uCamUp * uv.y + uCamFwd * uFovTan);
+  vec3 pos = uCamPos;
+  vec3 vel = rd;
 
-  // -- Gravitational wave ripple distortion --
-  float gwPhase = dist * 40.0 - uTime * 3.0;
-  float gwRipple = sin(gwPhase) * uGWStrain * 0.02;
-  vec2 gwOffset = dir * gwRipple;
+  // ─ 2. Disk extent ─
+  float diskInner = kerrISCO(uSpinStar);
+  float diskOuter = diskInner * 5.5;
 
-  // -- Frame-dragging (Lense-Thirring): twist coordinates near BH --
-  float dragAngle = uSpinStar * 0.8 / (dist * dist + 0.01);
-  float cosD = cos(dragAngle);
-  float sinD = sin(dragAngle);
-  vec2 draggedCenter = vec2(
-    centered.x * cosD - centered.y * sinD,
-    centered.x * sinD + centered.y * cosD
-  );
-  // Blend: more twisting closer to BH
-  float dragBlend = smoothstep(0.5, 0.05, dist);
-  centered = mix(centered, draggedCenter, dragBlend) + gwOffset;
-  dist = length(centered);
-  dir = centered / max(dist, 0.001);
+  // ─ 3. Accumulators ─
+  vec3  color    = vec3(0.0);
+  float alpha    = 0.0;
+  bool  captured = false;
+  float minDist  = FAR;
 
-  // -- Gravitational lensing distortion --
-  float rEinstein = sqrt(uLensStrength) * 0.15;
-  // Higher-order deflection: point mass + spin correction
-  float deflection = rEinstein * rEinstein / max(dist, 0.001);
-  // Spin adds tangential deflection component
-  float tangentialDefl = uSpinStar * deflection * 0.15;
-  deflection = min(deflection, 0.5);
-  tangentialDefl = min(tangentialDefl, 0.1);
-  // Radial + tangential deflection
-  vec2 tangent = vec2(-dir.y, dir.x);
-  vec2 lensedUV = uv + dir * deflection + tangent * tangentialDefl;
+  // ─ 4. Ray march through curved spacetime ─
+  for (int i = 0; i < STEPS; i++) {
+    float r  = length(pos);
+    minDist  = min(minDist, r);
 
-  // -- Event horizon shadow --
-  float horizonR = uBHRadius;
-  float photonR = horizonR * 1.5;
-  float shadowR = horizonR * 2.6;
+    if (r < RS * 0.5) { captured = true; break; }
+    if (r > FAR) break;
+    if (alpha > 0.97) break;
 
-  // -- Render starfield with lensing --
-  vec3 col = starfield(lensedUV);
+    // Geodesic acceleration
+    vec3  h_vec = cross(pos, vel);
+    float h2    = dot(h_vec, h_vec);
+    float r2    = r * r;
+    float r5    = r2 * r2 * r;
 
-  // -- Photon ring sub-structure (n=0,1,2,3 sub-rings) --
-  // Each successive sub-ring is exponentially demagnified and thinner
-  // Physical: photons completing n half-orbits form nested ring images
-  vec3 ringColor = vec3(1.0, 0.88, 0.45);
-  for (int n = 0; n < 4; n++) {
-    float nf = float(n);
-    float demag = exp(-3.14159 * nf * 0.7);  // Lyapunov demagnification
-    float subRingR = photonR * (1.0 + demag * 0.35);
-    float subRingWidth = 0.0005 * photonR * photonR * demag;
-    float subRingBright = 1.5 * demag;
-    float rDist = abs(dist - subRingR);
-    float ring = exp(-rDist * rDist / max(subRingWidth, 0.00001)) * subRingBright;
-    // Sub-rings shift color: n=0 golden, n=1 warm white, n=2 blue-white, n=3 violet
-    vec3 subCol = n == 0 ? ringColor :
-                  n == 1 ? vec3(0.95, 0.90, 0.80) :
-                  n == 2 ? vec3(0.7, 0.80, 1.0) :
-                           vec3(0.55, 0.50, 0.95);
-    col += subCol * ring;
+    // Schwarzschild: a = -1.5 * h^2 * pos / r^5
+    vec3 accel = -1.5 * h2 / r5 * pos;
+
+    // Kerr frame-dragging
+    vec3 rhat = pos / r;
+    vec3 tang = cross(vec3(0.0, 1.0, 0.0), rhat);
+    float tl  = length(tang);
+    if (tl > 0.001) {
+      tang /= tl;
+      accel += tang * 2.0 * uSpinStar * M_BH * M_BH / (r2 * r + 0.01);
+    }
+
+    // GW perturbation
+    float gwP = sin(r * 30.0 - uTime * 3.0) * sin(2.0 * atan(pos.z, pos.x));
+    accel += rhat * gwP * uGWStrain * 0.004;
+
+    // Adaptive step
+    float h_near = clamp(0.1 * (r - RS * 0.4), 0.015, 0.5);
+    float h_far  = 1.2;
+    float step   = mix(h_near, h_far, smoothstep(3.5, 7.0, r));
+
+    // Velocity-Verlet
+    vec3 velHalf = vel + accel * step * 0.5;
+    vec3 newPos  = pos + velHalf * step;
+
+    float nr  = length(newPos);
+    float nr5 = nr * nr * nr * nr * nr;
+    vec3  nL  = cross(newPos, velHalf);
+    float nL2 = dot(nL, nL);
+    vec3  na  = -1.5 * nL2 / max(nr5, 1e-8) * newPos;
+    vec3  nrh = newPos / max(nr, 1e-6);
+    vec3  nt  = cross(vec3(0.0, 1.0, 0.0), nrh);
+    float ntl = length(nt);
+    if (ntl > 0.001) {
+      nt /= ntl;
+      na += nt * 2.0 * uSpinStar * M_BH * M_BH / (nr * nr * nr + 0.01);
+    }
+    vec3 newVel = vel + (accel + na) * step * 0.5;
+    newVel = normalize(newVel);
+
+    // Disk-plane crossing
+    if (pos.y * newPos.y < 0.0 && alpha < 0.96) {
+      float tCross = abs(pos.y) / (abs(pos.y) + abs(newPos.y) + 1e-6);
+      vec3  crossP = mix(pos, newPos, tCross);
+      float crossR = length(vec2(crossP.x, crossP.z));
+
+      if (crossR > diskInner * 0.85 && crossR < diskOuter) {
+        float phi = atan(crossP.z, crossP.x);
+
+        // Novikov-Thorne temperature
+        float rn = crossR / diskInner;
+        float ntT = pow(rn, -0.75) * pow(max(1.0 - 1.0 / sqrt(rn), 0.001), 0.25);
+
+        // Doppler beaming
+        float vK   = sqrt(M_BH / crossR);
+        vec3  vDir = normalize(cross(vec3(0.0, 1.0, 0.0),
+                     normalize(vec3(crossP.x, 0.0, crossP.z))));
+        float cosA  = dot(vDir, vel);
+        float beta  = min(vK * 1.5, 0.92);
+        float gamma = 1.0 / sqrt(max(1.0 - beta * beta, 0.01));
+        float D     = 1.0 / (gamma * (1.0 - beta * cosA));
+        float beam  = clamp(D * D * D, 0.08, 12.0);
+
+        // Gravitational redshift
+        float grs = sqrt(max(1.0 - RS / crossR, 0.001));
+
+        // Frame-drag spiral + turbulence
+        float dTw  = uSpinStar * 2.0 / (crossR * crossR + 0.5);
+        float dPhi = phi + dTw * uTime * 0.3;
+        float sp   = 0.5 + 0.30 * sin(dPhi * 3.0 - log(max(crossR, 0.01)) * 6.0
+                                       + uTime * vK * 2.0)
+                         + 0.15 * sin(dPhi * 5.0 - log(max(crossR, 0.01)) * 10.0
+                                       + uTime * vK * 3.0 + 1.5);
+        sp = clamp(sp, 0.3, 1.0);
+        float turb = 0.7 + 0.2  * noise(vec2(dPhi * 8.0  + uTime * 0.3, crossR * 6.0))
+                         + 0.10 * noise(vec2(dPhi * 25.0 + uTime * 0.8, crossR * 20.0));
+
+        float T = ntT * beam * grs * grs;
+
+        vec3  dCol = blackbody(T * 2.5);
+
+        // ISCO stress glow
+        float iscoG = exp(-pow((crossR - diskInner) / (diskInner * 0.12), 2.0)) * 2.5;
+        dCol += vec3(1.0, 0.95, 0.88) * iscoG;
+
+        // Doppler colour shift
+        dCol *= vec3(1.0 + cosA * beta * 0.12,
+                     1.0,
+                     1.0 - cosA * beta * 0.12);
+
+        // Edge softness
+        float td = (crossR - diskInner) / (diskOuter - diskInner);
+        float edge = smoothstep(0.0, 0.06, td) * smoothstep(1.0, 0.85, td);
+
+        float intensity = T * sp * turb * edge * 1.8;
+        vec3  emission  = dCol * intensity;
+        float dA = clamp(intensity * 0.65, 0.0, 1.0);
+
+        color += emission * (1.0 - alpha);
+        alpha += dA * (1.0 - alpha);
+      }
+    }
+
+    pos = newPos;
+    vel = newVel;
   }
 
-  // -- Einstein ring glow --
-  float eRingDist = abs(dist - rEinstein);
-  float eRing = exp(-eRingDist * eRingDist / (0.0008 * rEinstein * rEinstein)) * 0.4;
-  col += vec3(0.5, 0.7, 1.0) * eRing;
+  // ─ 5. Final colour composition ─
+  vec3 finalColor = color;
+  float photonR = 1.5 * RS;
 
-  // -- Ergosphere shell (faint blue glow for spinning BH) --
-  float ergoR = shadowR * (1.0 + sqrt(max(1.0 - uSpinStar * uSpinStar, 0.0)));
-  float ergoDist = abs(dist - ergoR);
-  float ergoGlow = exp(-ergoDist * ergoDist / (0.002 * ergoR * ergoR)) * uSpinStar * 0.25;
-  col += vec3(0.2, 0.4, 0.9) * ergoGlow;
-
-  // -- Event horizon shadow (soft penumbra) --
-  // Physical: the shadow edge is NOT sharp -- photon orbits at r=3M
-  // create a gradual dimming zone (penumbra) before total darkness
-  float penumbraOuter = shadowR * 1.08;  // outer penumbra start
-  float penumbraInner = shadowR * 0.82;  // inner shadow (fully dark)
-  float penumbra = smoothstep(penumbraOuter, penumbraInner, dist);
-  // Add gradient structure: scattered photons create faint ring zones
-  float scatterRing = exp(-pow((dist - shadowR) / (shadowR * 0.06), 2.0)) * 0.15;
-  col *= (1.0 - penumbra);
-  col += vec3(0.6, 0.45, 0.25) * scatterRing * (1.0 - penumbra * 0.5);
-
-  // -- Horizon edge glow (Hawking radiation + corona) --
-  // Multi-layer corona: hot inner ring + warm outer halo
-  float edgeGlow = exp(-(dist - shadowR) * (dist - shadowR) / (0.0008 * shadowR * shadowR));
-  float coronaWide = exp(-(dist - shadowR) * (dist - shadowR) / (0.004 * shadowR * shadowR));
-  col += vec3(0.9, 0.35, 0.08) * edgeGlow * 0.4;
-  col += vec3(0.4, 0.15, 0.05) * coronaWide * 0.2;
-  // Inner Cauchy horizon glow (for charged/spinning BHs) -- faint violet
-  float innerHR = shadowR * 0.4;
-  float innerGlow = exp(-(dist - innerHR) * (dist - innerHR) / (0.0005 * innerHR * innerHR));
-  col += vec3(0.4, 0.1, 0.6) * innerGlow * uSpinStar * 0.15;
-
-  // -- Gravitational wave + polarization pattern --
-  float gwVis = sin(dist * 60.0 - uTime * 4.0) * uGWStrain * 0.15;
-  float gwAngle = atan(centered.y, centered.x);
-  float gwPattern = sin(2.0 * gwAngle) * gwVis; // quadrupole pattern
-  col += vec3(0.3, 0.5, 0.8) * max(gwPattern, 0.0);
-
-  gl_FragColor = vec4(col, 1.0);
-}
-`;
-
-// -- Accretion disk shader --
-const DISK_VERT = `
-attribute vec3 aPosition;
-attribute vec2 aTexCoord;
-uniform mat4 uMVP;
-varying vec2 vTexCoord;
-varying vec3 vWorldPos;
-
-void main() {
-  gl_Position = uMVP * vec4(aPosition, 1.0);
-  vTexCoord = aTexCoord;
-  vWorldPos = aPosition;
-}
-`;
-
-const DISK_FRAG = `
-precision highp float;
-varying vec2 vTexCoord;
-varying vec3 vWorldPos;
-uniform float uTime;
-uniform float uInnerR;
-uniform float uOuterR;
-uniform float uSpinDisk;      // spin parameter for disk warping
-
-// Hash-based noise
-float hash2(vec2 p) {
-  return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
-}
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  f = f * f * (3.0 - 2.0 * f);
-  return mix(
-    mix(hash2(i), hash2(i + vec2(1.0, 0.0)), f.x),
-    mix(hash2(i + vec2(0.0, 1.0)), hash2(i + vec2(1.0, 1.0)), f.x),
-    f.y
-  );
-}
-float fbmDisk(vec2 p) {
-  float v = 0.0;
-  float a = 0.5;
-  for (int i = 0; i < 5; i++) {
-    v += a * noise(p);
-    p *= 2.3;
-    a *= 0.45;
+  if (captured) {
+    float prG = exp(-pow((minDist - photonR) / (RS * 0.08), 2.0)) * 0.7;
+    finalColor += vec3(1.0, 0.90, 0.50) * prG * (1.0 - alpha);
+    float chR = RS * 0.5 * (1.0 + sqrt(max(1.0 - uSpinStar * uSpinStar, 0.0)));
+    float chG = exp(-pow((minDist - chR) / (RS * 0.04), 2.0)) * uSpinStar * 0.25;
+    finalColor += vec3(0.40, 0.15, 0.70) * chG * (1.0 - alpha);
+  } else {
+    vec3 bg = starfield(vel);
+    finalColor += bg * (1.0 - alpha);
   }
-  return v;
-}
 
-void main() {
-  float r = length(vWorldPos.xz);
-  float angle = atan(vWorldPos.z, vWorldPos.x);
+  // Photon-ring enhancement for near-miss rays
+  float prGlow = exp(-pow((minDist - photonR) / (RS * 0.15), 2.0)) * 0.35;
+  finalColor += vec3(1.0, 0.92, 0.55) * prGlow;
 
-  // Normalized radial position in disk
-  float t = (r - uInnerR) / (uOuterR - uInnerR);
-  t = clamp(t, 0.0, 1.0);
+  // Ergosphere tint
+  if (minDist < 2.0 * M_BH * 1.1) {
+    float ergoF = smoothstep(2.0 * M_BH * 1.1, RS * 0.6, minDist) * uSpinStar;
+    finalColor += vec3(0.08, 0.15, 0.35) * ergoF * 0.15;
+  }
 
-  // -- Novikov-Thorne temperature profile --
-  // T(r) ~ r^{-3/4} * [1 - sqrt(r_ISCO/r)]^{1/4}
-  float rNorm = max(r / uInnerR, 1.001);
-  float ntFactor = pow(rNorm, -0.75) * pow(max(1.0 - 1.0 / sqrt(rNorm), 0.001), 0.25);
-  float temp = ntFactor;
+  // ACES tone mapping + gamma
+  finalColor = ACESFilm(finalColor * 1.3);
+  finalColor = pow(finalColor, vec3(1.0 / 2.2));
 
-  // -- Keplerian velocity for Doppler beaming --
-  float orbitalV = 1.0 / sqrt(max(r, 0.1));
-
-  // -- Frame-dragging spiral: disk material co-rotates with BH --
-  float dragTwist = uSpinDisk * 2.0 / (r * r + 0.5);
-  float draggedAngle = angle + dragTwist * uTime * 0.3;
-
-  // -- Multi-arm spiral structure (MHD instability analog) --
-  float spiral1 = sin(draggedAngle * 3.0 - log(max(r, 0.01)) * 6.0 + uTime * orbitalV * 2.0);
-  float spiral2 = sin(draggedAngle * 5.0 - log(max(r, 0.01)) * 10.0 + uTime * orbitalV * 3.0 + 1.5);
-  float spiral = 0.5 + 0.3 * spiral1 + 0.15 * spiral2;
-  spiral = clamp(spiral, 0.3, 1.0);
-
-  // -- MHD turbulence (magneto-rotational instability) --
-  float turb1 = fbmDisk(vec2(draggedAngle * 8.0 + uTime * 0.3, r * 6.0));
-  float turb2 = noise(vec2(draggedAngle * 25.0 + uTime * 0.8, r * 20.0));
-  float turb = 0.7 + 0.2 * turb1 + 0.1 * turb2;
-
-  // -- ISCO stress edge: sharp brightness enhancement at inner edge --
-  float iscoEdge = exp(-pow((r - uInnerR) / (uInnerR * 0.15), 2.0)) * 1.5;
-
-  // -- Color: Novikov-Thorne temperature gradient --
-  // Hottest inner: blue-white (T ~ 10^7 K for stellar BH)
-  // Mid: yellow-orange
-  // Outer: deep red -> infrared
-  vec3 hotColor = vec3(0.85, 0.92, 1.0);     // blue-white
-  vec3 warmColor = vec3(1.0, 0.75, 0.25);    // golden-yellow
-  vec3 midColor = vec3(1.0, 0.45, 0.1);      // orange
-  vec3 coolColor = vec3(0.7, 0.10, 0.03);    // deep red
-  vec3 coldColor = vec3(0.3, 0.03, 0.01);    // near-IR
-
-  vec3 diskColor;
-  if (t < 0.1)       diskColor = mix(hotColor, warmColor, t / 0.1);
-  else if (t < 0.3)  diskColor = mix(warmColor, midColor, (t - 0.1) / 0.2);
-  else if (t < 0.6)  diskColor = mix(midColor, coolColor, (t - 0.3) / 0.3);
-  else               diskColor = mix(coolColor, coldColor, (t - 0.6) / 0.4);
-
-  // ISCO stress glow -- bright white line at inner edge
-  diskColor += vec3(1.0, 0.9, 0.8) * iscoEdge;
-
-  // -- Relativistic Doppler beaming --
-  // Approaching side: blue-shifted + brighter (D^4 enhancement)
-  // Receding side: red-shifted + dimmer
-  float viewAngle = sin(draggedAngle + uTime * 0.2);
-  float beta = orbitalV * 0.6;  // v/c fraction
-  float dopplerFactor = 1.0 / (1.0 - beta * viewAngle);
-  float beaming = dopplerFactor * dopplerFactor;  // D^2 approximation
-  beaming = clamp(beaming, 0.3, 3.0);
-
-  // Doppler color shift: approaching -> bluer, receding -> redder
-  vec3 dopplerShift = vec3(
-    1.0 - viewAngle * beta * 0.15,
-    1.0,
-    1.0 + viewAngle * beta * 0.15
-  );
-  diskColor *= dopplerShift;
-
-  float brightness = temp * spiral * turb * beaming;
-
-  // Edge softness (physical: inner = plunge region, outer = tidal truncation)
-  float innerEdge = smoothstep(0.0, 0.04, t);
-  float outerEdge = smoothstep(1.0, 0.88, t);
-  brightness *= innerEdge * outerEdge;
-
-  // Opacity: more opaque at inner edge (denser), thinner at outer edge
-  float alpha = brightness * 0.9;
-  alpha *= innerEdge * outerEdge;
-
-  // Vertical thickness variation -- disk warping from spin
-  float warp = abs(vWorldPos.y) / (0.05 + t * 0.1);
-  alpha *= exp(-warp * warp);
-
-  gl_FragColor = vec4(diskColor * brightness, alpha);
+  gl_FragColor = vec4(finalColor, 1.0);
 }
 `;
 
@@ -470,56 +433,26 @@ void main() {
   vec2 c = gl_PointCoord - 0.5;
   float r = length(c);
   if (r > 0.5) discard;
-  // Multi-layer glow: bright core + soft halo + wide haze
-  float core = exp(-r * r * 50.0);   // tight brilliant center
-  float halo = exp(-r * r * 12.0);   // medium warm glow
-  float outer = exp(-r * r * 3.0);   // wide soft haze
-  float glow = core * 0.5 + halo * 0.35 + outer * 0.15;
-  // Core whitening: hottest center approaches white
-  vec3 coreColor = mix(vColor, vec3(1.0, 0.97, 0.92), core * 0.6);
-  // Subtle chromatic fringe at halo edge
-  vec3 fringeColor = coreColor + vec3(0.05, -0.02, 0.08) * halo * (1.0 - core);
-  gl_FragColor = vec4(fringeColor * glow, glow * 0.9);
+  float core  = exp(-r * r * 50.0);
+  float halo  = exp(-r * r * 12.0);
+  float outer = exp(-r * r *  3.0);
+  float glow  = core * 0.5 + halo * 0.35 + outer * 0.15;
+  vec3 coreCol  = mix(vColor, vec3(1.0, 0.97, 0.92), core * 0.6);
+  vec3 fringeCol = coreCol + vec3(0.05, -0.02, 0.08) * halo * (1.0 - core);
+  gl_FragColor = vec4(fringeCol * glow, glow * 0.9);
 }
 `;
 
 /* ===================================================================
-   S3  GEOMETRY GENERATORS
+   S3  KERR ISCO (TypeScript)
    =================================================================== */
 
-// Accretion disk: flat annulus in the XZ plane
-function generateDisk(innerR: number, outerR: number, segments: number, rings: number): {
-  verts: Float32Array; indices: Uint16Array;
-} {
-  const count = (rings + 1) * segments;
-  const verts = new Float32Array(count * 5); // xyz + uv
-  let vi = 0;
-  for (let ri = 0; ri <= rings; ri++) {
-    const t = ri / rings;
-    const r = innerR + t * (outerR - innerR);
-    for (let si = 0; si < segments; si++) {
-      const a = (si / segments) * Math.PI * 2;
-      verts[vi++] = r * Math.cos(a);
-      verts[vi++] = 0; // flat in XZ
-      verts[vi++] = r * Math.sin(a);
-      verts[vi++] = t;           // u = radial
-      verts[vi++] = si / segments; // v = angular
-    }
-  }
-  const idxCount = rings * segments * 6;
-  const indices = new Uint16Array(idxCount);
-  let ii = 0;
-  for (let ri = 0; ri < rings; ri++) {
-    for (let si = 0; si < segments; si++) {
-      const c = ri * segments + si;
-      const n = ri * segments + (si + 1) % segments;
-      const a = (ri + 1) * segments + si;
-      const an = (ri + 1) * segments + (si + 1) % segments;
-      indices[ii++] = c; indices[ii++] = a; indices[ii++] = n;
-      indices[ii++] = n; indices[ii++] = a; indices[ii++] = an;
-    }
-  }
-  return { verts, indices };
+function computeKerrISCO(a: number): number {
+  const a2 = a * a;
+  const z1 = 1 + Math.cbrt(Math.max(1 - a2, 1e-12))
+    * (Math.cbrt(1 + a) + Math.cbrt(Math.max(1 - a, 1e-6)));
+  const z2 = Math.sqrt(3 * a2 + z1 * z1);
+  return (3 + z2 - Math.sqrt(Math.max((3 - z1) * (3 + z1 + 2 * z2), 0))) * 0.5;
 }
 
 /* ===================================================================
@@ -540,9 +473,7 @@ function spawnParticle(type: SpaceParticle['type'], innerR: number, outerR: numb
   if (type === 'accretion') {
     const r = innerR + Math.random() * (outerR - innerR);
     const a = Math.random() * Math.PI * 2;
-    // Keplerian orbital velocity v ~ r^{-1/2}
     const orbV = 1.0 / Math.sqrt(r);
-    // Add slight eccentricity for visual interest
     const ecc = 0.02 * Math.random();
     return {
       x: r * Math.cos(a) * (1 + ecc), y: (Math.random() - 0.5) * 0.04, z: r * Math.sin(a),
@@ -554,7 +485,6 @@ function spawnParticle(type: SpaceParticle['type'], innerR: number, outerR: numb
   } else if (type === 'jet') {
     const side = Math.random() > 0.5 ? 1 : -1;
     const spread = 0.08;
-    // Precessing jet -- slight wobble
     const wobble = Math.sin(Date.now() * 0.001) * 0.03;
     return {
       x: (Math.random() - 0.5) * spread + wobble, y: side * innerR * 0.3,
@@ -566,7 +496,6 @@ function spawnParticle(type: SpaceParticle['type'], innerR: number, outerR: numb
       type, cr: 0.3 + Math.random() * 0.3, cg: 0.5 + Math.random() * 0.4, cb: 1.0,
     };
   } else if (type === 'tidal') {
-    // Tidally disrupted matter -- stretched along radial direction
     const a = Math.random() * Math.PI * 2;
     const r = innerR * (1.0 + Math.random() * 0.5);
     return {
@@ -577,8 +506,6 @@ function spawnParticle(type: SpaceParticle['type'], innerR: number, outerR: numb
       type, cr: 1.0, cg: 0.3, cb: 0.1,
     };
   } else if (type === 'penrose') {
-    // Penrose process: particle splitting near ergosphere
-    // One piece escapes with MORE energy, the other falls in
     const a = Math.random() * Math.PI * 2;
     const r = innerR * 1.1;
     const escaping = Math.random() > 0.5;
@@ -595,10 +522,9 @@ function spawnParticle(type: SpaceParticle['type'], innerR: number, outerR: numb
       cb: escaping ? 1.0 : 0.3,
     };
   } else {
-    // Infalling -- with angular momentum
     const a = Math.random() * Math.PI * 2;
     const r = outerR * (1.2 + Math.random() * 0.5);
-    const tangV = 0.08 * (Math.random() - 0.3); // slight angular momentum
+    const tangV = 0.08 * (Math.random() - 0.3);
     return {
       x: r * Math.cos(a), y: (Math.random() - 0.5) * 0.3, z: r * Math.sin(a),
       vx: -Math.cos(a) * 0.15 + tangV * (-Math.sin(a)),
@@ -629,7 +555,6 @@ export interface HUDData {
   S: number;
   C: number;
   delta: number;
-  // Advanced physics
   frameDrag: number;
   penroseEff: number;
   entropy: number;
@@ -664,7 +589,6 @@ function computeHUD(cameraDistance: number, bhOmega: number, spin: number, curva
     S: kr.S,
     C: kr.C,
     delta: kr.delta,
-    // Advanced physics
     frameDrag: frameDragging(observerOmega, spin),
     penroseEff: penroseEfficiency(spin),
     entropy: bhEntropy(kr.kappa),
@@ -678,7 +602,7 @@ function computeHUD(cameraDistance: number, bhOmega: number, spin: number, curva
 }
 
 /* ===================================================================
-   S6  MAIN INIT
+   S6  MAIN INIT — Ray-Traced Renderer
    =================================================================== */
 
 export interface SpaceSimControls {
@@ -691,7 +615,8 @@ export function initSpaceSim(
   hudCallback?: (data: HUDData) => void,
 ): SpaceSimControls {
   const glCtx = canvas.getContext('webgl', {
-    antialias: true, alpha: false, premultipliedAlpha: false,
+    antialias: false, alpha: false, premultipliedAlpha: false,
+    powerPreference: 'high-performance',
   });
   if (!glCtx) {
     console.error('WebGL not available');
@@ -699,7 +624,6 @@ export function initSpaceSim(
   }
   const gl: WebGLRenderingContext = glCtx;
 
-  // -- Extensions --
   gl.getExtension('OES_standard_derivatives');
 
   gl.enable(gl.DEPTH_TEST);
@@ -707,7 +631,6 @@ export function initSpaceSim(
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
-  // -- Compile helpers --
   function compileShader(type: number, src: string): WebGLShader {
     const s = gl.createShader(type)!;
     gl.shaderSource(s, src);
@@ -726,44 +649,39 @@ export function initSpaceSim(
     return p;
   }
 
-  // -- Programs --
-  const bgProg = linkProgram(BG_VERT, BG_FRAG);
-  const diskProg = linkProgram(DISK_VERT, DISK_FRAG);
+  // -- Programs (ray tracer + particles) --
+  const rtProg   = linkProgram(RT_VERT, RT_FRAG);
   const partProg = linkProgram(PART_VERT, PART_FRAG);
 
-  // -- Background quad --
+  // -- Fullscreen quad --
   const quadVBO = gl.createBuffer()!;
   gl.bindBuffer(gl.ARRAY_BUFFER, quadVBO);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
 
-  // -- Accretion disk geometry -- high resolution --
-  const DISK_INNER = 0.6;
-  const DISK_OUTER = 3.0;
-  const disk = generateDisk(DISK_INNER, DISK_OUTER, 192, 48);
+  // -- BH params --
+  const bhOmega = 0.95;
+  const bhSpin  = 0.7;
+  const bhC = BLACK_HOLE_ENTITIES[0].c.length > 3
+    ? computeKernel(BLACK_HOLE_ENTITIES[0].c, BLACK_HOLE_ENTITIES[0].w).C : 0;
 
-  const diskVBO = gl.createBuffer()!;
-  gl.bindBuffer(gl.ARRAY_BUFFER, diskVBO);
-  gl.bufferData(gl.ARRAY_BUFFER, disk.verts, gl.STATIC_DRAW);
+  // -- Disk extents for particles --
+  const DISK_INNER = computeKerrISCO(bhSpin);
+  const DISK_OUTER = DISK_INNER * 5.5;
 
-  const diskIBO = gl.createBuffer()!;
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, diskIBO);
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, disk.indices, gl.STATIC_DRAW);
-
-  // -- Particles -- high density for realism --
-  const MAX_PARTICLES = 600;
+  // -- Particles --
+  const MAX_PARTICLES = 800;
   const particles: SpaceParticle[] = [];
-  // Seed initial particles
-  for (let i = 0; i < 350; i++) {
-    const type: SpaceParticle['type'] = i < 200 ? 'accretion' : i < 270 ? 'jet' : 'infalling';
+  for (let i = 0; i < 450; i++) {
+    const type: SpaceParticle['type'] = i < 240 ? 'accretion' : i < 340 ? 'jet' : 'infalling';
     const p = spawnParticle(type, DISK_INNER, DISK_OUTER);
-    p.life = Math.random() * p.maxLife; // stagger
+    p.life = Math.random() * p.maxLife;
     particles.push(p);
   }
   const particleVBO = gl.createBuffer()!;
 
   // -- Camera --
   let azimuth = 0;
-  let elevation = 0.35; // slightly above disk plane
+  let elevation = 0.35;
   let camDist = 8.0;
   let dragging = false;
   let lastX = 0, lastY = 0;
@@ -772,7 +690,6 @@ export function initSpaceSim(
   let targetElevation = 0.35;
   let targetDist = 8.0;
 
-  // Mouse/touch controls
   canvas.addEventListener('mousedown', (e) => {
     dragging = true; autoOrbit = false;
     lastX = e.clientX; lastY = e.clientY;
@@ -817,47 +734,34 @@ export function initSpaceSim(
 
   canvas.style.cursor = 'grab';
 
-  // -- BH params --
-  const bhOmega = 0.95; // deep collapse -- near horizon
-  const bhSpin = 0.7;   // moderate spin (a* = 0.7)
-  const bhC = BLACK_HOLE_ENTITIES[0].c.length > 3
-    ? computeKernel(BLACK_HOLE_ENTITIES[0].c, BLACK_HOLE_ENTITIES[0].w).C : 0;
-
   // -- Uniform locations --
-  // Background
-  const bgLocs = {
-    aPos: gl.getAttribLocation(bgProg, 'aPos'),
-    uBHScreen: gl.getUniformLocation(bgProg, 'uBHScreen'),
-    uBHRadius: gl.getUniformLocation(bgProg, 'uBHRadius'),
-    uLensStrength: gl.getUniformLocation(bgProg, 'uLensStrength'),
-    uTime: gl.getUniformLocation(bgProg, 'uTime'),
-    uSpinStar: gl.getUniformLocation(bgProg, 'uSpinStar'),
-    uGWStrain: gl.getUniformLocation(bgProg, 'uGWStrain'),
+  const rtLocs = {
+    aPos:        gl.getAttribLocation(rtProg,  'aPos'),
+    uResolution: gl.getUniformLocation(rtProg, 'uResolution'),
+    uTime:       gl.getUniformLocation(rtProg, 'uTime'),
+    uSpinStar:   gl.getUniformLocation(rtProg, 'uSpinStar'),
+    uCamPos:     gl.getUniformLocation(rtProg, 'uCamPos'),
+    uCamRight:   gl.getUniformLocation(rtProg, 'uCamRight'),
+    uCamUp:      gl.getUniformLocation(rtProg, 'uCamUp'),
+    uCamFwd:     gl.getUniformLocation(rtProg, 'uCamFwd'),
+    uFovTan:     gl.getUniformLocation(rtProg, 'uFovTan'),
+    uGWStrain:   gl.getUniformLocation(rtProg, 'uGWStrain'),
   };
-  // Disk
-  const diskLocs = {
-    aPosition: gl.getAttribLocation(diskProg, 'aPosition'),
-    aTexCoord: gl.getAttribLocation(diskProg, 'aTexCoord'),
-    uMVP: gl.getUniformLocation(diskProg, 'uMVP'),
-    uTime: gl.getUniformLocation(diskProg, 'uTime'),
-    uInnerR: gl.getUniformLocation(diskProg, 'uInnerR'),
-    uOuterR: gl.getUniformLocation(diskProg, 'uOuterR'),
-    uSpinDisk: gl.getUniformLocation(diskProg, 'uSpinDisk'),
-  };
-  // Particles
+
   const partLocs = {
     aPosition: gl.getAttribLocation(partProg, 'aPosition'),
-    aColor: gl.getAttribLocation(partProg, 'aColor'),
-    aSize: gl.getAttribLocation(partProg, 'aSize'),
-    uMVP: gl.getUniformLocation(partProg, 'uMVP'),
+    aColor:    gl.getAttribLocation(partProg, 'aColor'),
+    aSize:     gl.getAttribLocation(partProg, 'aSize'),
+    uMVP:      gl.getUniformLocation(partProg, 'uMVP'),
   };
 
-  // -- Resize handler --
+  // -- Resize (native DPR for max resolution) --
+  const FOV = 0.9;
   function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
-    canvas.width = Math.round(w * dpr);
+    canvas.width  = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     gl.viewport(0, 0, canvas.width, canvas.height);
   }
@@ -869,7 +773,7 @@ export function initSpaceSim(
   let hudData = computeHUD(camDist, bhOmega, bhSpin, bhC);
 
   // -- Animation --
-  let running = true;
+  let running  = true;
   let lastTime = 0;
 
   function frame(now: number) {
@@ -877,92 +781,59 @@ export function initSpaceSim(
     const dt = Math.min((now - lastTime) / 1000, 0.05);
     lastTime = now;
 
-    // Smooth camera interpolation
     if (autoOrbit) targetAzimuth += dt * 0.08;
-    azimuth += (targetAzimuth - azimuth) * 0.05;
+    azimuth   += (targetAzimuth   - azimuth)   * 0.05;
     elevation += (targetElevation - elevation) * 0.05;
-    camDist += (targetDist - camDist) * 0.05;
+    camDist   += (targetDist      - camDist)   * 0.05;
 
     const cx = camDist * Math.cos(elevation) * Math.sin(azimuth);
     const cy = camDist * Math.sin(elevation);
     const cz = camDist * Math.cos(elevation) * Math.cos(azimuth);
 
+    // Camera direction vectors for ray construction
+    const camPos: Vec3 = [cx, cy, cz];
+    const fwd: Vec3 = normalize([-cx, -cy, -cz]);
+    let worldUp: Vec3 = [0, 1, 0];
+    if (Math.abs(fwd[1]) > 0.99) worldUp = [0, 0, 1];
+    const right: Vec3 = normalize(cross(fwd, worldUp));
+    const up: Vec3    = cross(right, fwd);
+
     const aspect = canvas.width / canvas.height;
-    const proj = perspective(0.9, aspect, 0.1, 100);
-    const view = lookAt([cx, cy, cz], [0, 0, 0], [0, 1, 0]);
-    const vp = mul(proj, view);
+    const proj   = perspective(FOV, aspect, 0.1, 100);
+    const view   = lookAt(camPos, [0, 0, 0], [0, 1, 0]);
+    const vp     = mul(proj, view);
+    const t      = now / 1000;
 
-    // -- Project BH center to screen --
-    // BH is at origin; transform [0,0,0,1] through VP
-    const clipX = vp[12] / vp[15];
-    const clipY = vp[13] / vp[15];
-    const screenBH: [number, number] = [clipX * 0.5 + 0.5, clipY * 0.5 + 0.5];
-
-    // Apparent angular size of BH based on distance
-    const bhAngularR = Math.atan(0.5 / camDist) / (0.9 / 2); // normalized to FOV
-    // Lens strength varies with mass (|κ|) and distance
-    const lensStrength = gammaOmega(bhOmega) / (camDist * 0.5);
-
-    const t = now / 1000;
+    const currentGWStrain = Math.min(gwStrain(bhOmega, bhC, camDist), 1.0);
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // === Pass 1: Background + Lensing ===
+    // ═══ Pass 1: Ray-traced black hole ═══
     gl.depthMask(false);
     gl.disable(gl.DEPTH_TEST);
-    gl.useProgram(bgProg);
+    gl.useProgram(rtProg);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, quadVBO);
-    gl.enableVertexAttribArray(bgLocs.aPos);
-    gl.vertexAttribPointer(bgLocs.aPos, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(rtLocs.aPos);
+    gl.vertexAttribPointer(rtLocs.aPos, 2, gl.FLOAT, false, 0, 0);
 
-    gl.uniform2fv(bgLocs.uBHScreen, screenBH);
-    gl.uniform1f(bgLocs.uBHRadius, bhAngularR);
-    gl.uniform1f(bgLocs.uLensStrength, lensStrength);
-    gl.uniform1f(bgLocs.uTime, t);
-    gl.uniform1f(bgLocs.uSpinStar, bhSpin);
-    // GW strain varies with observer distance and BH curvature
-    const currentGWStrain = gwStrain(bhOmega, bhC, camDist);
-    gl.uniform1f(bgLocs.uGWStrain, Math.min(currentGWStrain, 1.0));
+    gl.uniform2f(rtLocs.uResolution, canvas.width, canvas.height);
+    gl.uniform1f(rtLocs.uTime,       t);
+    gl.uniform1f(rtLocs.uSpinStar,   bhSpin);
+    gl.uniform3f(rtLocs.uCamPos,     camPos[0], camPos[1], camPos[2]);
+    gl.uniform3f(rtLocs.uCamRight,   right[0],  right[1],  right[2]);
+    gl.uniform3f(rtLocs.uCamUp,      up[0],     up[1],     up[2]);
+    gl.uniform3f(rtLocs.uCamFwd,     fwd[0],    fwd[1],    fwd[2]);
+    gl.uniform1f(rtLocs.uFovTan,     1.0 / Math.tan(FOV * 0.5));
+    gl.uniform1f(rtLocs.uGWStrain,   currentGWStrain);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    gl.disableVertexAttribArray(bgLocs.aPos);
+    gl.disableVertexAttribArray(rtLocs.aPos);
 
     gl.depthMask(true);
     gl.enable(gl.DEPTH_TEST);
 
-    // === Pass 2: Accretion Disk ===
-    // Tilt disk slightly for visual interest
-    const diskTilt = rotX(0.12);
-    const diskMVP = mul(vp, diskTilt);
-
-    gl.useProgram(diskProg);
-    gl.bindBuffer(gl.ARRAY_BUFFER, diskVBO);
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, diskIBO);
-
-    const stride = 5 * 4;
-    gl.enableVertexAttribArray(diskLocs.aPosition);
-    gl.vertexAttribPointer(diskLocs.aPosition, 3, gl.FLOAT, false, stride, 0);
-    if (diskLocs.aTexCoord >= 0) {
-      gl.enableVertexAttribArray(diskLocs.aTexCoord);
-      gl.vertexAttribPointer(diskLocs.aTexCoord, 2, gl.FLOAT, false, stride, 12);
-    }
-
-    gl.uniformMatrix4fv(diskLocs.uMVP, false, diskMVP);
-    gl.uniform1f(diskLocs.uTime, t);
-    gl.uniform1f(diskLocs.uInnerR, DISK_INNER);
-    gl.uniform1f(diskLocs.uOuterR, DISK_OUTER);
-    gl.uniform1f(diskLocs.uSpinDisk, bhSpin);
-
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    gl.drawElements(gl.TRIANGLES, disk.indices.length, gl.UNSIGNED_SHORT, 0);
-
-    gl.disableVertexAttribArray(diskLocs.aPosition);
-    if (diskLocs.aTexCoord >= 0) gl.disableVertexAttribArray(diskLocs.aTexCoord);
-
-    // === Pass 3: Particles ===
-    // Update particles with GR-aware physics
+    // ═══ Pass 2: Particles ═══
     for (let i = particles.length - 1; i >= 0; i--) {
       const p = particles[i];
       p.life += dt;
@@ -974,55 +845,41 @@ export function initSpaceSim(
       const r = Math.sqrt(p.x * p.x + p.z * p.z) || 0.1;
 
       if (p.type === 'accretion') {
-        // Keplerian orbit + radiation drag inspiral + frame-dragging torque
         const orbSpeed = 1.0 / (r * Math.sqrt(r)) * 0.5;
         const ax = -p.z / r, az = p.x / r;
-        // Frame drag: co-rotate in direction of BH spin
         const dragTorque = bhSpin * 0.005 / (r * r + 0.1);
-        // Radiation drag: slow inspiral
         const dragInward = 0.008 / (r + 0.1);
         p.vx = ax * (orbSpeed + dragTorque) - p.x / r * dragInward;
         p.vz = az * (orbSpeed + dragTorque) - p.z / r * dragInward;
-        // Gravitational redshift dims particle near horizon
         if (r < DISK_INNER * 1.2) {
           const dimFactor = Math.max(0.1, (r - 0.2) / DISK_INNER);
           p.cr *= dimFactor; p.cg *= dimFactor; p.cb *= dimFactor;
         }
       } else if (p.type === 'jet') {
-        // Relativistic jet: accelerate + collimate
         p.vy *= 1.008;
-        // Magnetic collimation -- push toward axis
         p.vx *= 0.99;
         p.vz *= 0.99;
       } else if (p.type === 'tidal') {
-        // Tidal spaghettification: accelerate radially, stretch along infall
         const radialAccel = 0.15 / (r * r + 0.01);
         p.vx -= p.x / r * radialAccel * dt;
         p.vz -= p.z / r * radialAccel * dt;
-        // Stretch the particle (size increases along motion direction)
         p.size *= 1.01;
-        // Heating: turns white-hot as it falls
         p.cr = Math.min(1.0, p.cr + dt * 0.3);
         p.cg = Math.min(1.0, p.cg + dt * 0.2);
         p.cb = Math.min(1.0, p.cb + dt * 0.15);
       } else if (p.type === 'penrose') {
-        // Penrose particle: if escaping, decelerate but escape; if falling, accelerate inward
         const radV = (p.vx * p.x + p.vz * p.z) / r;
         if (radV > 0) {
-          // Escaping: slow deceleration (it has extracted BH energy)
           p.vx *= 0.998;
           p.vz *= 0.998;
         } else {
-          // Falling: strong inward acceleration
           p.vx -= p.x / r * 0.1 * dt;
           p.vz -= p.z / r * 0.1 * dt;
         }
       } else {
-        // Infalling: GR-corrected gravity (stronger near horizon)
         const gStrength = 0.05 / (r * r + 0.01);
         p.vx -= p.x / r * gStrength * dt;
         p.vz -= p.z / r * gStrength * dt;
-        // Frame-drag: add tangential velocity component
         const dragV = bhSpin * 0.003 / (r * r + 0.1);
         p.vx += (-p.z / r) * dragV * dt;
         p.vz += (p.x / r) * dragV * dt;
@@ -1032,14 +889,12 @@ export function initSpaceSim(
       p.y += p.vy * dt;
       p.z += p.vz * dt;
 
-      // Respawn if too far or absorbed
       const dist = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
-      if (dist < 0.15 || dist > 18) {
+      if (dist < 0.15 || dist > 20) {
         particles[i] = spawnParticle(p.type, DISK_INNER, DISK_OUTER);
       }
     }
 
-    // Spawn new particles with type distribution
     while (particles.length < MAX_PARTICLES) {
       const roll = Math.random();
       const type: SpaceParticle['type'] =
@@ -1050,14 +905,17 @@ export function initSpaceSim(
       particles.push(spawnParticle(type, DISK_INNER, DISK_OUTER));
     }
 
-    // Upload particle data
-    const pData = new Float32Array(particles.length * 7); // xyz rgb size
+    const pData = new Float32Array(particles.length * 7);
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       const fade = Math.min(1, Math.min(p.life / 0.3, (p.maxLife - p.life) / 0.5));
       const b = i * 7;
-      pData[b] = p.x; pData[b + 1] = p.y; pData[b + 2] = p.z;
-      pData[b + 3] = p.cr * fade; pData[b + 4] = p.cg * fade; pData[b + 5] = p.cb * fade;
+      pData[b]     = p.x;
+      pData[b + 1] = p.y;
+      pData[b + 2] = p.z;
+      pData[b + 3] = p.cr * fade;
+      pData[b + 4] = p.cg * fade;
+      pData[b + 5] = p.cb * fade;
       pData[b + 6] = p.size * (0.5 + fade * 0.5);
     }
 
@@ -1081,7 +939,6 @@ export function initSpaceSim(
     gl.disableVertexAttribArray(partLocs.aColor);
     gl.disableVertexAttribArray(partLocs.aSize);
 
-    // Reset blend mode
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
     // -- Update HUD --
