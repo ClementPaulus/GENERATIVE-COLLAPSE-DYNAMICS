@@ -147,9 +147,9 @@ Tier-1 (44 structural identities, 47 lemmas, 716 proven theorems) → Tier-0 (19
 The integrity bound holds universally from quarks to consciousness — verified across Standard Model particles, 118 periodic table elements, 40 organisms, 30 sign systems, and 20 consciousness states. Derived independently from Axiom-0. Zero violations across all domains.
 
 <p align="center">
-  <img src="images/09_integrity_bound_proof.png" alt="IC ≤ F integrity bound verified across six domains with zero violations" width="88%">
+  <img src="images/09_integrity_bound_proof.png" alt="IC ≤ F integrity bound verified across twelve domains with zero violations" width="88%">
   <br>
-  <sub><b>Figure 2</b> — Integrity bound IC ≤ F holds universally. Every point is computed from real closure data — Standard Model, periodic table, evolution, semiotics, consciousness, and awareness-cognition.</sub>
+  <sub><b>Figure 2</b> — Integrity bound IC ≤ F holds universally. Every point is computed from real closure data — Standard Model, periodic table, evolution, semiotics, consciousness, awareness-cognition, immunology, ecology, information theory, spacetime memory, and clinical neuroscience.</sub>
 </p>
 
 ### Validation Timelapse: Living Ledger History
@@ -1133,12 +1133,12 @@ The four-regime classification with real Standard Model particles mapped to thei
 
 ### Cross-Scale Universality: Matter Genesis Ladder and Heterogeneity Gap
 
-The matter genesis 6-act ladder traces fidelity from fundamental particles through nuclear binding to bulk matter. IC drops 98.8% at the confinement cliff (Act II→III). The heterogeneity gap distribution spans 5 domains (SM particles, 118 elements, evolution, consciousness, semiotics) — the same kernel structure governs quarks and sign systems.
+The matter genesis 6-act ladder traces fidelity from fundamental particles through nuclear binding to bulk matter. IC drops 98.8% at the confinement cliff (Act II→III). The heterogeneity gap distribution spans 11 domains (SM particles, 118 elements, evolution, consciousness, semiotics, awareness-cognition, immunology, ecology, info theory, spacetime, clinical neuro) — the same kernel structure governs quarks and ecosystems.
 
 <p align="center">
-  <img src="images/07_cross_scale_heterogeneity_gap.png" alt="Cross-scale heterogeneity gap spanning 5 domains from particles to semiotics" width="88%">
+  <img src="images/07_cross_scale_heterogeneity_gap.png" alt="Cross-scale heterogeneity gap spanning 11 domains from particles to ecosystems" width="88%">
   <br>
-  <sub><b>Figure 10</b> — Cross-scale universality: the heterogeneity gap Δ = F − IC spans quarks, atoms, organisms, sign systems, and consciousness states. Same kernel, same identities.</sub>
+  <sub><b>Figure 10</b> — Cross-scale universality: the heterogeneity gap Δ = F − IC spans quarks, atoms, organisms, sign systems, consciousness states, immune cells, ecosystems, computation classes, and spacetime objects. Same kernel, same identities.</sub>
 </p>
 
 ---

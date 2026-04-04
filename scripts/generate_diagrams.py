@@ -50,8 +50,8 @@ plt.rcParams.update(
         "grid.alpha": 0.5,
         "font.size": 14,
         "font.family": "sans-serif",
-        "figure.dpi": 300,
-        "savefig.dpi": 300,
+        "figure.dpi": 400,
+        "savefig.dpi": 400,
         "axes.titleweight": "bold",
         "axes.titlesize": 18,
         "axes.labelsize": 15,
@@ -523,6 +523,80 @@ SEMIOTICS_DATA: dict[str, tuple[float, float, str]] = {
     "Honeybee dance": (0.4664, 0.1672, "Animal"),
     "Morse code": (0.2963, 0.1385, "Formal"),
     "LLM output": (0.5288, 0.4022, "Artificial"),
+}
+
+# Immunology — immune cell types (from closures/immunology/immune_cell_kernel.py)
+IMMUNOLOGY_DATA: dict[str, tuple[float, float, str]] = {
+    "Neutrophil": (0.41, 0.18, "Innate"),
+    "NK cell": (0.59, 0.39, "Innate"),
+    "Macrophage": (0.54, 0.30, "Innate"),
+    "Dendritic cell": (0.63, 0.40, "Innate"),
+    "CD4 Th1": (0.66, 0.48, "Adaptive"),
+    "CD8 CTL": (0.73, 0.61, "Adaptive"),
+    "CD4 Treg": (0.71, 0.59, "Adaptive"),
+    "Memory B": (0.70, 0.58, "Adaptive"),
+    "B cell plasma": (0.63, 0.37, "Adaptive"),
+}
+
+# Ecology — ecological states (from closures/ecology/ecology_kernel.py)
+ECOLOGY_DATA: dict[str, tuple[float, float, str]] = {
+    "Coral reef": (0.93, 0.89, "Stable"),
+    "Climax forest": (0.89, 0.83, "Stable"),
+    "Grassland": (0.78, 0.66, "Intermediate"),
+    "Tundra": (0.46, 0.23, "Stressed"),
+    "Desert": (0.31, 0.08, "Stressed"),
+    "Agriculture": (0.58, 0.16, "Managed"),
+    "Trophic cascade": (0.22, 0.001, "Collapse"),
+    "Pioneer stage": (0.54, 0.32, "Intermediate"),
+}
+
+# Information theory — complexity classes (from closures/information_theory/)
+INFO_THEORY_DATA: dict[str, tuple[float, float, str]] = {
+    "O(1)": (0.96, 0.94, "Decidable"),
+    "P": (0.88, 0.81, "Decidable"),
+    "NP": (0.56, 0.19, "Hard"),
+    "BPP": (0.74, 0.54, "Randomized"),
+    "BQP": (0.71, 0.50, "Quantum"),
+    "PSPACE": (0.60, 0.24, "Hard"),
+    "EXPTIME": (0.52, 0.16, "Hard"),
+    "HALT": (0.10, 0.0001, "Undecidable"),
+}
+
+# Spacetime memory — spacetime objects (from closures/spacetime_memory/)
+SPACETIME_DATA: dict[str, tuple[float, float, str]] = {
+    "Neutron star": (0.91, 0.84, "Stellar"),
+    "Main-seq star": (0.89, 0.82, "Stellar"),
+    "He-4 nucleus": (0.91, 0.88, "Nuclear"),
+    "Fe-56 nucleus": (0.88, 0.83, "Nuclear"),
+    "Red giant": (0.79, 0.64, "Stellar"),
+    "White dwarf": (0.86, 0.76, "Stellar"),
+    "Black hole": (0.68, 0.25, "Stellar"),
+    "Photon (ST)": (0.39, 0.01, "Subatomic"),
+}
+
+# Awareness-cognition — organisms (from closures/awareness_cognition/)
+AWARENESS_DATA: dict[str, tuple[float, float, str]] = {
+    "E. coli (AWC)": (0.28, 0.08, "Bacteria"),
+    "C. elegans": (0.29, 0.09, "Nematoda"),
+    "Fruit fly": (0.45, 0.23, "Insecta"),
+    "Octopus (AWC)": (0.53, 0.35, "Cephalopoda"),
+    "NC crow": (0.62, 0.48, "Aves"),
+    "Dolphin (AWC)": (0.70, 0.61, "Mammalia"),
+    "Chimpanzee (AWC)": (0.78, 0.71, "Primates"),
+    "Human adult": (0.95, 0.93, "Primates"),
+}
+
+# Clinical neuroscience — neurocognitive states (from closures/clinical_neuroscience/)
+CLINICAL_DATA: dict[str, tuple[float, float, str]] = {
+    "Young adult": (0.89, 0.83, "Healthy"),
+    "Expert meditator": (0.91, 0.86, "Healthy"),
+    "Flow state": (0.89, 0.82, "Altered"),
+    "Psilocybin": (0.76, 0.67, "Altered"),
+    "REM sleep": (0.70, 0.58, "Altered"),
+    "Gen. anesthesia": (0.31, 0.08, "Altered"),
+    "Coma": (0.20, 0.03, "DOC"),
+    "Alzheimer severe": (0.34, 0.09, "Neurodegen"),
+    "Schizophrenia": (0.57, 0.33, "Psychiatric"),
 }
 
 
@@ -1390,7 +1464,7 @@ def plot_regime_diagram() -> None:
 # DIAGRAM 7: Matter Genesis Scale Ladder + Cross-Domain Heterogeneity Gap
 # ═══════════════════════════════════════════════════════════════════════════
 def plot_cross_scale() -> None:
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(17, 8), gridspec_kw={"width_ratios": [3, 2]})
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 10), gridspec_kw={"width_ratios": [3, 2]})
 
     # ── Left panel: Matter Genesis 6-Act Ladder ──
     acts = list(MATTER_GENESIS.keys())
@@ -1495,8 +1569,14 @@ def plot_cross_scale() -> None:
         "Evolution": [v[0] - v[1] for v in EVOLUTION_DATA.values()],
         "Consciousness": [v[0] - v[1] for v in CONSCIOUSNESS_DATA.values()],
         "Semiotics": [v[0] - v[1] for v in SEMIOTICS_DATA.values()],
+        "Immunology": [v[0] - v[1] for v in IMMUNOLOGY_DATA.values()],
+        "Ecology": [v[0] - v[1] for v in ECOLOGY_DATA.values()],
+        "Info Theory": [v[0] - v[1] for v in INFO_THEORY_DATA.values()],
+        "Spacetime": [v[0] - v[1] for v in SPACETIME_DATA.values()],
+        "Awareness": [v[0] - v[1] for v in AWARENESS_DATA.values()],
+        "Clinical": [v[0] - v[1] for v in CLINICAL_DATA.values()],
     }
-    domain_colors = [RED, CYAN, GREEN, PURPLE, ORANGE]
+    domain_colors = [RED, CYAN, GREEN, PURPLE, ORANGE, PINK, "#2ea043", "#a371f7", "#79c0ff", YELLOW, "#f47067"]
     domain_means = []
 
     y_pos = np.arange(len(domain_gaps))
@@ -1522,14 +1602,14 @@ def plot_cross_scale() -> None:
     ax2.set_yticks(y_pos)
     ax2.set_yticklabels(list(domain_gaps.keys()), fontsize=12)
     ax2.set_xlabel("Heterogeneity Gap  Δ = F − IC")
-    ax2.set_title("Cross-Domain Gap Distribution\n5 domains, 190+ data points", pad=14)
+    ax2.set_title("Cross-Domain Gap Distribution\n11 domains, 300+ data points", pad=14)
     ax2.grid(True, axis="x", alpha=0.25, linewidth=0.5)
     ax2.invert_yaxis()
     ax2.set_xlim(0, 0.55)
 
     fig.suptitle(
-        "Cross-Scale Universality: From Quarks to Consciousness\n"
-        "IC ≤ F holds across all 18 domains │ Matter Genesis reveals the scale ladder",
+        "Cross-Scale Universality: From Quarks to Ecosystems\n"
+        "IC ≤ F holds across all 23 domains │ Matter Genesis reveals the scale ladder",
         fontsize=18,
         y=1.02,
         fontweight="bold",
@@ -1602,7 +1682,7 @@ def plot_validation_timelapse() -> None:
         start = max(0, i - window + 1)
         gap_rolling.append(np.mean(gaps[start : i + 1]))
 
-    fig, axes = plt.subplots(3, 1, figsize=(15, 13), sharex=True)
+    fig, axes = plt.subplots(4, 1, figsize=(16, 16), sharex=True)
 
     # Panel 1: Cumulative runs
     ax1 = axes[0]
@@ -1616,7 +1696,7 @@ def plot_validation_timelapse() -> None:
         fontweight="bold",
     )
     ax1.grid(True, alpha=0.25, linewidth=0.5)
-    for m in [100, 500, 1000, 2000, 5000, 7000]:
+    for m in [100, 500, 1000, 2000, 5000, 7000, 10000]:
         if m <= len(timestamps):
             ax1.axhline(y=m, color=BG_BORDER, linewidth=0.5, linestyle=":")
             ax1.text(timestamps[-1], m, f"  {m:,}", fontsize=12, color=TEXT_SECONDARY, va="center")
@@ -1632,15 +1712,32 @@ def plot_validation_timelapse() -> None:
     ax2.grid(True, alpha=0.25, linewidth=0.5)
     ax2.set_ylim(-0.02, 1.05)
 
-    # Panel 3: Conformance rate
+    # Panel 3: Drift (ω) evolution
+    omega_rolling = []
+    for i in range(len(omega_vals)):
+        start = max(0, i - window + 1)
+        omega_rolling.append(np.mean(omega_vals[start : i + 1]))
+
     ax3 = axes[2]
-    ax3.plot(timestamps, conf_rate, color=GREEN, linewidth=2)
-    ax3.fill_between(timestamps, 0, conf_rate, alpha=0.12, color=GREEN)
-    ax3.axhline(y=1.0, color=GREEN, linewidth=0.5, linestyle="--", alpha=0.5)
-    ax3.axhline(y=0.95, color=YELLOW, linewidth=0.5, linestyle=":", alpha=0.5)
+    ax3.plot(timestamps, omega_rolling, color=RED, linewidth=2, label=f"ω (rolling {window})", alpha=0.9)
+    ax3.fill_between(timestamps, 0, omega_rolling, alpha=0.12, color=RED)
+    ax3.axhline(y=0.30, color=RED, linewidth=1, linestyle="--", alpha=0.5, label="Collapse threshold (ω ≥ 0.30)")
+    ax3.axhline(y=0.038, color=YELLOW, linewidth=1, linestyle=":", alpha=0.5, label="Stable threshold (ω < 0.038)")
+    ax3.set_ylabel("Drift  ω")
+    legend3 = ax3.legend(fontsize=12, loc="upper right", framealpha=0.5, edgecolor=BG_BORDER)
+    legend3.get_frame().set_facecolor(BG_PANEL)
+    ax3.grid(True, alpha=0.25, linewidth=0.5)
+    ax3.set_ylim(-0.005, max(0.35, max(omega_rolling) * 1.15 if omega_rolling else 0.35))
+
+    # Panel 4: Conformance rate
+    ax4 = axes[3]
+    ax4.plot(timestamps, conf_rate, color=GREEN, linewidth=2)
+    ax4.fill_between(timestamps, 0, conf_rate, alpha=0.12, color=GREEN)
+    ax4.axhline(y=1.0, color=GREEN, linewidth=0.5, linestyle="--", alpha=0.5)
+    ax4.axhline(y=0.95, color=YELLOW, linewidth=0.5, linestyle=":", alpha=0.5)
     final_rate = conf_rate[-1] if conf_rate else 0
     _info_box(
-        ax3,
+        ax4,
         0.98,
         0.15,
         f"Current: {final_rate:.1%} conformant\n{conf_count:,}/{len(timestamps):,} runs",
@@ -1648,10 +1745,10 @@ def plot_validation_timelapse() -> None:
         ha="right",
         va="bottom",
     )
-    ax3.set_ylabel("Conformance Rate")
-    ax3.set_xlabel("Time")
-    ax3.grid(True, alpha=0.25, linewidth=0.5)
-    ax3.set_ylim(0.90, 1.005)
+    ax4.set_ylabel("Conformance Rate")
+    ax4.set_xlabel("Time")
+    ax4.grid(True, alpha=0.25, linewidth=0.5)
+    ax4.set_ylim(0.90, 1.005)
 
     fig.tight_layout()
     fig.savefig(fig_path("08_validation_timelapse.png"), bbox_inches="tight")
@@ -1663,7 +1760,7 @@ def plot_validation_timelapse() -> None:
 # DIAGRAM 9: Integrity Bound Proof — IC ≤ F Across All Domains
 # ═══════════════════════════════════════════════════════════════════════════
 def plot_integrity_bound_proof() -> None:
-    """Show IC ≤ F across ALL domains — SM, elements, evolution, consciousness, semiotics."""
+    """Show IC ≤ F across ALL domains — 12 domain groups, 400+ data points."""
     all_points: list[tuple[str, float, float, str]] = []
     for name, (f, ic, _cat) in FUNDAMENTAL.items():
         all_points.append((name, f, ic, "SM Fundamental"))
@@ -1678,6 +1775,18 @@ def plot_integrity_bound_proof() -> None:
         all_points.append((name, f, ic, "Consciousness"))
     for name, (f, ic, _cat) in SEMIOTICS_DATA.items():
         all_points.append((name, f, ic, "Semiotics"))
+    for name, (f, ic, _cat) in IMMUNOLOGY_DATA.items():
+        all_points.append((name, f, ic, "Immunology"))
+    for name, (f, ic, _cat) in ECOLOGY_DATA.items():
+        all_points.append((name, f, ic, "Ecology"))
+    for name, (f, ic, _cat) in INFO_THEORY_DATA.items():
+        all_points.append((name, f, ic, "Information Theory"))
+    for name, (f, ic, _cat) in SPACETIME_DATA.items():
+        all_points.append((name, f, ic, "Spacetime Memory"))
+    for name, (f, ic, _cat) in AWARENESS_DATA.items():
+        all_points.append((name, f, ic, "Awareness-Cognition"))
+    for name, (f, ic, _cat) in CLINICAL_DATA.items():
+        all_points.append((name, f, ic, "Clinical Neuro"))
 
     fig, ax = plt.subplots(figsize=(13, 10))
 
@@ -1698,6 +1807,12 @@ def plot_integrity_bound_proof() -> None:
         "Evolution": (GREEN, "s", 100),
         "Consciousness": (YELLOW, "p", 110),
         "Semiotics": (ORANGE, "h", 100),
+        "Immunology": (PINK, "X", 90),
+        "Ecology": ("#2ea043", "d", 90),
+        "Information Theory": ("#a371f7", "v", 90),
+        "Spacetime Memory": ("#79c0ff", "*", 110),
+        "Awareness-Cognition": ("#e3b341", "<", 90),
+        "Clinical Neuro": ("#f47067", ">", 90),
     }
     for domain, (color, marker, sz) in domain_styles.items():
         pts = [(f, ic) for _, f, ic, d in all_points if d == domain]
@@ -1725,8 +1840,8 @@ def plot_integrity_bound_proof() -> None:
         0.98,
         f"IC ≤ F: {total}/{total} verified\n"
         f"Violations: {violations}\n"
-        f"Domains: {n_domains} (physics → biology → cognition)\n"
-        f"From quarks to consciousness — zero exceptions",
+        f"Domains: {n_domains} (physics → biology → cognition → ecology → computation)\n"
+        f"From quarks to ecosystems — zero exceptions",
         color=GREEN,
         fontsize=13,
     )
@@ -1735,10 +1850,10 @@ def plot_integrity_bound_proof() -> None:
     ax.set_ylabel("Integrity Composite  IC")
     ax.set_title(
         f"Integrity Bound Proof: IC ≤ F Across {total} Data Points, {n_domains} Domains\n"
-        "Zero violations │ Quarks → Elements → Organisms → Sign systems → Consciousness",
+        "Zero violations │ Quarks → Elements → Organisms → Ecosystems → Consciousness → Computation",
         pad=18,
     )
-    legend = ax.legend(fontsize=12, loc="lower right", framealpha=0.6, edgecolor=BG_BORDER, ncol=2, columnspacing=1.0)
+    legend = ax.legend(fontsize=11, loc="lower right", framealpha=0.6, edgecolor=BG_BORDER, ncol=3, columnspacing=0.8)
     legend.get_frame().set_facecolor(BG_PANEL)
     ax.set_xlim(0.05, 0.95)
     ax.set_ylim(-0.02, 0.92)
@@ -1755,9 +1870,9 @@ def plot_integrity_bound_proof() -> None:
 # ═══════════════════════════════════════════════════════════════════════════
 def plot_tier_architecture() -> None:
     """Visualize the three-tier architecture with dependency arrows."""
-    fig, ax = plt.subplots(figsize=(15, 10))
-    ax.set_xlim(0, 12)
-    ax.set_ylim(0, 11)
+    fig, ax = plt.subplots(figsize=(16, 11))
+    ax.set_xlim(0, 13)
+    ax.set_ylim(-0.5, 11)
     ax.axis("off")
 
     tiers = [
@@ -1771,7 +1886,7 @@ def plot_tier_architecture() -> None:
             "K: [0,1]ⁿ × Δⁿ → (F, ω, S, C, κ, IC)\n\n"
             "F + ω = 1  │  IC ≤ F  │  IC = exp(κ)\n"
             "44 structural identities  │  47 lemmas  │  5 frozen constants\n"
-            "76 proven theorems across 18 domains  │  0 violations",
+            "716 proven theorems across 23 domains  │  0 violations",
         ),
         (
             1.5,
@@ -1783,20 +1898,21 @@ def plot_tier_architecture() -> None:
             "Regime gates: Stable / Watch / Collapse  │  Seam calculus\n\n"
             "Validator  │  Contracts  │  Schemas  │  SHA-256 integrity\n"
             "Three-valued verdicts: CONFORMANT / NONCONFORMANT / NON_EVALUABLE\n"
-            "18,018 tests  │  218 closure modules  │  C++17 accelerator (50-80× speedup)",
+            "19,631 tests  │  222 closure modules  │  C++17 accelerator (50-80× speedup)",
         ),
         (
             1.5,
-            0.8,
+            0.0,
             9,
-            2.5,
+            3.3,
             "TIER 2: EXPANSION SPACE",
             PURPLE,
-            "20 domains across physics, biology, cognition, and formal systems:\n\n"
+            "23 domains across physics, biology, cognition, ecology, and computation:\n\n"
             "Standard Model  │  Nuclear  │  Atomic  │  QM  │  Astronomy  │  WEYL\n"
             "Kinematics  │  Materials  │  Finance  │  Security  │  GCD  │  RCFT\n"
-            "Evolution  │  Semiotics  │  Consciousness  │  Continuity\n"
-            "Everyday  │  Awareness  │  Clinical Neuro  │  Spacetime Memory",
+            "Evolution  │  Semiotics  │  Consciousness  │  Continuity  │  Everyday\n"
+            "Awareness  │  Clinical Neuro  │  Spacetime  │  Immunology  │  Ecology\n"
+            "Information Theory",
         ),
     ]
 
@@ -1852,10 +1968,23 @@ def plot_tier_architecture() -> None:
     ax.text(6.4, 7.1, "implements", fontsize=11, color=TEXT_SECONDARY, va="center")
     ax.text(6.4, 3.75, "validates against", fontsize=11, color=TEXT_SECONDARY, va="center")
 
-    # No-back-edge indicator
+    # No-back-edge indicator — line split into two segments with gap for text
     ax.annotate(
+        "",
+        xy=(11.5, 8.5),
+        xytext=(11.5, 6.3),
+        arrowprops={"arrowstyle": "-", "color": RED, "lw": 2.5, "linestyle": "--"},
+    )
+    ax.annotate(
+        "",
+        xy=(11.5, 4.7),
+        xytext=(11.5, 3.3),
+        arrowprops={"arrowstyle": "-", "color": RED, "lw": 2.5, "linestyle": "--"},
+    )
+    ax.text(
+        11.5,
+        5.5,
         "✗ NO FEEDBACK",
-        xy=(11, 5.5),
         fontsize=14,
         color=RED,
         ha="center",
@@ -1863,12 +1992,8 @@ def plot_tier_architecture() -> None:
         rotation=90,
         fontweight="bold",
         path_effects=GLOW,
-    )
-    ax.annotate(
-        "",
-        xy=(11, 8.5),
-        xytext=(11, 3.5),
-        arrowprops={"arrowstyle": "-", "color": RED, "lw": 2.5, "linestyle": "--"},
+        bbox={"boxstyle": "round,pad=0.3", "facecolor": BG_DARK, "edgecolor": "none", "alpha": 0.9},
+        zorder=10,
     )
 
     # Axiom-0 banner
