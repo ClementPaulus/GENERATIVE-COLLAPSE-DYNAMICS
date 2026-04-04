@@ -1017,6 +1017,18 @@ registry:
         cross_references:
           - "closures/evolution/evolution_kernel.py"
           - "closures/atomic_physics/periodic_kernel.py"
+      - name: "intelligence_coherence"
+        path: "closures/evolution/intelligence_coherence.py"
+        description: "Intelligence coherence closure — formalizes the structural relationship between intelligence and IC/F across 58 entities (40 organisms + 12 fungi + 6 mycorrhizal). 6 theorems (T-IC-1–6): floor dominance, peak irrelevance, asymmetric damage, convergence attractor, peak-coherence tradeoff, spread-coherence inversion."
+        contract: "UMA.INTSTACK.v1"
+        inputs: ["organisms", "fungi_entities", "mycorrhizal_entities"]
+        outputs: ["CoherenceProfile", "IC_F", "floor", "peak", "spread", "regime"]
+        frozen_params:
+          epsilon: 1.0e-8
+          n_channels: 8
+        cross_references:
+          - "closures/evolution/evolution_kernel.py"
+          - "closures/evolution/fungi_kingdom.py"
 
     unified:
       - name: "unified_minimal_structure"
