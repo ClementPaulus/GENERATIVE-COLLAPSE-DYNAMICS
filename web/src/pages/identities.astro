@@ -14,9 +14,11 @@ const base = import.meta.env.BASE_URL;
     <div class="mb-6">
       <h1 class="text-3xl font-bold text-kernel-100 mb-2">Identity Network</h1>
       <p class="text-kernel-400 max-w-3xl">
-        44 structural identities derived from Axiom-0 and verified to machine precision.
-        Click any identity to see its full bounds, proof sketch, live verification, and
-        cross-links to related identities and domains.
+        44 structural identities derived from Axiom-0. Identities are classified as
+        <span class="text-green-400 font-medium">Exact</span> (algebraic, machine-precision),
+        <span class="text-blue-400 font-medium">Sampled</span> (numerically verified by Monte Carlo),
+        or <span class="text-kernel-300 font-medium">Narrative</span> (analytical proof in prose).
+        Click any identity for its full bounds, proof sketch, and cross-links.
       </p>
       <p class="text-kernel-500 italic text-sm mt-2">
         Numeri sunt intellectus. — The numbers are the understanding.
@@ -85,8 +87,9 @@ const base = import.meta.env.BASE_URL;
     <div class="bg-kernel-900 border border-kernel-700 rounded-lg p-6">
       <h2 class="text-lg font-bold text-kernel-200 mb-3">Live Verification</h2>
       <p class="text-xs text-kernel-500 mb-4">
-        Verify the core identities by sweeping channel values. The kernel runs 1000 random
-        configurations and checks every identity to machine precision.
+        Verify the core algebraic identities (E1, E2, E3, B1) by sweeping 1000 random
+        channel configurations. Only Exact and Sampled identities participate in this sweep.
+        Narrative identities are not machine-verified here.
       </p>
       <div class="flex gap-3 items-center">
         <button id="run-sweep" class="bg-amber-700 hover:bg-amber-600 text-white px-4 py-2 rounded text-sm transition">
@@ -102,6 +105,8 @@ const base = import.meta.env.BASE_URL;
 <script>
   import { computeKernel, classifyRegime, verifyIdentities, bernoulliEntropy } from '../lib/kernel';
   import { EPSILON, C_STAR, C_TRAP, OMEGA_TRAP } from '../lib/constants';
+  import { IDENTITY_VERIFICATION, VERIFICATION_BADGES, renderBadge, hasLiveVerification } from '../lib/identity-verification';
+  import type { VerificationState } from '../lib/identity-verification';
 
   const BASE = (document.querySelector('link[rel="icon"]')?.getAttribute('href') || '/').replace('favicon.svg', '');
 
@@ -120,7 +125,7 @@ const base = import.meta.env.BASE_URL;
     domains: string[];
     related: string[];
     latin: string;
-    verifiable: boolean;
+    verification: VerificationState;
   }
 
   const identities: Identity[] = [
@@ -136,7 +141,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'standard_model', 'atomic_physics', 'finance', 'quantum_mechanics'],
       related: ['E4', 'B7', 'D3'],
       latin: 'Complementum Perfectum',
-      verifiable: true,
+      verification: 'exact',
     },
     {
       id: 'E2', series: 'E', name: 'Log-Integrity Relation', formula: 'IC = exp(κ)',
@@ -149,7 +154,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'standard_model', 'nuclear_physics', 'consciousness_coherence'],
       related: ['E3', 'D1', 'B1'],
       latin: 'Integritas Composita',
-      verifiable: true,
+      verification: 'exact',
     },
     {
       id: 'E3', series: 'E', name: 'Integrity Bound', formula: 'IC ≤ F',
@@ -162,7 +167,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'standard_model', 'nuclear_physics', 'atomic_physics', 'evolution'],
       related: ['E2', 'D1', 'B5', 'D3'],
       latin: 'Limbus Integritatis',
-      verifiable: true,
+      verification: 'sampled',
     },
     {
       id: 'E4', series: 'E', name: 'Equator Fixed Point', formula: 'S(½) + κ(½) = 0',
@@ -175,7 +180,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'quantum_mechanics', 'consciousness_coherence'],
       related: ['E1', 'E5', 'E6', 'B7', 'B9'],
       latin: 'Aequator',
-      verifiable: true,
+      verification: 'exact',
     },
     {
       id: 'E5', series: 'E', name: 'Fisher Metric Unity', formula: 'g_F(θ) = 1',
@@ -188,7 +193,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'rcft'],
       related: ['E6', 'E7', 'B7'],
       latin: 'Planities Manifoldi',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'E6', series: 'E', name: 'One Function', formula: 'f(θ) = 2cos²θ·ln(tan θ)',
@@ -201,7 +206,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'rcft'],
       related: ['E4', 'E5', 'B9'],
       latin: 'Functio Una',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'E7', series: 'E', name: 'Spectral Integral', formula: '∫g_F·S dc = π²/3 = 2ζ(2)',
@@ -214,7 +219,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'rcft'],
       related: ['E5', 'E6'],
       latin: 'Integrale Spectrale',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'E8', series: 'E', name: 'Seam Associativity', formula: '(A ∘ B) ∘ C = A ∘ (B ∘ C)',
@@ -227,7 +232,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'standard_model', 'nuclear_physics'],
       related: ['B2', 'B3', 'B4', 'D6', 'D8'],
       latin: 'Associativitas Suturae',
-      verifiable: false,
+      verification: 'narrative',
     },
 
     // B series — Bound & Composition
@@ -242,7 +247,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'quantum_mechanics', 'consciousness_coherence'],
       related: ['E3', 'E2'],
       latin: 'Limes Superior Entropiae',
-      verifiable: true,
+      verification: 'sampled',
     },
     {
       id: 'B2', series: 'B', name: 'IC Geometric Composition', formula: 'IC₁₂ = √(IC₁·IC₂)',
@@ -255,7 +260,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'standard_model', 'finance'],
       related: ['B3', 'B4', 'E8', 'D6'],
       latin: 'Compositio Geometrica',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'B3', series: 'B', name: 'F Arithmetic Composition', formula: 'F₁₂ = (F₁+F₂)/2',
@@ -268,7 +273,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'finance', 'evolution'],
       related: ['B2', 'B4', 'E8'],
       latin: 'Compositio Arithmetica',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'B4', series: 'B', name: 'Gap Composition Law', formula: 'Δ₁₂ = (Δ₁+Δ₂)/2 + correction',
@@ -281,7 +286,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'standard_model'],
       related: ['B2', 'B3', 'D6'],
       latin: 'Lex Compositionis Distantiae',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'B5', series: 'B', name: 'Perturbation Chain Start', formula: 'IC ≈ F − C²/(8F²)',
@@ -294,7 +299,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'nuclear_physics'],
       related: ['E3', 'B11', 'D2'],
       latin: 'Initium Catenae Perturbationis',
-      verifiable: true,
+      verification: 'sampled',
     },
     {
       id: 'B6', series: 'B', name: 'Cardano Root', formula: 'x³ + x − 1 = 0',
@@ -307,7 +312,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd'],
       related: ['B8', 'B10', 'D4'],
       latin: 'Radix Cardaniana',
-      verifiable: true,
+      verification: 'exact',
     },
     {
       id: 'B7', series: 'B', name: 'Equator Quintuple Point', formula: 'c = ½ is 5-way fixed',
@@ -320,20 +325,20 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'quantum_mechanics'],
       related: ['E1', 'E4', 'E5', 'B9', 'D3'],
       latin: 'Punctum Quintuplex',
-      verifiable: true,
+      verification: 'exact',
     },
     {
       id: 'B8', series: 'B', name: 'Logistic Fixed Point', formula: 'c* = 0.7822',
       cluster: 'Fixed-Point Triangle',
       description: 'Self-dual fixed point maximizing S + κ per channel.',
-      bounds: 'c* = 0.7822... maximizes f(c) = S(c) + κ(c) = −(1−c)ln(1−c). Unique maximum in (0,1).',
+      bounds: 'c* = 0.7822... maximizes f(c) = S(c) + κ(c) = −c ln c − (1−c)ln(1−c) + ln c. Unique maximum in (0,1).',
       range: 'c* = 0.7822 ± 0.0001. The logistic self-dual point.',
-      proof: 'f\'(c) = ln(1−c) + 1 = 0 → 1−c = e⁻¹ → c* = 1 − e⁻¹ ≈ 0.6321... Wait — c* = 0.7822 comes from a different optimization involving the weighted S+κ landscape.',
+      proof: 'f(c) = S(c) + κ(c) = −c ln c − (1−c)ln(1−c) + ln c. Differentiating: f′(c) = ln((1−c)/c) + 1/c. Setting f′(c) = 0 gives ln((1−c)/c) + 1/c = 0, solved numerically by bisection (see frozen_contract.py) to c* ≈ 0.7822.',
       symbols: ['S', 'κ'],
       domains: ['gcd'],
       related: ['B6', 'B10', 'B9'],
       latin: 'Punctum Fixum Logisticum',
-      verifiable: true,
+      verification: 'sampled',
     },
     {
       id: 'B9', series: 'B', name: 'Reflection Formula', formula: 'f(c) + f(1−c) = 0',
@@ -346,7 +351,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd'],
       related: ['E4', 'B7', 'E6'],
       latin: 'Formula Reflexionis',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'B10', series: 'B', name: 'Fisher Space Partition', formula: '63.1% + 24.4% + 12.5% = 100%',
@@ -359,7 +364,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'finance', 'evolution', 'consciousness_coherence'],
       related: ['B6', 'B8', 'D4', 'D5'],
       latin: 'Partitio Spatii Fisher',
-      verifiable: true,
+      verification: 'sampled',
     },
     {
       id: 'B11', series: 'B', name: 'Super-Exponential Convergence', formula: 'IC → F faster than e^(-n)',
@@ -372,7 +377,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd'],
       related: ['B5', 'D2', 'D7'],
       latin: 'Convergentia Super-Exponentialis',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'B12', series: 'B', name: 'Low-Rank Closures', formula: '5 diagnostics → 4 effective dims',
@@ -385,7 +390,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd'],
       related: ['E8', 'D7', 'D8'],
       latin: 'Clausurae Rangi Inferioris',
-      verifiable: false,
+      verification: 'narrative',
     },
 
     // D series — Duality & Deep structure
@@ -400,7 +405,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'standard_model', 'quantum_mechanics'],
       related: ['E3', 'E2', 'B1'],
       latin: 'Aequatio Solubilitatis',
-      verifiable: true,
+      verification: 'exact',
     },
     {
       id: 'D2', series: 'D', name: 'Rank Classification', formula: 'Rank-1 ⊂ Rank-2 ⊂ Rank-3',
@@ -413,7 +418,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd'],
       related: ['D3', 'B5', 'D7'],
       latin: 'Classificatio Graduum',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'D3', series: 'D', name: 'Homogeneous Fast Path', formula: 'All cᵢ = c₀ ⟹ IC = F',
@@ -426,7 +431,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'quantum_mechanics'],
       related: ['E1', 'E3', 'B7'],
       latin: 'Via Rapida Homogenea',
-      verifiable: true,
+      verification: 'exact',
     },
     {
       id: 'D4', series: 'D', name: 'Confinement Cliff', formula: 'IC drops 98% at boundary',
@@ -439,7 +444,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['standard_model', 'nuclear_physics', 'atomic_physics'],
       related: ['D5', 'B10', 'B6', 'E3'],
       latin: 'Praecipitium Confinamenti',
-      verifiable: true,
+      verification: 'sampled',
     },
     {
       id: 'D5', series: 'D', name: 'Scale Inversion', formula: 'Atom IC/F ≈ 0.96 after cliff',
@@ -452,7 +457,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['standard_model', 'atomic_physics', 'materials_science'],
       related: ['D4', 'B10', 'B6'],
       latin: 'Inversio Scalarum',
-      verifiable: true,
+      verification: 'sampled',
     },
     {
       id: 'D6', series: 'D', name: 'Het. Gap Invariant', formula: 'Δ invariant under identical composition',
@@ -465,7 +470,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd'],
       related: ['B2', 'B3', 'B4', 'E8'],
       latin: 'Invarians Heterogeneitatis',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'D7', series: 'D', name: 'Entropy-Curvature Correlation', formula: 'corr(C,S) → −1 as n → ∞',
@@ -478,7 +483,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd'],
       related: ['B5', 'B11', 'B12'],
       latin: 'Correlatio Entropiae et Curvaturae',
-      verifiable: false,
+      verification: 'narrative',
     },
     {
       id: 'D8', series: 'D', name: 'Budget Conservation', formula: 'Δκ = R·τ_R − (D_ω + D_C)',
@@ -491,7 +496,7 @@ const base = import.meta.env.BASE_URL;
       domains: ['gcd', 'finance', 'standard_model', 'nuclear_physics'],
       related: ['E8', 'B2', 'B3'],
       latin: 'Conservatio Rationum',
-      verifiable: true,
+      verification: 'sampled',
     },
   ];
 
@@ -628,6 +633,7 @@ const base = import.meta.env.BASE_URL;
             </div>
           </div>
           <div class="flex items-center gap-2 shrink-0">
+            ${renderBadge(id.verification)}
             <span class="text-xs ${cc.text} bg-kernel-800 px-2 py-0.5 rounded hidden md:inline">${id.cluster}</span>
             <span class="text-kernel-500 text-xs transition-transform ${isExpanded ? 'rotate-180' : ''}">▼</span>
           </div>
@@ -697,7 +703,7 @@ const base = import.meta.env.BASE_URL;
             </div>
           </div>
 
-          ${id.verifiable ? `
+          ${hasLiveVerification(id.id) ? `
           <!-- Live verify button -->
           <div class="flex items-center gap-3">
             <button class="verify-identity bg-kernel-800 hover:bg-kernel-700 text-kernel-300 px-3 py-1.5 rounded text-xs transition border border-kernel-600" data-id="${id.id}">
@@ -834,9 +840,16 @@ const base = import.meta.env.BASE_URL;
       pass = checks.every(Boolean);
       detail = `5 properties at c=½: ${checks.filter(Boolean).length}/3 verified`;
     } else if (id === 'B8') {
-      const r = computeKernel([C_STAR], [1]);
-      pass = true;
-      detail = `c* = ${C_STAR}, F=${r.F.toFixed(4)}, IC=${r.IC.toFixed(4)}`;
+      // Verify c* satisfies the bisection equation: ln((1-c)/c) + 1/c = 0
+      const c = C_STAR;
+      const fPrime = Math.log((1 - c) / c) + 1 / c;
+      const res = Math.abs(fPrime);
+      pass = res < 0.01;
+      // Also verify it is a local maximum (f''(c*) < 0)
+      const fDoublePrime = -1 / (c * (1 - c)) - 1 / (c * c);
+      const isMax = fDoublePrime < 0;
+      detail = `f′(c*) = ${fPrime.toFixed(6)}, |residual| = ${res.toExponential(2)}, f″ < 0: ${isMax}`;
+      pass = pass && isMax;
     } else if (id === 'B10') {
       let nS = 0, nW = 0, nC = 0;
       const T = 5000;
@@ -1062,7 +1075,7 @@ const base = import.meta.env.BASE_URL;
         </div>
         <div class="text-center p-2 rounded ${allPass ? 'bg-green-900/30 border border-green-700/50' : 'bg-red-900/30 border border-red-700/50'}">
           <span class="${allPass ? 'text-green-400' : 'text-red-400'} font-bold text-sm">
-            ${allPass ? '✓ ALL IDENTITIES VERIFIED' : '✗ IDENTITY VIOLATION DETECTED'} — ${sweepCount} configurations tested
+            ${allPass ? '✓ CORE IDENTITIES PASS' : '✗ IDENTITY VIOLATION DETECTED'} — ${sweepCount} configurations, 4 identities (E1, E2, E3, B1)
           </span>
         </div>`;
 

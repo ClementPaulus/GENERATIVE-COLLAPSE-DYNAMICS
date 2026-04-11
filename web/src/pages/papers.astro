@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { TEST_COUNT } from '../lib/metrics';
 const base = import.meta.env.BASE_URL;
 
 /* ═══════════════════════════════════════════════════════════
@@ -586,7 +587,7 @@ pdflatex paper.tex</pre>
             </li>
             <li class="flex items-start gap-2">
               <span class="text-green-400 mt-0.5">&#x2713;</span>
-              <span><strong class="text-kernel-300">19,397 tests</strong> — every theorem verified computationally</span>
+              <span><strong class="text-kernel-300">{TEST_COUNT} tests</strong> — every theorem verified computationally</span>
             </li>
             <li class="flex items-start gap-2">
               <span class="text-green-400 mt-0.5">&#x2713;</span>

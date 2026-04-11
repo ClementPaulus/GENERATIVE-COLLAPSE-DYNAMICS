@@ -4,6 +4,7 @@
  * Sleek, clean design — introduces and guides exploration.
  */
 import BaseLayout from './BaseLayout.astro';
+import { TEST_COUNT, IDENTITY_COUNT, LEMMA_COUNT } from '../lib/metrics';
 
 const { frontmatter } = Astro.props;
 const { title = 'Generative Collapse Dynamics', description = 'A single-axiom mathematical framework that measures what survives collapse and what returns — across 21 scientific domains.' } = frontmatter || {};
@@ -348,11 +349,11 @@ const totalModules = domainCatalog.reduce((s, d) => s + d.modules, 0);
         <div class="text-[11px] text-kernel-500 mt-1">Domains</div>
       </div>
       <div>
-        <div class="text-3xl font-bold text-kernel-300">44</div>
+        <div class="text-3xl font-bold text-kernel-300">{IDENTITY_COUNT}</div>
         <div class="text-[11px] text-kernel-500 mt-1">Identities</div>
       </div>
       <div>
-        <div class="text-3xl font-bold text-kernel-300">47</div>
+        <div class="text-3xl font-bold text-kernel-300">{LEMMA_COUNT}</div>
         <div class="text-[11px] text-kernel-500 mt-1">Lemmas</div>
       </div>
       <div>
@@ -360,7 +361,7 @@ const totalModules = domainCatalog.reduce((s, d) => s + d.modules, 0);
         <div class="text-[11px] text-kernel-500 mt-1">Modules</div>
       </div>
       <div>
-        <div class="text-3xl font-bold text-amber-400">19,921</div>
+        <div class="text-3xl font-bold text-amber-400">{TEST_COUNT}</div>
         <div class="text-[11px] text-kernel-500 mt-1">Tests</div>
       </div>
     </div>

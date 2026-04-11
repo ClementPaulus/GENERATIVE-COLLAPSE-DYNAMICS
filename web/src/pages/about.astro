@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { AT_A_GLANCE, TEST_COUNT, DOMAIN_COUNT, IDENTITY_COUNT, LEMMA_COUNT, BASE_TEST_COUNT, PARAMETRIZE_FACTOR, TEST_FILE_COUNT, C_LINES, C_ASSERTIONS, CPP_ASSERTIONS, CPP_SPEEDUP } from '../lib/metrics';
 const base = import.meta.env.BASE_URL;
 ---
 
@@ -50,14 +51,7 @@ const base = import.meta.env.BASE_URL;
         <div class="bg-kernel-900/50 border border-kernel-800/40 rounded-xl p-5">
           <h3 class="text-sm font-bold text-kernel-400 uppercase tracking-wider mb-4">At a Glance</h3>
           <div class="grid grid-cols-2 gap-3">
-            {[
-              { n: '19,921', label: 'Tests', icon: '✓' },
-              { n: '21', label: 'Domains', icon: '◈' },
-              { n: '44', label: 'Identities', icon: '≡' },
-              { n: '47', label: 'Lemmas', icon: '∴' },
-              { n: '222', label: 'Closures', icon: '⊕' },
-              { n: '3', label: 'Languages', icon: '⟨⟩' },
-            ].map(s => (
+            {AT_A_GLANCE.map(s => (
               <div class="text-center py-2">
                 <div class="text-2xl font-bold text-amber-400">{s.n}</div>
                 <div class="text-xs text-kernel-500">{s.label}</div>
@@ -280,9 +274,9 @@ const base = import.meta.env.BASE_URL;
     <!-- ═══ Test Count — Compounding Structure ═══ -->
     <section class="mb-16" id="tests-section">
       <p class="text-xs tracking-[0.2em] uppercase text-kernel-600 mb-3">Compounding Parametrized Sweeps</p>
-      <h2 class="text-2xl font-bold text-kernel-100 mb-2">19,921 Tests</h2>
+      <h2 class="text-2xl font-bold text-kernel-100 mb-2">{TEST_COUNT} Tests</h2>
       <p class="text-kernel-300 mb-6">
-        Not 19,921 separate assertions — <strong class="text-kernel-100">compounding parametrized sweeps</strong> across 21 domains.
+        Not {TEST_COUNT} separate assertions — <strong class="text-kernel-100">compounding parametrized sweeps</strong> across {DOMAIN_COUNT} domains.
         <span class="text-kernel-500">~800 base test functions expand 18× through domain × entity × configuration parametrization.</span>
       </p>
 
@@ -303,7 +297,7 @@ const base = import.meta.env.BASE_URL;
           </div>
           <div class="text-center p-4 bg-kernel-950 rounded-lg relative">
             <div class="absolute -left-3 top-1/2 -translate-y-1/2 text-kernel-600 hidden md:block">=</div>
-            <div class="text-3xl font-bold text-green-400 mb-1">19,921</div>
+            <div class="text-3xl font-bold text-green-400 mb-1">{TEST_COUNT}</div>
             <div class="text-xs text-kernel-400">Collected test items</div>
             <div class="text-[10px] text-kernel-600 mt-1">Every invariant, every domain</div>
           </div>
@@ -440,7 +434,7 @@ const base = import.meta.env.BASE_URL;
           <div class="text-sm text-kernel-300 mb-2">Closures, validation, dashboard</div>
           <div class="grid grid-cols-2 gap-2 text-center">
             <div><div class="text-lg font-bold text-kernel-200">32+</div><div class="text-[10px] text-kernel-500">Modules</div></div>
-            <div><div class="text-lg font-bold text-kernel-200">19,921</div><div class="text-[10px] text-kernel-500">Tests</div></div>
+            <div><div class="text-lg font-bold text-kernel-200">{TEST_COUNT}</div><div class="text-[10px] text-kernel-500">Tests</div></div>
           </div>
           <div class="text-[10px] text-kernel-600 mt-3 group-hover:text-kernel-400 transition">Click for details &rarr;</div>
         </button>
@@ -1441,7 +1435,7 @@ const base = import.meta.env.BASE_URL;
             <p class="text-[10px] text-kernel-500">fleet/ (scheduler, worker, queue, cache, tenant) · dashboard/ (46 pages) · accel.py (C++ bridge) · api_umcp.py (FastAPI)</p>
           </div>
         </div>
-        <p class="text-xs"><strong class="text-emerald-400">Why Python?</strong> Domain closures require expressiveness — mapping 31 Standard Model particles or 118 periodic table elements to 8-channel traces is naturally expressed in Python. The CLI validates casepacks, the dashboard visualizes results, and pytest's parametrize decorator powers the 19,921-test compounding structure.</p>
+        <p class="text-xs"><strong class="text-emerald-400">Why Python?</strong> Domain closures require expressiveness — mapping 31 Standard Model particles or 118 periodic table elements to 8-channel traces is naturally expressed in Python. The CLI validates casepacks, the dashboard visualizes results, and pytest's parametrize decorator powers the {TEST_COUNT}-test compounding structure.</p>
         <p class="text-[10px] text-kernel-500 mt-2">Every source file starts with <code>from __future__ import annotations</code> (PEP 563).</p>`
     },
   };

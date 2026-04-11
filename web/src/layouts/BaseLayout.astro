@@ -3,6 +3,7 @@
  * Base HTML layout for all GCD domain sites.
  * Clean, professional design with grouped navigation.
  */
+import { TEST_COUNT, DOMAIN_COUNT, THEOREM_COUNT, IDENTITY_COUNT, LEMMA_COUNT, CLOSURE_COUNT } from '../lib/metrics';
 export interface Props {
   title: string;
   description?: string;
@@ -109,7 +110,7 @@ const navGroups = [
       "name": "Generative Collapse Dynamics",
       "alternateName": "GCD / UMCP",
       "url": siteUrl,
-      "description": "A single-axiom mathematical framework for measuring what survives collapse and what returns. 21 domain closures, 716 proven theorems, 44 structural identities, 47 lemmas, 222 closure modules, 19,397 automated tests.",
+      "description": `A single-axiom mathematical framework for measuring what survives collapse and what returns. ${DOMAIN_COUNT} domain closures, ${THEOREM_COUNT} proven theorems, ${IDENTITY_COUNT} structural identities, ${LEMMA_COUNT} lemmas, ${CLOSURE_COUNT} closure modules, ${TEST_COUNT} automated tests.`,
       "version": "2.3.0",
       "publisher": {
         "@type": "Organization",

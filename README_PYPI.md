@@ -29,7 +29,7 @@ Built on **Generative Collapse Dynamics (GCD)**, a measurement theory derived fr
 | **Tier-1 kernel** | Six invariants (F, ω, S, C, κ, IC) computed from any bounded trace vector — domain-independent. |
 | **21 scientific domains** | From particle physics and cosmology to neuroscience and finance — all through one kernel. |
 | **716 proven theorems** | 47 lemmas, 44 structural identities, 716 theorems verified to machine precision. |
-| **19,921 tests** | Comprehensive test suite across 225 files with 222 closure modules. |
+| **19,921 tests** | Comprehensive test suite across 226 files with 222 closure modules. |
 | **Three-valued verdicts** | Never boolean. Always CONFORMANT / NONCONFORMANT / NON\_EVALUABLE. |
 | **Three-layer architecture** | C99 orchestration (~1,900 lines) → C++17 accelerator → Python engine. 760 C/C++ assertions. |
 | **Interactive dashboard** | 46-page Streamlit dashboard for real-time kernel exploration. |
