@@ -148,7 +148,7 @@ The kernel maps to three regimes via frozen threshold gates:
 
 ---
 
-## 20 Scientific Domains
+## 23 Scientific Domains
 
 Each domain provides closure modules that map real-world data to trace vectors:
 
@@ -174,6 +174,9 @@ Each domain provides closure modules that map real-world data to trace vectors:
 | **Security** | Input validation, audit trails | — |
 | **GCD** | Generative Collapse Dynamics core | — |
 | **RCFT** | Recursive Collapse Field Theory | — |
+| **Immunology** | Immune cell kernel, cytokine networks, vaccine response | 36 |
+| **Ecology** | 12 ecological states, trophic cascades | 2 |
+| **Information Theory** | 10 complexity classes, computability kernel | 2 |
 
 ---
 
@@ -251,7 +254,7 @@ closures/                # 23 domain closure modules (245 .py files)
 contracts/               # 23 versioned mathematical contracts (YAML)
 casepacks/               # 29 self-contained validation packages
 schemas/                 # 17 JSON Schema Draft 2020-12 definitions
-canon/                   # 21 canonical anchor files
+canon/                   # 22 canonical anchor files
 ```
 
 ---

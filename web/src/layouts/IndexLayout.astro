@@ -7,7 +7,7 @@ import BaseLayout from './BaseLayout.astro';
 import { TEST_COUNT, IDENTITY_COUNT, LEMMA_COUNT } from '../lib/metrics';
 
 const { frontmatter } = Astro.props;
-const { title = 'Generative Collapse Dynamics', description = 'A single-axiom mathematical framework that measures what survives collapse and what returns — across 21 scientific domains.' } = frontmatter || {};
+const { title = 'Generative Collapse Dynamics', description = 'A single-axiom mathematical framework that measures what survives collapse and what returns — across 23 scientific domains.' } = frontmatter || {};
 const base = import.meta.env.BASE_URL;
 
 /* ── Tool categories ────────────────────────────────── */
@@ -58,7 +58,7 @@ const corpus = [
   { title: 'Orientation', desc: 'Ten computational re-derivations. Understanding is computed.', href: `${base}orientation/`, latin: 'Intellectus Computatur' },
 ];
 
-/* ── Domain catalog: 21 closure domains ─────────────── */
+/* ── Domain catalog: 23 closure domains ─────────────── */
 const domainCatalog = [
   { slug: 'gcd', name: 'Generative Collapse Dynamics', lens: 'Epistemology', modules: 11, category: 'Core', desc: 'The axiom, the kernel, the spine.', channels: 6, theorems: 37 },
   { slug: 'rcft', name: 'Recursive Collapse Field Theory', lens: 'Epistemology', modules: 13, category: 'Core', desc: 'Recursive field-theoretic structure of collapse.', channels: 8, theorems: 30 },
@@ -81,6 +81,8 @@ const domainCatalog = [
   { slug: 'continuity_theory', name: 'Continuity Theory', lens: 'History', modules: 5, category: 'Humanities', desc: 'Continuity law, topological persistence.', channels: 8, theorems: 29 },
   { slug: 'spacetime_memory', name: 'Spacetime Memory', lens: 'Ontology', modules: 8, category: 'Physics', desc: '40 entities, gravitational memory.', channels: 8, theorems: 46 },
   { slug: 'immunology', name: 'Immunology', lens: 'Phenomenology', modules: 6, category: 'Biology', desc: 'Immune cell kernel, cytokine networks, vaccine response.', channels: 8, theorems: 36 },
+  { slug: 'ecology', name: 'Ecology', lens: 'History', modules: 3, category: 'Biology', desc: '12 ecological states, trophic cascades.', channels: 5, theorems: 2 },
+  { slug: 'information_theory', name: 'Information Theory', lens: 'Epistemology', modules: 3, category: 'Applied', desc: '10 complexity classes, computability kernel.', channels: 5, theorems: 2 },
 ];
 
 const categories = ['Core', 'Physics', 'Science', 'Biology', 'Cognition', 'Applied', 'Humanities'];
@@ -111,7 +113,7 @@ const lensColors: Record<string, string> = {
   Semiotics: 'text-cyan-400',
 };
 
-const totalTheorems = 716; // Canonical unique theorem count (per-domain sums to 760 due to 44 cross-domain references)
+const totalTheorems = 746; // Canonical unique theorem count
 const totalModules = domainCatalog.reduce((s, d) => s + d.modules, 0);
 ---
 
