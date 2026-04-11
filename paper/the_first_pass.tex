@@ -1,0 +1,821 @@
+% ============================================================
+% The First Pass: A Complete Worked Example Through the
+% Generative-Collapse Spine
+%
+% Compile: pdflatex → bibtex → pdflatex → pdflatex
+% ============================================================
+
+\documentclass[
+  aps,
+  prd,
+  twocolumn,
+  superscriptaddress,
+  nofootinbib,
+  floatfix
+]{revtex4-2}
+
+% ── packages ──
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\definecolor{linkblue}{HTML}{337799}
+\usepackage[colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue]{hyperref}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xfrac}
+\usepackage{enumitem}
+\usepackage{array}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% ── theorem environments ──
+\newtheorem*{axiom}{Axiom}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{identity}[theorem]{Identity}
+\newtheorem{remark}{Remark}
+
+% ── UMCP macros ──
+\newcommand{\tR}{\tau_{\!R}}
+\newcommand{\tRS}{\tau_{\!R}^{*}}
+\newcommand{\Gam}{\Gamma}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\IR}{\infty_{\mathrm{rec}}}
+\newcommand{\tolseam}{\mathrm{tol}_{\mathrm{seam}}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Res}{\mathrm{Res}}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\INF}{\texttt{INF\_REC}}
+\newcommand{\regime}[1]{\textrm{\upshape\scshape#1}}
+\newcommand{\conform}{\regime{conformant}}
+\newcommand{\nonconform}{\regime{nonconformant}}
+\newcommand{\neval}{\regime{non-evaluable}}
+\newcommand{\tvec}{\mathbf{c}}
+\newcommand{\wvec}{\mathbf{w}}
+\newcommand{\IC}{\mathrm{IC}}
+\newcommand{\gF}{g_{\!F}}
+\newcommand{\RunID}{\mathrm{RunID}}
+
+\begin{document}
+
+% ============================================================
+% TITLE
+% ============================================================
+\title{The First Pass: A Complete Worked Example Through the
+Generative-Collapse Spine}
+
+\author{Clement Paulus}
+\email{clementpaulus9@gmail.com}
+\affiliation{UMCP / GCD / RCFT Canon}
+\affiliation{UMCP Reference Implementation, GitHub}
+
+\date{\today}
+
+\begin{abstract}
+We trace a single measurement---three voltage readings at 99\%
+fidelity---through the complete validation spine of the Universal
+Measurement Contract Protocol (UMCP).  Starting from Axiom-0
+(``Collapse is generative; only what returns is real'') and a frozen
+contract, we embed the raw data into a bounded trace vector
+$\tvec \in [\eps, 1-\eps]^3$, compute the six kernel invariants
+$(F, \omega, S, C, \kappa, \IC)$, reconcile the integrity ledger,
+classify the regime via four frozen gates, and derive the three-valued
+verdict \conform{}.  Every number is exact, every identity is verified
+to machine precision, and every step is reproducible from the
+open-source reference implementation.  We present the kernel
+computation in explicit detail, prove the three structural identities
+($F + \omega = 1$, $\IC \leq F$, $\IC = e^\kappa$) for the worked
+example, demonstrate the seam budget closure, and show how the same
+spine applies identically regardless of the interface used---command
+line, Python API, or REST endpoint.  A heterogeneous counterexample
+is provided to demonstrate geometric slaughter: the mechanism by which
+a single degraded channel destroys multiplicative coherence while
+leaving the arithmetic mean apparently healthy.  The paper serves as
+a self-contained entrance to the GCD formalism, requiring no prior
+knowledge of the framework.
+\end{abstract}
+
+\maketitle
+
+% ============================================================
+\section{Introduction}\label{sec:intro}
+% ============================================================
+
+The Generative Collapse Dynamics (GCD) framework and its operational
+arm, the Universal Measurement Contract Protocol
+(UMCP)~\cite{paulus2025umcp,paulus2025physicscoherence}, constitute a
+contract-first validation system built on a single axiom.  The
+framework has been applied across 23 domain
+closures~\cite{umcpmetadatarepo}, from particle
+physics~\cite{paulus2025physicscoherence} to consciousness coherence,
+with 20{,}221 automated tests, 47~lemmas, and 44~structural
+identities verified to machine precision.
+
+Despite this scope, no single document has previously traced one
+complete object through every layer of the system: from the axiom
+through the frozen contract, embedding, kernel computation, ledger
+reconciliation, regime classification, casepack packaging, and
+operational execution---all with exact numbers.
+
+This paper provides that trace.  The object is deliberately minimal:
+three identical voltage readings.  The simplicity is the point.  When
+the system is understood for the simplest case, the general case
+follows by replacing the trace vector---the spine does not change.
+
+\subsection{Scope and structure}
+
+We present twelve stops, organized into the five stages of the
+fixed discourse spine:
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Contract} (Stops~1--2): The axiom is stated; the
+  contract is frozen.
+\item \textbf{Canon} (Stops~3--5): Channels are chosen, the trace
+  is bounded, and the kernel is computed.
+\item \textbf{Closures} (Stop~6): Thresholds are published; the
+  ledger is debited and credited.
+\item \textbf{Integrity Ledger} (Stops~6--7): The seam residual is
+  checked; the regime is classified.
+\item \textbf{Stance} (Stops~7--12): The verdict is derived;
+  the result is packaged, executed, rendered, and read back into
+  ordinary language.
+\end{enumerate}
+
+Appendix~\ref{app:heterogeneous} provides a heterogeneous
+counterexample.  Appendix~\ref{app:degenerate} establishes the
+precise relationship between the GCD kernel and classical results.
+
+% ============================================================
+\section{The Axiom}\label{sec:axiom}
+% ============================================================
+
+\begin{axiom}[Axiom-0]
+\emph{Collapse is generative; only what returns is real.}
+
+\emph{Collapsus generativus est; solum quod redit, reale est.}
+\end{axiom}
+
+This is the single foundational principle.  It is a constraint on
+admissible claims: no measurement, computation, or verdict is
+admitted unless it can demonstrate \emph{return}---meaning the system
+can re-enter its admissible neighborhood $D_\theta$ after drift,
+perturbation, or delay, under the same evaluation rules that were
+declared before the data was seen.
+
+Formally, return at time $t$ requires the existence of a prior
+state $u \in D_\theta(t)$ such that
+$\|\Psi(t) - \Psi(u)\| \leq \eta$, where $\eta$ is the frozen
+return tolerance.  When return is indefinitely deferred,
+$\tR = \IR$, and no epistemic credit is granted.
+
+Everything that follows derives from this axiom.
+
+% ============================================================
+\section{The Frozen Contract}\label{sec:contract}
+% ============================================================
+
+Before touching data, we declare the rules.  The contract
+\texttt{UMA.INTSTACK.v1}~\cite{paulus2026umcpcasepack} freezes all
+parameters prior to computation.
+
+\begin{definition}[Frozen parameters]\label{def:frozen}
+The frozen parameters are:
+\begin{align}
+  \eps &= 10^{-8} & &\text{(guard band)}, \notag \\
+  p &= 3 & &\text{(drift cost exponent)}, \notag \\
+  \alpha &= 1.0 & &\text{(curvature cost coefficient)}, \notag \\
+  \tolseam &= 0.005 & &\text{(seam residual tolerance)}. \notag
+\end{align}
+\end{definition}
+
+These values are not arbitrary.  They are \emph{seam-derived}: the
+unique constants where mathematical identities hold consistently
+across all 23 tested
+domains~\cite{paulus2025physicscoherence,umcpmetadatarepo}.  The
+exponent $p = 3$ is the unique integer for which
+$\omega_{\mathrm{trap}}$ is a Cardano root of $x^3 + x - 1 = 0$.
+The tolerance $\tolseam = 0.005$ is the width at which $\IC \leq F$
+holds at 100\% across every domain.  The guard band $\eps = 10^{-8}$
+is chosen so that the pole at $\omega = 1$ does not affect any
+measurement to machine precision.
+
+The contract also declares three algebraic identities that every
+computation must satisfy:
+\begin{align}
+  F + \omega &= 1 \quad &&\text{(duality),} \label{eq:duality} \\
+  \IC &\leq F \quad &&\text{(integrity bound),} \label{eq:bound} \\
+  \IC &= e^\kappa \quad &&\text{(log-integrity).} \label{eq:logint}
+\end{align}
+
+And three-valued verdicts:  \conform{} $|$ \nonconform{} $|$
+\neval{}.  Never boolean.
+
+% ============================================================
+\section{Channel Choice and Embedding}\label{sec:channels}
+% ============================================================
+
+At $t = 0$, a sensor reports three raw values:
+\beq\label{eq:raw}
+  x_1 = 9.9, \quad x_2 = 9.9, \quad x_3 = 9.9,
+\eeq
+with declared instrument range $[0, 10]$.
+
+Channel choice is a Tier-2 act: the domain closure maps physical
+quantities to the unit interval.  With linear normalization:
+\beq\label{eq:embed}
+  c_k = \frac{x_k - x_{\min}}{x_{\max} - x_{\min}} = \frac{x_k}{10},
+\eeq
+yielding $c_1 = c_2 = c_3 = 0.99$.  Equal weights $w_k = 1/3$ are
+assigned (no domain-specific reason to privilege any channel).
+
+\begin{definition}[Trace and weight vectors]\label{def:trace}
+The trace vector is $\tvec = (0.99,\, 0.99,\, 0.99) \in [0,1]^3$.
+The weight vector is $\wvec = (\sfrac{1}{3},\, \sfrac{1}{3},\,
+\sfrac{1}{3}) \in \Delta^2$.  Both satisfy the contract constraints:
+$c_k \in [\eps, 1-\eps]$ and $\sum_k w_k = 1$.
+\end{definition}
+
+\subsection{The guard band}
+
+The contract specifies face policy \texttt{pre\_clip}: before any
+computation, every channel is clamped to $[\eps, 1-\eps]$.  For
+$c_k = 0.99$, the clamp is inactive.  The guard band exists because
+the kernel requires $\ln(c_k)$; if $c_k = 0$, the kernel diverges.
+The $\eps$-clamp is a return guarantee: no channel can fully die,
+because a dead channel has no path back through collapse.
+
+If a raw value exceeds the declared bounds (e.g., $x_1 = 12.5$ when
+the range is $[0, 10]$), the embedding produces $c_1 = 1.25$, which
+clips to $c_1 = 1 - \eps \approx 1.0$, and an out-of-range (OOR)
+flag is set.  The data is preserved; the flag is the audit trail.
+
+For our trace: no OOR flags.  The bounded trace is
+\beq
+  \Psi(0) = (0.99,\, 0.99,\, 0.99).
+\eeq
+
+% ============================================================
+\section{The Kernel}\label{sec:kernel}
+% ============================================================
+
+The kernel $K: [0,1]^n \times \Delta^{n-1} \to \mathbb{R}^6$ maps
+the trace and weight vectors to six invariants.  We compute each
+explicitly.
+
+\begin{definition}[GCD Kernel]\label{def:kernel}
+Given $\tvec = (c_1, \ldots, c_n) \in [\eps, 1-\eps]^n$ and
+$\wvec = (w_1, \ldots, w_n)$ with $\sum_i w_i = 1$:
+\begin{align}
+  F &= \sum_i w_i \, c_i, \label{eq:F} \\
+  \omega &= 1 - F, \label{eq:omega} \\
+  \kappa &= \sum_i w_i \ln c_i, \label{eq:kappa} \\
+  \IC &= e^\kappa, \label{eq:IC} \\
+  S &= -\sum_i w_i \bigl[c_i \ln c_i + (1{-}c_i)\ln(1{-}c_i)\bigr],
+    \label{eq:S} \\
+  C &= \frac{\mathrm{stddev}(c_i)}{0.5}. \label{eq:C}
+\end{align}
+\end{definition}
+
+\subsection{Fidelity and drift}
+
+\emph{Fidelitas} ($F$) measures what survives collapse:
+\beq
+  F = \tfrac{1}{3}(0.99 + 0.99 + 0.99) = 0.99.
+\eeq
+\emph{Derivatio} ($\omega$) measures what is lost:
+\beq
+  \omega = 1 - 0.99 = 0.01.
+\eeq
+
+\begin{proposition}[Duality verification]\label{prop:duality}
+$F + \omega = 0.99 + 0.01 = 1.0$ exactly.  The residual is
+$|F + \omega - 1| = 0.0$.
+\end{proposition}
+
+This is not approximate.  The duality identity~\eqref{eq:duality}
+holds to $0.0 \times 10^0$ residual across all tested
+traces~\cite{umcpmetadatarepo}.
+
+\subsection{Log-integrity and integrity}
+
+\emph{Log-Integritas} ($\kappa$):
+\beq
+  \kappa = \tfrac{1}{3}\bigl[\ln(0.99) + \ln(0.99) + \ln(0.99)\bigr]
+  = -0.01005034.
+\eeq
+$\kappa \leq 0$ always, since $\ln(c_i) \leq 0$ for
+$c_i \in (0, 1]$.
+
+\emph{Integritas Composita} ($\IC$):
+\beq
+  \IC = e^{-0.01005034} = 0.99.
+\eeq
+The log-integrity relation~\eqref{eq:logint} holds by construction.
+
+\begin{proposition}[Integrity bound verification]\label{prop:bound}
+$\IC = 0.99 \leq 0.99 = F$.  For homogeneous traces
+($c_1 = c_2 = \cdots = c_n$), equality holds: $\IC = F$.
+\end{proposition}
+
+The integrity bound~\eqref{eq:bound} is the solvability condition
+for trace recovery: given $(F, \IC)$ with $n = 2$, the individual
+channels satisfy $c_{1,2} = F \pm \sqrt{F^2 - \IC^2}$, which
+requires $\IC \leq F$ for real solutions.  This is derived
+independently from Axiom-0; the classical AM-GM inequality is the
+degenerate limit when channel semantics, weights, and the guard band
+are removed.
+
+\subsection{Entropy}
+
+The Bernoulli field entropy (not Shannon entropy, which is the
+degenerate limit when the collapse field is set to $\{0, 1\}$):
+\begin{align}
+  S &= -\tfrac{1}{3}\bigl[0.99\ln(0.99) + 0.01\ln(0.01)\bigr]
+       \times 3 \notag \\
+    &= 0.05600. \label{eq:Sval}
+\end{align}
+This is low: the channels are near-maximal, leaving little
+uncertainty in the collapse field.
+
+\subsection{Curvature}
+
+\emph{Curvatura} ($C$) measures channel spread:
+\beq
+  C = \frac{\mathrm{stddev}(0.99, 0.99, 0.99)}{0.5} = \frac{0.0}{0.5} = 0.0.
+\eeq
+With identical channels, there is no heterogeneity.
+
+\subsection{The heterogeneity gap}
+
+The gap $\Delta = F - \IC$ measures how much the arithmetic mean
+conceals about channel dispersion:
+\beq
+  \Delta = 0.99 - 0.99 = 0.0.
+\eeq
+For homogeneous traces, $\Delta = 0$.  This will become nontrivial
+in Appendix~\ref{app:heterogeneous}.
+
+\subsection{Kernel summary}
+
+\begin{table}[h]
+\caption{Kernel outputs for $\tvec = (0.99, 0.99, 0.99)$ with
+  equal weights.}
+\label{tab:kernel}
+\begin{ruledtabular}
+\begin{tabular}{lccl}
+  Symbol & Latin & Value & Meaning \\
+  \hline
+  $F$ & Fidelitas & $0.99$ & What survives \\
+  $\omega$ & Derivatio & $0.01$ & What is lost \\
+  $\kappa$ & Log-Integritas & $-0.01005$ & Log coherence \\
+  $\IC$ & Integritas & $0.99$ & Mult.\ coherence \\
+  $S$ & Entropia & $0.05600$ & Field entropy \\
+  $C$ & Curvatura & $0.0$ & Channel spread \\
+  $\Delta$ & --- & $0.0$ & Heterogeneity gap \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+% ============================================================
+\section{The Integrity Ledger}\label{sec:ledger}
+% ============================================================
+
+The integrity ledger tracks debits and credits across the
+seam~\cite{paulus2025seams}:
+
+\begin{definition}[Seam budget]\label{def:seam}
+The budget identity is
+\beq\label{eq:budget}
+  \Delta\kappa = R \cdot \tR - (D_\omega + D_C),
+\eeq
+where the drift cost is
+\beq\label{eq:Domega}
+  D_\omega = \Gam(\omega) = \frac{\omega^p}{1 - \omega + \eps}
+  = \frac{(0.01)^3}{0.99 + 10^{-8}} = 1.01 \times 10^{-6},
+\eeq
+and the curvature cost is
+\beq\label{eq:DC}
+  D_C = \alpha \cdot C = 1.0 \times 0.0 = 0.0.
+\eeq
+\end{definition}
+
+At $t = 0$, there is no prior history.  The system has never
+departed and never returned, so $\tR = \IR$---infinite return delay.
+Under the contract's censoring rule (\emph{Si $\tR = \IR$, nulla
+fides datur}), no credit is earned:
+\beq
+  R \cdot \tR = 0.
+\eeq
+
+The ledger:
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Entry & Type & Amount \\
+\midrule
+Drift cost $D_\omega$ & Debit & $1.01 \times 10^{-6}$ \\
+Curvature cost $D_C$ & Debit & $0.0$ \\
+Return credit & Credit & $0.0$ \\
+\midrule
+\textbf{Residual} $|s|$ & & $1.01 \times 10^{-6}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The seam closes: $|s| = 1.01 \times 10^{-6} \leq 0.005 = \tolseam$.
+
+% ============================================================
+\section{Regime Classification}\label{sec:regime}
+% ============================================================
+
+The regime is classified by four conjunctive gates applied to the
+kernel outputs.  These gates are frozen in the
+contract~\cite{paulus2026umcpcasepack}:
+
+\begin{definition}[Regime gates]\label{def:gates}
+\begin{align}
+  &\regime{Stable}: & &\omega < 0.038 \;\wedge\; F > 0.90 \notag \\
+  & & &\wedge\; S < 0.15 \;\wedge\; C < 0.14, \notag \\
+  &\regime{Watch}: & &0.038 \leq \omega < 0.30 \notag \\
+  & & &\text{(or Stable gates not all met)}, \notag \\
+  &\regime{Collapse}: & &\omega \geq 0.30, \notag \\
+  &\regime{Critical}: & &\IC < 0.30 \;\text{(overlay)}. \notag
+\end{align}
+\end{definition}
+
+For our trace:
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Gate & Threshold & Value & Pass? \\
+\midrule
+$\omega < 0.038$ & 0.038 & 0.01 & \checkmark \\
+$F > 0.90$       & 0.90  & 0.99 & \checkmark \\
+$S < 0.15$       & 0.15  & 0.056 & \checkmark \\
+$C < 0.14$       & 0.14  & 0.0 & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All four gates pass.  Regime: \regime{Stable}.  Critical overlay:
+inactive ($\IC = 0.99 > 0.30$).  Stance: \conform{}.
+
+\begin{remark}
+In Fisher coordinate space ($\theta = \arcsin\sqrt{\omega}$), the
+\regime{Stable} regime occupies only 12.5\% of the total manifold.
+The remaining 87.5\% is \regime{Watch} (24.4\%) and
+\regime{Collapse} (63.1\%).  Stability is structurally rare.
+\end{remark}
+
+% ============================================================
+\section{Operational Execution}\label{sec:execution}
+% ============================================================
+
+The preceding computation is packaged in a \emph{casepack}---the
+atomic unit of auditable work~\cite{paulus2026umcpcasepack}.  A
+casepack is a directory containing the raw data, the frozen contract,
+the closure registry, and the expected outputs (embedded trace,
+invariants, SS1M receipt with SHA-256 checksums).
+
+\subsection{Command-line validation}
+
+\begin{verbatim}
+$ umcp validate casepacks/hello_world \
+    --strict
+UMCP validation: CONFORMANT
+  (repo + casepacks/hello_world),
+  errors=0 warnings=0;
+  validator=umcp-validator v2.3.1;
+  policy strict=true;
+  sha256=6fc79df4...
+\end{verbatim}
+
+The validator performs, in sequence: JSON Schema validation
+(Draft~2020-12), semantic rule checks (15+~rules), kernel identity
+checks ($F = 1 - \omega$, $\IC \approx e^\kappa$, $\IC \leq F$),
+regime consistency verification, and SHA-256 integrity checking.
+Exit code: 0 = \conform{}, 1 = \nonconform{}.
+
+\subsection{Programmatic API}
+
+The same computation is available via the Python API:
+
+\begin{verbatim}
+from umcp import validate
+result = validate("casepacks/hello_world")
+assert result["run_status"] == "CONFORMANT"
+\end{verbatim}
+
+Or via the \texttt{MeasurementEngine} for raw data:
+
+\begin{verbatim}
+from umcp.measurement_engine \
+    import MeasurementEngine
+import numpy as np
+
+engine = MeasurementEngine()
+raw = np.array([[9.9, 9.9, 9.9]])
+result = engine.from_array(
+    raw, weights=[1/3, 1/3, 1/3]
+)
+row = result.invariants[0]
+# row.F == 0.99, row.regime == "Stable"
+\end{verbatim}
+
+\subsection{The cognitive equalizer}
+
+Every execution path---CLI, Python API, REST endpoint, C99 core,
+C++ accelerator---passes through the same spine with the same frozen
+parameters and produces the same verdict.  This is the
+\emph{Aequator Cognitivus}: the system produces identical output
+regardless of which cognitive agent operates it.  Thresholds are
+frozen, vocabulary is operationally defined, and verdicts are derived
+from gates.  The structure measures; the agent does not.
+
+% ============================================================
+\section{Latin Rendering and Cross-Domain
+Translation}\label{sec:latin}
+% ============================================================
+
+The canonical Latin vocabulary carries operational constraints that
+English does not.  Each term is not a translation but a precision
+instrument whose morphology encodes the operational definition.
+
+The worked example, rendered canonically:
+
+\begin{quote}
+\emph{Ad tempus $t = 0$, tria vestigia mensurantur:
+$\tvec = (0.99,\, 0.99,\, 0.99)$.  Fidelitas est $F = 0.99$;
+derivatio est $\omega = 0.01$.  Complementum perfectum tenet:
+$F + \omega = 1$.  Log-integritas est $\kappa = -0.01005$;
+integritas composita est $\IC = 0.99$.  Limbus integritatis tenet:
+$\IC \leq F$.  Entropia campi est $S = 0.056$; curvatura est
+$C = 0.0$.  Moratio reditus est $\tR = \IR$---nulla fides datur.
+Regio est Stabilis.  Sutura clauditur.  Iudicium: \conform{}.}
+\end{quote}
+
+\subsection{The five-word vocabulary}
+
+The canonical prose interface uses five words, each with a ledger
+role~\cite{paulus2025umcp}:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Latin & English & Value \\
+\midrule
+Derivatio & Drift & $\omega = 0.01$ \\
+Fidelitas & Fidelity & $F = 0.99$ \\
+Curvatura & Roughness & $C = 0.0$ \\
+Moratio Reditus & Return & $\tR = \IR$ \\
+Integritas & Integrity & $\IC = 0.99$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Rosetta translation}
+
+The Rosetta adapter~\cite{paulus2025umcp} maps the five words across
+lenses so different fields can read the same computation in their
+own dialect:
+
+\begin{center}
+\small
+\begin{tabular}{lll}
+\toprule
+Lens & Drift $= 0.01$ & Fidelity $= 0.99$ \\
+\midrule
+Physics & 1\% energy loss & 99\% preserved \\
+Finance & 1\% drawdown & 99\% retained \\
+Epistemology & Minimal shift & Warrant preserved \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The meanings of the columns remain stable while the dialect changes.
+\emph{Significatio stabilis manet dum dialectus mutatur.}
+
+% ============================================================
+\section{Degenerate Limits}\label{sec:degenerate}
+% ============================================================
+
+The GCD kernel structures relate to classical results as follows:
+the classical result is what remains when degrees of freedom are
+removed.  The arrow of derivation runs from the axiom to the
+classical limit, never in reverse.
+
+\begin{proposition}[Classical degenerate limits]\label{prop:limits}
+\begin{enumerate}[leftmargin=*,label=(\roman*)]
+\item \textbf{Duality $\to$ unitarity.}
+  $F + \omega = 1$ reduces to $p + q = 1$ when the cost function
+  $\Gam(\omega)$ is removed.
+
+\item \textbf{Integrity bound $\to$ AM-GM inequality.}
+  $\IC \leq F$ reduces to $\mathrm{GM}(c) \leq \mathrm{AM}(c)$
+  when channel semantics, weights, and the guard band $\eps$ are
+  removed.
+
+\item \textbf{Bernoulli field entropy $\to$ Shannon entropy.}
+  The entropy $S$ of Eq.~\eqref{eq:S} reduces to Shannon entropy
+  when the collapse field is removed (i.e., $c_i \in \{0, 1\}$
+  only).
+
+\item \textbf{Log-integrity $\to$ exponential map.}
+  $\IC = e^\kappa$ reduces to the standard exponential map when the
+  weighted sum structure is removed.
+\end{enumerate}
+\end{proposition}
+
+The GCD framework does not ``use'' or ``apply'' these classical
+results.  It derives the kernel identities independently from
+Axiom-0; the classical results emerge as structurally impoverished
+special cases.
+
+% ============================================================
+\section{Discussion}\label{sec:discussion}
+% ============================================================
+
+We have traced three voltage readings---the simplest possible
+measurement---through the complete GCD/UMCP spine.  The trace
+demonstrates:
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{Contract precedence.}  All parameters are frozen
+  before any data is seen.  No threshold, tolerance, or gate is
+  tuned after evidence.
+
+\item \textbf{Exact identities.}  $F + \omega = 1$ holds to
+  $0.0 \times 10^0$ residual; $\IC = e^\kappa$ holds to machine
+  precision; $\IC \leq F$ with equality for homogeneous traces.
+
+\item \textbf{Three-valued logic.}  The verdict is \conform{},
+  \nonconform{}, or \neval{}---never boolean.
+
+\item \textbf{Typed boundaries.}  $\tR = \IR$ is a first-class
+  semantic value (not an error or a missing datum) that directly
+  determines ledger credit.
+
+\item \textbf{Interface invariance.}  CLI, Python API, REST API,
+  C99 core, and C++ accelerator all produce identical results from
+  the same spine and frozen parameters.
+
+\item \textbf{Structural stability is rare.}
+  \regime{Stable} occupies 12.5\% of Fisher space; the homogeneous
+  high-fidelity trace sits in the small corner where all four gates
+  simultaneously pass.
+\end{enumerate}
+
+The simplicity of the example is a feature: the spine is identical
+for three voltage readings and for 31~Standard Model
+particles~\cite{paulus2025physicscoherence}.  Only the Tier-2
+channel choice changes; the Tier-1 kernel and Tier-0 protocol are
+invariant.
+
+% ============================================================
+\section{Conclusions}\label{sec:conclusions}
+% ============================================================
+
+We have provided a complete, self-contained trace of a single
+measurement through the twelve stops of the GCD validation spine.
+Every number is reproducible by running the open-source reference
+implementation~\cite{umcpmetadatarepo}.  The paper serves as the
+canonical entrance to the framework: a reader who has seen one
+complete pass can navigate any domain closure, any theorem, and any
+extension of the system.
+
+The first pass is complete.  Now proceed through any door.
+
+\emph{Finis primi transitus.  Nunc per quamlibet portam procede.}
+
+% ============================================================
+\begin{acknowledgments}
+This work was conducted independently without institutional
+affiliation or external funding.  The kernel's mathematical
+substrate has a long history: Jakob Bernoulli's \emph{Ars
+Conjectandi}~(1713) established the field structure from which the
+entropy formula descends; R.~A.~Fisher's geometric treatment of
+statistical families~(1925) provides the coordinate space in which
+regime partition is measured; Claude Shannon's channel capacity
+theorem~(1948) is recovered here as a degenerate limit when the
+collapse field is removed; and the metrological tradition
+codified in the GUM~\cite{jcgm2008gum} established the principle
+that measurement uncertainty must be declared before evidence.
+The frozen-contract discipline inherits from this last tradition
+directly.  The open-source scientific computing ecosystem made
+the 20{,}221-test validation suite possible.  Reference
+implementation:
+\url{https://github.com/calebpruett927/GENERATIVE-COLLAPSE-DYNAMICS}.
+\end{acknowledgments}
+
+% ============================================================
+\appendix
+% ============================================================
+
+\section{Heterogeneous Counterexample}\label{app:heterogeneous}
+
+To demonstrate why the integrity bound is a diagnostic and not merely
+an inequality, we contrast the homogeneous trace with two
+heterogeneous cases.
+
+\subsection{Moderate heterogeneity}
+
+Replace $\tvec = (0.99, 0.99, 0.99)$ with
+$\tvec = (0.85, 0.92, 0.98)$---the $t = 0$ state from the
+end-to-end reference casepack \texttt{UMCP-REF-E2E-0001}:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Output & Homogeneous & Heterogeneous \\
+\midrule
+$F$ & 0.9900 & 0.9167 \\
+$\omega$ & 0.0100 & 0.0833 \\
+$\kappa$ & $-0.01005$ & $-0.08870$ \\
+$\IC$ & 0.9900 & 0.9151 \\
+$\Delta$ & 0.0000 & 0.0015 \\
+$S$ & 0.0560 & 0.2665 \\
+$C$ & 0.0000 & 0.1062 \\
+Regime & \regime{Stable} & \regime{Watch} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The heterogeneous trace drops to \regime{Watch} because
+$\omega = 0.083 > 0.038$ (drift gate fails).  The gap appears:
+$\Delta = 0.0015$.
+
+\subsection{Geometric slaughter}\label{app:slaughter}
+
+The mechanism of \emph{geometric slaughter} is demonstrated when
+a single channel approaches zero.  Set $c_1 = 0.001$,
+$c_2 = c_3 = 0.99$:
+
+\begin{align}
+  F &= 0.6603 \quad \text{(mean still majority-healthy)}, \notag \\
+  \IC &= 0.0993 \quad \text{(geometric mean destroyed)}, \notag \\
+  \Delta &= 0.5610 \quad \text{(massive gap)}. \notag
+\end{align}
+
+One channel near $\eps$ kills $\IC$ because the geometric mean
+multiplies rather than averages.  Fidelity $F$ is the arithmetic
+mean: it is robust to a single outlier.  Integrity $\IC$ is the
+geometric mean: it is sensitive to every channel simultaneously.
+This is why $\IC \leq F$ is not merely an inequality---it is a
+\textbf{diagnostic}.  The gap $\Delta$ reveals what the arithmetic
+mean conceals.
+
+% ============================================================
+
+\section{Degenerate-Limit Derivations}\label{app:degenerate}
+
+\subsection{Duality identity}
+
+The GCD duality $F + \omega = 1$ is definitional ($\omega \coloneqq
+1 - F$).  Classical unitarity $p + q = 1$ for a Bernoulli trial is
+the zero-cost special case where $\Gam(\omega)$ is removed from the
+seam budget~\eqref{eq:budget}.
+
+\subsection{Integrity bound}
+
+For $n = 2$ equal-weight channels, $F = (c_1 + c_2)/2$ and
+$\IC = \sqrt{c_1 \cdot c_2}$.  The condition $\IC \leq F$ is
+precisely $\sqrt{c_1 c_2} \leq (c_1 + c_2)/2$, i.e., the
+arithmetic--geometric mean inequality for two variables.  For
+general $n$ with weights, the integrity bound is strictly more
+general: it carries channel semantics ($c_i$ represents a specific
+physical quantity), the guard band ($c_i \in [\eps, 1-\eps]$), and
+composition laws ($\IC$ composes geometrically:
+$\IC_{12} = \sqrt{\IC_1 \cdot \IC_2}$; $F$ composes arithmetically:
+$F_{12} = (F_1 + F_2)/2$).
+
+The solvability interpretation: given $(F, \IC)$ with $n = 2$,
+\beq
+  c_{1,2} = F \pm \sqrt{F^2 - \IC^2},
+\eeq
+which requires $\IC \leq F$ for real solutions.
+
+\subsection{Bernoulli field entropy}
+
+The GCD entropy~\eqref{eq:S} is the full Bernoulli field entropy.
+Each channel $c_i$ is a continuous variable in $(0, 1)$.  When the
+collapse field is restricted to $c_i \in \{0, 1\}$ only, the binary
+entropy $h(c) = -c\log c - (1-c)\log(1-c)$ is evaluated only at the
+endpoints, and the sum reduces to Shannon's formula for a discrete
+source with outcome probabilities equal to the weights.
+
+\subsection{Log-integrity relation}
+
+$\IC = e^\kappa$ is definitional: $\kappa = \sum w_i \ln c_i$
+defines $\kappa$, and $\IC \coloneqq e^\kappa$.  The classical
+exponential map $e^x: \mathbb{R} \to \mathbb{R}^+$ is what remains
+when the weighted sum is replaced by a scalar and the channel
+structure is removed.
+
+% ============================================================
+
+\bibliography{Bibliography}
+
+\end{document}
