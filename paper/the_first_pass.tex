@@ -115,7 +115,10 @@ framework has been applied across 23 domain
 closures~\cite{umcpmetadatarepo}, from particle
 physics~\cite{paulus2025physicscoherence} to consciousness coherence,
 with 20{,}221 automated tests, 47~lemmas, and 44~structural
-identities verified to machine precision.
+identities verified to machine precision.  A \emph{closure} in this
+context is a domain-specific mapping layer: it selects which
+real-world quantities become the trace vector's channels and weights,
+but does not alter the kernel or the protocol that evaluates them.
 
 Despite this scope, no single document has previously traced one
 complete object through every layer of the system: from the axiom
@@ -127,6 +130,18 @@ This paper provides that trace.  The object is deliberately minimal:
 three identical voltage readings.  The simplicity is the point.  When
 the system is understood for the simplest case, the general case
 follows by replacing the trace vector---the spine does not change.
+
+The choice of a trivial example is architectural, not pedagogical
+laziness.  The validation spine is \emph{invariant} across domains:
+the same frozen contract, kernel, ledger, regime gates, and verdict
+logic apply whether the trace vector carries three voltages or
+thirty-one Standard Model particles.  Only the Tier-2 closure
+changes---the mapping from raw observables to the unit interval.
+One complete pass through the simplest case therefore constitutes
+the correct entrance to the entire framework, because a reader who
+has verified the spine for three homogeneous channels can then
+navigate any domain closure by understanding only the channel
+selection, never the protocol itself.
 
 \subsection{Scope and structure}
 
@@ -152,33 +167,37 @@ stages visually.
 \begin{figure}[ht]
 \centering
 \small
-\setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}c@{\,}l@{\quad}l@{}}
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}c@{\,}l@{\quad}l@{\quad}l@{}}
   \toprule
-  \textbf{Stop} & \textbf{What happens} & \textbf{Spine stage} \\
+  \textbf{Stop} & \textbf{What happens} & \textbf{Spine stage} & \textbf{Tier} \\
   \midrule
-  1 & Axiom declared    & \multirow{2}{*}{\textsc{Contract}} \\
-  2 & Parameters frozen  & \\
+  1 & Axiom declared    & \multirow{2}{*}{\textsc{Contract}} & Tier-1 \\
+  2 & Parameters frozen  & & Tier-0 \\
   \midrule
-  3 & Channels chosen    & \multirow{3}{*}{\textsc{Canon}} \\
-  4 & Trace bounded      & \\
-  5 & Kernel computed    & \\
+  3 & Channels chosen    & \multirow{3}{*}{\textsc{Canon}} & Tier-2 \\
+  4 & Trace bounded      & & Tier-0 \\
+  5 & Kernel computed    & & $1 \!\leftarrow\! 0$ \\
   \midrule
-  6 & Ledger debited / credited & \textsc{Closures} \\
+  6 & Ledger debited / credited & \textsc{Closures} & Tier-0 \\
   \midrule
-  7 & Regime classified  & \textsc{Integrity Ledger} \\
+  7 & Regime classified  & \textsc{Integrity Ledger} & Tier-0 \\
   \midrule
-  8 & Casepack assembled & \multirow{5}{*}{\textsc{Stance}} \\
-  9 & CLI executed       & \\
-  10 & API called        & \\
-  11 & Latin rendered    & \\
-  12 & Ordinary reading  & \\
+  8 & Casepack assembled & \multirow{5}{*}{\textsc{Stance}} & Tier-0 \\
+  9 & CLI executed       & & Tier-0 \\
+  10 & API called        & & Tier-0 \\
+  11 & Latin rendered    & & Tier-2 \\
+  12 & Ordinary reading  & & Tier-2 \\
   \bottomrule
 \end{tabular}
 \caption{The twelve stops mapped onto the five stages of the
   fixed discourse spine:
   Contract~$\to$~Canon~$\to$~Closures~$\to$~Integrity
-  Ledger~$\to$~Stance.}
+  Ledger~$\to$~Stance.  The \textbf{Tier} column shows whether each
+  stop is Tier-1 (the kernel and its identities), Tier-0 (the protocol
+  that implements and interprets the kernel), or Tier-2 (domain-specific
+  channel selection).  ``$1 \!\leftarrow\! 0$'' denotes a crossing:
+  Tier-0 code evaluates a Tier-1 function.}
 \label{fig:spine}
 \end{figure}
 
@@ -254,13 +273,23 @@ The frozen parameters are:
 These values are not arbitrary.  They are \emph{seam-derived}: the
 unique constants where mathematical identities hold consistently
 across all 23 tested
-domains~\cite{paulus2025physicscoherence,umcpmetadatarepo}.  The
-exponent $p = 3$ is the unique integer for which
-$\omega_{\mathrm{trap}}$ is a Cardano root of $x^3 + x - 1 = 0$.
-The tolerance $\tolseam = 0.005$ is the width at which $\IC \leq F$
-holds at 100\% across every domain.  The guard band $\eps = 10^{-8}$
-is chosen so that the pole at $\omega = 1$ does not affect any
-measurement to machine precision.
+domains~\cite{paulus2025physicscoherence,umcpmetadatarepo}.
+Operationally:
+\begin{itemize}[leftmargin=*,nosep]
+  \item $\eps = 10^{-8}$: no channel can fully die---this guard band
+    keeps $\ln(c_i)$ finite without affecting any measurement to
+    machine precision.
+  \item $p = 3$: the unique integer for which
+    $\omega_{\mathrm{trap}}$ is a Cardano root of $x^3 + x - 1 = 0$,
+    governing how steeply the drift cost $\Gam(\omega)$ penalizes
+    departure from fidelity.
+  \item $\alpha = 1.0$: unit coupling---each unit of curvature
+    contributes one unit of cost to the ledger, with no amplification
+    or suppression.
+  \item $\tolseam = 0.005$: the width at which $\IC \leq F$ holds at
+    100\% across every tested domain; a residual below this threshold
+    means the seam closes.
+\end{itemize}
 
 The contract also declares three algebraic identities that every
 computation must satisfy:
@@ -487,6 +516,41 @@ Return credit & Credit & $0.0$ \\
 
 The seam closes: $|s| = 1.01 \times 10^{-6} \leq 0.005 = \tolseam$.
 
+\begin{tcolorbox}[
+  colback=black!4,
+  colframe=black!60,
+  boxrule=1.0pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=6pt, bottom=6pt,
+  title={\bfseries\sffamily Why $\tR = \IR$ and the paper is still
+    \conform{}},
+  coltitle=white,
+  colbacktitle=black!70,
+  fonttitle=\small,
+]
+\small
+\begin{enumerate}[leftmargin=*,nosep,label=(\arabic*)]
+\item \textbf{No return credit.}  Because $\tR = \IR$, the return
+  credit $R \cdot \tR$ is exactly zero.  The system has never
+  departed and never returned, so the ledger earns nothing on
+  the credit side.
+\item \textbf{The seam still closes.}  Conformance requires only
+  that the residual $|s| \leq \tolseam$.  For a near-perfect trace
+  the debit side is negligible ($D_\omega \approx 10^{-6}$,
+  $D_C = 0$), so the seam closes even with zero credit.
+\item \textbf{$\IR$ is a typed semantic value.}  In data files
+  it appears as the string \INF{}; in Python it maps to
+  \texttt{float("inf")}.  It is not an error, not a missing datum,
+  and not a placeholder---it is the legitimate verdict ``no
+  return has occurred.''
+\item \textbf{First-pass admissibility.}  A first measurement
+  has no history against which to measure return.  The protocol
+  handles this by construction: the ledger reconciles without
+  credit, and the regime gates evaluate independently of $\tR$.
+  History begins here; return is measured from the next pass onward.
+\end{enumerate}
+\end{tcolorbox}
+
 % ============================================================
 \section{Regime Classification}\label{sec:regime}
 % ============================================================
@@ -530,15 +594,64 @@ The remaining 87.5\% is \regime{Watch} (24.4\%) and
 \regime{Collapse} (63.1\%).  Stability is structurally rare.
 \end{remark}
 
+The regime, the stance, and the validator result are distinct objects.
+Table~\ref{tab:distinctions} separates them.
+
+\begin{table}[ht]
+\caption{Four related but distinct concepts.  Each is computed from
+  different inputs and answers a different question.}
+\label{tab:distinctions}
+\begin{ruledtabular}
+\begin{tabular}{P{1.3cm}P{1.8cm}P{1.9cm}P{1.5cm}}
+  Object & Computed from & Meaning & This example \\
+  \hline
+  Regime & Four gates on $(F,\omega,S,C)$ & Structural phase of the
+    trace & \regime{Stable} \\
+  Stance / verdict & Ledger reconciliation + regime + identity checks
+    & Auditable three-valued judgment & \conform{} \\
+  Validator result & Schema, semantics, checksums, identities & Protocol
+    compliance of the casepack & \conform{}, 0 errors \\
+  Return status & $\tR$ from prior history & Whether the system has
+    re-entered $D_\theta$ & $\tR = \IR$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
 % ============================================================
 \section{Operational Execution}\label{sec:execution}
 % ============================================================
 
 The preceding computation is packaged in a \emph{casepack}---the
 atomic unit of auditable work~\cite{paulus2026umcpcasepack}.  A
-casepack is a directory containing the raw data, the frozen contract,
-the closure registry, and the expected outputs (embedded trace,
-invariants, SS1M receipt with SHA-256 checksums).
+casepack is a directory containing every artifact needed to
+reproduce the computation and verify the verdict.  The
+\texttt{hello\_world} casepack contains:
+
+\begin{Verbatim}[fontsize=\small]
+casepacks/hello_world/
+  manifest.json
+  raw_data.json
+  contract_ref.yaml
+  closure_registry.yaml
+  expected_outputs.json
+  ss1m_receipt.json
+\end{Verbatim}
+
+\begin{itemize}[leftmargin=*,nosep]
+  \item \texttt{manifest.json}: provenance metadata---timestamps,
+    tool versions, SHA-256 checksums binding every artifact to a
+    unique digest.
+  \item \texttt{raw\_data.json}: the raw measurements (here,
+    three voltages at 9.9).
+  \item \texttt{contract\_ref.yaml}: pointer to the frozen contract
+    (\texttt{UMA.INTSTACK.v1}).
+  \item \texttt{closure\_registry.yaml}: lists which Tier-2 closures
+    are active for this run.
+  \item \texttt{expected\_outputs.json}: the embedded trace,
+    kernel invariants, and regime classification.
+  \item \texttt{ss1m\_receipt.json}: the Single-Source
+    Single-Measurement receipt with integrity checksums.
+\end{itemize}
 
 \subsection{Command-line validation}
 
@@ -589,7 +702,39 @@ row = result.invariants[0]
 
 Every execution path---CLI, Python API, REST endpoint, C99 core,
 C++ accelerator---passes through the same spine with the same frozen
-parameters and produces the same verdict.  This is the
+parameters and produces the same verdict.
+
+\subsection{REST endpoint}
+
+The optional FastAPI extension exposes the same spine over HTTP:
+
+\begin{Verbatim}[fontsize=\small]
+POST /api/v1/validate HTTP/1.1
+Content-Type: application/json
+
+{"casepack": "casepacks/hello_world",
+ "strict": true}
+\end{Verbatim}
+
+\begin{Verbatim}[fontsize=\small]
+HTTP/1.1 200 OK
+
+{"run_status": "CONFORMANT",
+ "errors": 0,
+ "warnings": 0,
+ "regime": "Stable",
+ "F": 0.99, "omega": 0.01,
+ "IC": 0.99, "S": 0.056,
+ "sha256": "6fc79df4..."}
+\end{Verbatim}
+
+All three interfaces---CLI, Python API, REST---traverse the same
+frozen spine; no interface can produce a verdict that bypasses the
+kernel or the contract.
+
+\subsection{The cognitive equalizer (Aequator Cognitivus)}
+
+This is the
 \emph{Aequator Cognitivus}: the system produces identical output
 regardless of which cognitive agent operates it.  Thresholds are
 frozen, vocabulary is operationally defined, and verdicts are derived
@@ -599,6 +744,14 @@ from gates.  The structure measures; the agent does not.
 \section{Latin Rendering and Cross-Domain
 Translation}\label{sec:latin}
 % ============================================================
+
+The following section is not ornamentation.  The GCD framework
+maintains a canonical Latin discourse layer because each Latin term
+carries morphological constraints that English prose does not---the
+operational definition is encoded in the word's structure.  This
+section demonstrates that the worked example can be rendered in full
+canonical form, verifying that the five-word vocabulary and the
+Rosetta translation are operational, not decorative.
 
 The canonical Latin vocabulary carries operational constraints that
 English does not.  Each term is not a translation but a precision
@@ -692,7 +845,10 @@ classical limit, never in reverse.
 The GCD framework does not ``use'' or ``apply'' these classical
 results.  It derives the kernel identities independently from
 Axiom-0; the classical results emerge as structurally impoverished
-special cases.
+special cases.  These are structural containment claims internal to
+the formalism---they describe how the GCD kernel's degrees of freedom
+reduce to classical formulas when structure is removed, not broad
+historical priority claims about the classical results themselves.
 
 % ============================================================
 \section{Discussion}\label{sec:discussion}
