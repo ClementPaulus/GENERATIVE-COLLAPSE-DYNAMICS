@@ -940,6 +940,9 @@ All tests pass. All validations return CONFORMANT.
 
 ## Papers & Publications
 
+> Every paper applies the same kernel. Every paper carries the same warranty.
+> Test count measures coverage, not rigor. See **[paper/INDEX.md](paper/INDEX.md)** for the full proof.
+
 ### Compiled Papers
 
 | Paper | Title | Location |
@@ -972,47 +975,40 @@ The framework is anchored by peer-reviewed Zenodo publications covering the core
 
 ## Repository Structure
 
+> See **[ARCHITECTURE.md](ARCHITECTURE.md)** for the full directory map with
+> tier assignments, spine mapping, and append-only continuity rules.
+
 ```
-├── src/umcp/                  # Core validation engine
-│   ├── cli.py                 # CLI & validation pipeline
-│   ├── validator.py           # Root-file validator
-│   ├── kernel_optimized.py    # Kernel computation
-│   ├── seam_optimized.py      # Seam budget computation
-│   ├── tau_r_star.py          # Thermodynamic diagnostic
-│   ├── epistemic_weld.py      # Epistemic cost tracking
-│   ├── fleet/                 # Distributed validation
-│   └── dashboard/             # Modular Streamlit dashboard
-├── closures/                  # 23 domains, 245 modules
-│   ├── standard_model/        # 31 particles, 27 theorems
-│   ├── atomic_physics/        # 118 elements, Tier-1 proof
-│   ├── quantum_mechanics/     # Double slit, entanglement, tunneling, QDM, FQHE
-│   ├── nuclear_physics/       # Binding energy, decay chains, QGP/RHIC, Trinity blast wave
-│   ├── materials_science/     # 118 elements × 18 fields
-│   ├── evolution/             # 40 organisms, 20 species brain kernel, 60 kernel states
-│   ├── astronomy/             # Stellar evolution, HR diagram, Long-Period Radio Transients
-│   ├── kinematics/            # Motion analysis, phase space
-│   ├── gcd/                   # Core dynamics, 7 kernel structural theorems
-│   ├── rcft/                  # Fractal dimension, attractors
-│   ├── weyl/                  # Modified gravity, cosmology
-│   ├── everyday_physics/      # Thermodynamics, optics, electromagnetism, fluid dynamics
-│   ├── dynamic_semiotics/     # 30 sign systems, semiotic kernel, media coherence, computational semiotics, Malbolge kernel (12 esoteric languages, 6 theorems)
-│   ├── consciousness_coherence/ # 20 systems, coherence kernel, 7 theorems, altered states, neural correlates
-│   ├── awareness_cognition/  # 34 organisms, 5+5 channels, 10 theorems, attention mechanisms
-│   ├── clinical_neuroscience/ # 10-channel cortical kernel, neurotransmitter systems, developmental neuroscience
-│   ├── spacetime_memory/      # 40 entities, budget-surface kernel, gravitational wave memory, cosmological memory, gravitational phenomena, temporal topology
-│   ├── continuity_theory/     # Continuity law closures, topological persistence, organizational resilience, budget geometry
-│   └── finance/ & security/   # Applied domains
-├── contracts/                 # 21 mathematical contracts (YAML)
-├── schemas/                   # 17 JSON Schema files
-├── canon/                     # 21 canonical anchor files
-├── casepacks/                 # 26 reproducible validation bundles
-├── tests/                     # 231 test files, 20,221 tests
-├── paper/                     # 20 LaTeX papers + 2 Markdown papers + Bibliography.bib (189 entries)
-├── integrity/                 # SHA-256 checksums
-├── ledger/                    # Append-only validation log
-├── scripts/                   # Pre-commit protocol, integrity update
-├── docs/                      # 33 documentation files
-└── pyproject.toml             # Project configuration
+── THE SPINE (validation pipeline) ─────────────────────────────────
+contracts/                 Stop 1: Mathematical contracts (21 YAML)
+canon/                     Stop 2: Canonical anchors (23 domains)
+closures/                  Stop 3: Domain closures (23 domains, 245 modules)
+ledger/                    Stop 4: Append-only validation log
+                           Stop 5: Stance (computed at runtime)
+
+── TIER-0 PROTOCOL (frozen per run) ────────────────────────────────
+src/umcp/                  Python engine (kernel, seam, CLI, validator)
+src/umcp_c/                C99 core (the full spine in C, 326 assertions)
+src/umcp_cpp/              C++17 accelerator (pybind11, 434 assertions)
+schemas/                   JSON Schema validation (17 schemas)
+freeze/                    Cryptographic baselines (SHA-256)
+integrity/                 File checksums (279 tracked files)
+
+── TIER-2 EXPANSION (freely extensible) ────────────────────────────
+casepacks/                 Reproducible validation bundles (26)
+tests/                     Test suite (20,221 tests, 232 files)
+paper/                     Papers + INDEX.md (19 substantive papers)
+data/                      External input data (CERN, TERS, etc.)
+runs/                      Frozen run outputs (kinematics RUN004)
+
+── CONTINUITY (append-only) ────────────────────────────────────────
+archive/                   Superseded artifacts (never deleted)
+ledger/                    Every validation ever run (never edited)
+
+── INFRASTRUCTURE ──────────────────────────────────────────────────
+scripts/                   Pre-commit, orientation, diagnostics
+web/                       Astro 5 site + TypeScript kernel
+docs/                      Reference documentation (35 files)
 ```
 
 ---
@@ -1023,13 +1019,15 @@ The framework is anchored by peer-reviewed Zenodo publications covering the core
 
 | Document | Purpose |
 |----------|---------|
-| [AXIOM.md](AXIOM.md) | **Start here.** The foundational axiom, 44 structural identities, and why this system is original |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | **Start here.** How the repo maps to the three tiers, the five-stop spine, and the append-only rule |
+| [AXIOM.md](AXIOM.md) | The foundational axiom, 44 structural identities, and why this system is original |
 | [LIBER_COLLAPSUS.tex](LIBER_COLLAPSUS.tex) | *Liber Universalis de Collapsus Mathematica* — the Tier-1 Latin foundation text |
 | [MANIFESTUM_LATINUM.md](MANIFESTUM_LATINUM.md) | Latin manifesto: complete lexicon, seven verbs, eight typed patterns, twenty maxims |
 | [TIER_SYSTEM.md](TIER_SYSTEM.md) | The three-tier architecture: Immutable Invariants → Protocol → Expansion Space |
 | [KERNEL_SPECIFICATION.md](KERNEL_SPECIFICATION.md) | Complete kernel mathematics, 47 lemmas, and degenerate-limit proofs |
 | [QUICKSTART_TUTORIAL.md](QUICKSTART_TUTORIAL.md) | Getting started: first validation in 5 minutes |
 | [CATALOGUE.md](CATALOGUE.md) | **Master index**: all ~620 tagged formal objects — symbols, lemmas, identities, theorems, classes — organized by tier with full definitions and lineage |
+| [paper/INDEX.md](paper/INDEX.md) | **Paper equivalence proof**: why every paper carries the same structural warranty regardless of test count |
 
 ### The Three-Tier Architecture
 
