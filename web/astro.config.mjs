@@ -17,5 +17,8 @@ export default defineConfig({
     json: {
       stringify: true,
     },
+    build: {
+      chunkSizeWarningLimit: 600, // Increase chunk size limit to 600 kB
+    },
   },
 });
