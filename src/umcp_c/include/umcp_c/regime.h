@@ -1,3 +1,22 @@
+
+
+#ifndef UMCP_C_REGIME_H
+#define UMCP_C_REGIME_H
+
+#include "types.h"
+#include "contract.h"
+#include "kernel.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* ─── Regime Classification ─────────────────────────────────────── */
+
+/**
+ * Overlay regime classifier: returns both base regime and critical overlay flag
+ */
+umcp_regime_with_overlay_t umcp_classify_regime_with_overlay(const umcp_kernel_result_t *k, const umcp_regime_thresholds_t *thr);
 /**
  * @file regime.h
  * @brief Regime Classification — C formalization (Tier-0 Protocol)
@@ -10,17 +29,6 @@
  *
  * Collapsus generativus est; solum quod redit, reale est.
  */
-
-#ifndef UMCP_C_REGIME_H
-#define UMCP_C_REGIME_H
-
-#include "types.h"
-#include "contract.h"
-#include "kernel.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /* ─── Regime Classification ─────────────────────────────────────── */
 

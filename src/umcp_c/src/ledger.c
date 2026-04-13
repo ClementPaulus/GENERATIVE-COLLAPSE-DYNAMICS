@@ -160,7 +160,7 @@ void umcp_ledger_regime_fractions(const umcp_ledger_t *ledger,
     if (stable)   *stable   = (double)ledger->regime_counts[UMCP_REGIME_STABLE]   / total;
     if (watch)    *watch    = (double)ledger->regime_counts[UMCP_REGIME_WATCH]    / total;
     if (collapse) *collapse = (double)ledger->regime_counts[UMCP_REGIME_COLLAPSE] / total;
-    if (critical) *critical = (double)ledger->regime_counts[UMCP_REGIME_CRITICAL] / total;
+    if (critical) *critical = (double)ledger->regime_counts[3] / total; // 4th slot is for critical overlay
 }
 
 umcp_verdict_t umcp_ledger_verdict(const umcp_ledger_t *ledger)

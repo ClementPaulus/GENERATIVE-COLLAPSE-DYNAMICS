@@ -1,11 +1,3 @@
-/**
- * @file regime.c
- * @brief Regime Classification implementation
- *
- * Regime labels are derived from frozen gates on Tier-1 invariants.
- * Diagnostica informant, portae decernunt.
- * (Diagnostics inform; gates decide.)
- */
 
 #include "umcp_c/regime.h"
 #include <stdlib.h>

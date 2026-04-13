@@ -1,3 +1,12 @@
+#include <stdio.h>
+#include <string.h>
+#include "../include/umcp_c/types.h"
+#include "../include/umcp_c/regime.h"
+#include "../include/umcp_c/contract.h"
+#include "../include/umcp_c/kernel.h"
+
+// Prototype for overlay regime classifier (now in regime.c)
+umcp_regime_with_overlay_t umcp_classify_regime_with_overlay(const umcp_kernel_result_t *k, const umcp_regime_thresholds_t *thr);
 /**
  * @file test_orchestration.c
  * @brief Comprehensive tests for the C orchestration layer
@@ -285,15 +294,14 @@ static void test_regime_collapse(void)
     double w[8]; for (int i = 0; i < 8; i++) w[i] = 0.125;
     umcp_kernel_result_t k;
     umcp_kernel_compute(c, w, 8, 1e-8, &k);
-
-        umcp_regime_with_overlay_t r = umcp_classify_regime_with_overlay(&k, &ct.thresholds);
-        ASSERT(r.base_regime == UMCP_REGIME_COLLAPSE,
-            "low-fidelity → COLLAPSE");
+    umcp_contract_t ct;
+    umcp_contract_default(&ct);
+    umcp_regime_with_overlay_t r = umcp_classify_regime_with_overlay(&k, &ct.thresholds);
+    ASSERT(r.base_regime == UMCP_REGIME_COLLAPSE,
+           "low-fidelity → COLLAPSE");
 }
 
 static void test_regime_critical(void)
-    umcp_regime_with_overlay_t r = umcp_classify_regime_with_overlay(&k, &thr);
-    ASSERT(r.is_critical, "overlay struct: is_critical set");
 {
     printf("  Test: CRITICAL overlay detection\n");
     /* One dead channel kills IC → IC < 0.30 */
@@ -301,14 +309,14 @@ static void test_regime_critical(void)
     double w[8]; for (int i = 0; i < 8; i++) w[i] = 0.125;
     umcp_kernel_result_t k;
     umcp_kernel_compute(c, w, 8, 1e-8, &k);
-
-    umcp_regime_thresholds_t thr;
     umcp_contract_t ct;
     umcp_contract_default(&ct);
-    thr = ct.thresholds;
-
+    umcp_regime_thresholds_t thr = ct.thresholds;
+    umcp_regime_with_overlay_t r = umcp_classify_regime_with_overlay(&k, &thr);
+    ASSERT(r.is_critical, "overlay struct: is_critical set");
     ASSERT(umcp_is_critical(&k, &thr), "one dead channel → CRITICAL");
 }
+
 
 static void test_regime_partition(void)
 {
