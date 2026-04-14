@@ -49,24 +49,3 @@ if (typeof window !== "undefined") {
     </section>
   </OperatorShell>
 )}
-
-<OperatorShell title="GCD CAI · Collapse-Aware Intelligence" sessionId={session?.sessionId ?? ""}>
-  <Fragment slot="left">
-    <section class="operator-sidebar-card">
-      <h2>Session</h2>
-      <p><strong>Session ID:</strong> {session?.sessionId ?? "—"}</p>
-      <p><strong>Active Contract:</strong> {session?.activeContractId ?? "—"}</p>
-      <p><strong>Mode:</strong> {session?.mode ?? "—"}</p>
-    </section>
-  </Fragment>
-  <section>
-    <h2>Workspace Summary</h2>
-    <ul>
-      <li>Session created: {session?.createdAt ?? "—"}</li>
-      <li>Active contract: {session?.activeContractId ?? "—"}</li>
-      <li>Active casepack: {session?.activeCasepackId ?? "—"}</li>
-      <li>Closures: {session?.activeClosureIds?.length ?? 0}</li>
-    </ul>
-    <pre>{JSON.stringify(spine, null, 2)}</pre>
-  </section>
-</OperatorShell>
