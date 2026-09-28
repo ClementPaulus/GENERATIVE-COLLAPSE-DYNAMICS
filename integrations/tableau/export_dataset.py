@@ -376,7 +376,7 @@ def export_dataset(root: Path, output_dir: Path, include_archive: bool = True) -
     root = root.resolve()
     output_dir = output_dir.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
-    sources = list(_iter_runs(root, include_archive))
+    sources = [source for source in _iter_runs(root, include_archive) if source.run_dir.resolve() != output_dir]
     run_rows = [_run_identity(root, source) for source in sources]
 
     identity_fields = [
