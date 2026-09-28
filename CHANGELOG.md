@@ -5,6 +5,78 @@ All notable changes to the UMCP validator and repository will be documented in t
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **`SUMMA_REDITUS.md`** — ordered-body front door: the constitution (object *Reditus* →
+  field *Structura Reditus* → theory GCD), the two-axis **separation of powers** (authority
+  axis Tier-1/Tier-0/Tier-2 · functional axis UMCP/RCFT/ULRC), the matrix where the axes
+  meet, domain ingress, the reader route, and the spine.
+- **`STRUCTURA_REDITUS.md`** — the object (Reditus) and field definitions, the
+  *Reditus is not repetition* table, and Axiom-0 as a reflexive axiom.
+- **`FUNCTIONAL_SYSTEMS.md`** — the **functional-axis keystone** (companion to
+  `TIER_SYSTEM.md`): UMCP/RCFT/ULRC defined as functional systems with their disciplines,
+  burdens, tier relations, the functional matrix, the interlock path, and failure
+  conditions.
+- **`docs/ulrc_grammar.md`** — ULRC's markdown home (parity with `docs/rcft_theory.md`):
+  language-as-return, the structural-burden ledger, the formal translation rule, and the
+  Rosetta. Completes the per-system file set so each functional system (UMCP · RCFT · ULRC)
+  has a home.
+
+### Changed — clarify + redirect only (append-only; no rewrites)
+- Reclassified **RCFT** in living docs as a cross-tier **functional system** (the discovery
+  engine) whose *Tier-2 closure family* lives in this repo — not a tier. Clarified in
+  `docs/rcft_theory.md`, `docs/TERM_INDEX.md`, and the comment header of
+  `canon/rcft_anchors.yaml`; structured fields, symbols (D_f, Ψ_r, λ_p, Θ), and the
+  `RCFT.INTSTACK.v1` contract are unchanged.
+- **ULRC** named as the cross-tier language system in the keystone files.
+- Funnel redirects added to `README.md`, `ARCHITECTURE.md` (scoped to the authority axis +
+  spine), `TIER_SYSTEM.md` (tiers = authority axis), and `paper/INDEX.md`
+  (corpus_structure.tex clarified as the *Structura Collapsus* collapse-kernel reference).
+
+### Notes
+- *Historia numquam rescribitur; sutura tantum additur.* Historical entries are unchanged;
+  this is the forward weld recording the structural-clarity refinement.
+
+## [2.3.3] - 2026-05-18
+
+### Changed
+- **Version bump**: 2.3.2 → 2.3.3
+- `tests/test_215_casepack_roundtrip.py` — updated hardcoded casepack paths after the
+  v2.3.2 reorganization (commit `b579c3ef`)
+- `pyproject.toml` — added `jsonschema` to mypy `ignore_missing_imports` overrides
+  (commit `d914644b`)
+- Integrity checksums regenerated for 279 tracked files
+
+## [2.3.2] - 2026-05-10
+
+### Added
+- **Casepack reorganization** into the *Entering the Corpus* taxonomy:
+  - `casepacks/pedagogical/` (2 entries) — onboarding casepacks
+  - `casepacks/ladder/L<n>_<name>/` (7 entries) — capability ladder
+  - `casepacks/closures/full/<domain>/` (17 + 6 stubs = 23 entries) — one casepack per registered domain
+  - `casepacks/TAXONOMY.md` — taxonomy specification with Coverage Gap analysis
+  - `casepacks/REORG_AUDIT.{md,json}` — reference audit of file relocations
+- **6 stub casepacks** for previously uncovered domains under `casepacks/closures/full/`:
+  `nuclear_physics`, `consciousness_coherence`, `standard_model`, `ecology`, `immunology`,
+  `information_theory` — each a minimal Tier-1 Stable-regime demonstration unit pending
+  domain-specific raw measurements
+- `scripts/generate_stub_casepacks.py` — reproducible stub generator
+
+### Changed
+- **Version bump**: 2.3.1 → 2.3.2
+- **Test count**: 20,221 → 20,337 (+116 from recursive parametrize over new casepack tree)
+- **Validate targets**: 27 → 33 (+6 new stub casepacks all CONFORMANT)
+- `tests/test_215_casepack_roundtrip.py` — replaced flat `iterdir()` with recursive
+  `_discover_casepacks()` walker; rekeyed special-case dicts to new POSIX-relative paths
+- `tests/test_120_kinematics_closures.py` — paths updated to `casepacks/closures/full/kinematics/`
+- `src/umcp/api_umcp.py` — health check and `/casepacks` listing now use `rglob("manifest.json")`
+
+### Notes
+- All `manifest.casepack.id` strings are STABLE identifiers and were preserved during relocation
+  (consumed by `api_umcp` DomainInfo, `test_outputs`, `hcg/extractor`, `corpus_resolver`).
+- Git history preserved via `git mv` throughout the reorg.
+
 ## [2.3.1] - 2026-04-11
 
 ### Added

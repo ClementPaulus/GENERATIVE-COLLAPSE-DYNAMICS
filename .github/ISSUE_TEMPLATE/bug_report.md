@@ -9,7 +9,7 @@ assignees: ''
 
 ## Environment
 
-- **UMCP Version**: <!-- e.g., 2.3.0 — run `python -c "import umcp; print(umcp.__version__)"` -->
+- **UMCP Version**: <!-- e.g., 2.3.3 — run `python -c "import umcp; print(umcp.__version__)"` -->
 - **Python Version**: <!-- e.g., 3.12.1 -->
 - **OS**: <!-- e.g., Ubuntu 24.04, macOS 15, Windows 11 -->
 - **Install method**: <!-- pip install umcp / pip install -e ".[all]" / other -->
@@ -17,7 +17,7 @@ assignees: ''
 ## Contract & Regime (if applicable)
 
 - **Contract**: <!-- e.g., UMA.INTSTACK.v1 -->
-- **Casepack**: <!-- e.g., casepacks/hello_world -->
+- **Casepack**: <!-- e.g., casepacks/pedagogical/hello_world -->
 - **Regime**: <!-- Stable / Watch / Collapse / NON_EVALUABLE / unknown -->
 - **Verdict**: <!-- CONFORMANT / NONCONFORMANT / NON_EVALUABLE -->
 

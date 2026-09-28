@@ -15,7 +15,7 @@ export interface Props {
 
 const {
   title,
-  description = 'Generative Collapse Dynamics — a single-axiom mathematical framework with 23 domain closures, 44 structural identities, and interactive kernel computation.',
+  description = 'Generative Collapse Dynamics — a single-axiom mathematical framework with 23 domains closures, 44 structural identities, and interactive kernel computation.',
   primaryColor = '#0f172a',
   accentColor = '#f59e0b',
   ogImage = '',
@@ -112,7 +112,7 @@ const navGroups = [
       "alternateName": "GCD / UMCP",
       "url": siteUrl,
       "description": `A single-axiom mathematical framework for measuring what survives collapse and what returns. ${DOMAIN_COUNT} domain closures, ${THEOREM_COUNT} proven theorems, ${IDENTITY_COUNT} structural identities, ${LEMMA_COUNT} lemmas, ${CLOSURE_COUNT} closure modules, ${TEST_COUNT} automated tests.`,
-      "version": "2.3.1",
+      "version": "2.3.3",
       "publisher": {
         "@type": "Organization",
         "name": "GCD / UMCP"
@@ -124,15 +124,15 @@ const navGroups = [
         "codeRepository": "https://github.com/calebpruett927/GENERATIVE-COLLAPSE-DYNAMICS",
         "programmingLanguage": ["Python", "C", "C++", "TypeScript"],
         "runtimePlatform": "Python 3.11+",
-        "softwareVersion": "2.3.1",
+        "softwareVersion": "2.3.3",
         "license": "https://opensource.org/licenses/MIT"
       }
     })} />
     <!-- Project statistics — canonical machine-readable values for AI extraction -->
-    <meta name="gcd:version" content="2.3.1" />
+    <meta name="gcd:version" content="2.3.3" />
     <meta name="gcd:domains" content="23" />
     <meta name="gcd:theorems" content="746" />
-    <meta name="gcd:tests" content="20221" />
+    <meta name="gcd:tests" content="20540" />
     <meta name="gcd:identities" content="44" />
     <meta name="gcd:lemmas" content="47" />
     <meta name="gcd:closure-modules" content="245" />
@@ -234,7 +234,6 @@ const navGroups = [
             </div>
           ))}
 
-          <a href={`${base}gcd-cai/`} class="text-sm text-kernel-400 hover:text-kernel-100 transition-colors px-3 py-2 rounded-lg hover:bg-kernel-800/50">GCD CAI</a>
           <a href={`${base}about/`} class="text-sm text-kernel-400 hover:text-kernel-100 transition-colors px-3 py-2 rounded-lg hover:bg-kernel-800/50">About</a>
 
           <div class="w-px h-5 bg-kernel-800 mx-1"></div>
@@ -321,7 +320,7 @@ const navGroups = [
         <!-- Bottom bar -->
         <div class="border-t border-kernel-800/40 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p class="text-xs text-kernel-600 italic">Collapsus generativus est; solum quod redit, reale est.</p>
-          <p class="text-xs text-kernel-600">UMCP v2.3.1</p>
+          <p class="text-xs text-kernel-600">UMCP v2.3.3</p>
         </div>
       </div>
     </footer>

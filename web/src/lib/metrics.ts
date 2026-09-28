@@ -12,8 +12,8 @@
 /* ─── Repository-Scale Metrics ──────────────────────────────────── */
 
 /** Total collected pytest items (pytest --collect-only | grep "::" | wc -l). */
-export const TEST_COUNT = '20,235';
-export const TEST_COUNT_RAW = 20_235;
+export const TEST_COUNT = '20,540';
+export const TEST_COUNT_RAW = 20_540;
 
 /** Number of closure domains in closures/. */
 export const DOMAIN_COUNT = '23';
@@ -28,8 +28,8 @@ export const LEMMA_COUNT = '47';
 export const LEMMA_COUNT_RAW = 47;
 
 /** Closure modules across all domains. */
-export const CLOSURE_COUNT = '245';
-export const CLOSURE_COUNT_RAW = 245;
+export const CLOSURE_COUNT = '246';
+export const CLOSURE_COUNT_RAW = 246;
 
 /** Proven theorems across all domain closures. */
 export const THEOREM_COUNT = '746';
@@ -40,8 +40,8 @@ export const LANGUAGE_COUNT = '3';
 export const LANGUAGE_COUNT_RAW = 3;
 
 /** Test files (numbered test_000 through test_338). */
-export const TEST_FILE_COUNT = '232';
-export const TEST_FILE_COUNT_RAW = 232;
+export const TEST_FILE_COUNT = '233';
+export const TEST_FILE_COUNT_RAW = 233;
 
 /** Base test functions before parametrization. */
 export const BASE_TEST_COUNT = '~800';

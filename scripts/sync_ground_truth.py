@@ -71,7 +71,7 @@ def _rules() -> list[SyncRule]:
         {theorem_count}       → raw int: 746
         {identity_count}      → raw int: 44
         {lemma_count}         → raw int: 47
-        {version}             → string: 2.3.1
+        {version}             → string: 2.3.3
         {casepack_count}      → raw int: 29
         {canon_count}         → raw int: 22
         {contract_count}      → raw int: 23
@@ -236,6 +236,9 @@ def _rules() -> list[SyncRule]:
         # README.md — badges and key narrative references
         # ══════════════════════════════════════════════════════════
         SyncRule("README.md", r"tests-([\d%2C]+)-brightgreen", "{test_count_url}", "README badge: tests"),
+        SyncRule("README.md", r"!\[Tests: ([\d,]+)\]", "{test_count_comma}", "README badge alt: tests"),
+        SyncRule("README.md", r"!\[UMCP v([\d.]+)\]", "{version}", "README badge alt: version"),
+        SyncRule("README.md", r"UMCP-v([\d.]+)-orange", "{version}", "README badge url: version"),
         SyncRule("README.md", r"theorems-(\d+)-purple", "{theorem_count}", "README badge: theorems"),
         SyncRule("README.md", r"domains-(\d+)-teal", "{domain_count}", "README badge: domains"),
         SyncRule("README.md", r"closures-(\d+)-blue", "{closure_count}", "README badge: closures"),
@@ -244,6 +247,7 @@ def _rules() -> list[SyncRule]:
         # README_PYPI.md — badges and key references
         # ══════════════════════════════════════════════════════════
         SyncRule("README_PYPI.md", r"tests-([\d%2C]+)-brightgreen", "{test_count_url}", "PyPI badge: tests"),
+        SyncRule("README_PYPI.md", r"!\[Tests: ([\d,]+)\]", "{test_count_comma}", "PyPI badge alt: tests"),
         SyncRule("README_PYPI.md", r"Theorems: (\d+)", "{theorem_count}", "PyPI badge: theorems"),
         SyncRule("README_PYPI.md", r"Domains: (\d+)", "{domain_count}", "PyPI badge: domains"),
         SyncRule("README_PYPI.md", r"\*\*(\d+) scientific domains\*\*", "{domain_count}", "PyPI key features: domains"),

@@ -904,7 +904,7 @@ export interface ExtendedIdentityCheck extends IdentityCheck {
 }
 
 /**
- * Extended identity verification: 10 structural identities.
+ * Extended identity verification: 44 structural identities.
  * Goes beyond the basic 3 to verify deeper algebraic properties.
  */
 export function verifyExtendedIdentities(result: KernelResult, c: number[], w?: number[]): ExtendedIdentityCheck[] {
@@ -1283,7 +1283,7 @@ export function exportResults(
   }
   return {
     timestamp: new Date().toISOString(),
-    version: '2.3.1',
+    version: '2.3.3',
     channels: [...c],
     weights: w ? [...w] : Array(c.length).fill(1 / c.length),
     kernel, regime, rank, fisher, identities, seamBudget,

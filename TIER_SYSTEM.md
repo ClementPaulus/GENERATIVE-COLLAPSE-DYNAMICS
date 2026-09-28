@@ -1,6 +1,6 @@
 # UMCP Tier System
 
-**Version**: 2.3.0
+**Version**: 2.3.3
 **Status**: Protocol Foundation
 **Source**: UMCP Manuscript v1.0.0 §3 (revised per cross-domain validation, 146 experiments)
 **Last Updated**: 2026-03-11
@@ -10,6 +10,14 @@
 ## Overview
 
 The **UMCP tier system** has exactly three tiers. No half-tiers. No confusion.
+
+> **The tiers are the authority axis.** They govern *what may be changed*, and they are
+> orthogonal to the **functional axis** — UMCP (measures), RCFT (explores), ULRC (preserves
+> language) — which governs *what is being done* and operates across all three tiers. A
+> functional system is **never** a tier. The functional axis is specified in
+> [FUNCTIONAL_SYSTEMS.md](FUNCTIONAL_SYSTEMS.md); for the two-axis matrix and the
+> constitutional layer above (Reditus → Structura Reditus → GCD), see
+> [SUMMA_REDITUS.md](SUMMA_REDITUS.md).
 
 | Tier | Name | Role |
 |------|------|------|
@@ -463,7 +471,7 @@ The field is required by `schemas/contract.schema.json` and `schemas/canon.ancho
 
 > *Omnis clausura per spinam transit.* — Every closure passes through the spine.
 
-This section codifies the structural patterns observed across 21 domain closures. New domains should follow these conventions to maintain cross-domain consistency and machine-readable structure.
+This section codifies the structural patterns observed across 23 domain closures. New domains should follow these conventions to maintain cross-domain consistency and machine-readable structure.
 
 ### Domain Archetypes
 
@@ -513,7 +521,7 @@ The `scripts/theorem_registry.py` auto-discovers functions matching `theorem_*`.
 
 ### The 10-Theorem Template
 
-15 of 21 domains converge to exactly 10 theorems. This is a structural attractor, not a requirement, but new domains should aim for 10 theorems covering these archetype slots:
+15 of 23 domains converge to exactly 10 theorems. This is a structural attractor, not a requirement, but new domains should aim for 10 theorems covering these archetype slots:
 
 | Slot | Archetype | What It Proves | Frequency |
 |:----:|-----------|----------------|:---------:|
@@ -532,7 +540,7 @@ The `scripts/theorem_registry.py` auto-discovers functions matching `theorem_*`.
 
 ### Channel Design
 
-- Standard channel count: **8** (used by 14 of 21 domains)
+- Standard channel count: **8** (used by 14 of 23 domains)
 - Extended channel count: **10** (awareness_cognition, clinical_neuroscience)
 - Minimal channel count: **3** (nuclear_physics — BE/A, temporal, valley)
 - Every channel must be a dimensionless value in [0, 1] after normalization
@@ -550,11 +558,11 @@ Every new domain must be:
 
 ### Entropy Passivity Observation
 
-Across all 21 domains, Bernoulli field entropy S appears in only 1 of 13 theorem files (7.7%), despite being a Tier-1 kernel output. This is not an error — S is asymptotically determined by F and C (the statistical constraint S ≈ f(F, C)), making it a *computed* diagnostic rather than an independent degree of freedom. The effective degrees of freedom for theorem construction are **F, κ, C** (equivalently F, IC, C). New theorems should derive from these three quantities; S participates through the constraint, not directly.
+Across all 23 domains, Bernoulli field entropy S appears in only 1 of 13 theorem files (7.7%), despite being a Tier-1 kernel output. This is not an error — S is asymptotically determined by F and C (the statistical constraint S ≈ f(F, C)), making it a *computed* diagnostic rather than an independent degree of freedom. The effective degrees of freedom for theorem construction are **F, κ, C** (equivalently F, IC, C). New theorems should derive from these three quantities; S participates through the constraint, not directly.
 
 ---
 
-## Implementation Status (v2.3.0)
+## Implementation Status (v2.3.3)
 
 - ✅ **Tier-1**: The kernel function defined, verified, and mathematically complete
   - 4 primitive equations (F, κ, S, C) + 2 derived values (ω = 1−F, IC = exp(κ)) — defining K: [0,1]ⁿ × Δⁿ → ℝ⁶

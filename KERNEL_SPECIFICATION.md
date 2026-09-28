@@ -769,7 +769,7 @@ Together, Lemmas 1–34 provide a **complete formal foundation** for kernel vali
 
 ---
 
-## 4b. Extended Lemmas: Empirical Discoveries and Cross-Domain Laws (35-46)
+## 4b. Extended Lemmas: Empirical Discoveries and Cross-Domain Laws (35-47)
 
 **Purpose**: These lemmas extend the formal foundation based on **empirical observations** from quantum optics, astrophysics, and topological quantum computing. They formalize patterns discovered in the physics_observations_complete.csv dataset (38 observations across 23 orders of magnitude in scale).
 
@@ -1113,7 +1113,7 @@ IC_dead = ε^(1/n) · c₀^((n-1)/n)
 
 **Proof**: Direct from L-6 (IC sensitivity) and L-30 (IC collapse cascade). IC = exp(κ) = exp(Σ wᵢ ln cᵢ). Setting cₖ = ε: IC = ε^(wₖ) · exp(Σᵢ≠ₖ wᵢ ln cᵢ) = ε^(wₖ) · IC_rest. For F = Σ wᵢcᵢ: F_new = F_old − wₖ(cₖ − ε). Since ε^(wₖ) ≪ 1 for any wₖ > 0, IC drops exponentially while F drops linearly. ∎
 
-**Cross-domain instances**: Confinement (quark→hadron: color channel → 0, IC/F drops 100×), EWSB (Higgs mechanism), cortical lesion (clinical neuroscience), sign-ground rupture (dynamic semiotics), awareness deficit (awareness-cognition). Observed at phase boundaries in 8 of 21 domains.
+**Cross-domain instances**: Confinement (quark→hadron: color channel → 0, IC/F drops 100×), EWSB (Higgs mechanism), cortical lesion (clinical neuroscience), sign-ground rupture (dynamic semiotics), awareness deficit (awareness-cognition). Observed at phase boundaries in 8 of 23 domains.
 
 **Computational verification**: `python scripts/orientation.py -s 3` (§3: geometric slaughter). Key receipt: IC/F drops from 1.00 to 0.11 with one dead channel in 8-channel uniform trace.
 
@@ -1588,7 +1588,7 @@ If a computed run violates the bounds in Lemmas 1-46, the implementation is almo
 - Changes to default conventions (ε, normalization constants, domain generators) require **closure declarations**
 - Implementation changes that preserve mathematical definitions do not require versioning (but must pass conformance tests)
 
-**Current Version**: UMCP v2.3.0
+**Current Version**: UMCP v2.3.3
 
 ---
 
