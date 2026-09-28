@@ -200,7 +200,14 @@ def _kernel_rows(root: Path, sources: list[SourceRun]) -> Iterator[dict[str, Any
 def _return_rows(root: Path, sources: list[SourceRun]) -> Iterator[dict[str, Any]]:
     for source in sources:
         identity = _run_identity(root, source)
-        path = source.run_dir / "tables" / "tauR_series.csv"
+        candidates = [
+            source.run_dir / "tables" / "tauR_series.csv",
+            source.run_dir / "tables" / "taur_series.csv",
+            source.run_dir / "derived" / "tauR_series.csv",
+            source.run_dir / "derived" / "taur_series.csv",
+            source.run_dir / "casepacks" / "KIN.CP.SHM" / "tables" / "tauR_series.csv",
+        ]
+        path = next((candidate for candidate in candidates if candidate.exists()), candidates[0])
         for row_index, row in enumerate(_read_csv(path)):
             raw = row.get("tau_R", "")
             number = _finite_number(raw)
